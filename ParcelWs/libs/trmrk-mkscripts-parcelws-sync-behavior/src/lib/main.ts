@@ -17,14 +17,14 @@ const srcFoldersArr: { [key: string]: string } = {
   "trmrk-angular": "libs\\trmrk-angular\\projects\\trmrk-angular\\src\\lib",
   "trmrk-axios": "libs\\trmrk-axios\\src\\lib",
   "trmrk-browser": "libs\\trmrk-browser\\src\\lib",
-  "trmrk-blazor": "libs\\trmrk-blazor\\src\\lib",
-  "trmrk-lithtml": "libs\\trmrk-lithtml\\src\\lib",
-  "trmrk-react": "libs\\trmrk-react\\src\\lib",
-  "trmrk-solidjs": "libs\\trmrk-solidjs\\src\\lib",
-  "trmrk-svelte": "libs\\trmrk-svelte\\src\\lib",
-  "trmrk-vue": "libs\\trmrk-vue\\src\\lib",
+  "trmrk-filemanager-nglib":
+    "libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib\\src\\lib",
+  "trmrk-mailbox-nglib":
+    "libs\\trmrk-mailbox-nglib\\projects\\trmrk-mailbox-nglib\\src\\lib",
   "trmrk-mkscripts-parcelws-sync-behavior":
     "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src\\lib",
+  "trmrk-notes-nglib":
+    "libs\\trmrk-notes-nglib\\projects\\trmrk-notes-nglib\\src\\lib",
   "trmrk-text-transform-behavior":
     "libs\\trmrk-text-transform-behavior\\src\\lib",
   "trmrk-text-transform-defaultbehavior":
@@ -52,29 +52,14 @@ const destnLocationsArr: {
     dirPath: "libs\\trmrk-browser\\src",
     syncedLibs: ["trmrk", "trmrk-axios"],
   },
-  "trmrk-blazor": {
-    dirPath: "libs\\trmrk-blazor\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser"],
+  "trmrk-filemanager-nglib": {
+    dirPath:
+      "libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib\\src",
+    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-angular"],
   },
-  "trmrk-lithtml": {
-    dirPath: "libs\\trmrk-lithtml\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser"],
-  },
-  "trmrk-solidjs": {
-    dirPath: "libs\\trmrk-solidjs\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser"],
-  },
-  "trmrk-svelte": {
-    dirPath: "libs\\trmrk-svelte\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser"],
-  },
-  "trmrk-react": {
-    dirPath: "libs\\trmrk-react\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser"],
-  },
-  "trmrk-vue": {
-    dirPath: "libs\\trmrk-vue\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser"],
+  "trmrk-mailbox-nglib": {
+    dirPath: "libs\\trmrk-mailbox-nglib\\projects\\trmrk-mailbox-nglib\\src",
+    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-angular"],
   },
   "trmrk-text-transform-behavior": {
     dirPath: "libs\\trmrk-text-transform-behavior\\src",
@@ -96,6 +81,15 @@ const destnLocationsArr: {
       "trmrk-text-transform-mybehavior",
     ],
   },
+  "trmrk-notes-nglib": {
+    dirPath: "libs\\trmrk-notes-nglib\\projects\\trmrk-notes-nglib\\src",
+    syncedLibs: [
+      "trmrk",
+      "trmrk-browser",
+      "trmrk-angular",
+      "trmrk-filemanager-nglib",
+    ],
+  },
   "trmrk-mkscripts-parcelws-sync-behavior": {
     dirPath: "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src",
     syncedLibs: ["trmrk"],
@@ -106,55 +100,35 @@ const destnLocationsArr: {
   },
   "trmrk-filemanager-ngapp": {
     dirPath: "apps\\trmrk-filemanager-ngapp\\src",
-    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-angular"],
-  },
-  "trmrk-onedrive-notes-ngapp": {
-    dirPath: "apps\\trmrk-onedrive-notes-ngapp\\src",
-    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-angular"],
+    syncedLibs: [
+      "trmrk",
+      "trmrk-browser",
+      "trmrk-angular",
+      "trmrk-filemanager-nglib",
+    ],
   },
   "trmrk-http-proxy-nodejsapp": {
     dirPath: "apps\\trmrk-http-proxy-nodejsapp\\src",
     syncedLibs: ["trmrk"],
   },
-  "trmrk-notes-lithtmlapp": {
-    dirPath: "apps\\trmrk-notes-lithtmlapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-lithtml"],
+  "trmrk-mailbox-ngapp": {
+    dirPath: "apps\\trmrk-mailbox-ngapp\\src",
+    syncedLibs: [
+      "trmrk",
+      "trmrk-browser",
+      "trmrk-angular",
+      "trmrk-mailbox-nglib",
+    ],
   },
-  "trmrk-notes-reactapp": {
-    dirPath: "apps\\trmrk-notes-reactapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
-  },
-  "trmrk-notes-svelteapp": {
-    dirPath: "apps\\trmrk-notes-svelteapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-svelte"],
-  },
-  "trmrk-react-testapp": {
-    dirPath: "apps\\trmrk-react-testapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
-  },
-  "trmrk-notes-vueapp": {
-    dirPath: "apps\\trmrk-notes-vueapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-vue"],
-  },
-  "trmrk-notes-solidjsapp": {
-    dirPath: "apps\\trmrk-notes-solidjsapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
-  },
-  "trmrk-quicknotes-solidjsapp": {
-    dirPath: "apps\\trmrk-quicknotes-solidjsapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
-  },
-  "trmrk-localfs-notes-solidjsapp": {
-    dirPath: "apps\\trmrk-localfs-notes-solidjsapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
-  },
-  "trmrk-localfs-notes-solidjs-tauriapp": {
-    dirPath: "apps\\trmrk-localfs-notes-solidjs-tauriapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
-  },
-  "trmrk-localfs-quicknotes-solidjs-tauriapp": {
-    dirPath: "apps\\trmrk-localfs-quicknotes-solidjs-tauriapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
+  "trmrk-notes-ngapp": {
+    dirPath: "apps\\trmrk-notes-ngapp\\src",
+    syncedLibs: [
+      "trmrk",
+      "trmrk-browser",
+      "trmrk-angular",
+      "trmrk-filemanager-nglib",
+      "trmrk-notes-nglib",
+    ],
   },
 };
 

@@ -25,32 +25,16 @@
       "DirPath": "libs\\trmrk-axios\\src\\lib"
     },
     {
-      "Name": "trmrk-blazor",
-      "DirPath": "libs\\trmrk-blazor\\src\\lib"
-    },
-    {
       "Name": "trmrk-browser",
       "DirPath": "libs\\trmrk-browser\\src\\lib"
     },
     {
-      "Name": "trmrk-lithtml",
-      "DirPath": "libs\\trmrk-lithtml\\src\\lib"
+      "Name": "trmrk-filemanager-nglib",
+      "DirPath": "libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib\\src\\lib"
     },
     {
-      "Name": "trmrk-react",
-      "DirPath": "libs\\trmrk-react\\src\\lib"
-    },
-    {
-      "Name": "trmrk-solidjs",
-      "DirPath": "libs\\trmrk-solidjs\\src\\lib"
-    },
-    {
-      "Name": "trmrk-svelte",
-      "DirPath": "libs\\trmrk-svelte\\src\\lib"
-    },
-    {
-      "Name": "trmrk-vue",
-      "DirPath": "libs\\trmrk-vue\\src\\lib"
+      "Name": "trmrk-mailbox-nglib",
+      "DirPath": "libs\\trmrk-mailbox-nglib\\projects\\trmrk-mailbox-nglib\\src\\lib"
     },
     {
       "Name": "trmrk-mkscripts-parcelws-sync-behavior",
@@ -59,6 +43,10 @@
     {
       "Name": "trmrk-text-transform-behavior",
       "DirPath": "libs\\trmrk-text-transform-behavior\\src\\lib"
+    },
+    {
+      "Name": "trmrk-notes-nglib",
+      "DirPath": "libs\\trmrk-notes-nglib\\projects\\trmrk-notes-nglib\\src\\lib"
     },
     {
       "Name": "trmrk-text-transform-defaultbehavior",
@@ -116,92 +104,32 @@
       }
     },
     {
-      "Name": "trmrk-blazor",
-      "DirPath": "libs\\trmrk-blazor\\src",
+      "Name": "trmrk-filemanager-nglib",
+      "DirPath": "libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
         },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
         "trmrk-browser": {
           "DirPath": "trmrk-browser"
+        },
+        "trmrk-angular": {
+          "DirPath": "trmrk-angular"
         }
       }
     },
     {
-      "Name": "trmrk-lithtml",
-      "DirPath": "libs\\trmrk-lithtml\\src",
+      "Name": "trmrk-mailbox-nglib",
+      "DirPath": "libs\\trmrk-mailbox-nglib\\projects\\trmrk-mailbox-nglib\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
         },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
         "trmrk-browser": {
           "DirPath": "trmrk-browser"
-        }
-      }
-    },
-    {
-      "Name": "trmrk-react",
-      "DirPath": "libs\\trmrk-react\\src",
-      "FoldersMap": {
-        "trmrk": {
-          "DirPath": "trmrk"
         },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
-        "trmrk-browser": {
-          "DirPath": "trmrk-browser"
-        }
-      }
-    },
-    {
-      "Name": "trmrk-solidjs",
-      "DirPath": "libs\\trmrk-solidjs\\src",
-      "FoldersMap": {
-        "trmrk": {
-          "DirPath": "trmrk"
-        },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
-        "trmrk-browser": {
-          "DirPath": "trmrk-browser"
-        }
-      }
-    },
-    {
-      "Name": "trmrk-svelte",
-      "DirPath": "libs\\trmrk-svelte\\src",
-      "FoldersMap": {
-        "trmrk": {
-          "DirPath": "trmrk"
-        },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
-        "trmrk-browser": {
-          "DirPath": "trmrk-browser"
-        }
-      }
-    },
-    {
-      "Name": "trmrk-vue",
-      "DirPath": "libs\\trmrk-vue\\src",
-      "FoldersMap": {
-        "trmrk": {
-          "DirPath": "trmrk"
-        },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
-        "trmrk-browser": {
-          "DirPath": "trmrk-browser"
+        "trmrk-angular": {
+          "DirPath": "trmrk-angular"
         }
       }
     },
@@ -223,6 +151,24 @@
         },
         "trmrk-mkscripts-parcelws-sync-behavior": {
           "DirPath": "trmrk-mkscripts-parcelws-sync-behavior"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-notes-nglib",
+      "DirPath": "libs\\trmrk-notes-nglib\\projects\\trmrk-notes-nglib\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        },
+        "trmrk-angular": {
+          "DirPath": "trmrk-angular"
+        },
+        "trmrk-filemanager-ngapp": {
+          "DirPath": "trmrk-filemanager-ngapp"
         }
       }
     },
@@ -286,12 +232,15 @@
         },
         "trmrk-angular": {
           "DirPath": "trmrk-angular"
+        },
+        "trmrk-filemanager-nglib": {
+          "DirPath": "trmrk-filemanager-nglib"
         }
       }
     },
     {
-      "Name": "trmrk-onedrive-notes-ngapp",
-      "DirPath": "apps\\trmrk-onedrive-notes-ngapp\\src",
+      "Name": "trmrk-mailbox-ngapp",
+      "DirPath": "apps\\trmrk-mailbox-ngapp\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
@@ -301,6 +250,9 @@
         },
         "trmrk-angular": {
           "DirPath": "trmrk-angular"
+        },
+        "trmrk-mailbox-nglib": {
+          "DirPath": "trmrk-mailbox-nglib"
         }
       }
     },
@@ -314,182 +266,23 @@
       }
     },
     {
-      "Name": "trmrk-notes-lithtmlapp",
-      "DirPath": "apps\\trmrk-notes-lithtmlapp\\src",
+      "Name": "trmrk-notes-ngapp",
+      "DirPath": "apps\\trmrk-notes-ngapp\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
         },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
         "trmrk-browser": {
           "DirPath": "trmrk-browser"
         },
-        "trmrk-lithtml": {
-          "DirPath": "trmrk-lithtml"
-        }
-      }
-    },
-    {
-      "Name": "trmrk-notes-reactapp",
-      "DirPath": "apps\\trmrk-notes-reactapp\\src",
-      "FoldersMap": {
-        "trmrk": {
-          "DirPath": "trmrk"
+        "trmrk-angular": {
+          "DirPath": "trmrk-angular"
         },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
+        "trmrk-filemanager-nglib": {
+          "DirPath": "trmrk-filemanager-nglib"
         },
-        "trmrk-browser": {
-          "DirPath": "trmrk-browser"
-        },
-        "trmrk-react": {
-          "DirPath": "trmrk-react"
-        }
-      }
-    },
-    {
-      "Name": "trmrk-notes-svelteapp",
-      "DirPath": "apps\\trmrk-notes-svelteapp\\src",
-      "FoldersMap": {
-        "trmrk": {
-          "DirPath": "trmrk"
-        },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
-        "trmrk-browser": {
-          "DirPath": "trmrk-browser"
-        },
-        "trmrk-svelte": {
-          "DirPath": "trmrk-svelte"
-        }
-      }
-    },
-    {
-      "Name": "trmrk-notes-vueapp",
-      "DirPath": "apps\\trmrk-notes-vueapp\\src",
-      "FoldersMap": {
-        "trmrk": {
-          "DirPath": "trmrk"
-        },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
-        "trmrk-browser": {
-          "DirPath": "trmrk-browser"
-        },
-        "trmrk-vue": {
-          "DirPath": "trmrk-vue"
-        }
-      }
-    },
-    {
-      "Name": "trmrk-react-testapp",
-      "DirPath": "apps\\trmrk-react-testapp\\src",
-      "FoldersMap": {
-        "trmrk": {
-          "DirPath": "trmrk"
-        },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
-        "trmrk-browser": {
-          "DirPath": "trmrk-browser"
-        },
-        "trmrk-react": {
-          "DirPath": "trmrk-react"
-        }
-      }
-    },
-    {
-      "Name": "trmrk-notes-solidjsapp",
-      "DirPath": "apps\\trmrk-notes-solidjsapp\\src",
-      "FoldersMap": {
-        "trmrk": {
-          "DirPath": "trmrk"
-        },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
-        "trmrk-browser": {
-          "DirPath": "trmrk-browser"
-        },
-        "trmrk-solidjs": {
-          "DirPath": "trmrk-solidjs"
-        }
-      }
-    },
-    {
-      "Name": "trmrk-quicknotes-solidjsapp",
-      "DirPath": "apps\\trmrk-quicknotes-solidjsapp\\src",
-      "FoldersMap": {
-        "trmrk": {
-          "DirPath": "trmrk"
-        },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
-        "trmrk-browser": {
-          "DirPath": "trmrk-browser"
-        },
-        "trmrk-solidjs": {
-          "DirPath": "trmrk-solidjs"
-        }
-      }
-    },
-    {
-      "Name": "trmrk-localfs-notes-solidjsapp",
-      "DirPath": "apps\\trmrk-localfs-notes-solidjsapp\\src",
-      "FoldersMap": {
-        "trmrk": {
-          "DirPath": "trmrk"
-        },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
-        "trmrk-browser": {
-          "DirPath": "trmrk-browser"
-        },
-        "trmrk-solidjs": {
-          "DirPath": "trmrk-solidjs"
-        }
-      }
-    },
-    {
-      "Name": "trmrk-localfs-notes-solidjs-tauriapp",
-      "DirPath": "apps\\trmrk-localfs-notes-solidjs-tauriapp\\src",
-      "FoldersMap": {
-        "trmrk": {
-          "DirPath": "trmrk"
-        },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
-        "trmrk-browser": {
-          "DirPath": "trmrk-browser"
-        },
-        "trmrk-solidjs": {
-          "DirPath": "trmrk-solidjs"
-        }
-      }
-    },
-    {
-      "Name": "trmrk-localfs-quicknotes-solidjs-tauriapp",
-      "DirPath": "apps\\trmrk-localfs-quicknotes-solidjs-tauriapp\\src",
-      "FoldersMap": {
-        "trmrk": {
-          "DirPath": "trmrk"
-        },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
-        "trmrk-browser": {
-          "DirPath": "trmrk-browser"
-        },
-        "trmrk-solidjs": {
-          "DirPath": "trmrk-solidjs"
+        "trmrk-notes-nglib": {
+          "DirPath": "trmrk-notes-nglib"
         }
       }
     }
