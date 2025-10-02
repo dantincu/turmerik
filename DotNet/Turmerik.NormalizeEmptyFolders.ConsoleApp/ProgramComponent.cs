@@ -16,6 +16,8 @@ namespace Turmerik.NormalizeKeepFiles.ConsoleApp
     {
         private const string W = "w";
 
+        private static readonly string[] textFileNameExtensions = ".keep".Arr(".md", ".txt", "json", "js", "cs", "css", "html", "xml");
+
         private readonly DirsPairConfig config;
         private readonly IConsoleArgsParser parser;
         private readonly IConsoleMsgPrinter consoleMsgPrinter;
@@ -76,7 +78,8 @@ namespace Turmerik.NormalizeKeepFiles.ConsoleApp
                 }
                 else
                 {
-                    if (dumpKeepFile = filesArr.None(file => !string.IsNullOrWhiteSpace(File.ReadAllText(file))))
+                    if (dumpKeepFile = filesArr.None(file => textFileNameExtensions.Contains(Path.GetExtension(
+                        file)) && !string.IsNullOrWhiteSpace(File.ReadAllText(file))))
                     {
                         consoleMsgPrinter.Print([
                             [ "Directory only contains empty files: ", ConsoleColor.Blue, prIdnf ], [ 1 ]]);

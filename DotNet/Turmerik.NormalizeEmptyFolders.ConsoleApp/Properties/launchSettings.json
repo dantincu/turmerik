@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Turmerik.NormalizeEmptyFolders.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": ":w:||$MAINCSDRIVE_DIR||\\0002"
+    }
+  }
+}
