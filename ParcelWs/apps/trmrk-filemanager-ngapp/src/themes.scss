@@ -36,25 +36,9 @@
   }
 
   .trmrk-3-panels-layout {
-    .trmrk-app-panel > trmrk-horiz-strip > .trmrk-app-panel-header > .trmrk-resize-btn-wrapper {
-      &.trmrk-close-action-activated {
-        background-color: #FAA;
-      }
-
-      &.trmrk-reset-action-activated {
-        background-color: #8F8;
-      }
-    }
-
-    .trmrk-panel-resize-strip {
-      background-color: var(--trmrk-app-bar_background-color_light);
-
-      &.trmrk-close-action-activated {
-        background-color: #FAA;
-      }
-
-      &.trmrk-reset-action-activated {
-        background-color: #8F8;
+    > .trmrk-app-panel {
+      > .trmrk-panel-resize-strip {
+        background-color: var(--trmrk-app-bar_background-color_light);
       }
     }
   }
@@ -80,25 +64,9 @@
   }
 
   .trmrk-3-panels-layout {
-    .trmrk-app-panel > trmrk-horiz-strip > .trmrk-app-panel-header > .trmrk-resize-btn-wrapper {
-      &.trmrk-close-action-activated {
-        background-color: #880800;
-      }
-
-      &.trmrk-reset-action-activated {
-        background-color: #060;
-      }
-    }
-
-    .trmrk-panel-resize-strip {
-      background-color: var(--trmrk-app-bar_background-color_dark);
-
-      &.trmrk-close-action-activated {
-        background-color: #880800;
-      }
-
-      &.trmrk-reset-action-activated {
-        background-color: #060;
+    > .trmrk-app-panel {
+      > .trmrk-panel-resize-strip {
+        background-color: var(--trmrk-app-bar_background-color_dark);
       }
     }
   }
