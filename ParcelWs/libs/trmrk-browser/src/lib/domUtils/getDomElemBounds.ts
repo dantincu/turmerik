@@ -36,10 +36,7 @@ export interface HtmlElementBounds extends HtmlElementRectangleCore {
   scrollTop: number;
 }
 
-export const getDomElemBounds = (
-  elem: HTMLElement,
-  setOffsetToZero: boolean = false
-) => {
+export const getDomElemBounds = (elem: HTMLElement, setOffsetToZero: boolean = false) => {
   const retElem = {
     offsetLeft: setOffsetToZero ? 0 : elem.offsetLeft,
     offsetTop: setOffsetToZero ? 0 : elem.offsetTop,
@@ -66,10 +63,7 @@ export const getDomElemBounds = (
   return retElem;
 };
 
-export const getHcyElemBounds = (
-  rootElem: HTMLElement,
-  trgElem: HTMLElement
-) => {
+export const getHcyElemBounds = (rootElem: HTMLElement, trgElem: HTMLElement) => {
   let elem = getDomElemBounds(trgElem);
   const retArr: HtmlElementBounds[] = [elem];
   let reachedRoot = trgElem === rootElem;
@@ -98,8 +92,7 @@ export const getHcyElemBounds = (
     elem.totalRenderedOffsetLeft =
       prElem.totalRenderedOffsetLeft + elem.offsetLeft - prElem.scrollLeft;
 
-    elem.totalRenderedOffsetTop =
-      prElem.totalRenderedOffsetTop + elem.offsetTop - prElem.scrollTop;
+    elem.totalRenderedOffsetTop = prElem.totalRenderedOffsetTop + elem.offsetTop - prElem.scrollTop;
 
     prElem = elem;
   }
@@ -107,10 +100,7 @@ export const getHcyElemBounds = (
   return retArr;
 };
 
-export const isScrolledIntoView = (
-  rootElem: HTMLElement,
-  trgElem: HTMLElement
-) => {
+export const isScrolledIntoView = (rootElem: HTMLElement, trgElem: HTMLElement) => {
   const hcyElemBounds = getHcyElemBounds(rootElem, trgElem);
 
   const trgElemBounds = hcyElemBounds.slice(-1)[0];
@@ -218,9 +208,7 @@ export const applyRectnglProps = (
 
   let defaultCssPropValSerializer: (val: number | NullOrUndef) => string | null;
 
-  defaultCssPropValSerializer = clearPropsWhereNullOrUndef
-    ? () => ''
-    : () => null;
+  defaultCssPropValSerializer = clearPropsWhereNullOrUndef ? () => '' : () => null;
 
   applyCssPropValIfReq(
     elemStyle,
@@ -257,8 +245,10 @@ export const applyRectnglProps = (
 
 export const getElemIdx = (elems: HTMLElement[], coords: Coords) =>
   elems.findIndex((elem) =>
-    trmrk.withVal(
-      elem.getBoundingClientRect(),
-      (rect) => coords.clientX >= rect.left && coords.clientX <= rect.right
-    )
+    trmrk.withVal(elem.getBoundingClientRect(), (rect) => {
+      let retVal = coords.clientX >= rect.left && coords.clientX <= rect.right;
+      retVal = retVal && coords.clientY >= rect.top && coords.clientY <= rect.bottom;
+
+      return retVal;
+    })
   );

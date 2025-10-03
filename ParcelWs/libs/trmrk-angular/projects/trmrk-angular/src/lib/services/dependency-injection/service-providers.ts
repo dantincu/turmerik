@@ -49,19 +49,22 @@ export interface GetCommonServiceProviderOpts<TAppConfig extends AppConfigCore =
 }
 
 export interface GetCommonServiceProvidersArgs<TAppConfig extends AppConfigCore = AppConfigCore> {
+  envName?: string | NullOrUndef;
   isProdEnv: boolean;
   provide: GetCommonServiceProviderOpts<TAppConfig>;
   routes?: Route[];
   appProviders: (Provider | EnvironmentProviders | null)[];
 }
 
-export const defaultConfigNormalizeFactory = <TConfig extends AppConfigCore = AppConfigCore>(
+export const defaultConfigNormalizeFactory = async <TConfig extends AppConfigCore = AppConfigCore>(
   appConfig: TConfig
 ) => {
   appConfig.isWebApp ??= true;
   appConfig.routeBasePath ??= '/app';
   appConfig.requiresSetup ??= false;
   appConfig.listDefaultPageSize ??= 50;
+  appConfig.maxSimultaneousRequestsCount ??= 4;
+  appConfig.cacheValidIntervalMillis ??= 0;
   return appConfig;
 };
 
@@ -70,21 +73,22 @@ export class AppConfigProvidersFactory<TAppConfig extends AppConfigCore = AppCon
 
   getProviders(
     opts: LoadAppConfigOpts<TAppConfig>,
+    envName: string,
     isProdEnv: boolean
   ): (Provider | EnvironmentProviders)[] {
     return [
       provideAppInitializer(async () => {
         let appConfig =
-          opts.values ?? (await loadAppConfig<TAppConfig>(inject(HttpClient), opts, isProdEnv));
+          opts.values ?? (await loadAppConfig<TAppConfig>(inject(HttpClient), opts, envName));
 
         appConfig.isProdEnv = isProdEnv;
 
         if (opts.configNormalizeFactory) {
-          appConfig = opts.configNormalizeFactory(appConfig);
+          appConfig = await opts.configNormalizeFactory(appConfig);
         }
 
         if (opts.applyConfigDefaults ?? true) {
-          appConfig = defaultConfigNormalizeFactory(appConfig);
+          appConfig = await defaultConfigNormalizeFactory(appConfig);
         }
 
         this.appConfig = appConfig;
@@ -124,6 +128,7 @@ export const getServiceProviders = <TAppConfig extends AppConfigCore = AppConfig
           opts.appConfig ?? {
             values: {} as TAppConfig,
           },
+          args.envName ?? 'env',
           args.isProdEnv
         )
       : []),

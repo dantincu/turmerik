@@ -347,6 +347,10 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 }
 
+.trmrk-stretch {
+  flex: 1 0 auto;
+}
+
 trmrk-3-panels-layout, .trmrk-3-panels-layout {
   @include mixins.rel-stretch-to-parent-size;
 
@@ -400,6 +404,8 @@ trmrk-3-panels-layout, .trmrk-3-panels-layout {
       bottom: 0;
       padding-left: 6px;
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
 
       &.trmrk-stick-right {
         right: 0;
@@ -414,10 +420,38 @@ trmrk-3-panels-layout, .trmrk-3-panels-layout {
       > trmrk-horiz-strip > .trmrk-app-panel-header {
         padding-right: 46px;
 
-        > .trmrk-resize-btn {
+        > .trmrk-resize-btn-wrapper {
+          width: 52px;
+          height: 40px;
           position: absolute;
-          right: 6px;
-          background-color: inherit;
+          right: 0;
+          top: 0;
+
+          > .trmrk-resize-btn {
+            position: absolute;
+            top: 3px;
+            right: 6px;
+            background-color: inherit;
+          }
+        }
+      }
+    }
+
+    &.trmrk-right-panel {
+      > trmrk-horiz-strip > .trmrk-app-panel-header {
+        > .trmrk-resize-btn-wrapper {
+          width: 52px;
+          height: 40px;
+          position: absolute;
+          left: 0;
+          top: 0;
+
+          > .trmrk-resize-btn {
+            position: absolute;
+            top: 3px;
+            left: 6px;
+            background-color: inherit;
+          }
         }
       }
     }

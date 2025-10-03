@@ -41,16 +41,28 @@
         <mat-icon class="trmrk-icon">close</mat-icon>
       </button>
       } @if (visiblePanelsCount > 1) {
-      <button
-        mat-icon-button
-        class="trmrk-icon-btn trmrk-resize-btn"
-        (trmrkDrag)="leftPanelResizeBtnDrag($event)"
-        (trmrkDragStart)="leftPanelResizeBtnDragStart($event)"
-        (trmrkDragEnd)="leftPanelResizeBtnDragEnd($event)"
-        [trmrkPreventDefaults]="true"
+      <div
+        class="trmrk-resize-btn-wrapper"
+        [ngClass]="[
+          'trmrk-resize-btn-wrapper',
+          resizeLeftPanelStripCloseActionIsActivated
+            ? 'trmrk-close-action-activated'
+            : resizeLeftPanelStripResetActionIsActivated
+            ? 'trmrk-reset-action-activated'
+            : ''
+        ]"
       >
-        <div class="trmrk-custom-svg-icon" [innerHtml]="drag_pan"></div>
-      </button>
+        <button
+          mat-icon-button
+          [ngClass]="['trmrk-icon-btn trmrk-resize-btn']"
+          (trmrkDrag)="leftPanelResizeBtnDrag($event)"
+          (trmrkDragStart)="leftPanelResizeBtnDragStart($event)"
+          (trmrkDragEnd)="leftPanelResizeBtnDragEnd($event)"
+          [trmrkPreventDefaults]="true"
+        >
+          <div class="trmrk-custom-svg-icon" [innerHtml]="drag_pan"></div>
+        </button>
+      </div>
       }</ng-template
     >
     <div class="trmrk-app-panel-content trmrk-scrollable trmrk-scrollable-y trmrk-scrollable-x">
@@ -58,7 +70,24 @@
     </div>
 
     @if (isResizingLeftPanel) {
-    <div class="trmrk-panel-resize-strip trmrk-stick-right">
+    <div
+      [ngClass]="[
+        'trmrk-panel-resize-strip trmrk-stick-right',
+        resizeLeftPanelStripCloseActionIsActivated
+          ? 'trmrk-close-action-activated'
+          : resizeLeftPanelStripResetActionIsActivated
+          ? 'trmrk-reset-action-activated'
+          : ''
+      ]"
+      #resizeLeftPanelStrip
+    >
+      <button mat-icon-button class="trmrk-icon-btn">
+        <mat-icon class="trmrk-icon">close</mat-icon>
+      </button>
+      <button mat-icon-button class="trmrk-icon-btn">
+        <div class="trmrk-custom-svg-icon" [innerHtml]="recenter"></div>
+      </button>
+      <div class="trmrk-stretch"></div>
       <button mat-icon-button class="trmrk-icon-btn">
         <mat-icon class="trmrk-icon">close</mat-icon>
       </button>
@@ -140,16 +169,27 @@
     ></trmrk-horiz-strip>
     <ng-template #rightPanelHeaderLeadingTemplate
       >@if (trmrkAlwaysRenderMiddlePanel || showMiddlePanel) {
-      <button
-        mat-icon-button
-        class="trmrk-icon-btn"
-        (trmrkDrag)="rightPanelResizeBtnDrag($event)"
-        (trmrkDragStart)="rightPanelResizeBtnDragStart($event)"
-        (trmrkDragEnd)="rightPanelResizeBtnDragEnd($event)"
-        [trmrkPreventDefaults]="true"
+      <div
+        [ngClass]="[
+          'trmrk-resize-btn-wrapper',
+          resizeRightPanelStripCloseActionIsActivated
+            ? 'trmrk-close-action-activated'
+            : resizeRightPanelStripResetActionIsActivated
+            ? 'trmrk-reset-action-activated'
+            : ''
+        ]"
       >
-        <div class="trmrk-custom-svg-icon" [innerHtml]="drag_pan"></div>
-      </button>
+        <button
+          mat-icon-button
+          class="trmrk-icon-btn trmrk-resize-btn"
+          (trmrkDrag)="rightPanelResizeBtnDrag($event)"
+          (trmrkDragStart)="rightPanelResizeBtnDragStart($event)"
+          (trmrkDragEnd)="rightPanelResizeBtnDragEnd($event)"
+          [trmrkPreventDefaults]="true"
+        >
+          <div class="trmrk-custom-svg-icon" [innerHtml]="drag_pan"></div>
+        </button>
+      </div>
       }</ng-template
     >
     <ng-template #rightPanelHeaderTrailingTemplate>
@@ -176,7 +216,24 @@
       <ng-container *ngTemplateOutlet="trmrkRightPanelTemplate"></ng-container>
     </div>
     @if (isResizingRightPanel) {
-    <div class="trmrk-panel-resize-strip trmrk-stick-left">
+    <div
+      [ngClass]="[
+        'trmrk-panel-resize-strip trmrk-stick-left',
+        resizeRightPanelStripCloseActionIsActivated
+          ? 'trmrk-close-action-activated'
+          : resizeRightPanelStripResetActionIsActivated
+          ? 'trmrk-reset-action-activated'
+          : ''
+      ]"
+      #resizeRightPanelStrip
+    >
+      <button mat-icon-button class="trmrk-icon-btn">
+        <mat-icon class="trmrk-icon">close</mat-icon>
+      </button>
+      <button mat-icon-button class="trmrk-icon-btn">
+        <div class="trmrk-custom-svg-icon" [innerHtml]="recenter"></div>
+      </button>
+      <div class="trmrk-stretch"></div>
       <button mat-icon-button class="trmrk-icon-btn">
         <mat-icon class="trmrk-icon">close</mat-icon>
       </button>

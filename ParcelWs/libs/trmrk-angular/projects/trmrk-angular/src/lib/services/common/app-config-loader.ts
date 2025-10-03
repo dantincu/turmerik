@@ -9,23 +9,23 @@ export interface LoadAppConfigOpts<TConfig extends AppConfigCore = AppConfigCore
   provide?: boolean | NullOrUndef;
   values?: TConfig | NullOrUndef;
   appConfigUrl?: string | NullOrUndef;
-  envConfigUrlFactory?: ((baseAppConfigUrl: string, isProd: boolean) => string) | NullOrUndef;
+  envConfigUrlFactory?: ((baseAppConfigUrl: string, envName: string) => string) | NullOrUndef;
   configMergeFactory?: ((baseConfig: TConfig, envConfig: TConfig) => TConfig) | NullOrUndef;
-  configNormalizeFactory?: ((config: TConfig) => TConfig) | NullOrUndef;
+  configNormalizeFactory?: ((config: TConfig) => Promise<TConfig>) | NullOrUndef;
   applyConfigDefaults?: boolean | NullOrUndef;
 }
 
 export const defaultBaseAppConfigUrl = '/public/app-config.json';
 
-export const defaultEnvConfigUrlFactory: (baseAppConfigUrl: string, isProd: boolean) => string = (
+export const defaultEnvConfigUrlFactory: (baseAppConfigUrl: string, envName: string) => string = (
   baseAppConfigUrl: string,
-  isProd
-) => splice(baseAppConfigUrl.split('.'), -1, 0, isProd ? 'prod' : 'dev').join('.');
+  envName
+) => splice(baseAppConfigUrl.split('.'), -1, 0, envName).join('.');
 
 export const loadAppConfig = async <TConfig extends AppConfigCore = AppConfigCore>(
   httpClient: HttpClient,
   opts: LoadAppConfigOpts<TConfig>,
-  isProdEnv: boolean
+  envName: string
 ) => {
   const appConfigUrl = opts.appConfigUrl ?? defaultBaseAppConfigUrl;
 
@@ -33,7 +33,7 @@ export const loadAppConfig = async <TConfig extends AppConfigCore = AppConfigCor
 
   if (opts.configMergeFactory) {
     const envConfigUrlFactory = opts.envConfigUrlFactory ?? defaultEnvConfigUrlFactory;
-    const envConfigUrl = envConfigUrlFactory(appConfigUrl, isProdEnv);
+    const envConfigUrl = envConfigUrlFactory(appConfigUrl, envName);
     const envConfig = await observableToPromise(httpClient.get<TConfig>(envConfigUrl));
 
     appConfig = opts.configMergeFactory(appConfig, envConfig);

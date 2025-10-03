@@ -19,6 +19,8 @@ import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
 import { NullOrUndef } from '../../../../trmrk/core';
 import { TouchOrMouseCoords } from '../../../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { getElemIdx } from '../../../../trmrk-browser/domUtils/getDomElemBounds';
+import { htmlCollectionToArr } from '../../../../trmrk-browser/domUtils/common';
 
 import { AppServiceBase } from '../../../services/common/app-service-base';
 import { whenChanged } from '../../../services/common/simpleChanges';
@@ -123,8 +125,17 @@ export class Trmrk3PanelsLayout implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChild('rightPanelOptionsMenuTrigger', { read: MatMenuTrigger })
   rightPanelOptionsMenuTrigger!: MatMenuTrigger;
 
+  @ViewChild('resizeLeftPanelStrip') resizeLeftPanelStrip?: ElementRef<HTMLElement> | NullOrUndef;
+  @ViewChild('resizeRightPanelStrip') resizeRightPanelStrip?: ElementRef<HTMLElement> | NullOrUndef;
+
   isResizingLeftPanel = false;
   isResizingRightPanel = false;
+
+  resizeLeftPanelStripCloseActionIsActivated = false;
+  resizeRightPanelStripCloseActionIsActivated = false;
+
+  resizeLeftPanelStripResetActionIsActivated = false;
+  resizeRightPanelStripResetActionIsActivated = false;
 
   activePanel: PanelPosition = PanelPosition.None;
 
@@ -258,6 +269,7 @@ export class Trmrk3PanelsLayout implements OnChanges, OnDestroy, AfterViewInit {
     ];
 
     this.updatePanelWidths(PanelPosition.Left);
+    this.highlightResizePanelStripIfReq(event, true);
   }
 
   leftPanelResizeBtnDragEnd(event: TrmrkDragEvent) {
@@ -281,6 +293,7 @@ export class Trmrk3PanelsLayout implements OnChanges, OnDestroy, AfterViewInit {
     ];
 
     this.updatePanelWidths(PanelPosition.Right);
+    this.highlightResizePanelStripIfReq(event, false);
   }
 
   rightPanelResizeBtnDragEnd(event: TrmrkDragEvent) {
@@ -343,6 +356,49 @@ export class Trmrk3PanelsLayout implements OnChanges, OnDestroy, AfterViewInit {
     this.leftPanelWidth = null;
     this.rightPanelWidth = null;
     this.basePanelWidthRatios = this.panelWidthRatios;
+    this.unhighlightResizePanelStrips();
+  }
+
+  highlightResizePanelStripIfReq(event: TrmrkDragEvent, isLeftPanel: boolean) {
+    const resizePanelStrip = isLeftPanel ? this.resizeLeftPanelStrip : this.resizeRightPanelStrip;
+    const target = event.touchOrMouseMoveCoords.evt!.target as HTMLElement;
+
+    if (target && resizePanelStrip) {
+      const nodesArr = htmlCollectionToArr(resizePanelStrip.nativeElement.children);
+      const idx = getElemIdx(nodesArr, event.touchOrMouseMoveCoords);
+      let closeBtnActivated = false;
+      let resetBtnActivated = false;
+
+      switch (idx) {
+        case 0:
+          closeBtnActivated = true;
+          break;
+        case 1:
+          resetBtnActivated = true;
+          break;
+        case 3:
+          closeBtnActivated = true;
+          break;
+        case 4:
+          resetBtnActivated = true;
+          break;
+      }
+
+      if (isLeftPanel) {
+        this.resizeLeftPanelStripCloseActionIsActivated = closeBtnActivated;
+        this.resizeLeftPanelStripResetActionIsActivated = resetBtnActivated;
+      } else {
+        this.resizeRightPanelStripCloseActionIsActivated = closeBtnActivated;
+        this.resizeRightPanelStripResetActionIsActivated = resetBtnActivated;
+      }
+    }
+  }
+
+  unhighlightResizePanelStrips() {
+    this.resizeLeftPanelStripCloseActionIsActivated = false;
+    this.resizeLeftPanelStripResetActionIsActivated = false;
+    this.resizeRightPanelStripCloseActionIsActivated = false;
+    this.resizeRightPanelStripResetActionIsActivated = false;
   }
 
   getCssClass() {
