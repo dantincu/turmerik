@@ -7,6 +7,10 @@ import {
   TouchOrMouseCoords,
 } from '../../../trmrk-browser/domUtils/touchAndMouseEvents';
 
+export interface TrmrkDisaposable {
+  dispose: () => void;
+}
+
 export enum Placement {
   None = 0,
   Top,

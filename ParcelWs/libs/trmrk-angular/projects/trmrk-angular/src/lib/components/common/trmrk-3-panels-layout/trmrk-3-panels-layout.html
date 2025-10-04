@@ -1,21 +1,21 @@
-<div [ngClass]="cssClass" #containerEl>
-  @if (trmrkAlwaysRenderLeftPanel || showLeftPanel) {
+<div [ngClass]="service.cssClassArr" #containerEl>
+  @if (service.alwaysRenderLeftPanel || service.showLeftPanel) {
   <div
     #leftPanelEl
     [ngClass]="[
       'trmrk-app-panel',
       'trmrk-left-panel',
-      showLeftPanel ? '' : 'trmrk-hidden',
-      activePanel === PanelPosition.Left ? 'trmrk-is-active' : ''
+      service.showLeftPanel ? '' : 'trmrk-hidden',
+      service.activePanel === PanelPosition.Left ? 'trmrk-is-active' : ''
     ]"
-    [ngStyle]="panelStyles[0]"
-    (trmrkTouchStartOrMouseDown)="leftPanelTouchStartOrMouseDown($event)"
+    [ngStyle]="service.panelStyles[0]"
+    (trmrkTouchStartOrMouseDown)="service.leftPanelTouchStartOrMouseDown($event)"
   >
     <trmrk-horiz-strip
       [trmrkCssClass]="[
         'trmrk-top-horiz-strip',
         'trmrk-app-panel-header',
-        activePanel === PanelPosition.Left ? 'trmrk-has-border-x2' : ''
+        service.activePanel === PanelPosition.Left ? 'trmrk-has-border-x2' : ''
       ]"
       [trmrkLeadingTemplate]="leftPanelHeaderLeadingTemplate"
       [trmrkTrailingTemplate]="leftPanelHeaderTrailingTemplate"
@@ -23,31 +23,31 @@
     </trmrk-horiz-strip>
     <ng-template #leftPanelHeaderLeadingTemplate></ng-template>
     <ng-template #leftPanelHeaderTrailingTemplate>
-      @if (trmrkShowLeftPanelOptionsBtn) {
+      @if (service.showLeftPanelOptionsBtn) {
       <button
         mat-icon-button
         class="trmrk-icon-btn"
         [matMenuTriggerFor]="null"
         #leftPanelOptionsMenuTrigger="matMenuTrigger"
-        (click)="leftPanelOptionsMenuBtnClick()"
+        (click)="service.leftPanelOptionsMenuBtnClick()"
       >
         <mat-icon class="trmrk-icon">more_vert</mat-icon>
       </button>
       <mat-menu #leftPanelOptionsMenu class="trmrk-menu" dense>
         <ng-container *ngTemplateOutlet="trmrkLeftPanelOptionsMenuTemplate"></ng-container>
       </mat-menu>
-      } @if (trmrkAllowToggleLeftPanel) {
+      } @if (service.allowToggleLeftPanel) {
       <button mat-icon-button class="trmrk-icon-btn">
         <mat-icon class="trmrk-icon">close</mat-icon>
       </button>
-      } @if (visiblePanelsCount > 1) {
+      } @if (service.visiblePanelsCount > 1) {
       <div
         class="trmrk-resize-btn-wrapper"
         [ngClass]="[
           'trmrk-resize-btn-wrapper',
-          resizeLeftPanelStripCloseActionIsActivated
+          service.resizeLeftPanelStripCloseActionIsActivated
             ? 'trmrk-close-action-activated'
-            : resizeLeftPanelStripResetActionIsActivated
+            : service.resizeLeftPanelStripResetActionIsActivated
             ? 'trmrk-reset-action-activated'
             : ''
         ]"
@@ -55,9 +55,9 @@
         <button
           mat-icon-button
           [ngClass]="['trmrk-icon-btn trmrk-resize-btn']"
-          (trmrkDrag)="leftPanelResizeBtnDrag($event)"
-          (trmrkDragStart)="leftPanelResizeBtnDragStart($event)"
-          (trmrkDragEnd)="leftPanelResizeBtnDragEnd($event)"
+          (trmrkDrag)="service.leftPanelResizeBtnDrag($event)"
+          (trmrkDragStart)="service.leftPanelResizeBtnDragStart($event)"
+          (trmrkDragEnd)="service.leftPanelResizeBtnDragEnd($event)"
           [trmrkPreventDefaults]="true"
         >
           <div class="trmrk-custom-svg-icon" [innerHtml]="drag_pan"></div>
@@ -69,13 +69,13 @@
       <ng-container *ngTemplateOutlet="trmrkLeftPanelTemplate"></ng-container>
     </div>
 
-    @if (isResizingLeftPanel) {
+    @if (service.isResizingLeftPanel) {
     <div
       [ngClass]="[
         'trmrk-panel-resize-strip trmrk-stick-right',
-        resizeLeftPanelStripCloseActionIsActivated
+        service.resizeLeftPanelStripCloseActionIsActivated
           ? 'trmrk-close-action-activated'
-          : resizeLeftPanelStripResetActionIsActivated
+          : service.resizeLeftPanelStripResetActionIsActivated
           ? 'trmrk-reset-action-activated'
           : ''
       ]"
@@ -97,46 +97,46 @@
     </div>
     }
   </div>
-  } @if (trmrkAlwaysRenderMiddlePanel || showMiddlePanel) {
+  } @if (service.alwaysRenderMiddlePanel || service.showMiddlePanel) {
   <div
     [ngClass]="[
       'trmrk-app-panel',
       'trmrk-middle-panel',
-      showMiddlePanel ? '' : 'trmrk-hidden',
-      activePanel === PanelPosition.Middle ? 'trmrk-is-active' : ''
+      service.showMiddlePanel ? '' : 'trmrk-hidden',
+      service.activePanel === PanelPosition.Middle ? 'trmrk-is-active' : ''
     ]"
-    [ngStyle]="panelStyles[1]"
-    (trmrkTouchStartOrMouseDown)="middlePanelTouchStartOrMouseDown($event)"
+    [ngStyle]="service.panelStyles[1]"
+    (trmrkTouchStartOrMouseDown)="service.middlePanelTouchStartOrMouseDown($event)"
   >
     <trmrk-horiz-strip
       [trmrkCssClass]="[
         'trmrk-top-horiz-strip',
         'trmrk-app-panel-header',
-        activePanel === PanelPosition.Middle ? 'trmrk-has-border-x2' : ''
+        service.activePanel === PanelPosition.Middle ? 'trmrk-has-border-x2' : ''
       ]"
       [trmrkLeadingTemplate]="middlePanelHeaderLeadingTemplate"
       [trmrkTrailingTemplate]="middlePanelHeaderTrailingTemplate"
     ></trmrk-horiz-strip>
     <ng-template #middlePanelHeaderLeadingTemplate></ng-template>
     <ng-template #middlePanelHeaderTrailingTemplate>
-      @if (trmrkAllowToggleLeftPanel && !showLeftPanel) {
+      @if (service.allowToggleLeftPanel && !service.showLeftPanel) {
       <button mat-icon-button class="trmrk-icon-btn">
         <div class="trmrk-custom-svg-icon" [innerHtml]="left_panel_open"></div>
       </button>
-      } @if (trmrkShowMiddlePanelOptionsBtn) {
+      } @if (service.showMiddlePanelOptionsBtn) {
       <button
         mat-icon-button
         class="trmrk-icon-btn"
         [matMenuTriggerFor]="null"
         #middlePanelOptionsMenuTrigger="matMenuTrigger"
-        (click)="middlePanelOptionsMenuBtnClick()"
+        (click)="service.middlePanelOptionsMenuBtnClick()"
       >
         <mat-icon class="trmrk-icon">more_vert</mat-icon>
       </button>
       <mat-menu #middlePanelOptionsMenu class="trmrk-menu" dense>
         <ng-container *ngTemplateOutlet="trmrkMiddlePanelOptionsMenuTemplate"></ng-container>
       </mat-menu>
-      } @if (trmrkAllowToggleMiddlePanel && showRightPanel) {
+      } @if (service.allowToggleMiddlePanel && service.showRightPanel) {
       <button mat-icon-button class="trmrk-icon-btn">
         <mat-icon class="trmrk-icon">close</mat-icon>
       </button>
@@ -146,35 +146,35 @@
       <ng-container *ngTemplateOutlet="trmrkMiddlePanelTemplate"></ng-container>
     </div>
   </div>
-  } @if (trmrkAlwaysRenderRightPanel || showRightPanel) {
+  } @if (service.alwaysRenderRightPanel || service.showRightPanel) {
   <div
     #rightPanelEl
     [ngClass]="[
       'trmrk-app-panel',
       'trmrk-right-panel',
-      showRightPanel ? '' : 'trmrk-hidden',
-      activePanel === PanelPosition.Right ? 'trmrk-is-active' : ''
+      service.showRightPanel ? '' : 'trmrk-hidden',
+      service.activePanel === PanelPosition.Right ? 'trmrk-is-active' : ''
     ]"
-    [ngStyle]="panelStyles[2]"
-    (trmrkTouchStartOrMouseDown)="rightPanelTouchStartOrMouseDown($event)"
+    [ngStyle]="service.panelStyles[2]"
+    (trmrkTouchStartOrMouseDown)="service.rightPanelTouchStartOrMouseDown($event)"
   >
     <trmrk-horiz-strip
       [trmrkCssClass]="[
         'trmrk-top-horiz-strip',
         'trmrk-app-panel-header',
-        activePanel === PanelPosition.Right ? 'trmrk-has-border-x2' : ''
+        service.activePanel === PanelPosition.Right ? 'trmrk-has-border-x2' : ''
       ]"
       [trmrkLeadingTemplate]="rightPanelHeaderLeadingTemplate"
       [trmrkTrailingTemplate]="rightPanelHeaderTrailingTemplate"
     ></trmrk-horiz-strip>
     <ng-template #rightPanelHeaderLeadingTemplate
-      >@if (trmrkAlwaysRenderMiddlePanel || showMiddlePanel) {
+      >@if (service.alwaysRenderMiddlePanel || service.showMiddlePanel) {
       <div
         [ngClass]="[
           'trmrk-resize-btn-wrapper',
-          resizeRightPanelStripCloseActionIsActivated
+          service.resizeRightPanelStripCloseActionIsActivated
             ? 'trmrk-close-action-activated'
-            : resizeRightPanelStripResetActionIsActivated
+            : service.resizeRightPanelStripResetActionIsActivated
             ? 'trmrk-reset-action-activated'
             : ''
         ]"
@@ -182,9 +182,9 @@
         <button
           mat-icon-button
           class="trmrk-icon-btn trmrk-resize-btn"
-          (trmrkDrag)="rightPanelResizeBtnDrag($event)"
-          (trmrkDragStart)="rightPanelResizeBtnDragStart($event)"
-          (trmrkDragEnd)="rightPanelResizeBtnDragEnd($event)"
+          (trmrkDrag)="service.rightPanelResizeBtnDrag($event)"
+          (trmrkDragStart)="service.rightPanelResizeBtnDragStart($event)"
+          (trmrkDragEnd)="service.rightPanelResizeBtnDragEnd($event)"
           [trmrkPreventDefaults]="true"
         >
           <div class="trmrk-custom-svg-icon" [innerHtml]="drag_pan"></div>
@@ -193,20 +193,20 @@
       }</ng-template
     >
     <ng-template #rightPanelHeaderTrailingTemplate>
-      @if (trmrkShowRightPanelOptionsBtn) {
+      @if (service.showRightPanelOptionsBtn) {
       <button
         mat-icon-button
         class="trmrk-icon-btn"
         [matMenuTriggerFor]="null"
         #rightPanelOptionsMenuTrigger="matMenuTrigger"
-        (click)="rightPanelOptionsMenuBtnClick()"
+        (click)="service.rightPanelOptionsMenuBtnClick()"
       >
         <mat-icon class="trmrk-icon">more_vert</mat-icon>
       </button>
       <mat-menu #rightPanelOptionsMenu class="trmrk-menu" dense>
         <ng-container *ngTemplateOutlet="trmrkRightPanelOptionsMenuTemplate"></ng-container>
       </mat-menu>
-      } @if (trmrkAllowToggleRightPanel && showMiddlePanel) {
+      } @if (service.allowToggleRightPanel && service.showMiddlePanel) {
       <button mat-icon-button class="trmrk-icon-btn">
         <mat-icon class="trmrk-icon">close</mat-icon>
       </button>
@@ -215,13 +215,13 @@
     <div class="trmrk-app-panel-content trmrk-scrollable trmrk-scrollable-y trmrk-scrollable-x">
       <ng-container *ngTemplateOutlet="trmrkRightPanelTemplate"></ng-container>
     </div>
-    @if (isResizingRightPanel) {
+    @if (service.isResizingRightPanel) {
     <div
       [ngClass]="[
         'trmrk-panel-resize-strip trmrk-stick-left',
-        resizeRightPanelStripCloseActionIsActivated
+        service.resizeRightPanelStripCloseActionIsActivated
           ? 'trmrk-close-action-activated'
-          : resizeRightPanelStripResetActionIsActivated
+          : service.resizeRightPanelStripResetActionIsActivated
           ? 'trmrk-reset-action-activated'
           : ''
       ]"
