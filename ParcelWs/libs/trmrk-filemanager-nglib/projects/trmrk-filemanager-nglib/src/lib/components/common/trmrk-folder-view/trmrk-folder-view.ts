@@ -44,10 +44,13 @@ export class TrmrkFolderView {
       this.layoutService.onAfterSetup.subscribe(() => {
         this.layoutService.allowToggleLeftPanel = true;
         this.layoutService.showLeftPanel = true;
+        this.layoutService.showLeftPanelOptionsBtn = true;
         this.layoutService.allowToggleMiddlePanel = true;
         this.layoutService.showMiddlePanel = true;
+        this.layoutService.showMiddlePanelOptionsBtn = true;
         this.layoutService.allowToggleRightPanel = true;
         this.layoutService.showRightPanel = true;
+        this.layoutService.showRightPanelOptionsBtn = true;
       });
     });
   }

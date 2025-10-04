@@ -1,5 +1,6 @@
 import { Injectable, ElementRef, EventEmitter } from '@angular/core';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
+import { Subscription } from 'rxjs';
 
 import { NullOrUndef } from '../../../trmrk/core';
 import { TouchOrMouseCoords } from '../../../trmrk-browser/domUtils/touchAndMouseEvents';
@@ -76,6 +77,7 @@ export class AppPanelLayoutService implements TrmrkDisaposable {
   resizeRightPanelStripResetActionIsActivated = false;
 
   activePanel: PanelPosition = PanelPosition.None;
+  optionsMenuOpenForPanel: PanelPosition = PanelPosition.None;
 
   private _cssClass: string[] = [];
   private _dbObjectPfx: string = '';
@@ -100,8 +102,23 @@ export class AppPanelLayoutService implements TrmrkDisaposable {
   private leftPanelWidth: number | null = null;
   private rightPanelWidth: number | null = null;
 
+  private leftPanelMenuClosedSubscriptions: Subscription[] = [];
+  private middlePanelMenuClosedSubscriptions: Subscription[] = [];
+  private rightPanelMenuClosedSubscriptions: Subscription[] = [];
+
   constructor() {
     this.documentTouchStartOrMouseDown = this.documentTouchStartOrMouseDown.bind(this);
+    this.leftPanelOptionsMenuClosed = this.leftPanelOptionsMenuClosed.bind(this);
+    this.middlePanelOptionsMenuClosed = this.middlePanelOptionsMenuClosed.bind(this);
+    this.rightPanelOptionsMenuClosed = this.rightPanelOptionsMenuClosed.bind(this);
+
+    document.addEventListener('mousedown', this.documentTouchStartOrMouseDown, {
+      capture: true,
+    });
+
+    document.addEventListener('touchstart', this.documentTouchStartOrMouseDown, {
+      capture: true,
+    });
   }
 
   get cssClass() {
@@ -128,6 +145,7 @@ export class AppPanelLayoutService implements TrmrkDisaposable {
     if (this._alwaysRenderLeftPanel !== value) {
       this._alwaysRenderLeftPanel = value;
       this.panelsVisibilityChanged();
+      this.leftPanelVisibilityPropValueChanged();
       this.alwaysRenderLeftPanelChanged.emit(value);
     }
   }
@@ -140,6 +158,7 @@ export class AppPanelLayoutService implements TrmrkDisaposable {
     if (this._showLeftPanel !== value) {
       this._showLeftPanel = value;
       this.panelsVisibilityChanged();
+      this.leftPanelVisibilityPropValueChanged();
       this.showLeftPanelChanged.emit(value);
     }
   }
@@ -168,6 +187,7 @@ export class AppPanelLayoutService implements TrmrkDisaposable {
     if (this._alwaysRenderMiddlePanel !== value) {
       this._alwaysRenderMiddlePanel = value;
       this.panelsVisibilityChanged();
+      this.middlePanelVisibilityPropValueChanged();
       this.alwaysRenderMiddlePanelChanged.emit(value);
     }
   }
@@ -180,6 +200,7 @@ export class AppPanelLayoutService implements TrmrkDisaposable {
     if (this._showMiddlePanel !== value) {
       this._showMiddlePanel = value;
       this.panelsVisibilityChanged();
+      this.middlePanelVisibilityPropValueChanged();
       this.showMiddlePanelChanged.emit(value);
     }
   }
@@ -208,6 +229,7 @@ export class AppPanelLayoutService implements TrmrkDisaposable {
     if (this._alwaysRenderRightPanel !== value) {
       this._alwaysRenderRightPanel = value;
       this.panelsVisibilityChanged();
+      this.rightPanelVisibilityPropValueChanged();
       this.alwaysRenderRightPanelChanged.emit(value);
     }
   }
@@ -220,6 +242,7 @@ export class AppPanelLayoutService implements TrmrkDisaposable {
     if (this._showRightPanel !== value) {
       this._showRightPanel = value;
       this.panelsVisibilityChanged();
+      this.rightPanelVisibilityPropValueChanged();
       this.showRightPanelChanged.emit(value);
     }
   }
@@ -241,37 +264,44 @@ export class AppPanelLayoutService implements TrmrkDisaposable {
   }
 
   dispose() {
-    this.alwaysRenderLeftPanelChanged.subscribe();
-    this.showLeftPanelChanged.subscribe();
-    this.alwaysRenderMiddlePanelChanged.subscribe();
-    this.showMiddlePanelChanged.subscribe();
-    this.alwaysRenderRightPanelChanged.subscribe();
-    this.showRightPanelChanged.subscribe();
+    this.reset();
+    this.alwaysRenderLeftPanelChanged.unsubscribe();
+    this.showLeftPanelChanged.unsubscribe();
+    this.alwaysRenderMiddlePanelChanged.unsubscribe();
+    this.showMiddlePanelChanged.unsubscribe();
+    this.alwaysRenderRightPanelChanged.unsubscribe();
+    this.showRightPanelChanged.unsubscribe();
 
     this.onLeftPanelTouchStartOrMouseDown.unsubscribe();
     this.onMiddlePanelTouchStartOrMouseDown.unsubscribe();
     this.onRightPanelTouchStartOrMouseDown.unsubscribe();
     this.onActivePanelChanged.unsubscribe();
-    this.onAfterSetup.subscribe();
+    this.onAfterSetup.unsubscribe();
+
+    for (let subscriptionsArr of [
+      this.leftPanelMenuClosedSubscriptions,
+      this.middlePanelMenuClosedSubscriptions,
+      this.rightPanelMenuClosedSubscriptions,
+    ]) {
+      for (let subscription of subscriptionsArr) {
+        subscription.unsubscribe();
+      }
+
+      subscriptionsArr.splice(0, subscriptionsArr.length);
+    }
 
     this.setupArgs = null!;
   }
 
   setup(args: AppPanelLayoutServiceSetupArgs) {
+    this.reset();
     this.setupArgs = args;
-
-    document.addEventListener('mousedown', this.documentTouchStartOrMouseDown, {
-      capture: true,
-    });
-
-    document.addEventListener('touchstart', this.documentTouchStartOrMouseDown, {
-      capture: true,
-    });
-
     this.updatePanelWidthRatiosCore(PanelPosition.None);
     this.updatePanelWidths();
     this.onAfterSetup.emit();
   }
+
+  reset() {}
 
   leftPanelResizeBtnDragStart(event: TouchOrMouseCoords) {
     this.updatePanelWidthRatiosCore(PanelPosition.Left);
@@ -328,14 +358,17 @@ export class AppPanelLayoutService implements TrmrkDisaposable {
 
   leftPanelOptionsMenuBtnClick() {
     this.setupArgs.leftPanelOptionsMenuTrigger().openMenu();
+    this.optionsMenuOpenForPanel = PanelPosition.Left;
   }
 
   middlePanelOptionsMenuBtnClick() {
     this.setupArgs.middlePanelOptionsMenuTrigger().openMenu();
+    this.optionsMenuOpenForPanel = PanelPosition.Middle;
   }
 
   rightPanelOptionsMenuBtnClick() {
     this.setupArgs.rightPanelOptionsMenuTrigger().openMenu();
+    this.optionsMenuOpenForPanel = PanelPosition.Right;
   }
 
   leftPanelTouchStartOrMouseDown(event: MouseEvent | TouchEvent) {
@@ -357,7 +390,7 @@ export class AppPanelLayoutService implements TrmrkDisaposable {
     const target = event.target as HTMLElement;
 
     if (target) {
-      if (!(this.setupArgs.containerEl().nativeElement as HTMLElement).contains(target)) {
+      if (!(this.setupArgs.containerEl().nativeElement as HTMLElement)?.contains(target)) {
         this.updateActivePanel(PanelPosition.None);
       }
     }
@@ -564,5 +597,60 @@ export class AppPanelLayoutService implements TrmrkDisaposable {
       this.activePanel = activePanel;
       this.onActivePanelChanged.emit(activePanel);
     }
+  }
+
+  leftPanelVisibilityPropValueChanged() {
+    this.panelVisibilityPropValueChanged(
+      this.setupArgs.leftPanelOptionsMenuTrigger,
+      this.leftPanelMenuClosedSubscriptions,
+      this.leftPanelOptionsMenuClosed
+    );
+  }
+
+  middlePanelVisibilityPropValueChanged() {
+    this.panelVisibilityPropValueChanged(
+      this.setupArgs.rightPanelOptionsMenuTrigger,
+      this.rightPanelMenuClosedSubscriptions,
+      this.rightPanelOptionsMenuClosed
+    );
+  }
+
+  rightPanelVisibilityPropValueChanged() {
+    this.panelVisibilityPropValueChanged(
+      this.setupArgs.middlePanelOptionsMenuTrigger,
+      this.middlePanelMenuClosedSubscriptions,
+      this.middlePanelOptionsMenuClosed
+    );
+  }
+
+  panelVisibilityPropValueChanged(
+    panelOptionsMenuTriggerFactory: () => MatMenuTrigger,
+    panelMenuClosedSubscriptions: Subscription[],
+    panelOptionsMenuClosed: () => void
+  ) {
+    setTimeout(() => {
+      const panelOptionsMenuTrigger = panelOptionsMenuTriggerFactory();
+
+      if (panelOptionsMenuTrigger) {
+        panelMenuClosedSubscriptions.push(
+          panelOptionsMenuTrigger.menuClosed.subscribe(panelOptionsMenuClosed)
+        );
+      }
+    });
+  }
+
+  leftPanelOptionsMenuClosed() {
+    this.activePanel = PanelPosition.Left;
+    this.optionsMenuOpenForPanel = PanelPosition.None;
+  }
+
+  middlePanelOptionsMenuClosed() {
+    this.activePanel = PanelPosition.Middle;
+    this.optionsMenuOpenForPanel = PanelPosition.None;
+  }
+
+  rightPanelOptionsMenuClosed() {
+    this.activePanel = PanelPosition.Right;
+    this.optionsMenuOpenForPanel = PanelPosition.None;
   }
 }
