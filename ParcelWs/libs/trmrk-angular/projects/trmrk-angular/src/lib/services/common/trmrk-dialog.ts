@@ -74,11 +74,13 @@ export const openDialog = <TData extends TrmrkDialogComponentDataCore>(
     target.parentElement!.blur();
   }
 
-  args.matDialog.open(args.dialogComponent, {
+  const dialogRef = args.matDialog.open(args.dialogComponent, {
     panelClass: ['trmrk-mat-dialog-panel', getDialogPanelSizeCssClass(args.dialogPanelSize)],
     disableClose: true,
     data: args.data,
   });
+
+  return dialogRef;
 };
 
 export const updateModalVisibility = (modalHostEl: HTMLElement, show: boolean) => {

@@ -68,6 +68,10 @@ export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
       try {
         await this.resetAppService.resetApp(this.appStateService.dbObjNamePrefix);
         this.showSuccessMessage++;
+
+        if (this.appStateService.defaults.appResetTriggersSetup) {
+          this.appStateService.setupOk.next(false);
+        }
       } catch (err) {
         this.showErrorMessage++;
         this.errorMessage = getIDbRequestOpenErrorMsg(err as DOMException);

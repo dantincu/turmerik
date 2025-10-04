@@ -28,7 +28,9 @@ export class ModalService implements OnDestroy {
 
     this.currentModalIdChangedSubscription = appService.appStateService.currentModalId.subscribe(
       (currentModalId) => {
-        updateModalVisibility(this.hostEl(), this.modalId === currentModalId);
+        setTimeout(() => {
+          updateModalVisibility(this.hostEl(), this.modalId === currentModalId);
+        });
       }
     );
 

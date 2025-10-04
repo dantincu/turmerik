@@ -60,6 +60,11 @@ export class TrmrkResetAppService implements OnDestroy {
         setTimeout(async () => {
           try {
             await this.resetAppService.resetApp(this.appStateService.dbObjNamePrefix);
+
+            if (this.appStateService.defaults.appResetTriggersSetup) {
+              this.appStateService.setupOk.next(false);
+            }
+
             const url = replaceQueryParams('', null, false);
 
             this.router.navigate([url], {

@@ -30,10 +30,12 @@ export interface AppControlsVisibility {
 }
 
 export interface AppDefaultValues {
+  appResetTriggersSetup: boolean;
   show: AppControlsVisibility;
 }
 
 export const getAppDefaultValues = (): AppDefaultValues => ({
+  appResetTriggersSetup: true,
   show: {
     appBar: {
       backBtn: true,
@@ -62,6 +64,7 @@ export abstract class AppStateServiceBase implements OnDestroy {
   showAppBar = new TrmrkObservable<boolean>(true);
   currentModalId = new TrmrkObservable<number>(0);
   setupOk = new TrmrkObservable<boolean>(false);
+  performingSetup = new TrmrkObservable<boolean>(false);
   appSuspended = new TrmrkObservable<boolean>(false);
 
   defaults = getAppDefaultValues();

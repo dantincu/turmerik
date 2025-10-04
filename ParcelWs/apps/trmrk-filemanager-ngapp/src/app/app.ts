@@ -26,15 +26,15 @@ export class App implements OnDestroy {
     @Inject(AppServiceBase) private appService: AppService,
     private appSetupDialog: MatDialog
   ) {
-    this.setupOkValue = this.setupOkValue.bind(this);
+    this.setupOk = this.setupOk.bind(this);
 
     this.setupOkValueSubscription = appService.appStateService.setupOk.subscribe((setupOk) => {
-      this.setupOkValue(setupOk);
+      this.setupOk(setupOk);
     });
 
     if (!appService.appStateService.setupOk.value) {
       setTimeout(() => {
-        // this.setupOkValue(false);
+        this.setupOk(false);
       });
     }
   }
@@ -43,9 +43,11 @@ export class App implements OnDestroy {
     this.setupOkValueSubscription.unsubscribe();
   }
 
-  setupOkValue(setupOk: boolean) {
-    if (!setupOk) {
-      openDialog<TrmrkAppSetupDialogComponentData>({
+  setupOk(setupOk: boolean) {
+    if (!setupOk && !this.appService.appStateService.performingSetup.value) {
+      this.appService.appStateService.performingSetup.next(true);
+
+      const dialogRef = openDialog<TrmrkAppSetupDialogComponentData>({
         matDialog: this.appSetupDialog,
         dialogComponent: TrmrkAppSetupModal,
         data: {
@@ -57,6 +59,11 @@ export class App implements OnDestroy {
           },
         },
         dialogPanelSize: DialogPanelSize.Default,
+      });
+
+      const subscription = dialogRef.afterClosed().subscribe(() => {
+        subscription.unsubscribe();
+        this.appService.appStateService.performingSetup.next(false);
       });
     }
   }
