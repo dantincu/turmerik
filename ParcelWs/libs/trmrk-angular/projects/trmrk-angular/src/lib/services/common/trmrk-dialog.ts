@@ -15,6 +15,11 @@ export interface TrmrkDialogDataCore {
   contentTemplate?: TemplateRef<any> | NullOrUndef;
   actionsTemplate?: TemplateRef<any> | NullOrUndef;
   useMatDialogComponents?: boolean | NullOrUndef;
+  showOptionsBtn?: boolean | NullOrUndef;
+  showOptionsMenuTopStrip?: boolean | NullOrUndef;
+  optionsMenuTopStripTemplate?: TemplateRef<any> | NullOrUndef;
+  showManageTabsOptionsMenuBtn?: boolean | NullOrUndef;
+  optionsMenuTemplate?: TemplateRef<any> | NullOrUndef;
 }
 
 export interface TrmrkDialogData<TData extends TrmrkDialogComponentDataCore>
@@ -71,7 +76,6 @@ export const openDialog = <TData extends TrmrkDialogComponentDataCore>(
 
   args.matDialog.open(args.dialogComponent, {
     panelClass: ['trmrk-mat-dialog-panel', getDialogPanelSizeCssClass(args.dialogPanelSize)],
-    // disableClose: args.data.disableClose ?? undefined,
     disableClose: true,
     data: args.data,
   });

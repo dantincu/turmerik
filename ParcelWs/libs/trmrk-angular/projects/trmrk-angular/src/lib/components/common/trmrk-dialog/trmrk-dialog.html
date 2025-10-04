@@ -11,23 +11,38 @@
   }</trmrk-horiz-strip
 >
 <ng-template #topStripTrailingTemplate>
-  @if (!data.disableClose) {
+  @if (data.showOptionsBtn !== false) {
   <button
     mat-icon-button
-    class="trmrk-icon-btn"
-    (click)="closeModalClick($event)"
+    class="trmrk-icon-btn trmrk-options-btn"
+    [matMenuTriggerFor]="null"
+    #optionsMenuTrigger="matMenuTrigger"
+    (click)="openOptionsMenuBtnClick($event)"
   >
+    <mat-icon class="trmrk-icon">more_vert</mat-icon>
+  </button>
+  <mat-menu class="trmrk-menu" dense>
+    @if (data.showOptionsMenuTopStrip !== false) {
+    <div mat-menu-item class="trmrk-menu-item">
+      @if (data.showManageTabsOptionsMenuBtn !== false) {
+      <button mat-icon-button class="trmrk-icon-btn">
+        <div class="trmrk-custom-svg-icon-wrapper" [innerHtml]="tabGroupIcon"></div>
+      </button>
+      }
+      <ng-container *ngTemplateOutlet="data.optionsMenuTopStripTemplate"></ng-container>
+    </div>
+    }
+    <ng-container *ngTemplateOutlet="data.optionsMenuTemplate"></ng-container>
+  </mat-menu>
+  } @if (data.disableClose !== true) {
+  <button mat-icon-button class="trmrk-icon-btn" (click)="closeModalClick($event)">
     <mat-icon class="trmrk-icon">close</mat-icon>
   </button>
   }
 </ng-template>
 @if (data.useMatDialogComponents === false) {
-<ng-container
-  *ngTemplateOutlet="data.contentTemplate; context: { data: data.data }"
-></ng-container>
-<ng-container
-  *ngTemplateOutlet="data.actionsTemplate; context: { data: data.data }"
-></ng-container>
+<ng-container *ngTemplateOutlet="data.contentTemplate; context: { data: data.data }"></ng-container>
+<ng-container *ngTemplateOutlet="data.actionsTemplate; context: { data: data.data }"></ng-container>
 } @if (data.useMatDialogComponents ?? true) {
 <div mat-dialog-content class="trmrk-dialog-content">
   <ng-container

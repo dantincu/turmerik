@@ -109,7 +109,6 @@ export class TrmrkAppThemesService implements OnDestroy {
       dialogComponent: this.trmrkEditAppThemeDialogComponent,
       data: {
         title: 'Add app theme',
-        disableClose: false,
         data: {
           name: '',
         },
