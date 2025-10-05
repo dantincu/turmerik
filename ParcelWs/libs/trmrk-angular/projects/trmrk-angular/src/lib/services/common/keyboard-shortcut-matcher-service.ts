@@ -71,7 +71,7 @@ export class KeyboardShortcutMatcher implements OnDestroy {
             i++;
           }
         } else {
-          i++;
+          this.partialMatches.splice(i, 1);
         }
       }
     }
