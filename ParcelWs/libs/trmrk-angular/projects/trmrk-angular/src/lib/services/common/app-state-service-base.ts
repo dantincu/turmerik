@@ -82,8 +82,6 @@ export abstract class AppStateServiceBase implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.isDarkMode.unsubscribeAll();
-    this.showAppBar.unsubscribeAll();
     this.revertDarkModeToDefault.unsubscribe();
   }
 }

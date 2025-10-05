@@ -1,0 +1,135 @@
+import { Injectable, OnDestroy, Inject } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import {
+  BasicAppSettingsDbAdapter,
+  KeyPress,
+  KeyboardShortcut,
+  KeyboardShortcutSrlzbl,
+} from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
+
+import { NullOrUndef } from '../../../trmrk/core';
+
+import { injectionTokens } from '../dependency-injection/injection-tokens';
+import { TrmrkObservable } from './TrmrkObservable';
+import { KeyboardShortcutMatcher } from './keyboard-shortcut-matcher-service';
+
+export interface KeyboardShortcutServiceSetupArgs {
+  shortcuts: KeyboardShortcut[];
+}
+
+export interface KeyboardShortcutContainer {
+  containerElRetriever: () => HTMLElement | NullOrUndef;
+  componentId: number;
+  scopes: string[];
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class KeyboardShortcutService implements OnDestroy {
+  shortcuts: KeyboardShortcut[] = [];
+  scopeObserversMap: { [scope: string]: TrmrkObservable<KeyboardShortcut> } = {};
+
+  private readonly containers: KeyboardShortcutContainer[] = [];
+
+  constructor(
+    @Inject(injectionTokens.basicAppSettingsDbAdapter.token)
+    private trmrkBasicAppSettings: BasicAppSettingsDbAdapter,
+    private keyboardShortcutMatcher: KeyboardShortcutMatcher
+  ) {
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    window.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('keydown', this.handleKeyDown);
+    this.shortcuts = [];
+    this.containers.splice(0, this.containers.length);
+    this.scopeObserversMap = {};
+  }
+
+  setup(args: KeyboardShortcutServiceSetupArgs): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const arr = (this.shortcuts = args.shortcuts)
+        .map((s) => s.scopes)
+        .reduce((s1, s2) => [...s1, ...s2.filter((s) => !s1.includes(s))], [])
+        .map((s) => ({ key: s, obs: new TrmrkObservable<KeyboardShortcut>(null!) }));
+
+      for (let obj of arr) {
+        this.scopeObserversMap[obj.key] = obj.obs;
+      }
+
+      this.trmrkBasicAppSettings.open(
+        (_, db) => {
+          const req = this.trmrkBasicAppSettings.stores.keyboardShortcuts.store(db).getAll();
+
+          req.onsuccess = (event) => {
+            const target = event.target as IDBRequest<KeyboardShortcutSrlzbl[]>;
+
+            for (let srlzbl of target.result) {
+              const shortcut = this.shortcuts.find((s) => s.name === srlzbl.name);
+
+              if (shortcut) {
+                shortcut.enabled = srlzbl.enabled;
+
+                if (srlzbl.sequence) {
+                  shortcut.sequence = JSON.parse(srlzbl.sequence);
+                }
+              }
+            }
+
+            for (let shortcut of this.shortcuts) {
+              shortcut.enabled ??= true;
+            }
+
+            this.keyboardShortcutMatcher.setup({
+              shortcuts: this.shortcuts,
+              containers: this.containers,
+            });
+
+            resolve();
+          };
+
+          req.onerror = (event) => {
+            const target = event.target as IDBRequest;
+            reject(target.error);
+          };
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  }
+
+  registerContainer(container: KeyboardShortcutContainer) {
+    this.containers.push(container);
+  }
+
+  unRegisterContainer(componentId: number) {
+    const idx = this.containers.findIndex((c) => c.componentId === componentId);
+
+    if (idx >= 0) {
+      this.containers.splice(idx, 1);
+    }
+  }
+
+  handleKeyDown(event: KeyboardEvent) {
+    const matching = this.keyboardShortcutMatcher.fullyMatchesShortcutSequence(event);
+
+    if (matching) {
+      const shortcut = this.shortcuts.find((s) => s.name === matching.name);
+
+      if (shortcut) {
+        for (let scope of shortcut.scopes) {
+          const obs = this.scopeObserversMap[scope];
+          obs?.next(shortcut);
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }
+  }
+}

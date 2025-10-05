@@ -3,10 +3,8 @@ import { Subject, Observable, Subscription } from 'rxjs';
 import { NullOrUndef } from '../../../trmrk/core';
 
 export class TrmrkObservable<T> {
-  public readonly $obs: Observable<T>;
-
+  private readonly $obs: Observable<T>;
   private readonly subject: Subject<T>;
-  private readonly subscriptions: Subscription[] = [];
 
   public get value(): T {
     return this._value;
@@ -24,20 +22,7 @@ export class TrmrkObservable<T> {
 
   public subscribe(callback: (value: T) => void) {
     const subscription = this.$obs.subscribe(callback);
-    // this.subscriptions.push(subscription);
     return subscription;
-  }
-
-  public unsubscribeAll() {
-    for (let subscription of this.subscriptions) {
-      subscription.unsubscribe();
-    }
-
-    this.subscriptions.splice(0, this.subscriptions.length);
-  }
-
-  public [Symbol.dispose]() {
-    this.unsubscribeAll();
   }
 }
 

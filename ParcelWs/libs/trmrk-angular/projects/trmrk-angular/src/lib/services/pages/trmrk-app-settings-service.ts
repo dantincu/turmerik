@@ -35,7 +35,7 @@ export class TrmrkAppSettingsService implements OnDestroy {
     this.onDarkModeBtnClick = this.onDarkModeBtnClick.bind(this);
     this.darkModeStateChange = this.darkModeStateChange.bind(this);
 
-    this.darkModeStateChangeSubscription = appStateService.isDarkMode.$obs.subscribe(
+    this.darkModeStateChangeSubscription = appStateService.isDarkMode.subscribe(
       this.darkModeStateChange
     );
 

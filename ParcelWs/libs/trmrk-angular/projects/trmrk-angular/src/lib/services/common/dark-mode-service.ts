@@ -17,7 +17,7 @@ export class DarkModeService {
   constructor(public appStateService: AppStateServiceBase) {
     this.darkModeStateChange = this.darkModeStateChange.bind(this);
 
-    this.darkModeStateChangeSubscription = appStateService.isDarkMode.$obs.subscribe(
+    this.darkModeStateChangeSubscription = appStateService.isDarkMode.subscribe(
       this.darkModeStateChange
     );
 

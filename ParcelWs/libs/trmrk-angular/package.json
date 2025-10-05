@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --project=trmrk-angular-testapp --serve-path / --host=0.0.0.0 --ssl=true --ssl-key=./sslcert/key.pem --ssl-cert=./sslcert/cert.pem",
+    "build": "ng build --project=trmrk-angular",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
