@@ -118,7 +118,16 @@ export class KeyboardShortcutMatcher implements OnDestroy {
   }
 
   containerMatchesKeyboardEvent(container: KeyboardShortcutContainer, event: KeyboardEvent) {
-    const matches = container.containerElRetriever()?.contains(event.target as Node) ?? true;
+    let matches: boolean;
+
+    if (container.considerShortcutPredicate) {
+      matches = container.considerShortcutPredicate(event);
+    } else if (container.containerElRetriever) {
+      matches = container.containerElRetriever()?.contains(event.target as Node) ?? true;
+    } else {
+      matches = true;
+    }
+
     return matches;
   }
 

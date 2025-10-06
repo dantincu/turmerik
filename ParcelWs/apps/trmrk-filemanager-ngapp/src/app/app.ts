@@ -3,12 +3,15 @@ import { RouterOutlet } from '@angular/router';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 
-import { KeyboardShortcut } from '../trmrk-browser/indexedDB/databases/BasicAppSettings';
 import { openDialog, DialogPanelSize } from '../trmrk-angular/services/common/trmrk-dialog';
 import { AppServiceBase } from '../trmrk-angular/services/common/app-service-base';
 import { KeyboardShortcutService } from '../trmrk-angular/services/common/keyboard-shortcut-service';
 import { ComponentIdService } from '../trmrk-angular/services/common/component-id-service';
-import { unsubscribeAll } from '../trmrk-angular/services/common/rxjs/subscription';
+
+import {
+  keyboardShortcutKeys,
+  keyboardShortcutScopes,
+} from './services/common/keyboard-service-registrar';
 
 import { AppService } from './services/common/app-service';
 
@@ -27,17 +30,6 @@ export class App implements OnDestroy {
   id: number;
   private setupOkValueSubscription: Subscription;
   private appSetupDialogRef: MatDialogRef<unknown, any> | null = null;
-
-  private keyboardShortcutHandlersMap: {
-    [name: string]: (keyboardShortcut: KeyboardShortcut) => void;
-  } = {};
-
-  private keyboardShortcutScopesHandlersMap: {
-    [scope: string]: {
-      [name: string]: (keyboardShortcut: KeyboardShortcut) => void;
-    };
-  } = {};
-
   private keyboardShortcutSubscriptions: Subscription[] = [];
 
   constructor(
@@ -102,11 +94,11 @@ export class App implements OnDestroy {
       ...this.keyboardShortcutService.registerAndSubscribeToScopes(
         {
           componentId: this.id,
-          containerElRetriever: () => null,
+          considerShortcutPredicate: () => this.appService.appStateService.performingSetup.value,
         },
         {
-          'app-setup-modal': {
-            'close-app-setup-modal': () => {
+          [keyboardShortcutScopes.appSetupModal]: {
+            [keyboardShortcutKeys.closeAppSetupModal]: () => {
               this.appSetupDialogRef?.close();
             },
           },
