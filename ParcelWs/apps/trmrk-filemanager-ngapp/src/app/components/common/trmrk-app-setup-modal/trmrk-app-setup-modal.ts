@@ -25,10 +25,10 @@ import {
 import { injectionTokens } from '../../../../trmrk-angular/services/dependency-injection/injection-tokens';
 import { DriveStorageOption, DriveStorageType } from '../../../../trmrk/driveStorage/appConfig';
 
-import { AppStateService } from '../../../services/app-state-service';
-import { AppService } from '../../../services/app-service';
-import { AppConfig } from '../../../services/app-config';
-import { AppDriveStorageOption } from '../../../services/driveStorageOption';
+import { AppStateService } from '../../../services/common/app-state-service';
+import { AppService } from '../../../services/common/app-service';
+import { AppConfig } from '../../../services/common/app-config';
+import { AppDriveStorageOption } from '../../../services/common/driveStorageOption';
 
 export interface TrmrkAppSetupDialogComponentData extends TrmrkDialogComponentDataCore {
   optionChosen: (option: AppDriveStorageOption) => void;

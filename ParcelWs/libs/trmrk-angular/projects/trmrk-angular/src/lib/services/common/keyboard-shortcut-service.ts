@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy, Inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import {
   BasicAppSettingsDbAdapter,
@@ -13,14 +13,18 @@ import { NullOrUndef } from '../../../trmrk/core';
 import { injectionTokens } from '../dependency-injection/injection-tokens';
 import { TrmrkObservable } from './TrmrkObservable';
 import { KeyboardShortcutMatcher } from './keyboard-shortcut-matcher-service';
+import { unsubscribeAll } from './rxjs/subscription';
 
 export interface KeyboardShortcutServiceSetupArgs {
   shortcuts: KeyboardShortcut[];
 }
 
-export interface KeyboardShortcutContainer {
+export interface KeyboardShortcutContainerCore {
   containerElRetriever: () => HTMLElement | NullOrUndef;
   componentId: number;
+}
+
+export interface KeyboardShortcutContainer extends KeyboardShortcutContainerCore {
   scopes: string[];
 }
 
@@ -113,6 +117,48 @@ export class KeyboardShortcutService implements OnDestroy {
     if (idx >= 0) {
       this.containers.splice(idx, 1);
     }
+  }
+
+  subscribeToScope(
+    scope: string,
+    keyboardShortcutHandlersMap: {
+      [name: string]: (keyboardShortcut: KeyboardShortcut) => void;
+    }
+  ) {
+    const subscription = this.scopeObserversMap[scope].subscribe((shortcut) => {
+      const handler = keyboardShortcutHandlersMap[shortcut.name];
+
+      if (handler) {
+        handler(shortcut);
+      }
+    });
+
+    return subscription;
+  }
+
+  registerAndSubscribeToScopes(
+    container: KeyboardShortcutContainerCore,
+    scopeHandlersMap: {
+      [scope: string]: {
+        [name: string]: (keyboardShortcut: KeyboardShortcut) => void;
+      };
+    }
+  ) {
+    const containerToRegister = container as KeyboardShortcutContainer;
+    const scopesArr = Object.keys(scopeHandlersMap);
+    containerToRegister.scopes ??= scopesArr;
+    this.registerContainer(containerToRegister);
+
+    const subscriptions: Subscription[] = scopesArr.map((scope) =>
+      this.subscribeToScope(scope, scopeHandlersMap[scope])
+    );
+
+    return subscriptions;
+  }
+
+  unregisterAndUnsubscribeFromScopes(componentId: number, subscriptions: Subscription[]) {
+    this.unRegisterContainer(componentId);
+    unsubscribeAll(subscriptions);
   }
 
   handleKeyDown(event: KeyboardEvent) {

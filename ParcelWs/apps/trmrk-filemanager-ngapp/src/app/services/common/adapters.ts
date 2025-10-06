@@ -1,4 +1,4 @@
-import { BasicAppSettingsDbAdapter } from '../../trmrk-browser/indexedDB/databases/BasicAppSettings';
+import { BasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
 import { APP_NAME } from './core';
 

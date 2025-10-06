@@ -8,8 +8,9 @@ import { openDialog, DialogPanelSize } from '../trmrk-angular/services/common/tr
 import { AppServiceBase } from '../trmrk-angular/services/common/app-service-base';
 import { KeyboardShortcutService } from '../trmrk-angular/services/common/keyboard-shortcut-service';
 import { ComponentIdService } from '../trmrk-angular/services/common/component-id-service';
+import { unsubscribeAll } from '../trmrk-angular/services/common/rxjs/subscription';
 
-import { AppService } from './services/app-service';
+import { AppService } from './services/common/app-service';
 
 import {
   TrmrkAppSetupModal,
@@ -30,6 +31,14 @@ export class App implements OnDestroy {
   private keyboardShortcutHandlersMap: {
     [name: string]: (keyboardShortcut: KeyboardShortcut) => void;
   } = {};
+
+  private keyboardShortcutScopesHandlersMap: {
+    [scope: string]: {
+      [name: string]: (keyboardShortcut: KeyboardShortcut) => void;
+    };
+  } = {};
+
+  private keyboardShortcutSubscriptions: Subscription[] = [];
 
   constructor(
     @Inject(AppServiceBase) private appService: AppService,
@@ -55,7 +64,11 @@ export class App implements OnDestroy {
 
   ngOnDestroy(): void {
     this.setupOkValueSubscription.unsubscribe();
-    this.keyboardShortcutService.unRegisterContainer(this.id);
+
+    this.keyboardShortcutService.unregisterAndUnsubscribeFromScopes(
+      this.id,
+      this.keyboardShortcutSubscriptions
+    );
   }
 
   setupOk(setupOk: boolean) {
@@ -85,35 +98,20 @@ export class App implements OnDestroy {
   }
 
   setupKeyboardShortcuts() {
-    this.keyboardShortcutService.setup({
-      shortcuts: [
+    this.keyboardShortcutSubscriptions.push(
+      ...this.keyboardShortcutService.registerAndSubscribeToScopes(
         {
-          name: 'close-app-setup-modal',
-          displayName: 'Close App Setup Modal',
-          scopes: ['app-setup-modal'],
-          sequence: [{ key: 'm', ctrlKey: true }, { key: 'Escape' }],
+          componentId: this.id,
+          containerElRetriever: () => null,
         },
-      ],
-    });
-
-    this.keyboardShortcutService.registerContainer({
-      scopes: ['app-setup-modal'],
-      componentId: this.id,
-      containerElRetriever: () => null,
-    });
-
-    this.keyboardShortcutHandlersMap = {
-      'close-app-setup-modal': () => {
-        this.appSetupDialogRef?.close();
-      },
-    };
-
-    this.keyboardShortcutService.scopeObserversMap['app-setup-modal'].subscribe((shortcut) => {
-      const handler = this.keyboardShortcutHandlersMap[shortcut.name];
-
-      if (handler) {
-        handler(shortcut);
-      }
-    });
+        {
+          'app-setup-modal': {
+            'close-app-setup-modal': () => {
+              this.appSetupDialogRef?.close();
+            },
+          },
+        }
+      )
+    );
   }
 }

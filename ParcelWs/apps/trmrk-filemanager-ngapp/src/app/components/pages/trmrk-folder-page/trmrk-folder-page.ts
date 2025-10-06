@@ -8,7 +8,7 @@ import { AppServiceBase } from '../../../../trmrk-angular/services/common/app-se
 import { TrmrkAppPage } from '../../../../trmrk-angular/components/common/trmrk-app-page/trmrk-app-page';
 
 import { TrmrkFolderView } from '../../../../trmrk-filemanager-nglib/components/common/trmrk-folder-view/trmrk-folder-view';
-import { AppService } from '../../../services/app-service';
+import { AppService } from '../../../services/common/app-service';
 
 @Component({
   selector: 'trmrk-folder-page',

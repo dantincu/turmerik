@@ -3,10 +3,10 @@ import { ApplicationConfig } from '@angular/core';
 import { getServiceProviders } from '../trmrk-angular/services/dependency-injection/service-providers';
 
 import { environment } from '../environments/environment';
-import { AppService } from './services/app-service';
-import { AppStateService } from './services/app-state-service';
-import { AppConfig } from './services/app-config';
-import { iDbAdapters } from './services/adapters';
+import { AppService } from './services/common/app-service';
+import { AppStateService } from './services/common/app-state-service';
+import { AppConfig } from './services/common/app-config';
+import { iDbAdapters } from './services/common/adapters';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
