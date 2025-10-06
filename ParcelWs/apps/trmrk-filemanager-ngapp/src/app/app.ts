@@ -7,6 +7,8 @@ import { openDialog, DialogPanelSize } from '../trmrk-angular/services/common/tr
 import { AppServiceBase } from '../trmrk-angular/services/common/app-service-base';
 import { KeyboardShortcutService } from '../trmrk-angular/services/common/keyboard-shortcut-service';
 import { ComponentIdService } from '../trmrk-angular/services/common/component-id-service';
+import { runOnceWhenValueIs } from '../trmrk-angular/services/common/TrmrkObservable';
+import { KeyboardServiceRegistrar } from './services/common/keyboard-service-registrar';
 
 import {
   keyboardShortcutKeys,
@@ -36,7 +38,8 @@ export class App implements OnDestroy {
     @Inject(AppServiceBase) private appService: AppService,
     private appSetupDialog: MatDialog,
     private keyboardShortcutService: KeyboardShortcutService,
-    private componentIdService: ComponentIdService
+    private componentIdService: ComponentIdService,
+    private keyboardServiceRegistrar: KeyboardServiceRegistrar
   ) {
     this.id = this.componentIdService.getNextId();
     this.setupOk = this.setupOk.bind(this);
@@ -90,20 +93,22 @@ export class App implements OnDestroy {
   }
 
   setupKeyboardShortcuts() {
-    this.keyboardShortcutSubscriptions.push(
-      ...this.keyboardShortcutService.registerAndSubscribeToScopes(
-        {
-          componentId: this.id,
-          considerShortcutPredicate: () => this.appService.appStateService.performingSetup.value,
-        },
-        {
-          [keyboardShortcutScopes.appSetupModal]: {
-            [keyboardShortcutKeys.closeAppSetupModal]: () => {
-              this.appSetupDialogRef?.close();
-            },
+    return runOnceWhenValueIs(this.keyboardServiceRegistrar.shortcutsReady, true, () => {
+      this.keyboardShortcutSubscriptions.push(
+        ...this.keyboardShortcutService.registerAndSubscribeToScopes(
+          {
+            componentId: this.id,
+            considerShortcutPredicate: () => this.appService.appStateService.performingSetup.value,
           },
-        }
-      )
-    );
+          {
+            [keyboardShortcutScopes.appSetupModal]: {
+              [keyboardShortcutKeys.closeAppSetupModal]: () => {
+                this.appSetupDialogRef?.close();
+              },
+            },
+          }
+        )
+      );
+    });
   }
 }

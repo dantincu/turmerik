@@ -26,7 +26,7 @@ export class TrmrkObservable<T> {
   }
 }
 
-export const runWhenValueIs = async <TValue, TResult = any | void>(
+export const runOnceWhenValueIs = async <TValue, TResult = any | void>(
   $obs: TrmrkObservable<TValue>,
   value: TValue,
   callback: (val: TValue) => TResult,

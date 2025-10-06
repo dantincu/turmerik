@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { KeyboardShortcutService } from '../../../trmrk-angular/services/common/keyboard-shortcut-service';
 import { mapPropNamesToThemselves, PropNameWordsConvention } from '../../../trmrk/propNames';
+import { TrmrkObservable } from '../../../trmrk-angular/services/common/TrmrkObservable';
 
 export const keyboardShortcutKeys = mapPropNamesToThemselves(
   {
@@ -23,12 +24,14 @@ export const keyboardShortcutScopes = mapPropNamesToThemselves(
   providedIn: 'root',
 })
 export class KeyboardServiceRegistrar {
+  public shortcutsReady = new TrmrkObservable<boolean>(false);
+
   constructor(private keyboardShortcutService: KeyboardShortcutService) {
     this.setupKeyboardShortcuts();
   }
 
-  setupKeyboardShortcuts() {
-    this.keyboardShortcutService.setup({
+  async setupKeyboardShortcuts() {
+    await this.keyboardShortcutService.setup({
       shortcuts: [
         {
           name: keyboardShortcutKeys.closeAppSetupModal,
@@ -38,5 +41,7 @@ export class KeyboardServiceRegistrar {
         },
       ],
     });
+
+    this.shortcutsReady.next(true);
   }
 }
