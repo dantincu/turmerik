@@ -1,6 +1,6 @@
 import { Injectable, Inject, EventEmitter, OnDestroy } from '@angular/core';
 
-import { NullOrUndef } from '../../../trmrk/core';
+import { NullOrUndef, escapeRegexSpecialChars } from '../../../trmrk/core';
 
 import { AppStateServiceBase } from './app-state-service-base';
 import { AppConfigCore } from './app-config';
@@ -25,6 +25,54 @@ export const AppObjectKeyDelims = {
   windowShowDirectoryPicker: ['_', '_'],
 };
 
+export const getAppObjectKey = (
+  parts: string[],
+  appName?: string | NullOrUndef,
+  opts?: GetAppObjectKeyOpts | NullOrUndef
+) => {
+  opts ??= {};
+  opts.delims ??= AppObjectKeyDelims.default;
+  opts.includeAppName ??= (appName ?? null) != null;
+
+  const appObjectKey = [...(opts.includeAppName ? [appName] : []), ...parts]
+    .map((part) => [opts.delims![0], part, opts.delims![1]].join(''))
+    .join('');
+
+  return appObjectKey;
+};
+
+export const extractAppObjectKeyParts = (
+  appObjectKey: string,
+  opts?: GetAppObjectKeyOpts | NullOrUndef
+) => {
+  opts ??= {};
+  opts.delims ??= AppObjectKeyDelims.default;
+  const retArr: string[] = [];
+  let str = appObjectKey;
+
+  while (true) {
+    let idx = str.indexOf(opts.delims[0]);
+
+    if (idx >= 0) {
+      retArr.push(str.substring(0, idx));
+      str = str.substring(idx + opts.delims[0].length);
+      idx = str.indexOf(opts.delims[1]);
+
+      if (idx >= 0) {
+        retArr.push(str.substring(0, idx));
+        str = str.substring(idx + opts.delims[1].length);
+      } else {
+        break;
+      }
+    } else {
+      break;
+    }
+  }
+
+  retArr.push(str);
+  return retArr;
+};
+
 @Injectable()
 export class AppServiceBase implements OnDestroy {
   public onCloseModal = new EventEmitter<number>();
@@ -43,14 +91,11 @@ export class AppServiceBase implements OnDestroy {
   ngOnDestroy(): void {}
 
   getAppObjectKey(parts: string[], opts?: GetAppObjectKeyOpts | NullOrUndef) {
-    opts ??= {};
-    opts.delims ??= AppObjectKeyDelims.default;
-    opts.includeAppName ??= true;
-
-    const appObjectKey = [...(opts.includeAppName ? [this.appStateService.appName] : []), ...parts]
-      .map((part) => [opts.delims![0], part, opts.delims![1]].join(''))
-      .join('');
-
+    const appObjectKey = getAppObjectKey(
+      parts,
+      opts?.includeAppName ? this.appStateService.appName : null,
+      opts
+    );
     return appObjectKey;
   }
 

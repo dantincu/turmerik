@@ -73,7 +73,6 @@ export class TrmrkAppSetupModal implements OnDestroy {
       [getVarName(() => TrmrkAppSetupModal)],
       {
         delims: AppObjectKeyDelims.windowShowDirectoryPicker,
-        includeAppName: false,
       }
     );
 

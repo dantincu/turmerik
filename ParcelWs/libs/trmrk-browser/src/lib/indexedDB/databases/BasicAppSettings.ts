@@ -1,6 +1,9 @@
-import { NullOrUndef } from '../../../trmrk/core';
+import { NullOrUndef, cast } from '../../../trmrk/core';
 import { DbAdapterBase, DbStoreAdapter } from '../DbAdapterBase';
 import { createDbStoreIfNotExists } from '../core';
+import { mapObjProps } from '../../../trmrk/obj';
+import { mapPropNamesToThemselves } from '../../../trmrk/propNames';
+import { namesOf, nameOf } from '../../../trmrk/Reflection/core';
 
 export interface AppTheme {
   id: number;
@@ -8,9 +11,10 @@ export interface AppTheme {
   clientVersion: number;
 }
 
-export interface AppSettingsChoice {
+export interface AppSettingsChoice<TValue = string> {
   key: string;
   catKey: string;
+  value: TValue;
 }
 
 export interface KeyPress {
@@ -36,6 +40,15 @@ export interface KeyboardShortcut extends KeyboardShortcutCore {
   sequence: KeyPress[];
 }
 
+export const commonAppSettingsChoiceCatKeys = mapPropNamesToThemselves({
+  appPanelsLayout: '',
+});
+
+export const commonAppSettingsChoiceKeys = mapPropNamesToThemselves({
+  panelWidthRatios: '',
+  panelVisibilities: '',
+});
+
 export class BasicAppSettingsDbStores {
   public readonly choices = new DbStoreAdapter(BasicAppSettingsDbAdapter.DB_STORES.Choices.name);
 
@@ -52,20 +65,33 @@ export class BasicAppSettingsDbAdapter extends DbAdapterBase {
   public static readonly DB_NAME = 'BasicAppSettings';
   public static readonly DB_VERSION = 1;
 
-  public static readonly DB_STORES = Object.freeze({
-    Choices: Object.freeze({
-      name: 'Choices',
-      keyPath: Object.freeze(['key', 'catKey']),
-    }),
-    AppThemes: Object.freeze({
-      name: 'AppThemes',
-      keyPath: 'id',
-    }),
-    KeyboardShortcuts: Object.freeze({
-      name: 'KeyboardShortcuts',
-      keyPath: 'name',
-    }),
-  });
+  public static readonly DB_STORES = Object.freeze(
+    mapObjProps(
+      {
+        Choices: {
+          name: '',
+          keyPath: Object.freeze(
+            namesOf(() => cast<AppSettingsChoice>(), [(v) => v.catKey, (v) => v.key])
+          ),
+        },
+        AppThemes: {
+          name: '',
+          keyPath: nameOf(
+            () => cast<AppTheme>(),
+            (v) => v.id
+          ),
+        },
+        KeyboardShortcuts: {
+          name: '',
+          keyPath: nameOf(
+            () => cast<KeyboardShortcutSrlzbl>(),
+            (v) => v.name
+          ),
+        },
+      },
+      (propVal, propName) => Object.freeze({ ...propVal, name: propName })
+    )
+  );
 
   public readonly stores = new BasicAppSettingsDbStores();
 

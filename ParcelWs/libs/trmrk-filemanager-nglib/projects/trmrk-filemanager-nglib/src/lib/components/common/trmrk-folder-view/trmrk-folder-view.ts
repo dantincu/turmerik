@@ -11,8 +11,8 @@ import {
   TrmrkPaginatedListServiceSetupArgs,
 } from '../../../../trmrk-angular/services/common/trmrk-paginated-list-service';
 
-import { IntIdMappedAppPanelLayoutServiceFactory } from '../../../../trmrk-angular/services/common/int-id-mapped-app-panel-layout-service-factory';
-import { AppPanelLayoutService } from '../../../../trmrk-angular/services/common/app-panel-layout-service';
+import { IntIdMappedAppPanelsLayoutServiceFactory } from '../../../../trmrk-angular/services/common/int-id-mapped-app-panels-layout-service-factory';
+import { AppPanelsLayoutService } from '../../../../trmrk-angular/services/common/app-panels-layout-service';
 
 import { TrmrkPaginatedList } from '../../../../trmrk-angular/components/common/trmrk-paginated-list/trmrk-paginated-list';
 import { Trmrk3PanelsLayout } from '../../../../trmrk-angular/components/common/trmrk-3-panels-layout/trmrk-3-panels-layout';
@@ -31,17 +31,19 @@ import { Trmrk3PanelsLayout } from '../../../../trmrk-angular/components/common/
 })
 export class TrmrkFolderView {
   layoutId = 0;
-  private layoutService!: AppPanelLayoutService;
+  private layoutService!: AppPanelsLayoutService;
 
   constructor(
     public trmrkPaginatedListService: TrmrkPaginatedListService,
-    private intIdMappedAppPanelLayoutServiceFactory: IntIdMappedAppPanelLayoutServiceFactory
+    private intIdMappedAppPanelLayoutServiceFactory: IntIdMappedAppPanelsLayoutServiceFactory
   ) {
     setTimeout(() => {
       this.layoutId = this.trmrk3PanelsLayout.id;
       this.layoutService = intIdMappedAppPanelLayoutServiceFactory.getOrCreate(this.layoutId);
 
-      this.layoutService.onAfterSetup.subscribe(() => {
+      this.layoutService.loadAppSettingsChoices({});
+
+      this.layoutService.whenReady.subscribe(() => {
         this.layoutService.allowToggleLeftPanel = true;
         this.layoutService.showLeftPanel = true;
         this.layoutService.showLeftPanelOptionsBtn = true;

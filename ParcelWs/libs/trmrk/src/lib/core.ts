@@ -169,3 +169,15 @@ export const iterableToArray = <T>(list: Iterable<T>) => {
 
   return retArr;
 };
+
+export const cast = <T>(obj?: any) => obj as T;
+
+export const escapeRegexSpecialChars = (str: string) => {
+  let retStr = str;
+
+  for (let ch of regexSpecialChars) {
+    retStr = retStr.replaceAll(ch, `\\${ch}`);
+  }
+
+  return retStr;
+};

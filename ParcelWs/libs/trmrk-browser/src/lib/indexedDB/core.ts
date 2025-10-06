@@ -1,17 +1,8 @@
 import { NullOrUndef, AnyOrUnknown } from '../../trmrk/core';
 import { getDOMExceptionErrorMsg } from '../../trmrk-browser/domUtils/core';
 
-export interface TrmrkDBResp<T> {
-  data: T;
-  cacheMatch: boolean;
-  cacheError?: AnyOrUnknown;
-}
-
 export const getIDbRequestOpenErrorMsg = (error: DOMException | null): string =>
-  getDOMExceptionErrorMsg(
-    error,
-    'Unknown error occurred while opening IndexedDB.'
-  );
+  getDOMExceptionErrorMsg(error, 'Unknown error occurred while opening IndexedDB.');
 
 export const createDbStoreIfNotExists = (
   db: IDBDatabase,
@@ -28,5 +19,21 @@ export const createDbStoreIfNotExists = (
   return dbStore;
 };
 
-export const getDbObjName = (parts: string[]) =>
-  parts.map((part) => `[${part}]`).join('');
+export const getDbObjName = (parts: string[]) => parts.map((part) => `[${part}]`).join('');
+
+export interface DbResponse<T> {
+  value: T;
+  event: Event;
+}
+
+export const dbRequestToPromise = <T>(req: IDBRequest<T>) =>
+  new Promise<DbResponse<T>>((resolve, reject) => {
+    req.onsuccess = (event) => {
+      const target = event.target as IDBRequest<T>;
+      resolve({ value: target.result, event });
+    };
+    req.onerror = (event) => {
+      const target = event.target as IDBRequest;
+      reject(target.error);
+    };
+  });

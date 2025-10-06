@@ -13,3 +13,6 @@ export const propName = <T>(_: T, propNameFunc: (obj: T) => any) => getPropName(
 export const nameOf = <T>(_: () => T, propNameFunc: (obj: T) => any) => getPropName(propNameFunc);
 
 export const getVarName = (varNameFunc: () => any) => varNameFunc.toString().split('>')[1]?.trim();
+
+export const namesOf = <T>(dummyObjFactory: () => T, propNameFuncs: ((obj: T) => any)[]) =>
+  propNameFuncs.map((propNameFunc) => nameOf(dummyObjFactory, propNameFunc));

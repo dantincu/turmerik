@@ -19,12 +19,8 @@ export abstract class DbAdapterBase {
   }
 
   open = (
-    onSuccess:
-      | ((event: Event, db: IDBDatabase) => VoidOrAny)
-      | NullOrUndef = null,
-    onError:
-      | ((event: Event, error: DOMException | null) => VoidOrAny)
-      | NullOrUndef = null
+    onSuccess: ((event: Event, db: IDBDatabase) => VoidOrAny) | NullOrUndef = null,
+    onError: ((event: Event, error: DOMException | null) => VoidOrAny) | NullOrUndef = null
   ) => {
     const request = indexedDB.open(this.dbNameStr, this.version);
 
@@ -45,14 +41,6 @@ export abstract class DbAdapterBase {
         const target = event.target as IDBOpenDBRequest;
         onError(event, target?.error ?? null);
       };
-
-      /* onError(
-        {} as Event,
-        {
-          name: 'asdfasdf',
-          message: 'This is a test error',
-        } as DOMException
-      ); */
     }
 
     return request;

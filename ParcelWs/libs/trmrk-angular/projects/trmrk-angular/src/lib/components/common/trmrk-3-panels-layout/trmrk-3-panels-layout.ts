@@ -24,11 +24,11 @@ import { htmlCollectionToArr } from '../../../../trmrk-browser/domUtils/common';
 
 import { AppServiceBase } from '../../../services/common/app-service-base';
 import { ComponentIdService } from '../../../services/common/component-id-service';
-import { IntIdMappedAppPanelLayoutServiceFactory } from '../../../services/common/int-id-mapped-app-panel-layout-service-factory';
+import { IntIdMappedAppPanelsLayoutServiceFactory } from '../../../services/common/int-id-mapped-app-panels-layout-service-factory';
 import {
-  AppPanelLayoutService,
+  AppPanelsLayoutService,
   PanelPosition,
-} from '../../../services/common/app-panel-layout-service';
+} from '../../../services/common/app-panels-layout-service';
 import { whenChanged } from '../../../services/common/simpleChanges';
 import { TrmrkHorizStrip } from '../trmrk-horiz-strip/trmrk-horiz-strip';
 import { TrmrkDrag } from '../../../directives/trmrk-drag';
@@ -69,7 +69,7 @@ export class Trmrk3PanelsLayout implements OnDestroy {
   PanelPosition = PanelPosition;
 
   id: number;
-  service: AppPanelLayoutService;
+  service: AppPanelsLayoutService;
 
   drag_pan: SafeHtml;
   recenter: SafeHtml;
@@ -104,7 +104,7 @@ export class Trmrk3PanelsLayout implements OnDestroy {
     private appService: AppServiceBase,
     private domSanitizer: DomSanitizer,
     private componentIdService: ComponentIdService,
-    private intIdMappedAppPanelLayoutServiceFactory: IntIdMappedAppPanelLayoutServiceFactory
+    private intIdMappedAppPanelLayoutServiceFactory: IntIdMappedAppPanelsLayoutServiceFactory
   ) {
     this.drag_pan = domSanitizer.bypassSecurityTrustHtml(drag_pan);
     this.recenter = domSanitizer.bypassSecurityTrustHtml(recenter);
