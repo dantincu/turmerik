@@ -18,24 +18,23 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
 import { NullOrUndef } from '../../../../trmrk/core';
-import { TouchOrMouseCoords } from '../../../../trmrk-browser/domUtils/touchAndMouseEvents';
-import { getElemIdx } from '../../../../trmrk-browser/domUtils/getDomElemBounds';
-import { htmlCollectionToArr } from '../../../../trmrk-browser/domUtils/common';
-
 import { AppServiceBase } from '../../../services/common/app-service-base';
 import { ComponentIdService } from '../../../services/common/component-id-service';
 import { IntIdMappedAppPanelsLayoutServiceFactory } from '../../../services/common/int-id-mapped-app-panels-layout-service-factory';
+
 import {
   AppPanelsLayoutService,
   PanelPosition,
 } from '../../../services/common/app-panels-layout-service';
-import { whenChanged } from '../../../services/common/simpleChanges';
+
 import { TrmrkHorizStrip } from '../trmrk-horiz-strip/trmrk-horiz-strip';
 import { TrmrkDrag } from '../../../directives/trmrk-drag';
-import { TrmrkDragEvent } from '../../../services/common/types';
+import { TrmrkLongPressOrRightClick } from '../../../directives/trmrk-long-press-or-right-click';
 import { drag_pan } from '../../../assets/icons/material/drag_pan';
 import { recenter } from '../../../assets/icons/material/recenter';
 import { left_panel_open } from '../../../assets/icons/material/left_panel_open';
+import { right_panel_open } from '../../../assets/icons/material/right_panel_open';
+import { top_panel_open } from '../../../assets/icons/material/top_panel_open';
 import { TrmrkTouchStartOrMouseDown } from '../../../directives/trmrk-touch-start-or-mouse-down';
 
 @Component({
@@ -49,6 +48,7 @@ import { TrmrkTouchStartOrMouseDown } from '../../../directives/trmrk-touch-star
     TrmrkHorizStrip,
     TrmrkDrag,
     TrmrkTouchStartOrMouseDown,
+    TrmrkLongPressOrRightClick,
   ],
   templateUrl: './trmrk-3-panels-layout.html',
   styleUrl: './trmrk-3-panels-layout.scss',
@@ -74,6 +74,8 @@ export class Trmrk3PanelsLayout implements OnDestroy {
   drag_pan: SafeHtml;
   recenter: SafeHtml;
   left_panel_open: SafeHtml;
+  right_panel_open: SafeHtml;
+  top_panel_open: SafeHtml;
 
   basePanelWidthRatios = Trmrk3PanelsLayout.dfPanelWidthRatios;
   panelWidthRatios = Trmrk3PanelsLayout.dfPanelWidthRatios;
@@ -109,6 +111,8 @@ export class Trmrk3PanelsLayout implements OnDestroy {
     this.drag_pan = domSanitizer.bypassSecurityTrustHtml(drag_pan);
     this.recenter = domSanitizer.bypassSecurityTrustHtml(recenter);
     this.left_panel_open = domSanitizer.bypassSecurityTrustHtml(left_panel_open);
+    this.right_panel_open = domSanitizer.bypassSecurityTrustHtml(right_panel_open);
+    this.top_panel_open = domSanitizer.bypassSecurityTrustHtml(top_panel_open);
     this.leftPanelVisibilityChanged = this.leftPanelVisibilityChanged.bind(this);
     this.middlePanelVisibilityChanged = this.middlePanelVisibilityChanged.bind(this);
     this.rightPanelVisibilityChanged = this.rightPanelVisibilityChanged.bind(this);

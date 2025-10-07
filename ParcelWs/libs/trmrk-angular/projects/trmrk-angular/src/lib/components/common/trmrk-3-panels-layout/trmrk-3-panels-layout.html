@@ -36,7 +36,7 @@
       <mat-menu #leftPanelOptionsMenu class="trmrk-menu" dense>
         <ng-container *ngTemplateOutlet="trmrkLeftPanelOptionsMenuTemplate"></ng-container>
       </mat-menu>
-      } @if (service.allowToggleLeftPanel) {
+      } @if (service.allowToggleLeftPanel && service.visiblePanelsCount > 1) {
       <button mat-icon-button class="trmrk-icon-btn" (click)="service.leftPanelCloseBtnClicked()">
         <mat-icon class="trmrk-icon">close</mat-icon>
       </button>
@@ -120,8 +120,24 @@
     <ng-template #middlePanelHeaderLeadingTemplate></ng-template>
     <ng-template #middlePanelHeaderTrailingTemplate>
       @if (service.allowToggleLeftPanel && !service.showLeftPanel) {
-      <button mat-icon-button class="trmrk-icon-btn">
+      <button
+        mat-icon-button
+        class="trmrk-icon-btn"
+        (trmrkLongPressOrRightClick)="service.showLeftPanelBtnLongTouchOrMouseClick()"
+        (trmrkShortPressOrLeftClick)="
+          service.showLeftPanelBtnShortTouchOrMouseClick(PanelPosition.Middle)
+        "
+      >
         <div class="trmrk-custom-svg-icon" [innerHtml]="left_panel_open"></div>
+      </button>
+      } @if (service.allowToggleRightPanel && !service.showRightPanel) {
+      <button
+        mat-icon-button
+        class="trmrk-icon-btn"
+        (trmrkLongPressOrRightClick)="service.showRightPanelBtnLongTouchOrMouseClick()"
+        (trmrkShortPressOrLeftClick)="service.showRightPanelBtnShortTouchOrMouseClick()"
+      >
+        <div class="trmrk-custom-svg-icon" [innerHtml]="right_panel_open"></div>
       </button>
       } @if (service.showMiddlePanelOptionsBtn) {
       <button
@@ -192,8 +208,28 @@
       </div>
       }</ng-template
     >
-    <ng-template #rightPanelHeaderTrailingTemplate>
-      @if (service.showRightPanelOptionsBtn) {
+    <ng-template #rightPanelHeaderTrailingTemplate
+      >@if (service.allowToggleLeftPanel && !service.showLeftPanel && !service.showMiddlePanel) {
+      <button
+        mat-icon-button
+        class="trmrk-icon-btn"
+        (trmrkLongPressOrRightClick)="service.showLeftPanelBtnLongTouchOrMouseClick()"
+        (trmrkShortPressOrLeftClick)="
+          service.showLeftPanelBtnShortTouchOrMouseClick(PanelPosition.Right)
+        "
+      >
+        <div class="trmrk-custom-svg-icon" [innerHtml]="left_panel_open"></div>
+      </button>
+      } @if (service.allowToggleMiddlePanel && !service.showMiddlePanel) {
+      <button
+        mat-icon-button
+        class="trmrk-icon-btn"
+        (trmrkLongPressOrRightClick)="service.showMiddlePanelBtnLongTouchOrMouseClick()"
+        (trmrkShortPressOrLeftClick)="service.showMiddlePanelBtnShortTouchOrMouseClick()"
+      >
+        <div class="trmrk-custom-svg-icon trmrk-rot-315-deg" [innerHtml]="top_panel_open"></div>
+      </button>
+      } @if (service.showRightPanelOptionsBtn) {
       <button
         mat-icon-button
         class="trmrk-icon-btn"

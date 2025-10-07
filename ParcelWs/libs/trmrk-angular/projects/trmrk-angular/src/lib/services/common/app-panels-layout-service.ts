@@ -407,6 +407,33 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
     this.togglePanelVisibility(PanelPosition.Right, false);
   }
 
+  showLeftPanelBtnShortTouchOrMouseClick(buttonPanelPosition: PanelPosition) {
+    this.togglePanelVisibility(PanelPosition.Left, true);
+    this.togglePanelVisibility(buttonPanelPosition, false);
+  }
+
+  showLeftPanelBtnLongTouchOrMouseClick() {
+    this.togglePanelVisibility(PanelPosition.Left, true);
+  }
+
+  showMiddlePanelBtnShortTouchOrMouseClick() {
+    this.togglePanelVisibility(PanelPosition.Middle, true);
+    this.togglePanelVisibility(PanelPosition.Right, false);
+  }
+
+  showMiddlePanelBtnLongTouchOrMouseClick() {
+    this.togglePanelVisibility(PanelPosition.Middle, true);
+  }
+
+  showRightPanelBtnShortTouchOrMouseClick() {
+    this.togglePanelVisibility(PanelPosition.Right, true);
+    this.togglePanelVisibility(PanelPosition.Middle, false);
+  }
+
+  showRightPanelBtnLongTouchOrMouseClick() {
+    this.togglePanelVisibility(PanelPosition.Right, true);
+  }
+
   onPanelResizeBtnDragEnd(resizedPanel: PanelPosition) {
     this.isResizingLeftPanel = false;
     this.isResizingRightPanel = false;
@@ -820,7 +847,12 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
     if (this.setupArgs?.containerEl()) {
       let leftRatio: number, middleRatio: number, rightRatio: number;
       const baseArr = this.basePanelWidthRatios;
-      leftRatio = this.showLeftPanel ? this.normalizePanelWidthRatio(baseArr[0]) : 0;
+
+      leftRatio = this.showLeftPanel
+        ? this.visiblePanelsCount === 1
+          ? FULL_WIDTH_RATIO
+          : this.normalizePanelWidthRatio(baseArr[0])
+        : 0;
 
       middleRatio = this.showMiddlePanel
         ? this.showRightPanel

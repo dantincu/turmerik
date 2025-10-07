@@ -200,6 +200,34 @@ app-root {
   padding-bottom: 20px;
 }
 
+.trmrk-rot-45-deg {
+  transform: rotate(45deg);
+}
+
+.trmrk-rot-90-deg {
+  transform: rotate(90deg);
+}
+
+.trmrk-rot-135-deg {
+  transform: rotate(135deg);
+}
+
+.trmrk-rot-180-deg {
+  transform: rotate(180deg);
+}
+
+.trmrk-rot-225-deg {
+  transform: rotate(225deg);
+}
+
+.trmrk-rot-270-deg {
+  transform: rotate(270deg);
+}
+
+.trmrk-rot-315-deg {
+  transform: rotate(315deg);
+}
+
 /* .trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
   display: inline-flex;
   width: 40px;
@@ -454,6 +482,14 @@ trmrk-3-panels-layout, .trmrk-3-panels-layout {
             background-color: inherit;
           }
         }
+      }
+    }
+  }
+
+  &.trmrk-has-1-panels {
+    > .trmrk-app-panel.trmrk-left-panel {
+      > trmrk-horiz-strip > .trmrk-app-panel-header {
+        padding-right: 6px;
       }
     }
   }
