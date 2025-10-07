@@ -131,6 +131,7 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
 
   private _alwaysRenderMiddlePanel: boolean = false;
   private _showMiddlePanel: boolean = false;
+  private _preferMiddlePanel: boolean = false;
   private _allowToggleMiddlePanel: boolean = false;
   private _showMiddlePanelOptionsBtn: boolean = false;
 
@@ -197,6 +198,16 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
       this.panelsVisibilityChanged();
       this.leftPanelVisibilityPropValueChanged();
       this.showLeftPanelChanged.emit(value);
+
+      if (!value) {
+        if (!this.showMiddlePanel && !this.showRightPanel) {
+          if (this.preferMiddlePanel) {
+            this.togglePanelVisibility(PanelPosition.Middle, true);
+          } else {
+            this.togglePanelVisibility(PanelPosition.Right, true);
+          }
+        }
+      }
     }
   }
 
@@ -236,10 +247,25 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
   set showMiddlePanel(value: boolean) {
     if (this._showMiddlePanel !== value) {
       this._showMiddlePanel = value;
+
+      if (value) {
+        this.preferMiddlePanel = true;
+      } else if (this.showRightPanel) {
+        this.preferMiddlePanel = false;
+      }
+
       this.panelsVisibilityChanged();
       this.middlePanelVisibilityPropValueChanged();
       this.showMiddlePanelChanged.emit(value);
     }
+  }
+
+  get preferMiddlePanel() {
+    return this._preferMiddlePanel;
+  }
+
+  set preferMiddlePanel(value: boolean) {
+    this._preferMiddlePanel = value;
   }
 
   get allowToggleMiddlePanel() {
@@ -278,6 +304,11 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
   set showRightPanel(value: boolean) {
     if (this._showRightPanel !== value) {
       this._showRightPanel = value;
+
+      if (value) {
+        this.preferMiddlePanel = false;
+      }
+
       this.panelsVisibilityChanged();
       this.rightPanelVisibilityPropValueChanged();
       this.showRightPanelChanged.emit(value);
@@ -459,6 +490,7 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
   panelsVisibilityChanged() {
     this.visiblePanelsCount = this.getVisiblePanelsCount();
     this.cssClassArr = this.getCssClass();
+    this.applyCorePanelWidthRatios();
     this.updatePanelWidthRatiosCore(PanelPosition.None);
     this.updatePanelWidths();
   }
@@ -692,14 +724,20 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
       this.corePanelWidthRatios = [...this.basePanelWidthRatios];
     } else {
       if (this.showLeftPanel) {
+        const decreaseFactor =
+          (this.basePanelWidthRatios[1] + this.basePanelWidthRatios[2]) /
+          (this.corePanelWidthRatios[1] + this.corePanelWidthRatios[2]);
+
         this.corePanelWidthRatios[0] = this.basePanelWidthRatios[0];
+        this.corePanelWidthRatios[1] = Math.floor(this.corePanelWidthRatios[1] * decreaseFactor);
+        this.corePanelWidthRatios[2] = Math.floor(this.corePanelWidthRatios[2] * decreaseFactor);
+      } else {
+        const decreaseFactor =
+          (this.corePanelWidthRatios[1] + this.corePanelWidthRatios[2]) / FULL_WIDTH_RATIO;
+
+        this.corePanelWidthRatios[1] = Math.floor(this.basePanelWidthRatios[1] * decreaseFactor);
+        this.corePanelWidthRatios[2] = Math.floor(this.basePanelWidthRatios[2] * decreaseFactor);
       }
-
-      const increaseFactor =
-        FULL_WIDTH_RATIO / (this.basePanelWidthRatios[1] + this.basePanelWidthRatios[2]);
-
-      this.corePanelWidthRatios[1] = Math.floor(this.basePanelWidthRatios[1] * increaseFactor);
-      this.corePanelWidthRatios[2] = Math.floor(this.basePanelWidthRatios[2] * increaseFactor);
     }
 
     if (this.resizeLeftPanelStripResetActionIsActivated) {
@@ -736,7 +774,6 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
         break;
     }
 
-    this.panelsVisibilityChanged();
     this.writePanelVisibilitiesToIndexedDb();
   }
 

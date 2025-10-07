@@ -36,7 +36,7 @@
       <mat-menu #leftPanelOptionsMenu class="trmrk-menu" dense>
         <ng-container *ngTemplateOutlet="trmrkLeftPanelOptionsMenuTemplate"></ng-container>
       </mat-menu>
-      } @if (service.allowToggleLeftPanel && service.visiblePanelsCount > 1) {
+      } @if (service.allowToggleLeftPanel) {
       <button mat-icon-button class="trmrk-icon-btn" (click)="service.leftPanelCloseBtnClicked()">
         <mat-icon class="trmrk-icon">close</mat-icon>
       </button>
