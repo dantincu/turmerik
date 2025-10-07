@@ -41,9 +41,7 @@ export class TrmrkFolderView {
       this.layoutId = this.trmrk3PanelsLayout.id;
       this.layoutService = intIdMappedAppPanelLayoutServiceFactory.getOrCreate(this.layoutId);
 
-      this.layoutService.loadAppSettingsChoices({});
-
-      this.layoutService.whenReady.subscribe(() => {
+      this.layoutService.onAfterSetup.subscribe(() => {
         this.layoutService.allowToggleLeftPanel = true;
         this.layoutService.showLeftPanel = true;
         this.layoutService.showLeftPanelOptionsBtn = true;
@@ -53,6 +51,7 @@ export class TrmrkFolderView {
         this.layoutService.allowToggleRightPanel = true;
         this.layoutService.showRightPanel = true;
         this.layoutService.showRightPanelOptionsBtn = true;
+        this.layoutService.loadAppSettingsChoices({});
       });
     });
   }

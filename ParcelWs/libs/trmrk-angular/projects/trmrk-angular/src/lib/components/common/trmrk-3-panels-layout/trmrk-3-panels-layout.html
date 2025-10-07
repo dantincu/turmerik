@@ -37,7 +37,7 @@
         <ng-container *ngTemplateOutlet="trmrkLeftPanelOptionsMenuTemplate"></ng-container>
       </mat-menu>
       } @if (service.allowToggleLeftPanel) {
-      <button mat-icon-button class="trmrk-icon-btn">
+      <button mat-icon-button class="trmrk-icon-btn" (click)="service.leftPanelCloseBtnClicked()">
         <mat-icon class="trmrk-icon">close</mat-icon>
       </button>
       } @if (service.visiblePanelsCount > 1) {
@@ -137,7 +137,7 @@
         <ng-container *ngTemplateOutlet="trmrkMiddlePanelOptionsMenuTemplate"></ng-container>
       </mat-menu>
       } @if (service.allowToggleMiddlePanel && service.showRightPanel) {
-      <button mat-icon-button class="trmrk-icon-btn">
+      <button mat-icon-button class="trmrk-icon-btn" (click)="service.middlePanelCloseBtnClicked()">
         <mat-icon class="trmrk-icon">close</mat-icon>
       </button>
       }
@@ -207,7 +207,7 @@
         <ng-container *ngTemplateOutlet="trmrkRightPanelOptionsMenuTemplate"></ng-container>
       </mat-menu>
       } @if (service.allowToggleRightPanel && service.showMiddlePanel) {
-      <button mat-icon-button class="trmrk-icon-btn">
+      <button mat-icon-button class="trmrk-icon-btn" (click)="service.rightPanelCloseBtnClicked()">
         <mat-icon class="trmrk-icon">close</mat-icon>
       </button>
       }

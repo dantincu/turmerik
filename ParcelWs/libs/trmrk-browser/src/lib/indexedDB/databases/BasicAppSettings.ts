@@ -11,7 +11,7 @@ export interface AppTheme {
   clientVersion: number;
 }
 
-export interface AppSettingsChoice<TValue = string> {
+export interface AppSettingsChoice<TValue = any> {
   key: string;
   catKey: string;
   value: TValue;
@@ -32,7 +32,7 @@ export interface KeyboardShortcutCore {
 }
 
 export interface KeyboardShortcutSrlzbl extends KeyboardShortcutCore {
-  sequence?: string | NullOrUndef;
+  sequence?: KeyPress[] | NullOrUndef;
 }
 
 export interface KeyboardShortcut extends KeyboardShortcutCore {

@@ -25,6 +25,9 @@ import { TrmrkDisaposable } from './types';
 
 export const MIN_PANEL_WIDTH_PX = 54;
 export const FULL_WIDTH_RATIO = 100000;
+export const HALF_WIDTH_RATIO = FULL_WIDTH_RATIO / 2;
+export const THIRD_WIDTH_RATIO = Math.floor(FULL_WIDTH_RATIO / 3);
+export const TWO_THIRDS_WIDTH_RATIO = FULL_WIDTH_RATIO - THIRD_WIDTH_RATIO;
 
 export enum PanelPosition {
   None = 0,
@@ -64,7 +67,7 @@ export interface AppPanelLayoutServiceLoadAppSettingsChoicesArgs {
 @Injectable()
 export class AppPanelsLayoutService implements TrmrkDisaposable {
   static dfCssClass = 'trmrk-3-panels-layout';
-  static dfPanelWidthRatios = [33333, 33333, 33333];
+  static dfPanelWidthRatios = [THIRD_WIDTH_RATIO, THIRD_WIDTH_RATIO, THIRD_WIDTH_RATIO];
 
   id: number = 0;
   setupArgs: AppPanelLayoutServiceSetupArgs | null = null;
@@ -89,6 +92,7 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
   cssClassArr: string[] = [AppPanelsLayoutService.dfCssClass];
   visiblePanelsCount = 0;
 
+  corePanelWidthRatios = AppPanelsLayoutService.dfPanelWidthRatios;
   basePanelWidthRatios = AppPanelsLayoutService.dfPanelWidthRatios;
   panelWidthRatios = AppPanelsLayoutService.dfPanelWidthRatios;
   panelStyles: { [key: string]: string }[] = [{}, {}, {}];
@@ -296,118 +300,6 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
     this._showRightPanelOptionsBtn = value;
   }
 
-  dispose() {
-    this.reset();
-    this.alwaysRenderLeftPanelChanged.unsubscribe();
-    this.showLeftPanelChanged.unsubscribe();
-    this.alwaysRenderMiddlePanelChanged.unsubscribe();
-    this.showMiddlePanelChanged.unsubscribe();
-    this.alwaysRenderRightPanelChanged.unsubscribe();
-    this.showRightPanelChanged.unsubscribe();
-
-    this.onLeftPanelTouchStartOrMouseDown.unsubscribe();
-    this.onMiddlePanelTouchStartOrMouseDown.unsubscribe();
-    this.onRightPanelTouchStartOrMouseDown.unsubscribe();
-    this.onActivePanelChanged.unsubscribe();
-    this.onAfterSetup.unsubscribe();
-
-    for (let subscriptionsArr of [
-      this.leftPanelMenuClosedSubscriptions,
-      this.middlePanelMenuClosedSubscriptions,
-      this.rightPanelMenuClosedSubscriptions,
-    ]) {
-      for (let subscription of subscriptionsArr) {
-        subscription.unsubscribe();
-      }
-
-      subscriptionsArr.splice(0, subscriptionsArr.length);
-    }
-
-    this.setupArgs = null;
-    this.loadAppSettingsChoicesArgs = null;
-  }
-
-  setup(args: AppPanelLayoutServiceSetupArgs) {
-    this.reset();
-    this.setupArgs = args;
-    this.updatePanelWidthRatiosCore(PanelPosition.None);
-    this.updatePanelWidths();
-    this.setupDone = true;
-    this.onAfterSetup.emit();
-    this.fireReadyIfReq();
-  }
-
-  loadAppSettingsChoices(args: AppPanelLayoutServiceLoadAppSettingsChoicesArgs) {
-    return new Promise<void>((resolve, reject) => {
-      this.loadAppSettingsChoicesArgs = args;
-
-      const appPanelsLayoutCatKey = (this.indexedDb.appSettings.choices.appPanelsLayout.catKey =
-        this.appService.getAppObjectKey([
-          commonAppSettingsChoiceCatKeys.appPanelsLayout,
-          args.layoutKey ?? commonLayoutKeys.main,
-        ]));
-
-      this.basicAppSettingsDbAdapter.open(
-        (_, db) => {
-          const keyPathsArr = [
-            commonAppSettingsChoiceKeys.panelWidthRatios,
-            commonAppSettingsChoiceKeys.panelVisibilities,
-          ].map((key) => [appPanelsLayoutCatKey, this.appService.getAppObjectKey([key])]);
-
-          // dbRequestToPromise
-
-          Promise.all(
-            keyPathsArr.map((keyPath) =>
-              dbRequestToPromise<AppSettingsChoice>(
-                this.basicAppSettingsDbAdapter.stores.choices.store(db).get(keyPath)
-              )
-            )
-          ).then((resultsArr) => {
-            for (let result of resultsArr) {
-              const choice = result.value;
-
-              if (choice) {
-                const choiceKey = extractAppObjectKeyParts(choice.key).filter(
-                  (str) => str.length
-                )[0];
-
-                switch (choiceKey) {
-                  case commonAppSettingsChoiceKeys.panelWidthRatios:
-                    this.basePanelWidthRatios = JSON.parse(choice.value);
-                    this.updatePanelWidthRatiosCore(PanelPosition.None);
-                    this.updatePanelWidths();
-                    break;
-                  case commonAppSettingsChoiceKeys.panelVisibilities:
-                    const panelVisibilities = JSON.parse(choice.value) as boolean[];
-                    this.showLeftPanel = panelVisibilities[0];
-                    this.showMiddlePanel = panelVisibilities[1];
-                    this.showRightPanel = panelVisibilities[2];
-                    break;
-                }
-              }
-            }
-
-            this.appSettingsChoicesLoaded = true;
-            this.onAppSettingsChoicesLoaded.emit();
-            this.fireReadyIfReq();
-            resolve();
-          });
-        },
-        (_, error) => {
-          reject(error);
-        }
-      );
-    });
-  }
-
-  reset() {}
-
-  fireReadyIfReq() {
-    if (this.setupDone && this.appSettingsChoicesLoaded) {
-      this.whenReady.emit();
-    }
-  }
-
   leftPanelResizeBtnDragStart(event: TouchOrMouseCoords) {
     this.updatePanelWidthRatiosCore(PanelPosition.Left);
   }
@@ -429,7 +321,7 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
       rightPanelNewWidthRatio,
     ];
 
-    this.updatePanelWidths(PanelPosition.Left);
+    this.updatePanelWidths();
     this.highlightResizePanelStripIfReq(event, true);
   }
 
@@ -445,7 +337,9 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
     const rightPanelNewWidthRatio = this.getNewPanelWidthRatioCore(event, PanelPosition.Right);
 
     const middlePanelNewWidthRatio =
-      FULL_WIDTH_RATIO - this.basePanelWidthRatios[0] - rightPanelNewWidthRatio;
+      FULL_WIDTH_RATIO -
+      (this.showLeftPanel ? this.basePanelWidthRatios[0] : 0) -
+      rightPanelNewWidthRatio;
 
     this.basePanelWidthRatios = [
       this.basePanelWidthRatios[0],
@@ -453,7 +347,7 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
       rightPanelNewWidthRatio,
     ];
 
-    this.updatePanelWidths(PanelPosition.Right);
+    this.updatePanelWidths();
     this.highlightResizePanelStripIfReq(event, false);
   }
 
@@ -501,19 +395,16 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
     }
   }
 
-  updatePanelWidthRatiosCore(resizedPanel: PanelPosition) {
-    if (this.setupArgs?.containerEl()) {
-      this.isResizingLeftPanel = resizedPanel === PanelPosition.Left;
-      this.isResizingRightPanel = resizedPanel === PanelPosition.Right;
-      this.containerWidth = (this.setupArgs.containerEl().nativeElement as HTMLElement).offsetWidth;
-      this.panelMinWidthRatio = (MIN_PANEL_WIDTH_PX / this.containerWidth) * FULL_WIDTH_RATIO;
+  leftPanelCloseBtnClicked() {
+    this.togglePanelVisibility(PanelPosition.Left, false);
+  }
 
-      this.leftPanelWidth =
-        (this.setupArgs.leftPanelEl()?.nativeElement as HTMLElement)?.offsetWidth ?? 0;
+  middlePanelCloseBtnClicked() {
+    this.togglePanelVisibility(PanelPosition.Middle, false);
+  }
 
-      this.rightPanelWidth =
-        (this.setupArgs.rightPanelEl()?.nativeElement as HTMLElement)?.offsetWidth ?? 0;
-    }
+  rightPanelCloseBtnClicked() {
+    this.togglePanelVisibility(PanelPosition.Right, false);
   }
 
   onPanelResizeBtnDragEnd(resizedPanel: PanelPosition) {
@@ -524,180 +415,18 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
     this.leftPanelWidth = null;
     this.rightPanelWidth = null;
     this.basePanelWidthRatios = this.panelWidthRatios;
+
+    if (this.resizeLeftPanelStripCloseActionIsActivated) {
+      this.togglePanelVisibility(PanelPosition.Left, false);
+    } else if (this.resizeRightPanelStripCloseActionIsActivated) {
+      this.togglePanelVisibility(PanelPosition.Right, false);
+    }
+
+    this.updateCorePanelWidthRatios(resizedPanel);
+    this.applyCorePanelWidthRatios();
+    this.updatePanelWidths();
     this.unhighlightResizePanelStrips();
-
-    this.basicAppSettingsDbAdapter.open((_, db) => {
-      this.basicAppSettingsDbAdapter.stores.choices.store(db, null, 'readwrite').put({
-        catKey: this.indexedDb.appSettings.choices.appPanelsLayout.catKey,
-        key: this.appService.getAppObjectKey([commonAppSettingsChoiceKeys.panelWidthRatios]),
-        value: JSON.stringify(this.basePanelWidthRatios),
-      });
-    });
-  }
-
-  highlightResizePanelStripIfReq(event: TrmrkDragEvent, isLeftPanel: boolean) {
-    if (this.setupArgs) {
-      const resizePanelStrip = isLeftPanel
-        ? this.setupArgs.resizeLeftPanelStrip()
-        : this.setupArgs.resizeRightPanelStrip();
-      const target = event.touchOrMouseMoveCoords.evt!.target as HTMLElement;
-
-      if (target && resizePanelStrip) {
-        const nodesArr = htmlCollectionToArr(resizePanelStrip.nativeElement.children);
-        const idx = getElemIdx(nodesArr, event.touchOrMouseMoveCoords);
-        let closeBtnActivated = false;
-        let resetBtnActivated = false;
-
-        switch (idx) {
-          case 0:
-            closeBtnActivated = true;
-            break;
-          case 1:
-            resetBtnActivated = true;
-            break;
-          case 3:
-            closeBtnActivated = true;
-            break;
-          case 4:
-            resetBtnActivated = true;
-            break;
-        }
-
-        if (isLeftPanel) {
-          this.resizeLeftPanelStripCloseActionIsActivated = closeBtnActivated;
-          this.resizeLeftPanelStripResetActionIsActivated = resetBtnActivated;
-        } else {
-          this.resizeRightPanelStripCloseActionIsActivated = closeBtnActivated;
-          this.resizeRightPanelStripResetActionIsActivated = resetBtnActivated;
-        }
-      }
-    }
-  }
-
-  unhighlightResizePanelStrips() {
-    this.resizeLeftPanelStripCloseActionIsActivated = false;
-    this.resizeLeftPanelStripResetActionIsActivated = false;
-    this.resizeRightPanelStripCloseActionIsActivated = false;
-    this.resizeRightPanelStripResetActionIsActivated = false;
-  }
-
-  getCssClass() {
-    const cssClass = [AppPanelsLayoutService.dfCssClass, ...this.cssClass];
-
-    if (this.showLeftPanel) {
-      cssClass.push('trmrk-has-left-panel');
-    }
-
-    if (this.showMiddlePanel) {
-      cssClass.push('trmrk-has-middle-panel');
-    }
-
-    if (this.showRightPanel) {
-      cssClass.push('trmrk-has-right-panel');
-    }
-
-    cssClass.push(`trmrk-has-${this.visiblePanelsCount}-panels`);
-    return cssClass;
-  }
-
-  getVisiblePanelsCount() {
-    let visiblePanelsCount = 0;
-
-    if (this.showLeftPanel) {
-      visiblePanelsCount++;
-    }
-
-    if (this.showMiddlePanel) {
-      visiblePanelsCount++;
-    }
-
-    if (this.showRightPanel) {
-      visiblePanelsCount++;
-    }
-
-    return visiblePanelsCount;
-  }
-
-  updatePanelWidths(resizedPanel: PanelPosition = PanelPosition.None) {
-    if (this.setupArgs?.containerEl()) {
-      let leftRatio: number, middleRatio: number, rightRatio: number;
-      const baseArr = this.basePanelWidthRatios;
-
-      if (resizedPanel !== PanelPosition.Right) {
-        leftRatio = this.showLeftPanel ? this.normalizePanelWidthRatio(baseArr[0]) : 0;
-
-        middleRatio = this.showMiddlePanel
-          ? this.normalizePanelWidthRatio(
-              (baseArr[1] / (baseArr[1] + baseArr[2])) * (FULL_WIDTH_RATIO - leftRatio),
-              leftRatio
-            )
-          : 0;
-      } else {
-        leftRatio = this.showLeftPanel ? baseArr[0] : 0;
-
-        middleRatio = this.showMiddlePanel
-          ? this.normalizePanelWidthRatio(baseArr[1], baseArr[0])
-          : 0;
-      }
-
-      rightRatio = this.showRightPanel ? FULL_WIDTH_RATIO - leftRatio - middleRatio : 0;
-      const panelWidthRatios = [leftRatio, middleRatio, rightRatio];
-      this.panelWidthRatios = panelWidthRatios;
-
-      this.panelStyles = panelWidthRatios.map((ratio) => {
-        ratio = Math.floor(ratio);
-
-        return {
-          width: `${ratio / 1000}%`,
-          maxWidth: `${ratio / 1000}%`,
-        };
-      });
-    } else {
-      this.panelStyles = [{}, {}, {}];
-    }
-  }
-
-  normalizePanelWidthRatio(panelWidthRatio: number, otherPanelWidthRatio?: number | NullOrUndef) {
-    const minRatio = this.panelMinWidthRatio!;
-
-    const maxRatio = Math.max(
-      FULL_WIDTH_RATIO -
-        (this.visiblePanelsCount === 3 ? minRatio : 0) -
-        (otherPanelWidthRatio ?? minRatio),
-      minRatio
-    );
-
-    panelWidthRatio = Math.min(Math.max(panelWidthRatio, minRatio), maxRatio);
-    return panelWidthRatio;
-  }
-
-  getPanelResizeDx(event: TrmrkDragEvent) {
-    const dx = event.touchOrMouseMoveCoords.clientX - event.touchStartOrMouseDownCoords!.clientX;
-    return dx;
-  }
-
-  getNewPanelWidthCore(event: TrmrkDragEvent, resizedPanel: PanelPosition) {
-    const dx = this.getPanelResizeDx(event);
-    let newPanelWidth: number;
-
-    switch (resizedPanel) {
-      case PanelPosition.Left:
-        newPanelWidth = this.leftPanelWidth! + dx;
-        break;
-      case PanelPosition.Right:
-        newPanelWidth = this.rightPanelWidth! - dx;
-        break;
-      default:
-        throw new Error(`Unsupported resized panel position: ${resizedPanel}`);
-    }
-
-    return newPanelWidth;
-  }
-
-  getNewPanelWidthRatioCore(event: TrmrkDragEvent, resizedPanel: PanelPosition) {
-    const newPanelWidth = this.getNewPanelWidthCore(event, resizedPanel);
-    const newPanelWidthRatio = (newPanelWidth / this.containerWidth!) * FULL_WIDTH_RATIO;
-    return newPanelWidthRatio;
+    this.writePanelWidthRatiosToIndexedDb();
   }
 
   panelsVisibilityChanged() {
@@ -705,13 +434,6 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
     this.cssClassArr = this.getCssClass();
     this.updatePanelWidthRatiosCore(PanelPosition.None);
     this.updatePanelWidths();
-  }
-
-  updateActivePanel(activePanel: PanelPosition) {
-    if (activePanel !== this.activePanel) {
-      this.activePanel = activePanel;
-      this.onActivePanelChanged.emit(activePanel);
-    }
   }
 
   leftPanelVisibilityPropValueChanged() {
@@ -773,5 +495,399 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
   rightPanelOptionsMenuClosed() {
     this.activePanel = PanelPosition.Right;
     this.optionsMenuOpenForPanel = PanelPosition.None;
+  }
+
+  setup(args: AppPanelLayoutServiceSetupArgs) {
+    this.reset();
+    this.setupArgs = args;
+    this.updatePanelWidthRatiosCore(PanelPosition.None);
+    this.updatePanelWidths();
+    this.setupDone = true;
+    this.onAfterSetup.emit();
+    this.fireReadyIfReq();
+  }
+
+  dispose() {
+    this.reset();
+    this.alwaysRenderLeftPanelChanged.unsubscribe();
+    this.showLeftPanelChanged.unsubscribe();
+    this.alwaysRenderMiddlePanelChanged.unsubscribe();
+    this.showMiddlePanelChanged.unsubscribe();
+    this.alwaysRenderRightPanelChanged.unsubscribe();
+    this.showRightPanelChanged.unsubscribe();
+
+    this.onLeftPanelTouchStartOrMouseDown.unsubscribe();
+    this.onMiddlePanelTouchStartOrMouseDown.unsubscribe();
+    this.onRightPanelTouchStartOrMouseDown.unsubscribe();
+    this.onActivePanelChanged.unsubscribe();
+    this.onAfterSetup.unsubscribe();
+
+    for (let subscriptionsArr of [
+      this.leftPanelMenuClosedSubscriptions,
+      this.middlePanelMenuClosedSubscriptions,
+      this.rightPanelMenuClosedSubscriptions,
+    ]) {
+      for (let subscription of subscriptionsArr) {
+        subscription.unsubscribe();
+      }
+
+      subscriptionsArr.splice(0, subscriptionsArr.length);
+    }
+
+    this.setupArgs = null;
+    this.loadAppSettingsChoicesArgs = null;
+  }
+
+  reset() {}
+
+  loadAppSettingsChoices(args: AppPanelLayoutServiceLoadAppSettingsChoicesArgs) {
+    return new Promise<void>((resolve, reject) => {
+      this.loadAppSettingsChoicesArgs = args;
+
+      const appPanelsLayoutCatKey = (this.indexedDb.appSettings.choices.appPanelsLayout.catKey =
+        this.appService.getAppObjectKey([
+          commonAppSettingsChoiceCatKeys.appPanelsLayout,
+          args.layoutKey ?? commonLayoutKeys.main,
+        ]));
+
+      this.basicAppSettingsDbAdapter.open(
+        (_, db) => {
+          const keyPathsArr = [
+            commonAppSettingsChoiceKeys.panelWidthRatios,
+            commonAppSettingsChoiceKeys.panelVisibilities,
+          ].map((key) => [appPanelsLayoutCatKey, this.appService.getAppObjectKey([key])]);
+
+          Promise.all(
+            keyPathsArr.map((keyPath) =>
+              dbRequestToPromise<AppSettingsChoice>(
+                this.basicAppSettingsDbAdapter.stores.choices.store(db).get(keyPath)
+              )
+            )
+          ).then((resultsArr) => {
+            for (let result of resultsArr) {
+              const choice = result.value;
+
+              if (choice) {
+                const choiceKey = extractAppObjectKeyParts(choice.key).filter(
+                  (str) => str.length
+                )[0];
+
+                switch (choiceKey) {
+                  case commonAppSettingsChoiceKeys.panelWidthRatios:
+                    this.corePanelWidthRatios = choice.value;
+                    this.applyCorePanelWidthRatios();
+                    this.updatePanelWidthRatiosCore(PanelPosition.None);
+                    this.updatePanelWidths();
+                    break;
+                  case commonAppSettingsChoiceKeys.panelVisibilities:
+                    const panelVisibilities = choice.value as boolean[];
+                    this.showLeftPanel = panelVisibilities[0];
+                    this.showMiddlePanel = panelVisibilities[1];
+                    this.showRightPanel = panelVisibilities[2];
+                    break;
+                }
+              }
+            }
+
+            this.appSettingsChoicesLoaded = true;
+            this.onAppSettingsChoicesLoaded.emit();
+            this.fireReadyIfReq();
+            resolve();
+          });
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  }
+
+  applyCorePanelWidthRatios() {
+    const visibilities = [this.showLeftPanel, this.showMiddlePanel, this.showRightPanel];
+
+    this.basePanelWidthRatios = this.corePanelWidthRatios.map((value, i) =>
+      visibilities[i] ? value : 0
+    );
+
+    if (visibilities.some((v) => !v)) {
+      if (visibilities[0]) {
+        if (visibilities[1]) {
+          if (!visibilities[2]) {
+            this.basePanelWidthRatios[1] = FULL_WIDTH_RATIO - this.basePanelWidthRatios[0];
+          }
+        } else if (visibilities[2]) {
+          this.basePanelWidthRatios[2] = FULL_WIDTH_RATIO - this.basePanelWidthRatios[0];
+        } else {
+          this.basePanelWidthRatios[0] = FULL_WIDTH_RATIO;
+        }
+      } else if (visibilities[1]) {
+        if (visibilities[2]) {
+          const increaseFactor =
+            FULL_WIDTH_RATIO / (FULL_WIDTH_RATIO - this.corePanelWidthRatios[0]);
+
+          this.basePanelWidthRatios = this.basePanelWidthRatios.map((v, i) =>
+            i > 0 ? v * increaseFactor : 0
+          );
+        } else {
+          this.basePanelWidthRatios[1] = FULL_WIDTH_RATIO;
+        }
+      } else {
+        this.basePanelWidthRatios[2] = FULL_WIDTH_RATIO;
+      }
+    }
+  }
+
+  fireReadyIfReq() {
+    if (this.setupDone && this.appSettingsChoicesLoaded) {
+      this.whenReady.emit();
+    }
+  }
+
+  updatePanelWidthRatiosCore(resizedPanel: PanelPosition) {
+    if (this.setupArgs?.containerEl()) {
+      this.isResizingLeftPanel = resizedPanel === PanelPosition.Left;
+      this.isResizingRightPanel = resizedPanel === PanelPosition.Right;
+      this.containerWidth = (this.setupArgs.containerEl().nativeElement as HTMLElement).offsetWidth;
+      this.panelMinWidthRatio = (MIN_PANEL_WIDTH_PX / this.containerWidth) * FULL_WIDTH_RATIO;
+
+      this.leftPanelWidth = this.showLeftPanel
+        ? (this.setupArgs.leftPanelEl()?.nativeElement as HTMLElement)?.offsetWidth ?? 0
+        : 0;
+
+      this.rightPanelWidth = this.showRightPanel
+        ? (this.setupArgs.rightPanelEl()?.nativeElement as HTMLElement)?.offsetWidth ?? 0
+        : 0;
+    }
+  }
+
+  updateCorePanelWidthRatios(resizedPanel: PanelPosition) {
+    if (this.visiblePanelsCount === 3) {
+      this.corePanelWidthRatios = [...this.basePanelWidthRatios];
+    } else {
+      if (this.showLeftPanel) {
+        this.corePanelWidthRatios[0] = this.basePanelWidthRatios[0];
+      }
+
+      const increaseFactor =
+        FULL_WIDTH_RATIO / (this.basePanelWidthRatios[1] + this.basePanelWidthRatios[2]);
+
+      this.corePanelWidthRatios[1] = Math.floor(this.basePanelWidthRatios[1] * increaseFactor);
+      this.corePanelWidthRatios[2] = Math.floor(this.basePanelWidthRatios[2] * increaseFactor);
+    }
+
+    if (this.resizeLeftPanelStripResetActionIsActivated) {
+      const relRatio =
+        this.corePanelWidthRatios[1] /
+        (this.corePanelWidthRatios[1] + this.corePanelWidthRatios[2]);
+
+      this.corePanelWidthRatios[0] = THIRD_WIDTH_RATIO;
+      this.corePanelWidthRatios[1] = Math.floor(relRatio * TWO_THIRDS_WIDTH_RATIO);
+      this.corePanelWidthRatios[2] = TWO_THIRDS_WIDTH_RATIO - this.corePanelWidthRatios[1];
+    } else if (this.resizeRightPanelStripResetActionIsActivated) {
+      const availableWidth = FULL_WIDTH_RATIO - this.corePanelWidthRatios[0];
+      this.corePanelWidthRatios[1] = this.corePanelWidthRatios[2] = Math.floor(availableWidth / 2);
+    }
+  }
+
+  updateActivePanel(activePanel: PanelPosition) {
+    if (activePanel !== this.activePanel) {
+      this.activePanel = activePanel;
+      this.onActivePanelChanged.emit(activePanel);
+    }
+  }
+
+  togglePanelVisibility(panelPosition: PanelPosition, show: boolean) {
+    switch (panelPosition) {
+      case PanelPosition.Left:
+        this.showLeftPanel = show;
+        break;
+      case PanelPosition.Middle:
+        this.showMiddlePanel = show;
+        break;
+      case PanelPosition.Right:
+        this.showRightPanel = show;
+        break;
+    }
+
+    this.panelsVisibilityChanged();
+    this.writePanelVisibilitiesToIndexedDb();
+  }
+
+  highlightResizePanelStripIfReq(event: TrmrkDragEvent, isLeftPanel: boolean) {
+    if (this.setupArgs) {
+      const resizePanelStrip = isLeftPanel
+        ? this.setupArgs.resizeLeftPanelStrip()
+        : this.setupArgs.resizeRightPanelStrip();
+      const target = event.touchOrMouseMoveCoords.evt!.target as HTMLElement;
+
+      if (target && resizePanelStrip) {
+        const nodesArr = htmlCollectionToArr(resizePanelStrip.nativeElement.children);
+        const idx = getElemIdx(nodesArr, event.touchOrMouseMoveCoords);
+        let closeBtnActivated = false;
+        let resetBtnActivated = false;
+
+        switch (idx) {
+          case 0:
+            closeBtnActivated = true;
+            break;
+          case 1:
+            resetBtnActivated = true;
+            break;
+          case 3:
+            closeBtnActivated = true;
+            break;
+          case 4:
+            resetBtnActivated = true;
+            break;
+        }
+
+        if (isLeftPanel) {
+          this.resizeLeftPanelStripCloseActionIsActivated = closeBtnActivated;
+          this.resizeLeftPanelStripResetActionIsActivated = resetBtnActivated;
+        } else {
+          this.resizeRightPanelStripCloseActionIsActivated = closeBtnActivated;
+          this.resizeRightPanelStripResetActionIsActivated = resetBtnActivated;
+        }
+      }
+    }
+  }
+
+  unhighlightResizePanelStrips() {
+    this.resizeLeftPanelStripCloseActionIsActivated = false;
+    this.resizeLeftPanelStripResetActionIsActivated = false;
+    this.resizeRightPanelStripCloseActionIsActivated = false;
+    this.resizeRightPanelStripResetActionIsActivated = false;
+  }
+
+  writePanelWidthRatiosToIndexedDb() {
+    this.basicAppSettingsDbAdapter.open((_, db) => {
+      this.basicAppSettingsDbAdapter.stores.choices.store(db, null, 'readwrite').put({
+        catKey: this.indexedDb.appSettings.choices.appPanelsLayout.catKey,
+        key: this.appService.getAppObjectKey([commonAppSettingsChoiceKeys.panelWidthRatios]),
+        value: this.corePanelWidthRatios,
+      });
+    });
+  }
+
+  writePanelVisibilitiesToIndexedDb() {
+    this.basicAppSettingsDbAdapter.open((_, db) => {
+      this.basicAppSettingsDbAdapter.stores.choices.store(db, null, 'readwrite').put({
+        catKey: this.indexedDb.appSettings.choices.appPanelsLayout.catKey,
+        key: this.appService.getAppObjectKey([commonAppSettingsChoiceKeys.panelVisibilities]),
+        value: [this.showLeftPanel, this.showMiddlePanel, this.showRightPanel],
+      });
+    });
+  }
+
+  getCssClass() {
+    const cssClass = [AppPanelsLayoutService.dfCssClass, ...this.cssClass];
+
+    if (this.showLeftPanel) {
+      cssClass.push('trmrk-has-left-panel');
+    }
+
+    if (this.showMiddlePanel) {
+      cssClass.push('trmrk-has-middle-panel');
+    }
+
+    if (this.showRightPanel) {
+      cssClass.push('trmrk-has-right-panel');
+    }
+
+    cssClass.push(`trmrk-has-${this.visiblePanelsCount}-panels`);
+    return cssClass;
+  }
+
+  getVisiblePanelsCount() {
+    let visiblePanelsCount = 0;
+
+    if (this.showLeftPanel) {
+      visiblePanelsCount++;
+    }
+
+    if (this.showMiddlePanel) {
+      visiblePanelsCount++;
+    }
+
+    if (this.showRightPanel) {
+      visiblePanelsCount++;
+    }
+
+    return visiblePanelsCount;
+  }
+
+  updatePanelWidths() {
+    if (this.setupArgs?.containerEl()) {
+      let leftRatio: number, middleRatio: number, rightRatio: number;
+      const baseArr = this.basePanelWidthRatios;
+      leftRatio = this.showLeftPanel ? this.normalizePanelWidthRatio(baseArr[0]) : 0;
+
+      middleRatio = this.showMiddlePanel
+        ? this.showRightPanel
+          ? this.normalizePanelWidthRatio(
+              (baseArr[1] / (baseArr[1] + baseArr[2])) * (FULL_WIDTH_RATIO - leftRatio),
+              leftRatio
+            )
+          : FULL_WIDTH_RATIO - leftRatio
+        : 0;
+
+      rightRatio = this.showRightPanel ? FULL_WIDTH_RATIO - leftRatio - middleRatio : 0;
+      const panelWidthRatios = [leftRatio, middleRatio, rightRatio];
+      this.panelWidthRatios = panelWidthRatios;
+
+      this.panelStyles = panelWidthRatios.map((ratio) => {
+        ratio = Math.floor(ratio);
+
+        return {
+          width: `${ratio / 1000}%`,
+          maxWidth: `${ratio / 1000}%`,
+        };
+      });
+    } else {
+      this.panelStyles = [{}, {}, {}];
+    }
+  }
+
+  normalizePanelWidthRatio(panelWidthRatio: number, otherPanelWidthRatio?: number | NullOrUndef) {
+    const minRatio = this.panelMinWidthRatio!;
+
+    const maxRatio = Math.max(
+      FULL_WIDTH_RATIO -
+        (this.visiblePanelsCount === 3 ? minRatio : 0) -
+        (otherPanelWidthRatio ?? minRatio),
+      minRatio
+    );
+
+    panelWidthRatio = Math.min(Math.max(panelWidthRatio, minRatio), maxRatio);
+    return panelWidthRatio;
+  }
+
+  getPanelResizeDx(event: TrmrkDragEvent) {
+    const dx = event.touchOrMouseMoveCoords.clientX - event.touchStartOrMouseDownCoords!.clientX;
+    return dx;
+  }
+
+  getNewPanelWidthCore(event: TrmrkDragEvent, resizedPanel: PanelPosition) {
+    const dx = this.getPanelResizeDx(event);
+    let newPanelWidth: number;
+
+    switch (resizedPanel) {
+      case PanelPosition.Left:
+        newPanelWidth = this.leftPanelWidth! + dx;
+        break;
+      case PanelPosition.Right:
+        newPanelWidth = this.rightPanelWidth! - dx;
+        break;
+      default:
+        throw new Error(`Unsupported resized panel position: ${resizedPanel}`);
+    }
+
+    return newPanelWidth;
+  }
+
+  getNewPanelWidthRatioCore(event: TrmrkDragEvent, resizedPanel: PanelPosition) {
+    const newPanelWidth = this.getNewPanelWidthCore(event, resizedPanel);
+    const newPanelWidthRatio = (newPanelWidth / this.containerWidth!) * FULL_WIDTH_RATIO;
+    return newPanelWidthRatio;
   }
 }

@@ -79,7 +79,7 @@ export class KeyboardShortcutService implements OnDestroy {
                 shortcut.enabled = srlzbl.enabled;
 
                 if (srlzbl.sequence) {
-                  shortcut.sequence = JSON.parse(srlzbl.sequence);
+                  shortcut.sequence = srlzbl.sequence;
                 }
               }
             }

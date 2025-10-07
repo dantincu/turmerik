@@ -50,7 +50,7 @@ export class App implements OnDestroy {
 
     if (!appService.appStateService.setupOk.value) {
       setTimeout(() => {
-        this.setupOk(false);
+        // this.setupOk(false);
       });
     }
 
