@@ -6,6 +6,7 @@ import { AppStateService } from './app-state-service';
 
 const AppStateServiceBase = services.common.AppStateServiceBase;
 const AppServiceBase = services.common.AppServiceBase;
+const DarkModeService = services.common.DarkModeService;
 const injectionTokens = services.dependencyInjection.injectionTokens;
 
 @Injectable({
@@ -14,8 +15,9 @@ const injectionTokens = services.dependencyInjection.injectionTokens;
 export class AppService extends AppServiceBase {
   constructor(
     @Inject(injectionTokens.appConfig.token) appConfig: AppConfigCore,
-    @Inject(AppStateServiceBase) appStateService: AppStateService
+    @Inject(AppStateServiceBase) appStateService: AppStateService,
+    @Inject(DarkModeService) darkModeService: any
   ) {
-    super(appConfig, appStateService);
+    super(appConfig, appStateService, darkModeService);
   }
 }

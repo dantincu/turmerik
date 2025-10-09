@@ -33,7 +33,7 @@ export class TrmrkAppTreeView implements OnInit, OnDestroy {
   ngOnInit() {
     this.rootNodes = this.trmrkData.rootNodesData.value;
 
-    this.rootNodesSubscription = this.trmrkData.rootNodesData.$obs.subscribe(
+    this.rootNodesSubscription = this.trmrkData.rootNodesData.subscribe(
       (data) => {
         this.rootNodes = data;
       }

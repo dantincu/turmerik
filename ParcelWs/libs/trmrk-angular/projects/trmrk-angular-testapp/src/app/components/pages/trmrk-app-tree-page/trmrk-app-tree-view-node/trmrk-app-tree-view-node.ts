@@ -60,11 +60,11 @@ export class TrmrkAppTreeViewNode implements OnInit, OnDestroy {
     this.data = this.trmrkData.data.value;
     this.childNodes = this.trmrkData.childNodesData?.value;
 
-    this.dataSubscription = this.trmrkData.data.$obs.subscribe((data) => {
+    this.dataSubscription = this.trmrkData.data.subscribe((data) => {
       this.data = data;
     });
 
-    this.childNodesSubscription = this.trmrkData.childNodesData?.$obs.subscribe(
+    this.childNodesSubscription = this.trmrkData.childNodesData?.subscribe(
       (data) => {
         this.childNodes = data;
       }
