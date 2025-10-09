@@ -8,8 +8,9 @@ import { replaceQueryParams } from '../../../../trmrk/url';
 import { getIDbRequestOpenErrorMsg } from '../../../../trmrk-browser/indexedDB/core';
 
 import { AppStateServiceBase } from '../../common/app-state-service-base';
+import { AppServiceBase } from '../../common/app-service-base';
 
-import { ResetAppService } from './reset-app-service';
+import { DeleteAppStorageService } from '../../common/delete-app-storage-service';
 
 export interface TrmrkResetAppServiceInitArgs {
   route: ActivatedRoute;
@@ -31,7 +32,8 @@ export class TrmrkResetAppService implements OnDestroy {
   constructor(
     public router: Router,
     private appStateService: AppStateServiceBase,
-    private resetAppService: ResetAppService
+    private appService: AppServiceBase,
+    private resetAppService: DeleteAppStorageService
   ) {}
 
   ngOnDestroy() {
@@ -59,7 +61,8 @@ export class TrmrkResetAppService implements OnDestroy {
 
         setTimeout(async () => {
           try {
-            await this.resetAppService.resetApp(this.appStateService.dbObjNamePrefix);
+            await this.resetAppService.deleteStorage(this.appStateService.dbObjNamePrefix);
+            this.appService.onAppReset.emit();
 
             if (this.appStateService.defaults.appResetTriggersSetup) {
               this.appStateService.setupOk.next(false);

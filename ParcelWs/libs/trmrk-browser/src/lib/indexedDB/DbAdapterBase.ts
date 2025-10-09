@@ -1,5 +1,13 @@
 import { NullOrUndef, VoidOrAny } from '../../trmrk/core';
+import { mapPropNamesToThemselves } from '../../trmrk/propNames';
+
 import { getDbObjName } from './core';
+
+export const commonDbNamePrefixes = Object.freeze(
+  mapPropNamesToThemselves({
+    cache: '',
+  })
+);
 
 export abstract class DbAdapterBase {
   public readonly dbNameStr: string;

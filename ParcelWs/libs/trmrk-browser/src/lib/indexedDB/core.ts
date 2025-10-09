@@ -1,4 +1,4 @@
-import { NullOrUndef, AnyOrUnknown } from '../../trmrk/core';
+import { NullOrUndef } from '../../trmrk/core';
 import { getDOMExceptionErrorMsg } from '../../trmrk-browser/domUtils/core';
 
 export const getIDbRequestOpenErrorMsg = (error: DOMException | null): string =>

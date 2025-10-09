@@ -12,14 +12,13 @@ import { getIDbRequestOpenErrorMsg } from '../../../../../trmrk-browser/indexedD
 import { ModalService } from '../../../../services/common/modal-service';
 import { ModalServiceFactory } from '../../../../services/common/modal-service-factory';
 import { AppStateServiceBase } from '../../../../services/common/app-state-service-base';
-import { AppServiceBase } from '../../../../services/common/app-service-base';
 import { TrmrkDialog } from '../../../common/trmrk-dialog/trmrk-dialog';
 import { TrmrkDialogData, mergeDialogData } from '../../../../services/common/trmrk-dialog';
 import { DeleteAppStorageService } from '../../../../services/common/delete-app-storage-service';
 import { TrmrkLoading } from '../../../common/trmrk-loading/trmrk-loading';
 
 @Component({
-  selector: 'trmrk-reset-app-dialog',
+  selector: 'trmrk-delete-app-cache-dialog',
   standalone: true,
   imports: [
     CommonModule,
@@ -29,13 +28,13 @@ import { TrmrkLoading } from '../../../common/trmrk-loading/trmrk-loading';
     TrmrkDialog,
     TrmrkLoading,
   ],
-  templateUrl: './trmrk-reset-app-dialog.html',
-  styleUrl: './trmrk-reset-app-dialog.scss',
+  templateUrl: './trmrk-delete-app-cache-dialog.html',
+  styleUrl: './trmrk-delete-app-cache-dialog.scss',
 })
-export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
+export class TrmrkDeleteAppCacheDialog implements AfterViewInit, OnDestroy {
   mergeDialogData = mergeDialogData;
 
-  isResetting: boolean | null = null;
+  isDeleting: boolean | null = null;
   showSuccessMessage = 0;
   showErrorMessage = 0;
   errorMessage: string | NullOrUndef;
@@ -47,7 +46,6 @@ export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA)
     public data: TrmrkDialogData<any>,
     public dialogRef: MatDialogRef<any>,
-    private appService: AppServiceBase,
     private appStateService: AppStateServiceBase,
     private resetAppService: DeleteAppStorageService,
     private modalServiceFactory: ModalServiceFactory,
@@ -57,7 +55,7 @@ export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
 
     this.modalService.setup({
       hostEl: () => hostEl.nativeElement,
-      modalType: getVarName(() => TrmrkResetAppDialog),
+      modalType: getVarName(() => TrmrkDeleteAppCacheDialog),
       onCloseModal: () => this.dialogRef.close(),
       data: this.data.data,
     });
@@ -65,22 +63,17 @@ export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     setTimeout(async () => {
-      this.isResetting = true;
+      this.isDeleting = true;
 
       try {
-        await this.resetAppService.deleteStorage(this.appStateService.dbObjNamePrefix);
+        await this.resetAppService.deleteStorage(this.appStateService.cacheDbObjNamePrefix);
         this.showSuccessMessage++;
-        this.appService.onAppReset.emit();
-
-        if (this.appStateService.defaults.appResetTriggersSetup) {
-          this.appStateService.setupOk.next(false);
-        }
       } catch (err) {
         this.showErrorMessage++;
         this.errorMessage = getIDbRequestOpenErrorMsg(err as DOMException);
       }
 
-      this.isResetting = false;
+      this.isDeleting = false;
       this.resetFinished = true;
     });
   }

@@ -28,7 +28,7 @@ export enum CommonRoutes {
 }
 
 const defaultCommonChildRoutes = () =>
-  withVal({} as { [key: number]: Route }, (dfRoutes) => {
+  withVal({} as { [key: number]: CommonRouteOpts }, (dfRoutes) => {
     dfRoutes[CommonRoutes.Settings] = {
       path: 'settings',
       component: TrmrkAppSettings,
@@ -37,6 +37,7 @@ const defaultCommonChildRoutes = () =>
     dfRoutes[CommonRoutes.Themes] = {
       path: 'themes',
       component: TrmrkAppThemes,
+      exclude: true,
     };
 
     dfRoutes[CommonRoutes.ResetApp] = {
@@ -61,7 +62,7 @@ const defaultCommonChildRoutes = () =>
 
 const defaultCommonRoutes = () =>
   withVal({} as { [key: number]: Route }, (dfRoutes) => {
-    dfRoutes[CommonRoutes.Settings] = {
+    dfRoutes[CommonRoutes.NotFound] = {
       path: '**',
       component: NotFound,
     };
@@ -70,24 +71,24 @@ const defaultCommonRoutes = () =>
   });
 
 const getRoute = (opts: CommonRouteOpts | NullOrUndef, dfRoute: Route) => {
-  let route: Route | null;
+  let route: CommonRouteOpts | null;
 
   if (opts) {
-    if (!opts.exclude) {
-      route = { ...opts };
-      delete (route as CommonRouteOpts).exclude;
+    route = { ...opts };
 
-      for (let key of Object.keys(dfRoute)) {
-        (route as any)[key] ??= (dfRoute as any)[key];
-      }
-    } else {
-      route = null;
+    for (let key of Object.keys(dfRoute)) {
+      (route as any)[key] ??= (dfRoute as any)[key];
     }
   } else {
     route = dfRoute;
   }
 
-  return route;
+  if (route.exclude) {
+    route = null;
+  }
+
+  delete route?.exclude;
+  return route as Route;
 };
 
 const getRoutesArr = (

@@ -1050,10 +1050,22 @@ trmrk-app-themes-list-view {
 }
 
 div.mdc-form-field.mat-internal-form-field,
-.mat-mdc-button.mat-mdc-button,
-.mat-mdc-menu-content.mat-mdc-menu-content,
-.mat-mdc-menu-content .mat-mdc-menu-item span.mat-mdc-menu-item-text.mat-mdc-menu-item-text {
+  .mat-mdc-button.mat-mdc-button,
+  .mat-mdc-menu-content.mat-mdc-menu-content,
+  .mat-mdc-menu-content .mat-mdc-menu-item span.mat-mdc-menu-item-text.mat-mdc-menu-item-text {
   font-size: 1em;
+}
+
+.mat-mdc-button.mat-mdc-button > .mat-icon.mat-icon.mat-icon,
+  .mat-mdc-unelevated-button > .mat-icon,
+  .mat-mdc-raised-button > .mat-icon,
+  .mat-mdc-outlined-button > .mat-icon,
+  .mat-tonal-button > .mat-icon {
+  font-size: 1.75em;
+  height: 1em;
+  width: 1em;
+  margin-right: 8px;
+  margin-left: -6px;
 }
 
 .trmrk-spaced-list-item {

@@ -1,0 +1,28 @@
+<trmrk-dialog
+  [trmrkData]="
+    mergeDialogData(data, {
+      title: isDeleting
+        ? 'Deleting the app cache...'
+        : showErrorMessage
+        ? 'Delete App Cache Error'
+        : resetFinished
+        ? 'App Cache Deleted'
+        : 'Delete App Cache',
+      contentTemplate: content,
+      actionsTemplate: actions
+    })
+  "
+></trmrk-dialog>
+<ng-template #content
+  >@if (isDeleting) { <trmrk-loading></trmrk-loading> } @if (!isDeleting) { @if (showErrorMessage) {
+  <h3 class="trmrk-text-level-error">An error occurred while deleting the app cache:</h3>
+  <p class="trmrk-text-level-error">{{ errorMessage }}</p>
+  } @if (!showErrorMessage && resetFinished) {
+  <h3 class="trmrk-color-accept">The app cache has been deleted.</h3>
+  } }</ng-template
+>
+<ng-template #actions
+  >@if (resetFinished) {
+  <button mat-button class="trmrk-btn trmrk-btn-filled-primary" (click)="okClick()">OK</button>
+  }</ng-template
+>

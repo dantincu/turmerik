@@ -1,8 +1,10 @@
 import { Injectable, Inject, EventEmitter, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
-import { NullOrUndef, escapeRegexSpecialChars } from '../../../trmrk/core';
+import { NullOrUndef } from '../../../trmrk/core';
 
 import { AppStateServiceBase } from './app-state-service-base';
+import { DarkModeService } from './dark-mode-service';
 import { AppConfigCore } from './app-config';
 import { injectionTokens } from '../dependency-injection/injection-tokens';
 
@@ -79,16 +81,28 @@ export class AppServiceBase implements OnDestroy {
   public onCloseAllModals = new EventEmitter<void>();
   public registeredModals: RegisteredModal[] = [];
 
+  public onAppReset = new EventEmitter<void>();
+  public onAppCacheDeleted = new EventEmitter<void>();
+
+  private appResetSubscription: Subscription;
+
   constructor(
     @Inject(injectionTokens.appConfig) public appConfig: AppConfigCore,
-    public appStateService: AppStateServiceBase
+    public appStateService: AppStateServiceBase,
+    private darkModeService: DarkModeService
   ) {
+    this.appResetSubscription = this.onAppReset.subscribe(() => {
+      this.darkModeService.revertDarkModeToDefault();
+    });
+
     if (!appConfig.requiresSetup) {
       appStateService.setupOk.next(true);
     }
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.appResetSubscription.unsubscribe();
+  }
 
   getAppObjectKey(parts: string[], opts?: GetAppObjectKeyOpts | NullOrUndef) {
     const appObjectKey = getAppObjectKey(

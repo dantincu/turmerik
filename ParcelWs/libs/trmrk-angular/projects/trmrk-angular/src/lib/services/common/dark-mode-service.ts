@@ -12,21 +12,12 @@ import { AppStateServiceBase } from './app-state-service-base';
 })
 export class DarkModeService {
   private darkModeStateChangeSubscription: Subscription;
-  private revertDarkModeToDefaultSubscription: Subscription;
 
   constructor(public appStateService: AppStateServiceBase) {
     this.darkModeStateChange = this.darkModeStateChange.bind(this);
 
     this.darkModeStateChangeSubscription = appStateService.isDarkMode.subscribe(
       this.darkModeStateChange
-    );
-
-    this.revertDarkModeToDefaultSubscription = appStateService.revertDarkModeToDefault.subscribe(
-      () => {
-        const isDarkModeValue = isDarkMode(this.appStateService.appThemeIsDarkModeLocalStorageKey);
-        this.darkModeStateChange(isDarkModeValue);
-        appStateService.isDarkMode.next(isDarkModeValue);
-      }
     );
 
     this.storageEvent = this.storageEvent.bind(this);
@@ -69,13 +60,18 @@ export class DarkModeService {
     );
   }
 
+  revertDarkModeToDefault() {
+    const isDarkModeValue = isDarkMode(this.appStateService.appThemeIsDarkModeLocalStorageKey);
+    this.darkModeStateChange(isDarkModeValue);
+    this.appStateService.isDarkMode.next(isDarkModeValue);
+  }
+
   ngOnDestroy(): void {
     this.darkModeStateChangeSubscription.unsubscribe();
-    this.revertDarkModeToDefaultSubscription.unsubscribe();
     window.removeEventListener('storage', this.storageEvent);
   }
 
   init() {
-    this.appStateService.revertDarkModeToDefault.emit();
+    this.revertDarkModeToDefault();
   }
 }

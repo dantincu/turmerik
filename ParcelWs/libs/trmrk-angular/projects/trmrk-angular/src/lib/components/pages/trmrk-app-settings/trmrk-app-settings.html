@@ -19,6 +19,16 @@
       <button
         mat-button
         class="trmrk-icon-link"
+        (click)="trmrkAppSettingsService.deleteAppCacheClick($event)"
+      >
+        <mat-icon class="trmrk-icon">autorenew</mat-icon>
+        Delete App Cache
+      </button>
+    </div>
+    <div class="trmrk-field">
+      <button
+        mat-button
+        class="trmrk-icon-link"
         (click)="trmrkAppSettingsService.resetAppClick($event)"
       >
         <div

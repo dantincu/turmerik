@@ -1,6 +1,7 @@
-import { Injectable, OnDestroy, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { getDbObjName } from '../../../trmrk-browser/indexedDB/core';
+import { commonDbNamePrefixes } from '../../../trmrk-browser/indexedDB/DbAdapterBase';
 import { localStorageKeys } from '../../../trmrk-browser/domUtils/core';
 
 import { TrmrkObservable } from './TrmrkObservable';
@@ -58,9 +59,8 @@ export const getAppDefaultValues = (): AppDefaultValues => ({
 });
 
 @Injectable()
-export abstract class AppStateServiceBase implements OnDestroy {
+export abstract class AppStateServiceBase {
   isDarkMode = new TrmrkObservable<boolean>(false);
-  revertDarkModeToDefault = new EventEmitter<void>();
   showAppBar = new TrmrkObservable<boolean>(true);
   currentModalId = new TrmrkObservable<number>(0);
   setupOk = new TrmrkObservable<boolean>(false);
@@ -70,18 +70,16 @@ export abstract class AppStateServiceBase implements OnDestroy {
   defaults = getAppDefaultValues();
 
   dbObjNamePrefix: string;
+  cacheDbObjNamePrefix: string;
   appThemeIsDarkModeLocalStorageKey: string;
 
   constructor(public appName: string) {
     this.dbObjNamePrefix = getDbObjName([appName]);
+    this.cacheDbObjNamePrefix = getDbObjName([appName, commonDbNamePrefixes.cache]);
 
     this.appThemeIsDarkModeLocalStorageKey = getDbObjName([
       appName,
       localStorageKeys.appThemeIsDarkMode,
     ]);
-  }
-
-  ngOnDestroy(): void {
-    this.revertDarkModeToDefault.unsubscribe();
   }
 }

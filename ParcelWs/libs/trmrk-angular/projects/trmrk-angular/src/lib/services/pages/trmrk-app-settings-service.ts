@@ -16,6 +16,8 @@ import { setIsDarkModeToLocalStorage } from '../../../trmrk-browser/domUtils/cor
 export interface TrmrkAppSettingsServiceInitArgs {
   resetAppDialog: MatDialog;
   resetAppDialogComponent: any;
+  deleteAppCacheDialog: MatDialog;
+  deleteAppCacheComponent: any;
 }
 
 @Injectable({
@@ -30,6 +32,8 @@ export class TrmrkAppSettingsService implements OnDestroy {
   private darkModeStateChangeSubscription: Subscription;
   private resetAppDialog!: MatDialog;
   private resetAppDialogComponent: any;
+  private deleteAppCacheDialog!: MatDialog;
+  private deleteAppCacheDialogComponent: any;
 
   constructor(private appStateService: AppStateServiceBase, private sanitizer: DomSanitizer) {
     this.onDarkModeBtnClick = this.onDarkModeBtnClick.bind(this);
@@ -53,6 +57,8 @@ export class TrmrkAppSettingsService implements OnDestroy {
   init(args: TrmrkAppSettingsServiceInitArgs) {
     this.resetAppDialog = args.resetAppDialog;
     this.resetAppDialogComponent = args.resetAppDialogComponent;
+    this.deleteAppCacheDialog = args.deleteAppCacheDialog;
+    this.deleteAppCacheDialogComponent = args.deleteAppCacheComponent;
   }
 
   onDarkModeBtnClick(event: MatCheckboxChange): void {
@@ -72,6 +78,19 @@ export class TrmrkAppSettingsService implements OnDestroy {
     openDialog({
       matDialog: this.resetAppDialog,
       dialogComponent: this.resetAppDialogComponent,
+      data: {
+        disableClose: true,
+        data: {},
+      },
+      clickEvent: event,
+      dialogPanelSize: DialogPanelSize.Default,
+    });
+  }
+
+  deleteAppCacheClick(event: MouseEvent) {
+    openDialog({
+      matDialog: this.deleteAppCacheDialog,
+      dialogComponent: this.deleteAppCacheDialogComponent,
       data: {
         disableClose: true,
         data: {},

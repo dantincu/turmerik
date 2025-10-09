@@ -11,6 +11,7 @@ import { AppConfigCore } from '../../../services/common/app-config';
 import { TrmrkAppPage } from '../../common/trmrk-app-page/trmrk-app-page';
 
 import { TrmrkResetAppDialog } from './trmrk-reset-app-dialog/trmrk-reset-app-dialog';
+import { TrmrkDeleteAppCacheDialog } from './trmrk-delete-app-cache-dialog/trmrk-delete-app-cache-dialog';
 import { TrmrkAppSettingsService } from '../../../services/pages/trmrk-app-settings-service';
 
 export type TrmrkAppSettingsTsType = TrmrkAppSettings;
@@ -26,11 +27,14 @@ export class TrmrkAppSettings {
   constructor(
     @Inject(injectionTokens.appConfig.token) public appConfig: AppConfigCore,
     public trmrkAppSettingsService: TrmrkAppSettingsService,
-    private resetAppDialog: MatDialog
+    private resetAppDialog: MatDialog,
+    private deleteAppCacheDialog: MatDialog
   ) {
     trmrkAppSettingsService.init({
       resetAppDialog,
       resetAppDialogComponent: TrmrkResetAppDialog,
+      deleteAppCacheDialog,
+      deleteAppCacheComponent: TrmrkDeleteAppCacheDialog,
     });
   }
 }
