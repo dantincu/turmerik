@@ -57,6 +57,8 @@ export class Trmrk3PanelsLayout implements OnDestroy {
   static dfCssClass = 'trmrk-3-panels-layout';
   static dfPanelWidthRatios = [33333, 33333, 33333];
 
+  @Input() trmrkLayoutKey?: string | NullOrUndef;
+
   @Input() trmrkLeftPanelTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkLeftPanelOptionsMenuTemplate?: TemplateRef<any> | NullOrUndef;
 
@@ -131,6 +133,7 @@ export class Trmrk3PanelsLayout implements OnDestroy {
 
     setTimeout(() => {
       this.service.setup({
+        layoutKey: this.trmrkLayoutKey,
         containerEl: () => this.containerEl,
         leftPanelEl: () => this.leftPanelEl,
         leftPanelOptionsMenu: () => this.leftPanelOptionsMenu,

@@ -45,6 +45,7 @@ export const commonLayoutKeys = mapPropNamesToThemselves(
 );
 
 export interface AppPanelLayoutServiceSetupArgs {
+  layoutKey?: string | NullOrUndef;
   containerEl: () => ElementRef<any>;
   leftPanelEl: () => ElementRef<any>;
   rightPanelEl: () => ElementRef<any>;
@@ -60,10 +61,6 @@ export interface AppPanelLayoutServiceSetupArgs {
   resizeRightPanelStrip: () => ElementRef<HTMLElement> | NullOrUndef;
 }
 
-export interface AppPanelLayoutServiceLoadAppSettingsChoicesArgs {
-  layoutKey?: string | NullOrUndef;
-}
-
 @Injectable()
 export class AppPanelsLayoutService implements TrmrkDisaposable {
   static dfCssClass = 'trmrk-3-panels-layout';
@@ -71,7 +68,6 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
 
   id: number = 0;
   setupArgs: AppPanelLayoutServiceSetupArgs | null = null;
-  loadAppSettingsChoicesArgs: AppPanelLayoutServiceLoadAppSettingsChoicesArgs | null = null;
 
   alwaysRenderLeftPanelChanged = new EventEmitter<boolean>();
   showLeftPanelChanged = new EventEmitter<boolean>();
@@ -148,11 +144,16 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
   private leftPanelMenuClosedSubscriptions: Subscription[] = [];
   private middlePanelMenuClosedSubscriptions: Subscription[] = [];
   private rightPanelMenuClosedSubscriptions: Subscription[] = [];
+  private appResetSubscription: Subscription;
 
   constructor(
     private appService: AppServiceBase,
     private basicAppSettingsDbAdapter: BasicAppSettingsDbAdapter
   ) {
+    this.appResetSubscription = this.appService.onAppReset.subscribe(() => {
+      this.loadAppSettingsChoices();
+    });
+
     this.documentTouchStartOrMouseDown = this.documentTouchStartOrMouseDown.bind(this);
     this.leftPanelOptionsMenuClosed = this.leftPanelOptionsMenuClosed.bind(this);
     this.middlePanelOptionsMenuClosed = this.middlePanelOptionsMenuClosed.bind(this);
@@ -593,20 +594,19 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
       subscriptionsArr.splice(0, subscriptionsArr.length);
     }
 
+    this.appResetSubscription.unsubscribe();
+    this.appResetSubscription = null!;
     this.setupArgs = null;
-    this.loadAppSettingsChoicesArgs = null;
   }
 
   reset() {}
 
-  loadAppSettingsChoices(args: AppPanelLayoutServiceLoadAppSettingsChoicesArgs) {
+  loadAppSettingsChoices() {
     return new Promise<void>((resolve, reject) => {
-      this.loadAppSettingsChoicesArgs = args;
-
       const appPanelsLayoutCatKey = (this.indexedDb.appSettings.choices.appPanelsLayout.catKey =
         this.appService.getAppObjectKey([
           commonAppSettingsChoiceCatKeys.appPanelsLayout,
-          args.layoutKey ?? commonLayoutKeys.main,
+          this.setupArgs!.layoutKey ?? commonLayoutKeys.main,
         ]));
 
       this.basicAppSettingsDbAdapter.open(
