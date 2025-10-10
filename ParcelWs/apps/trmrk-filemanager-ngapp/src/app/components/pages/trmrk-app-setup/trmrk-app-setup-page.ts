@@ -8,6 +8,7 @@ import { TrmrkAppIcon } from '../../common/trmrk-app-icon/trmrk-app-icon';
 import { AppService } from '../../../services/common/app-service';
 import { AppServiceBase } from '../../../../trmrk-angular/services/common/app-service-base';
 import { commonQueryKeys } from '../../../../trmrk-angular/services/common/url';
+import { defaultMainCommonRouteKeys } from '../../../../trmrk-angular/components/pages/routes';
 
 @Component({
   selector: 'trmrk-app-setup-page',
@@ -16,7 +17,7 @@ import { commonQueryKeys } from '../../../../trmrk-angular/services/common/url';
   styleUrl: './trmrk-app-setup-page.scss',
 })
 export class TrmrkAppSetup implements OnDestroy {
-  static readonly defaultReturnToUrl = 'app';
+  static readonly defaultReturnToUrl = defaultMainCommonRouteKeys.App;
 
   private hasBeenSetupSubscription: Subscription;
   private activatedRouteSubscription: Subscription;

@@ -9,6 +9,7 @@ import { getIDbRequestOpenErrorMsg } from '../../../../trmrk-browser/indexedDB/c
 
 import { AppStateServiceBase } from '../../common/app-state-service-base';
 import { AppServiceBase } from '../../common/app-service-base';
+import { commonQueryKeys } from '../../common/url';
 
 import { DeleteAppStorageService } from '../../common/delete-app-storage-service';
 
@@ -20,14 +21,16 @@ export interface TrmrkResetAppServiceInitArgs {
   providedIn: 'root',
 })
 export class TrmrkResetAppService implements OnDestroy {
-  private routeSub!: Subscription;
-  private route!: ActivatedRoute;
+  jsonBool = jsonBool;
 
   isResetting: boolean | null = null;
   showSuccessMessage = 0;
   showErrorMessage = 0;
   errorMessage: string | NullOrUndef;
   showTopHorizStrip = true;
+
+  private routeSub!: Subscription;
+  private route!: ActivatedRoute;
 
   constructor(
     public router: Router,
@@ -44,7 +47,7 @@ export class TrmrkResetAppService implements OnDestroy {
     this.route = args.route;
 
     this.routeSub = this.route.queryParamMap.subscribe((params) => {
-      const resetParam = params.get('reset');
+      const resetParam = params.get(commonQueryKeys.reset);
 
       if (resetParam === jsonBool.true) {
         this.isResetting = true;
@@ -71,7 +74,7 @@ export class TrmrkResetAppService implements OnDestroy {
             const url = replaceQueryParams('', null, false);
 
             this.router.navigate([url], {
-              queryParams: { reset: 'false' },
+              queryParams: { [commonQueryKeys.reset]: jsonBool.false },
               replaceUrl: true,
             });
           } catch (err) {

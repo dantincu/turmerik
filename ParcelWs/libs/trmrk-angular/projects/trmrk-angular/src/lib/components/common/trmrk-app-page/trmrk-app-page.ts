@@ -24,6 +24,7 @@ import { TrmrkObservable } from '../../../services/common/TrmrkObservable';
 import { TrmrkAppLink } from '../../../components/common/trmrk-app-link/trmrk-app-link';
 import { injectionTokens } from '../../../services/dependency-injection/injection-tokens';
 import { tab_duplicate, tab_group } from '../../../assets/icons/material';
+import { defaultCommonChildRouteKeys, defaultMainCommonChildRouteKeys } from '../../pages/routes';
 
 @Component({
   selector: 'trmrk-app-page',
@@ -74,6 +75,9 @@ export class TrmrkAppPage implements OnDestroy {
   @Input() trmrkShowSettingsMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowHomeMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowHelpMenuBtn: boolean | NullOrUndef;
+
+  defaultCommonChildRouteKeys = defaultCommonChildRouteKeys;
+  defaultMainCommonChildRouteKeys = defaultMainCommonChildRouteKeys;
 
   @ViewChild(MatMenu) optionsMenu!: MatMenu;
 

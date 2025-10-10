@@ -9,6 +9,7 @@ import { TrmrkUrl, TrmrkUrlType } from './types';
 export const commonQueryKeys = Object.freeze(
   mapPropNamesToThemselves({
     returnTo: '',
+    reset: '',
   })
 );
 

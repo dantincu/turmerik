@@ -10,6 +10,16 @@ export const toMap = <TValue>(arr: Kvp<string, TValue>[]) => {
   return retMap;
 };
 
+export const toNumMap = <TValue>(arr: Kvp<number, TValue>[]) => {
+  const retMap: { [key: number]: TValue } = {};
+
+  for (let kvp of arr) {
+    retMap[kvp.key] = kvp.value;
+  }
+
+  return retMap;
+};
+
 export const getFromRecord = <K extends string | number | symbol, V, T>(
   record: Record<K, V>,
   key: K,

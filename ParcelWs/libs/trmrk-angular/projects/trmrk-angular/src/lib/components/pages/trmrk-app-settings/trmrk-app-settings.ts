@@ -14,6 +14,7 @@ import { TrmrkAppPage } from '../../common/trmrk-app-page/trmrk-app-page';
 import { TrmrkResetAppDialog } from './trmrk-reset-app-dialog/trmrk-reset-app-dialog';
 import { TrmrkDeleteAppCacheDialog } from './trmrk-delete-app-cache-dialog/trmrk-delete-app-cache-dialog';
 import { TrmrkAppSettingsService } from '../../../services/pages/trmrk-app-settings-service';
+import { defaultMainCommonChildRouteKeys } from '../routes';
 
 export type TrmrkAppSettingsTsType = TrmrkAppSettings;
 
@@ -25,6 +26,8 @@ export type TrmrkAppSettingsTsType = TrmrkAppSettings;
   encapsulation: ViewEncapsulation.None,
 })
 export class TrmrkAppSettings {
+  defaultMainCommonChildRouteKeys = defaultMainCommonChildRouteKeys;
+
   constructor(
     @Inject(injectionTokens.appConfig.token) public appConfig: TrmrkObservable<AppConfigCore>,
     public trmrkAppSettingsService: TrmrkAppSettingsService,
