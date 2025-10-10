@@ -1,5 +1,6 @@
 import { Component, Inject, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatMenuModule } from '@angular/material/menu';
@@ -13,17 +14,23 @@ import {
 
 import { IntIdMappedAppPanelsLayoutServiceFactory } from '../../../../trmrk-angular/services/common/int-id-mapped-app-panels-layout-service-factory';
 import { AppPanelsLayoutService } from '../../../../trmrk-angular/services/common/app-panels-layout-service';
-
 import { TrmrkPaginatedList } from '../../../../trmrk-angular/components/common/trmrk-paginated-list/trmrk-paginated-list';
 import { Trmrk3PanelsLayout } from '../../../../trmrk-angular/components/common/trmrk-3-panels-layout/trmrk-3-panels-layout';
+import { TrmrkHorizStrip } from '../../../../trmrk-angular/components/common/trmrk-horiz-strip/trmrk-horiz-strip';
+import { TrmrkLoading } from '../../../../trmrk-angular/components/common/trmrk-loading/trmrk-loading';
+
+import { TrmrkFolderViewService } from './trmrk-folder-view-service';
 
 @Component({
   selector: 'trmrk-folder-view',
   imports: [
     CommonModule,
+    MatButtonModule,
     MatIconModule,
     MatMenuModule,
     /* TrmrkPaginatedList, */ Trmrk3PanelsLayout,
+    TrmrkHorizStrip,
+    TrmrkLoading,
   ],
   templateUrl: './trmrk-folder-view.html',
   providers: [TrmrkPaginatedListService],
@@ -35,6 +42,7 @@ export class TrmrkFolderView {
 
   constructor(
     public trmrkPaginatedListService: TrmrkPaginatedListService,
+    public service: TrmrkFolderViewService,
     private intIdMappedAppPanelLayoutServiceFactory: IntIdMappedAppPanelsLayoutServiceFactory
   ) {
     setTimeout(() => {

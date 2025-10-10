@@ -2,8 +2,28 @@
   #trmrk3PanelsLayout
   [trmrkLeftPanelTemplate]="panel1"
   [trmrkMiddlePanelTemplate]="panel2"
-  [trmrkRightPanelTemplate]="panel3"
 ></trmrk-3-panels-layout>
-<ng-template #panel1></ng-template>
-<ng-template #panel2></ng-template>
-<ng-template #panel3></ng-template>
+<ng-template #panel1> </ng-template>
+<ng-template #panel2>
+  @if (service.hasError) {
+  <trmrk-horiz-strip
+    [trmrkCssClass]="['trmrk-top-message-horiz-strip', 'trmrk-text-level-error']"
+    [trmrkMainText]="service.errorTitle ?? 'Error'"
+    [trmrkDetailsTextParts]="
+      (service.errorMessage ?? null) !== null ? [service.errorMessage!] : null
+    "
+    [trmrkTrailingTemplate]="errorHorizStripTrailingTemplate"
+  ></trmrk-horiz-strip>
+  <ng-template #errorHorizStripTrailingTemplate>
+    @if (service.showAppSetupLink) {
+    <button mat-icon-button class="trmrk-icon-btn" (click)="service.runAppSetupClicked()">
+      <mat-icon class="'trmrk-icon'">build</mat-icon>
+    </button>
+    }
+  </ng-template>
+  } @if (service.isLoading) {
+  <trmrk-horiz-strip [trmrkUseContentInsteadOfTextRow]="true">
+    <trmrk-loading></trmrk-loading
+  ></trmrk-horiz-strip>
+  } @if (!service.hasError && !service.isLoading) { }
+</ng-template>

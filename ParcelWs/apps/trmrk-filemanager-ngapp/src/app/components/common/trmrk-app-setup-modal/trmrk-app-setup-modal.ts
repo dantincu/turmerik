@@ -34,6 +34,7 @@ import { AppConfig } from '../../../services/common/app-config';
 import { AppDriveStorageOption } from '../../../services/common/driveStorageOption';
 
 export interface TrmrkAppSetupDialogComponentData extends TrmrkDialogComponentDataCore {
+  isUpdate?: boolean | NullOrUndef;
   optionChosen: (option: AppDriveStorageOption) => void;
   errorMessage?: string | NullOrUndef;
 }

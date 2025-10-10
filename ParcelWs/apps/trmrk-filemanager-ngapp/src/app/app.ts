@@ -36,7 +36,7 @@ export class App implements OnDestroy {
   private keyboardShortcutSubscriptions: Subscription[] = [];
 
   constructor(
-    @Inject(AppServiceBase) private appService: AppService,
+    @Inject(AppServiceBase) public appService: AppService,
     private appSetupDialog: MatDialog,
     private keyboardShortcutService: KeyboardShortcutService,
     private componentIdService: ComponentIdService,
@@ -49,15 +49,13 @@ export class App implements OnDestroy {
       this.toggleAppSetupModal(show);
     });
 
-    setTimeout(() => {
-      if (appService.storageOptionService.currentStorageOption.value) {
-        this.appService.appStateService.hasBeenSetUp.next(true, true);
-      } else {
-        this.appService.appStateSvc.performAppSetup.next(true, true);
-      }
-    });
-
     this.setupKeyboardShortcuts();
+
+    if (appService.storageOptionService.currentStorageOption.value) {
+      this.appService.appStateService.hasBeenSetUp.next(true, true);
+    } else {
+      this.appService.appStateSvc.performAppSetup.next(true, true);
+    }
   }
 
   ngOnDestroy(): void {
@@ -89,6 +87,7 @@ export class App implements OnDestroy {
                 this.appService.storageOptionService.writeCurrentToIndexedDb();
               },
               errorMessage: this.appService.appStateSvc.appSetupModalErrorMsg.value,
+              isUpdate: this.appService.appStateService.hasBeenSetUp.value,
             },
           },
           dialogPanelSize: DialogPanelSize.Default,

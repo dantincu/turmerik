@@ -28,12 +28,16 @@ export class TrmrkAppSetup implements OnDestroy {
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) {
-    this.hasBeenSetupSubscription = this.appService.appStateService.hasBeenSetUp.subscribe(() => {
-      this.router.navigate([this.returnToUrl]);
-    });
-
     this.activatedRouteSubscription = this.activatedRoute.queryParamMap.subscribe((params) => {
       this.returnToUrl = params.get(commonQueryKeys.returnTo) ?? TrmrkAppSetup.defaultReturnToUrl;
+
+      if (this.appService.appStateService.hasBeenSetUp.value) {
+        this.router.navigate([this.returnToUrl]);
+      }
+    });
+
+    this.hasBeenSetupSubscription = this.appService.appStateService.hasBeenSetUp.subscribe(() => {
+      this.router.navigate([this.returnToUrl]);
     });
   }
 

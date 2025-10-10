@@ -10,10 +10,10 @@ import { DriveStorageOption } from '../../../trmrk/driveStorage/appConfig';
 import { injectionTokens } from '../../../trmrk-angular/services/dependency-injection';
 import { dbRequestToPromise } from '../../../trmrk-browser/indexedDB/core';
 import { getAppObjectKey } from '../../../trmrk-angular/services/common/app-service-base';
+import { AppStateServiceBase } from '../../../trmrk-angular/services/common/app-state-service-base';
 import { TrmrkObservable } from '../../../trmrk-angular/services/common/TrmrkObservable';
 
 import { IndexedDbDatabasesService } from './indexedDb/indexed-db-databases-service';
-import { AppConfig } from './app-config';
 import { appSettingsChoiceKeys } from './indexedDb/core';
 import { AppDriveStorageOption } from './driveStorageOption';
 
@@ -32,6 +32,7 @@ export class StorageOptionService implements OnDestroy {
 
   constructor(
     private indexedDbDatabasesService: IndexedDbDatabasesService,
+    private appStateService: AppStateServiceBase,
     @Inject(injectionTokens.appName.token) private appName: string
   ) {
     this.basicAppSettingsDbAdapter = indexedDbDatabasesService.basicAppSettings.value;
@@ -61,6 +62,7 @@ export class StorageOptionService implements OnDestroy {
 
             if (choice) {
               this.currentStorageOption.next(choice.value);
+              this.appStateService.hasBeenSetUp.next(true, true);
               resolve(choice.value);
             } else {
               resolve(null);

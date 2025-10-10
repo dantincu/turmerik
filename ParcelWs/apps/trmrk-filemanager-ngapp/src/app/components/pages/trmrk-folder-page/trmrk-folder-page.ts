@@ -8,6 +8,8 @@ import { AppServiceBase } from '../../../../trmrk-angular/services/common/app-se
 import { TrmrkAppPage } from '../../../../trmrk-angular/components/common/trmrk-app-page/trmrk-app-page';
 
 import { TrmrkFolderView } from '../../../../trmrk-filemanager-nglib/components/common/trmrk-folder-view/trmrk-folder-view';
+import { TrmrkFolderViewService } from '../../../../trmrk-filemanager-nglib/components/common/trmrk-folder-view/trmrk-folder-view-service';
+
 import { AppService } from '../../../services/common/app-service';
 
 @Component({
@@ -15,7 +17,11 @@ import { AppService } from '../../../services/common/app-service';
   imports: [CommonModule, MatIconModule, MatMenuModule, TrmrkAppPage, TrmrkFolderView],
   templateUrl: './trmrk-folder-page.html',
   styleUrl: './trmrk-folder-page.scss',
+  providers: [TrmrkFolderViewService],
 })
 export class TrmrkFolderPage {
-  constructor(@Inject(AppServiceBase) private appService: AppService) {}
+  constructor(
+    public folderViewService: TrmrkFolderViewService,
+    @Inject(AppServiceBase) private appService: AppService
+  ) {}
 }

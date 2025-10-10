@@ -65,6 +65,10 @@ app-root {
   text-decoration: underline;
 }
 
+.trmrk-text-align-center {
+  text-align: center;
+}
+
 /* .trmrk-scrollable::-webkit-scrollbar {
   width: 15px;
 }
@@ -759,6 +763,10 @@ trmrk-app-page {
 .trmrk-bottom-horiz-strip
 {
   border-radius: 0;
+
+  .trmrk-text-row {
+    justify-content: center;
+  }
 }
 
 .trmrk-tree-view {
