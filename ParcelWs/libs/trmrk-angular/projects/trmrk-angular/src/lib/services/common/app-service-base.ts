@@ -87,7 +87,7 @@ export class AppServiceBase implements OnDestroy {
   private appResetSubscription: Subscription;
 
   constructor(
-    @Inject(injectionTokens.appConfig) public appConfig: AppConfigCore,
+    @Inject(injectionTokens.appConfig.token) public appConfig: () => AppConfigCore,
     public appStateService: AppStateServiceBase,
     private darkModeService: DarkModeService
   ) {
@@ -95,8 +95,9 @@ export class AppServiceBase implements OnDestroy {
       this.darkModeService.revertDarkModeToDefault();
     });
 
-    if (!appConfig.requiresSetup) {
-      appStateService.setupOk.next(true);
+    if (!appConfig().requiresSetup) {
+      appStateService.hasBeenSetUp.next(true);
+      appStateService.performAppSetup.next(true);
     }
   }
 
@@ -107,7 +108,7 @@ export class AppServiceBase implements OnDestroy {
   getAppObjectKey(parts: string[], opts?: GetAppObjectKeyOpts | NullOrUndef) {
     const appObjectKey = getAppObjectKey(
       parts,
-      opts?.includeAppName ? this.appStateService.appName : null,
+      opts?.includeAppName ? this.appStateService.appConfig().appName : null,
       opts
     );
     return appObjectKey;

@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 
-import { services } from 'trmrk-angular';
+import { services, AppConfigCore } from 'trmrk-angular';
 
 const AppStateServiceBase = services.common.AppStateServiceBase;
-
-import { APP_NAME } from './core';
+const injectionTokens = services.dependencyInjection.injectionTokens;
 
 @Injectable()
 export class AppStateService extends AppStateServiceBase {
-  constructor() {
-    super(APP_NAME);
+  constructor(
+    @Inject(injectionTokens.appConfig.token) appConfig: () => AppConfigCore
+  ) {
+    super(appConfig);
   }
 }

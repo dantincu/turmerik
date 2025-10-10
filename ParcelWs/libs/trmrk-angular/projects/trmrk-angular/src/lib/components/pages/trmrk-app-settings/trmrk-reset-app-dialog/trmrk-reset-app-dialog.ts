@@ -58,8 +58,8 @@ export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
     this.modalService.setup({
       hostEl: () => hostEl.nativeElement,
       modalType: getVarName(() => TrmrkResetAppDialog),
-      onCloseModal: () => this.dialogRef.close(),
       data: this.data.data,
+      dialogRef,
     });
   }
 
@@ -68,12 +68,12 @@ export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
       this.isResetting = true;
 
       try {
-        await this.resetAppService.deleteStorage(this.appStateService.dbObjNamePrefix);
+        await this.resetAppService.deleteStorage(this.appService.getAppObjectKey([]));
         this.showSuccessMessage++;
         this.appService.onAppReset.emit();
 
         if (this.appStateService.defaults.appResetTriggersSetup) {
-          this.appStateService.setupOk.next(false);
+          this.appStateService.performAppSetup.next(false);
         }
       } catch (err) {
         this.showErrorMessage++;
@@ -90,6 +90,6 @@ export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
   }
 
   okClick() {
-    this.dialogRef.close();
+    this.modalService.closeModal();
   }
 }

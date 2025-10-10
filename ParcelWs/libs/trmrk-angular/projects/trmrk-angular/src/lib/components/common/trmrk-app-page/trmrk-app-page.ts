@@ -83,7 +83,7 @@ export class TrmrkAppPage implements OnDestroy {
   tabGroupIcon: SafeHtml;
 
   constructor(
-    @Inject(injectionTokens.appConfig.token) public appConfig: AppConfigCore,
+    @Inject(injectionTokens.appConfig.token) public appConfig: () => AppConfigCore,
     public appStateService: AppStateServiceBase,
     private domSanitizer: DomSanitizer
   ) {

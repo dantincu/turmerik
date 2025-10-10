@@ -14,7 +14,7 @@ const injectionTokens = services.dependencyInjection.injectionTokens;
 })
 export class AppService extends AppServiceBase {
   constructor(
-    @Inject(injectionTokens.appConfig.token) appConfig: AppConfigCore,
+    @Inject(injectionTokens.appConfig.token) appConfig: () => AppConfigCore,
     @Inject(AppStateServiceBase) appStateService: AppStateService,
     @Inject(DarkModeService) darkModeService: any
   ) {

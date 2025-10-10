@@ -2,8 +2,15 @@ import { UrlTree, UrlSerializer, Params, Router, UrlCreationOptions } from '@ang
 
 import { serializeQueryParams } from '../../../trmrk/url';
 import { trimFullStr } from '../../../trmrk/str';
+import { mapPropNamesToThemselves } from '../../../trmrk/propNames';
 
 import { TrmrkUrl, TrmrkUrlType } from './types';
+
+export const commonQueryKeys = Object.freeze(
+  mapPropNamesToThemselves({
+    returnTo: '',
+  })
+);
 
 export const serializeTrmrkUrl = (trmrkUrl: TrmrkUrl) => {
   const location = document.location;

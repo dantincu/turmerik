@@ -51,7 +51,7 @@ const defaultCommonChildRoutes = () =>
         const router = inject(Router);
         const appConfig = inject(injectionTokens.appConfig.token);
 
-        return router.createUrlTree([`${appConfig.routeBasePath}/reset-app`], {
+        return router.createUrlTree([`${appConfig().routeBasePath}/reset-app`], {
           queryParams: { reset: 'true' },
         });
       },

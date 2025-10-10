@@ -32,6 +32,7 @@ import { AppDriveStorageOption } from '../../../services/common/driveStorageOpti
 
 export interface TrmrkAppSetupDialogComponentData extends TrmrkDialogComponentDataCore {
   optionChosen: (option: AppDriveStorageOption) => void;
+  errorMessage?: string | NullOrUndef;
 }
 
 @Component({
@@ -45,12 +46,6 @@ export class TrmrkAppSetupModal implements OnDestroy {
   mergeDialogData = mergeDialogData;
   fileSystemApiFolderPickerId: string;
   modalService: ModalService;
-
-  /* isLoading: boolean | null = null;
-  showSuccessMessage = 0;
-  showErrorMessage = 0;
-  errorMessage: string | NullOrUndef;
-  loadingFinished: boolean | null = null; */
 
   cloudStorageOptions: DriveStorageOption[];
   otherStorageOptions: DriveStorageOption[];
@@ -67,7 +62,7 @@ export class TrmrkAppSetupModal implements OnDestroy {
     @Inject(AppStateServiceBase) private appStateService: AppStateService,
     private modalServiceFactory: ModalServiceFactory,
     private hostEl: ElementRef,
-    @Inject(injectionTokens.appConfig.token) appConfig: AppConfig
+    @Inject(injectionTokens.appConfig.token) appConfig: () => AppConfig
   ) {
     this.fileSystemApiFolderPickerId = appService.getAppObjectKey(
       [getVarName(() => TrmrkAppSetupModal)],
@@ -81,18 +76,18 @@ export class TrmrkAppSetupModal implements OnDestroy {
     this.modalService.setup({
       hostEl: () => hostEl.nativeElement,
       modalType: getVarName(() => TrmrkAppSetupModal),
-      onCloseModal: () => this.dialogRef.close(),
       data: this.data.data,
+      dialogRef,
     });
 
-    const driveStorageOptions = appConfig.driveStorageOptions.filter(
+    const driveStorageOptions = appConfig().driveStorageOptions.filter(
       (option) => option.isEnabled ?? true
     );
 
     this.cloudStorageOptions = driveStorageOptions.filter(
       (option) => option.storageType === DriveStorageType.RestApi
     );
-
+``
     this.hasCloudStorageOptions = !!this.cloudStorageOptions.length;
 
     this.otherStorageOptions = driveStorageOptions.filter(
@@ -119,7 +114,5 @@ export class TrmrkAppSetupModal implements OnDestroy {
       ...this.selectedStorageOption!,
       rootFolder: this.fileSystemApiDirHandle,
     });
-
-    this.modalService.closeModal();
   }
 }

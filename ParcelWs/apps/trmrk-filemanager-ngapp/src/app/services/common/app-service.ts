@@ -12,12 +12,14 @@ import { AppDriveStorageOption } from './driveStorageOption';
 @Injectable()
 export class AppService extends AppServiceBase {
   currentDriveStorageOption: AppDriveStorageOption | null = null;
+  appStateSvc: AppStateService;
 
   constructor(
-    @Inject(injectionTokens.appConfig.token) appConfig: AppConfig,
+    @Inject(injectionTokens.appConfig.token) appConfig: () => AppConfig,
     @Inject(AppStateServiceBase) appStateService: AppStateService,
     darkModeService: DarkModeService
   ) {
     super(appConfig, appStateService, darkModeService);
+    this.appStateSvc = appStateService;
   }
 }

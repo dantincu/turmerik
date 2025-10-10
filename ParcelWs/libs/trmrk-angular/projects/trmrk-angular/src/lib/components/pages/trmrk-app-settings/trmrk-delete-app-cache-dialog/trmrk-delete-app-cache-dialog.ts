@@ -8,10 +8,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { NullOrUndef } from '../../../../../trmrk/core';
 import { getVarName } from '../../../../../trmrk/Reflection/core';
 import { getIDbRequestOpenErrorMsg } from '../../../../../trmrk-browser/indexedDB/core';
+import { commonDbNamePrefixes } from '../../../../../trmrk-browser/indexedDB/DbAdapterBase';
 
 import { ModalService } from '../../../../services/common/modal-service';
 import { ModalServiceFactory } from '../../../../services/common/modal-service-factory';
 import { AppStateServiceBase } from '../../../../services/common/app-state-service-base';
+import { AppServiceBase } from '../../../../services/common/app-service-base';
 import { TrmrkDialog } from '../../../common/trmrk-dialog/trmrk-dialog';
 import { TrmrkDialogData, mergeDialogData } from '../../../../services/common/trmrk-dialog';
 import { DeleteAppStorageService } from '../../../../services/common/delete-app-storage-service';
@@ -47,6 +49,7 @@ export class TrmrkDeleteAppCacheDialog implements AfterViewInit, OnDestroy {
     public data: TrmrkDialogData<any>,
     public dialogRef: MatDialogRef<any>,
     private appStateService: AppStateServiceBase,
+    private appService: AppServiceBase,
     private resetAppService: DeleteAppStorageService,
     private modalServiceFactory: ModalServiceFactory,
     private hostEl: ElementRef
@@ -56,8 +59,8 @@ export class TrmrkDeleteAppCacheDialog implements AfterViewInit, OnDestroy {
     this.modalService.setup({
       hostEl: () => hostEl.nativeElement,
       modalType: getVarName(() => TrmrkDeleteAppCacheDialog),
-      onCloseModal: () => this.dialogRef.close(),
       data: this.data.data,
+      dialogRef,
     });
   }
 
@@ -66,7 +69,9 @@ export class TrmrkDeleteAppCacheDialog implements AfterViewInit, OnDestroy {
       this.isDeleting = true;
 
       try {
-        await this.resetAppService.deleteStorage(this.appStateService.cacheDbObjNamePrefix);
+        await this.resetAppService.deleteStorage(
+          this.appService.getAppObjectKey([commonDbNamePrefixes.cache])
+        );
         this.showSuccessMessage++;
       } catch (err) {
         this.showErrorMessage++;
@@ -83,6 +88,6 @@ export class TrmrkDeleteAppCacheDialog implements AfterViewInit, OnDestroy {
   }
 
   okClick() {
-    this.dialogRef.close();
+    this.modalService.closeModal();
   }
 }

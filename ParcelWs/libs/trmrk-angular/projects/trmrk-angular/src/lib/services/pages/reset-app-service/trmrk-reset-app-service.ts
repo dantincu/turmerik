@@ -61,11 +61,11 @@ export class TrmrkResetAppService implements OnDestroy {
 
         setTimeout(async () => {
           try {
-            await this.resetAppService.deleteStorage(this.appStateService.dbObjNamePrefix);
+            await this.resetAppService.deleteStorage(this.appService.getAppObjectKey([]));
             this.appService.onAppReset.emit();
 
             if (this.appStateService.defaults.appResetTriggersSetup) {
-              this.appStateService.setupOk.next(false);
+              this.appStateService.performAppSetup.next(false);
             }
 
             const url = replaceQueryParams('', null, false);

@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { getDbObjName } from '../../../trmrk-browser/indexedDB/core';
-import { commonDbNamePrefixes } from '../../../trmrk-browser/indexedDB/DbAdapterBase';
-import { localStorageKeys } from '../../../trmrk-browser/domUtils/core';
-
 import { TrmrkObservable } from './TrmrkObservable';
+import { AppConfigCore } from './app-config';
 
 export interface AppBarControlsVisibility {
   backBtn: boolean;
@@ -63,23 +60,10 @@ export abstract class AppStateServiceBase {
   isDarkMode = new TrmrkObservable<boolean>(false);
   showAppBar = new TrmrkObservable<boolean>(true);
   currentModalId = new TrmrkObservable<number>(0);
-  setupOk = new TrmrkObservable<boolean>(false);
-  performingSetup = new TrmrkObservable<boolean>(false);
-  appSuspended = new TrmrkObservable<boolean>(false);
+  hasBeenSetUp = new TrmrkObservable<boolean>(false);
+  performAppSetup = new TrmrkObservable<boolean>(false);
 
   defaults = getAppDefaultValues();
 
-  dbObjNamePrefix: string;
-  cacheDbObjNamePrefix: string;
-  appThemeIsDarkModeLocalStorageKey: string;
-
-  constructor(public appName: string) {
-    this.dbObjNamePrefix = getDbObjName([appName]);
-    this.cacheDbObjNamePrefix = getDbObjName([appName, commonDbNamePrefixes.cache]);
-
-    this.appThemeIsDarkModeLocalStorageKey = getDbObjName([
-      appName,
-      localStorageKeys.appThemeIsDarkMode,
-    ]);
-  }
+  constructor(public appConfig: () => AppConfigCore) {}
 }

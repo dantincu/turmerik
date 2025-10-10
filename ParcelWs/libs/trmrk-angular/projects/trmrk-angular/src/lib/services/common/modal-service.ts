@@ -1,4 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 import { Subscription } from 'rxjs';
 
@@ -10,7 +11,7 @@ import { updateModalVisibility, TrmrkDialogComponentDataCore } from './trmrk-dia
 export interface ModalServiceSetupArgs {
   hostEl: () => HTMLElement;
   modalType: string;
-  onCloseModal: () => void;
+  dialogRef: MatDialogRef<any>;
   data: TrmrkDialogComponentDataCore;
 }
 
@@ -20,8 +21,9 @@ export class ModalService implements OnDestroy {
   private currentModalIdChangedSubscription: Subscription;
   private closeModalSubscription: Subscription;
   private closeAllModalsSubscription: Subscription;
+  private modalClosedSubscription: Subscription | null = null;
   private hostEl!: () => HTMLElement;
-  private onCloseModal!: () => void;
+  dialogRef!: MatDialogRef<any>;
 
   constructor(private modalIdService: ModalIdService, private appService: AppServiceBase) {
     this._modalId = modalIdService.getNextId();
@@ -55,7 +57,11 @@ export class ModalService implements OnDestroy {
 
   setup(args: ModalServiceSetupArgs) {
     this.hostEl = args.hostEl;
-    this.onCloseModal = args.onCloseModal;
+    this.dialogRef = args.dialogRef;
+
+    this.modalClosedSubscription = args.dialogRef.afterClosed().subscribe(() => {
+      updateModalVisibility(this.hostEl(), true);
+    });
 
     this.appService.registerModal({
       modalId: this.modalId,
@@ -68,15 +74,16 @@ export class ModalService implements OnDestroy {
   }
 
   closeModal() {
-    this.onCloseModal();
-    updateModalVisibility(this.hostEl(), true);
+    this.dialogRef?.close();
   }
 
   destroy() {
     this.currentModalIdChangedSubscription.unsubscribe();
     this.closeModalSubscription.unsubscribe();
     this.closeAllModalsSubscription.unsubscribe();
+    this.modalClosedSubscription?.unsubscribe();
+    this.modalClosedSubscription = null;
     this.hostEl = null!;
-    this.onCloseModal = null!;
+    this.dialogRef = null!;
   }
 }

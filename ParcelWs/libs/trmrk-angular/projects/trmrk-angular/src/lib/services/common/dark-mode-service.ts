@@ -1,19 +1,31 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { appThemeCssClasses, isDarkMode } from '../../../trmrk-browser/domUtils/core';
-
 import { jsonBool } from '../../../trmrk/core';
+import { getDbObjName } from '../../../trmrk-browser/indexedDB/core';
+import { localStorageKeys } from '../../../trmrk-browser/domUtils/core';
 
 import { AppStateServiceBase } from './app-state-service-base';
+import { injectionTokens } from '../dependency-injection/injection-tokens';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DarkModeService {
+  public appThemeIsDarkModeLocalStorageKey: string;
+
   private darkModeStateChangeSubscription: Subscription;
 
-  constructor(public appStateService: AppStateServiceBase) {
+  constructor(
+    public appStateService: AppStateServiceBase,
+    @Inject(injectionTokens.appName.token) private appName: string
+  ) {
+    this.appThemeIsDarkModeLocalStorageKey = getDbObjName([
+      appName,
+      localStorageKeys.appThemeIsDarkMode,
+    ]);
+
     this.darkModeStateChange = this.darkModeStateChange.bind(this);
 
     this.darkModeStateChangeSubscription = appStateService.isDarkMode.subscribe(
@@ -25,18 +37,14 @@ export class DarkModeService {
   }
 
   storageEvent(event: StorageEvent) {
-    if (
-      (event.key ?? null) === null ||
-      event.key === this.appStateService.appThemeIsDarkModeLocalStorageKey
-    ) {
+    if ((event.key ?? null) === null || event.key === this.appThemeIsDarkModeLocalStorageKey) {
       let isDarkModeValue = false;
 
       if (
         (event.key ?? null) === null ||
-        (event.key === this.appStateService.appThemeIsDarkModeLocalStorageKey &&
-          (event.newValue ?? null) === null)
+        (event.key === this.appThemeIsDarkModeLocalStorageKey && (event.newValue ?? null) === null)
       ) {
-        isDarkModeValue = isDarkMode(this.appStateService.appThemeIsDarkModeLocalStorageKey);
+        isDarkModeValue = isDarkMode(this.appThemeIsDarkModeLocalStorageKey);
       } else {
         isDarkModeValue = event.newValue === jsonBool.true;
       }
@@ -61,7 +69,7 @@ export class DarkModeService {
   }
 
   revertDarkModeToDefault() {
-    const isDarkModeValue = isDarkMode(this.appStateService.appThemeIsDarkModeLocalStorageKey);
+    const isDarkModeValue = isDarkMode(this.appThemeIsDarkModeLocalStorageKey);
     this.darkModeStateChange(isDarkModeValue);
     this.appStateService.isDarkMode.next(isDarkModeValue);
   }

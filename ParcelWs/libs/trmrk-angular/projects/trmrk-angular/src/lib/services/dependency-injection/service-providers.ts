@@ -51,6 +51,7 @@ export interface GetCommonServiceProviderOpts<TAppConfig extends AppConfigCore =
 export interface GetCommonServiceProvidersArgs<TAppConfig extends AppConfigCore = AppConfigCore> {
   envName?: string | NullOrUndef;
   isProdEnv: boolean;
+  appName: string;
   provide: GetCommonServiceProviderOpts<TAppConfig>;
   routes?: Route[];
   appProviders: (Provider | EnvironmentProviders | null)[];
@@ -74,7 +75,8 @@ export class AppConfigProvidersFactory<TAppConfig extends AppConfigCore = AppCon
   getProviders(
     opts: LoadAppConfigOpts<TAppConfig>,
     envName: string,
-    isProdEnv: boolean
+    isProdEnv: boolean,
+    appName: string
   ): (Provider | EnvironmentProviders)[] {
     return [
       provideAppInitializer(async () => {
@@ -82,6 +84,7 @@ export class AppConfigProvidersFactory<TAppConfig extends AppConfigCore = AppCon
           opts.values ?? (await loadAppConfig<TAppConfig>(inject(HttpClient), opts, envName));
 
         appConfig.isProdEnv = isProdEnv;
+        appConfig.appName ??= appName;
 
         if (opts.configNormalizeFactory) {
           appConfig = await opts.configNormalizeFactory(appConfig);
@@ -94,8 +97,14 @@ export class AppConfigProvidersFactory<TAppConfig extends AppConfigCore = AppCon
         this.appConfig = appConfig;
       }),
       {
+        provide: injectionTokens.appName.token,
+        useValue: appName,
+      },
+      {
         provide: injectionTokens.appConfig.token,
-        useFactory: () => this.appConfig,
+        useFactory: () => {
+          return () => this.appConfig;
+        },
       },
     ];
   }
@@ -129,7 +138,8 @@ export const getServiceProviders = <TAppConfig extends AppConfigCore = AppConfig
             values: {} as TAppConfig,
           },
           args.envName ?? 'env',
-          args.isProdEnv
+          args.isProdEnv,
+          args.appName
         )
       : []),
 

@@ -7,7 +7,9 @@
   "
 ></trmrk-dialog>
 <ng-template #content>
-  @if (!selectedStorageOption) {
+  @if ((data.data.errorMessage ?? null) !== null) {
+  <p class="trmrk-text-level-error">{{ data.data.errorMessage }}</p>
+  } @if (!selectedStorageOption) {
   <p>Choose what type of storage you want to use with this app. Pick any of the options bellow.</p>
   @if (hasCloudStorageOptions) {
   <h3>Cloud Storage</h3>

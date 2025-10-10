@@ -69,7 +69,7 @@ export class TrmrkAppBar implements AfterViewInit, OnChanges, OnDestroy {
 
   constructor(
     public hostEl: ElementRef,
-    @Inject(injectionTokens.appConfig.token) public appConfig: AppConfigCore,
+    @Inject(injectionTokens.appConfig.token) public appConfig: () => AppConfigCore,
     public appStateService: AppStateServiceBase
   ) {
     this.updateBackBtnDisabled();

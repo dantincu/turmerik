@@ -2,6 +2,7 @@ import { ApplicationConfig } from '@angular/core';
 
 import { getServiceProviders } from '../trmrk-angular/services/dependency-injection/service-providers';
 
+import { APP_NAME } from './services/common/core';
 import { environment } from '../environments/environment';
 import { AppService } from './services/common/app-service';
 import { AppStateService } from './services/common/app-state-service';
@@ -12,6 +13,7 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: getServiceProviders<AppConfig>({
     isProdEnv: environment.production,
+    appName: APP_NAME,
     provide: {
       zoneChangeDetection: {
         provide: true,

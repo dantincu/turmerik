@@ -15,7 +15,8 @@ export const injectionTokens = mapObjProps(
   {
     basicAppSettingsDbAdapter: {} as InjectionTokenWrapper<BasicAppSettingsDbAdapter>,
     intIdServiceFactory: {} as InjectionTokenWrapper<IntIdServiceFactory>,
-    appConfig: {} as InjectionTokenWrapper<AppConfigCore>,
+    appConfig: {} as InjectionTokenWrapper<() => AppConfigCore>,
+    appName: {} as InjectionTokenWrapper<string>,
   },
   (_, propName): InjectionTokenWrapper<any> => ({
     name: propName,

@@ -8,6 +8,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NullOrUndef } from '../../../trmrk/core';
 
 import { AppStateServiceBase } from '../../services/common/app-state-service-base';
+import { DarkModeService } from '../../services/common/dark-mode-service';
 import * as materialIcons from '../../assets/icons/material';
 
 import { openDialog, DialogPanelSize } from '../../services/common/trmrk-dialog';
@@ -35,7 +36,11 @@ export class TrmrkAppSettingsService implements OnDestroy {
   private deleteAppCacheDialog!: MatDialog;
   private deleteAppCacheDialogComponent: any;
 
-  constructor(private appStateService: AppStateServiceBase, private sanitizer: DomSanitizer) {
+  constructor(
+    private appStateService: AppStateServiceBase,
+    private sanitizer: DomSanitizer,
+    private darkModeService: DarkModeService
+  ) {
     this.onDarkModeBtnClick = this.onDarkModeBtnClick.bind(this);
     this.darkModeStateChange = this.darkModeStateChange.bind(this);
 
@@ -64,7 +69,7 @@ export class TrmrkAppSettingsService implements OnDestroy {
   onDarkModeBtnClick(event: MatCheckboxChange): void {
     setIsDarkModeToLocalStorage(
       !this.isDarkMode,
-      this.appStateService.appThemeIsDarkModeLocalStorageKey
+      this.darkModeService.appThemeIsDarkModeLocalStorageKey
     );
 
     this.appStateService.isDarkMode.next(!this.isDarkMode);

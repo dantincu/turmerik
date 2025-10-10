@@ -25,7 +25,7 @@ export type TrmrkAppSettingsTsType = TrmrkAppSettings;
 })
 export class TrmrkAppSettings {
   constructor(
-    @Inject(injectionTokens.appConfig.token) public appConfig: AppConfigCore,
+    @Inject(injectionTokens.appConfig.token) public appConfig: () => AppConfigCore,
     public trmrkAppSettingsService: TrmrkAppSettingsService,
     private resetAppDialog: MatDialog,
     private deleteAppCacheDialog: MatDialog

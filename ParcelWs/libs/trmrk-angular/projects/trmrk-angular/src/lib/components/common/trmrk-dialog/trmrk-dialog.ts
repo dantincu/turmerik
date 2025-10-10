@@ -10,9 +10,7 @@ import {
 } from '@angular/core';
 
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';

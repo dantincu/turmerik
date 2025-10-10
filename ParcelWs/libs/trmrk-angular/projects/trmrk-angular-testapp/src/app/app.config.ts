@@ -7,12 +7,14 @@ import { AppStateService } from './services/app-state-service';
 import { iDbAdapters } from './services/adapters';
 import { routes } from './app.routes';
 import { environment } from '../environments/environment';
+import { APP_NAME } from './services/core';
 
 const getServiceProviders = services.dependencyInjection.getServiceProviders;
 
 export const appConfig: ApplicationConfig = {
   providers: getServiceProviders({
     isProdEnv: environment.production,
+    appName: APP_NAME,
     provide: {
       zoneChangeDetection: {
         provide: true,

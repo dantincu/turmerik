@@ -30,8 +30,9 @@ import {
 })
 export class App implements OnDestroy {
   id: number;
-  private setupOkValueSubscription: Subscription;
-  private appSetupDialogRef: MatDialogRef<unknown, any> | null = null;
+  setupModalId: number | null = null;
+  private setupModalIsShown = false;
+  private performAppSetupSubscription: Subscription;
   private keyboardShortcutSubscriptions: Subscription[] = [];
 
   constructor(
@@ -42,23 +43,21 @@ export class App implements OnDestroy {
     private keyboardServiceRegistrar: KeyboardServiceRegistrar
   ) {
     this.id = this.componentIdService.getNextId();
-    this.setupOk = this.setupOk.bind(this);
+    this.toggleAppSetupModal = this.toggleAppSetupModal.bind(this);
 
-    this.setupOkValueSubscription = appService.appStateService.setupOk.subscribe((setupOk) => {
-      this.setupOk(setupOk);
+    this.performAppSetupSubscription = appService.appStateSvc.performAppSetup.subscribe((show) => {
+      this.toggleAppSetupModal(show);
     });
 
-    if (!appService.appStateService.setupOk.value) {
-      setTimeout(() => {
-        // this.setupOk(false);
-      });
-    }
+    setTimeout(() => {
+      appService.appStateSvc.performAppSetup.next(true);
+    });
 
     this.setupKeyboardShortcuts();
   }
 
   ngOnDestroy(): void {
-    this.setupOkValueSubscription.unsubscribe();
+    this.performAppSetupSubscription.unsubscribe();
 
     this.keyboardShortcutService.unregisterAndUnsubscribeFromScopes(
       this.id,
@@ -66,29 +65,45 @@ export class App implements OnDestroy {
     );
   }
 
-  setupOk(setupOk: boolean) {
-    if (!setupOk && !this.appService.appStateService.performingSetup.value) {
-      this.appService.appStateService.performingSetup.next(true);
+  toggleAppSetupModal(show: boolean) {
+    if (show !== this.setupModalIsShown) {
+      this.setupModalIsShown = show;
 
-      this.appSetupDialogRef = openDialog<TrmrkAppSetupDialogComponentData>({
-        matDialog: this.appSetupDialog,
-        dialogComponent: TrmrkAppSetupModal,
-        data: {
+      if (show) {
+        this.appService.appStateSvc.performAppSetup.next(true, true);
+
+        const appSetupDialogRef = openDialog<TrmrkAppSetupDialogComponentData>({
+          matDialog: this.appSetupDialog,
+          dialogComponent: TrmrkAppSetupModal,
           data: {
-            optionChosen: (option) => {
-              this.appService.currentDriveStorageOption = option;
-              this.appService.appStateService.setupOk.next(true);
+            data: {
+              modalIdAvailable: (modalId) => (this.setupModalId = modalId),
+              optionChosen: (option) => {
+                this.appService.currentDriveStorageOption = option;
+                this.appService.appStateService.performAppSetup.next(false);
+                this.appService.appStateService.hasBeenSetUp.next(true, true);
+              },
+              errorMessage: this.appService.appStateSvc.appSetupModalErrorMsg.value,
             },
           },
-        },
-        dialogPanelSize: DialogPanelSize.Default,
-      });
+          dialogPanelSize: DialogPanelSize.Default,
+        });
 
-      const subscription = this.appSetupDialogRef.afterClosed().subscribe(() => {
-        this.appSetupDialogRef = null;
-        subscription.unsubscribe();
-        this.appService.appStateService.performingSetup.next(false);
-      });
+        const subscription = appSetupDialogRef.afterClosed().subscribe(() => {
+          this.setupModalId = null;
+          subscription.unsubscribe();
+          this.appService.appStateSvc.performAppSetup.next(false, true);
+        });
+      } else {
+        this.closeSetupModal();
+      }
+    }
+  }
+
+  closeSetupModal() {
+    if (this.setupModalId) {
+      this.setupModalIsShown = false;
+      this.appService.closeModal(this.setupModalId);
     }
   }
 
@@ -98,12 +113,12 @@ export class App implements OnDestroy {
         ...this.keyboardShortcutService.registerAndSubscribeToScopes(
           {
             componentId: this.id,
-            considerShortcutPredicate: () => this.appService.appStateService.performingSetup.value,
+            considerShortcutPredicate: () => this.appService.appStateService.performAppSetup.value,
           },
           {
             [keyboardShortcutScopes.appSetupModal]: {
               [keyboardShortcutKeys.closeAppSetupModal]: () => {
-                this.appSetupDialogRef?.close();
+                this.closeSetupModal();
               },
             },
           }

@@ -15,9 +15,22 @@ export class TrmrkObservable<T> {
     this.$obs = this.subject.asObservable();
   }
 
-  public next(value: T): void {
-    this._value = value;
-    this.subject.next(value);
+  public next(
+    value: T,
+    onlyIfDifferent?: boolean | NullOrUndef,
+    eqCompr?: ((prevVal: T, newVal: T) => boolean) | NullOrUndef
+  ): void {
+    let setValue = !onlyIfDifferent;
+
+    if (!setValue) {
+      eqCompr ??= (prevVal, newVal) => prevVal === newVal;
+      setValue = !eqCompr(this._value, value);
+    }
+
+    if (setValue) {
+      this._value = value;
+      this.subject.next(value);
+    }
   }
 
   public subscribe(callback: (value: T) => void) {
