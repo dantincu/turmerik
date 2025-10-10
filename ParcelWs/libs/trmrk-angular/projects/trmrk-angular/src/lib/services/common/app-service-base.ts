@@ -6,6 +6,7 @@ import { NullOrUndef } from '../../../trmrk/core';
 import { AppStateServiceBase } from './app-state-service-base';
 import { DarkModeService } from './dark-mode-service';
 import { AppConfigCore } from './app-config';
+import { TrmrkObservable } from './TrmrkObservable';
 import { injectionTokens } from '../dependency-injection/injection-tokens';
 
 export interface RegisterModalArgsCore {
@@ -87,7 +88,7 @@ export class AppServiceBase implements OnDestroy {
   private appResetSubscription: Subscription;
 
   constructor(
-    @Inject(injectionTokens.appConfig.token) public appConfig: () => AppConfigCore,
+    @Inject(injectionTokens.appConfig.token) public appConfig: TrmrkObservable<AppConfigCore>,
     public appStateService: AppStateServiceBase,
     private darkModeService: DarkModeService
   ) {
@@ -95,7 +96,7 @@ export class AppServiceBase implements OnDestroy {
       this.darkModeService.revertDarkModeToDefault();
     });
 
-    if (!appConfig().requiresSetup) {
+    if (!appConfig.value.requiresSetup) {
       appStateService.hasBeenSetUp.next(true);
       appStateService.performAppSetup.next(true);
     }
@@ -108,7 +109,7 @@ export class AppServiceBase implements OnDestroy {
   getAppObjectKey(parts: string[], opts?: GetAppObjectKeyOpts | NullOrUndef) {
     const appObjectKey = getAppObjectKey(
       parts,
-      opts?.includeAppName ? this.appStateService.appConfig().appName : null,
+      opts?.includeAppName ? this.appStateService.appConfig.value.appName : null,
       opts
     );
     return appObjectKey;

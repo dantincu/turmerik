@@ -26,8 +26,7 @@ import { NullOrUndef, VoidOrAny } from '../../../../trmrk/core';
 import { injectionTokens } from '../../../services/dependency-injection/injection-tokens';
 import { AppConfigCore } from '../../../services/common/app-config';
 import { AppStateServiceBase } from '../../../services/common/app-state-service-base';
-
-import { TrmrkUrlType } from '../../../services/common/types';
+import { TrmrkObservable } from '../../../services/common/TrmrkObservable';
 
 @Component({
   selector: 'trmrk-app-bar',
@@ -69,7 +68,7 @@ export class TrmrkAppBar implements AfterViewInit, OnChanges, OnDestroy {
 
   constructor(
     public hostEl: ElementRef,
-    @Inject(injectionTokens.appConfig.token) public appConfig: () => AppConfigCore,
+    @Inject(injectionTokens.appConfig.token) public appConfig: TrmrkObservable<AppConfigCore>,
     public appStateService: AppStateServiceBase
   ) {
     this.updateBackBtnDisabled();

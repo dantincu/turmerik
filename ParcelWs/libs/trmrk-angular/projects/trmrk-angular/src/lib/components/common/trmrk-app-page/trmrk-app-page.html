@@ -45,31 +45,31 @@
         <mat-icon class="trmrk-icon">share</mat-icon>
       </button>
       } @if (trmrkShowUserProfileMenuBtn ?? appStateService.defaults.show.mainMenu.userProfileBtn) {
-      <trmrk-app-link [trmrkRouterLink]="[`${appConfig().routeBasePath}/user-profile`]">
+      <trmrk-app-link [trmrkRouterLink]="[`${appConfig.value.routeBasePath}/user-profile`]">
         <button mat-icon-button class="trmrk-icon-btn">
           <mat-icon class="trmrk-icon">account_circle</mat-icon>
         </button>
       </trmrk-app-link>
       } @if (trmrkShowManageAppMenuBtn ?? appStateService.defaults.show.mainMenu.manageAppBtn) {
-      <trmrk-app-link [trmrkRouterLink]="[`${appConfig().routeBasePath}/manage-app`]">
+      <trmrk-app-link [trmrkRouterLink]="[`${appConfig.value.routeBasePath}/manage-app`]">
         <button mat-icon-button class="trmrk-icon-btn">
           <mat-icon class="trmrk-icon">settings_applications</mat-icon>
         </button></trmrk-app-link
       >
       } @if (trmrkShowSettingsMenuBtn ?? appStateService.defaults.show.mainMenu.settingsBtn) {
-      <trmrk-app-link [trmrkRouterLink]="[`${appConfig().routeBasePath}/settings`]"
+      <trmrk-app-link [trmrkRouterLink]="[`${appConfig.value.routeBasePath}/settings`]"
         ><button mat-icon-button class="trmrk-icon-btn">
           <mat-icon class="trmrk-icon">settings</mat-icon>
         </button></trmrk-app-link
       >
       } @if (trmrkShowHomeMenuBtn ?? appStateService.defaults.show.mainMenu.homeBtn) {
-      <trmrk-app-link [trmrkRouterLink]="[appConfig().routeBasePath]"
+      <trmrk-app-link [trmrkRouterLink]="[appConfig.value.routeBasePath]"
         ><button mat-icon-button class="trmrk-icon-btn">
           <mat-icon class="trmrk-icon">home</mat-icon>
         </button></trmrk-app-link
       >
       } @if (trmrkShowHelpMenuBtn ?? appStateService.defaults.show.mainMenu.helpBtn) {
-      <trmrk-app-link [trmrkRouterLink]="[`${appConfig().routeBasePath}/help`]"
+      <trmrk-app-link [trmrkRouterLink]="[`${appConfig.value.routeBasePath}/help`]"
         ><button mat-icon-button class="trmrk-icon-btn">
           <mat-icon class="trmrk-icon">help</mat-icon>
         </button></trmrk-app-link

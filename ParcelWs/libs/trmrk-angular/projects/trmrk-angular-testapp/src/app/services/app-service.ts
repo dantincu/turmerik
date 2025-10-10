@@ -7,6 +7,7 @@ import { AppStateService } from './app-state-service';
 const AppStateServiceBase = services.common.AppStateServiceBase;
 const AppServiceBase = services.common.AppServiceBase;
 const DarkModeService = services.common.DarkModeService;
+const TrmrkObservable = services.common.TrmrkObservable;
 const injectionTokens = services.dependencyInjection.injectionTokens;
 
 @Injectable({
@@ -14,10 +15,11 @@ const injectionTokens = services.dependencyInjection.injectionTokens;
 })
 export class AppService extends AppServiceBase {
   constructor(
-    @Inject(injectionTokens.appConfig.token) appConfig: () => AppConfigCore,
+    @Inject(injectionTokens.appConfig.token)
+    appConfig: typeof TrmrkObservable<AppConfigCore>,
     @Inject(AppStateServiceBase) appStateService: AppStateService,
     @Inject(DarkModeService) darkModeService: any
   ) {
-    super(appConfig, appStateService, darkModeService);
+    super(appConfig as any, appStateService, darkModeService);
   }
 }

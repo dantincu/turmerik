@@ -65,5 +65,5 @@ export abstract class AppStateServiceBase {
 
   defaults = getAppDefaultValues();
 
-  constructor(public appConfig: () => AppConfigCore) {}
+  constructor(public appConfig: TrmrkObservable<AppConfigCore>) {}
 }

@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { injectionTokens } from '../../../services/dependency-injection/injection-tokens';
 import { AppConfigCore } from '../../../services/common/app-config';
+import { TrmrkObservable } from '../../../services/common/TrmrkObservable';
 
 import { TrmrkAppPage } from '../../common/trmrk-app-page/trmrk-app-page';
 
@@ -25,7 +26,7 @@ export type TrmrkAppSettingsTsType = TrmrkAppSettings;
 })
 export class TrmrkAppSettings {
   constructor(
-    @Inject(injectionTokens.appConfig.token) public appConfig: () => AppConfigCore,
+    @Inject(injectionTokens.appConfig.token) public appConfig: TrmrkObservable<AppConfigCore>,
     public trmrkAppSettingsService: TrmrkAppSettingsService,
     private resetAppDialog: MatDialog,
     private deleteAppCacheDialog: MatDialog

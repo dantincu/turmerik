@@ -25,6 +25,7 @@ import { BasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedDB/data
 import { loadAppConfig, LoadAppConfigOpts } from '../common/app-config-loader';
 import { AppConfigCore } from '../common/app-config';
 import { DarkModeService } from '../common/dark-mode-service';
+import { TrmrkObservable } from '../common/TrmrkObservable';
 
 import { injectionTokens } from './injection-tokens';
 
@@ -70,7 +71,7 @@ export const defaultConfigNormalizeFactory = async <TConfig extends AppConfigCor
 };
 
 export class AppConfigProvidersFactory<TAppConfig extends AppConfigCore = AppConfigCore> {
-  appConfig: TAppConfig | null = null;
+  appConfig = new TrmrkObservable<TAppConfig>(null!);
 
   getProviders(
     opts: LoadAppConfigOpts<TAppConfig>,
@@ -94,7 +95,7 @@ export class AppConfigProvidersFactory<TAppConfig extends AppConfigCore = AppCon
           appConfig = await defaultConfigNormalizeFactory(appConfig);
         }
 
-        this.appConfig = appConfig;
+        this.appConfig.next(appConfig);
       }),
       {
         provide: injectionTokens.appName.token,
@@ -103,7 +104,7 @@ export class AppConfigProvidersFactory<TAppConfig extends AppConfigCore = AppCon
       {
         provide: injectionTokens.appConfig.token,
         useFactory: () => {
-          return () => this.appConfig;
+          return this.appConfig;
         },
       },
     ];

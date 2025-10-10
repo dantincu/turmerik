@@ -5,6 +5,7 @@ import { BasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedDB/data
 
 import { IntIdServiceFactory } from '../common/int-id-service-factory';
 import { AppConfigCore } from '../common/app-config';
+import { TrmrkObservable } from '../common/TrmrkObservable';
 
 export interface InjectionTokenWrapper<T> {
   name: string;
@@ -15,7 +16,7 @@ export const injectionTokens = mapObjProps(
   {
     basicAppSettingsDbAdapter: {} as InjectionTokenWrapper<BasicAppSettingsDbAdapter>,
     intIdServiceFactory: {} as InjectionTokenWrapper<IntIdServiceFactory>,
-    appConfig: {} as InjectionTokenWrapper<() => AppConfigCore>,
+    appConfig: {} as InjectionTokenWrapper<TrmrkObservable<AppConfigCore>>,
     appName: {} as InjectionTokenWrapper<string>,
   },
   (_, propName): InjectionTokenWrapper<any> => ({

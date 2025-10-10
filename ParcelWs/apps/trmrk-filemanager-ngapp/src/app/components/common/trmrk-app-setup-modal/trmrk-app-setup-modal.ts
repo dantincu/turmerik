@@ -8,13 +8,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { NullOrUndef } from '../../../../trmrk/core';
 import { getVarName } from '../../../../trmrk/Reflection/core';
 import { AppStateServiceBase } from '../../../../trmrk-angular/services/common/app-state-service-base';
+
 import {
   AppServiceBase,
   AppObjectKeyDelims,
 } from '../../../../trmrk-angular/services/common/app-service-base';
+
 import { TrmrkDialog } from '../../../../trmrk-angular/components/common/trmrk-dialog/trmrk-dialog';
 import { ModalService } from '../../../../trmrk-angular/services/common/modal-service';
 import { ModalServiceFactory } from '../../../../trmrk-angular/services/common/modal-service-factory';
+import { TrmrkObservable } from '../../../../trmrk-angular/services/common/TrmrkObservable';
 
 import {
   TrmrkDialogData,
@@ -62,7 +65,7 @@ export class TrmrkAppSetupModal implements OnDestroy {
     @Inject(AppStateServiceBase) private appStateService: AppStateService,
     private modalServiceFactory: ModalServiceFactory,
     private hostEl: ElementRef,
-    @Inject(injectionTokens.appConfig.token) appConfig: () => AppConfig
+    @Inject(injectionTokens.appConfig.token) appConfig: TrmrkObservable<AppConfig>
   ) {
     this.fileSystemApiFolderPickerId = appService.getAppObjectKey(
       [getVarName(() => TrmrkAppSetupModal)],
@@ -80,14 +83,14 @@ export class TrmrkAppSetupModal implements OnDestroy {
       dialogRef,
     });
 
-    const driveStorageOptions = appConfig().driveStorageOptions.filter(
+    const driveStorageOptions = appConfig.value.driveStorageOptions.filter(
       (option) => option.isEnabled ?? true
     );
 
     this.cloudStorageOptions = driveStorageOptions.filter(
       (option) => option.storageType === DriveStorageType.RestApi
     );
-``
+    ``;
     this.hasCloudStorageOptions = !!this.cloudStorageOptions.length;
 
     this.otherStorageOptions = driveStorageOptions.filter(

@@ -20,6 +20,7 @@ import { NullOrUndef, VoidOrAny } from '../../../../trmrk/core';
 import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
 import { AppStateServiceBase } from '../../../services/common/app-state-service-base';
 import { AppConfigCore } from '../../../services/common/app-config';
+import { TrmrkObservable } from '../../../services/common/TrmrkObservable';
 import { TrmrkAppLink } from '../../../components/common/trmrk-app-link/trmrk-app-link';
 import { injectionTokens } from '../../../services/dependency-injection/injection-tokens';
 import { tab_duplicate, tab_group } from '../../../assets/icons/material';
@@ -83,7 +84,7 @@ export class TrmrkAppPage implements OnDestroy {
   tabGroupIcon: SafeHtml;
 
   constructor(
-    @Inject(injectionTokens.appConfig.token) public appConfig: () => AppConfigCore,
+    @Inject(injectionTokens.appConfig.token) public appConfig: TrmrkObservable<AppConfigCore>,
     public appStateService: AppStateServiceBase,
     private domSanitizer: DomSanitizer
   ) {

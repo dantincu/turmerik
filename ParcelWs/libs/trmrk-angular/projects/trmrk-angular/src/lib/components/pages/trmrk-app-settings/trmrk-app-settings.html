@@ -10,7 +10,7 @@
     </div>
     @if (trmrkAppSettingsService.showAppThemeOption ?? false) {
     <div class="trmrk-field">
-      <a mat-button [routerLink]="[`${appConfig().routeBasePath}/themes`]" class="trmrk-icon-link"
+      <a mat-button [routerLink]="[`${appConfig.value.routeBasePath}/themes`]" class="trmrk-icon-link"
         ><mat-icon class="trmrk-icon">palette</mat-icon> App Theme
       </a>
     </div>
