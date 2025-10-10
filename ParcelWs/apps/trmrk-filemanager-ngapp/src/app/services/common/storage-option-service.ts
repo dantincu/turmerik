@@ -1,4 +1,5 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import {
   BasicAppSettingsDbAdapter,
@@ -19,9 +20,9 @@ import { AppDriveStorageOption } from './driveStorageOption';
 @Injectable({
   providedIn: 'root',
 })
-export class StorageOptionService {
-  public currentLoadedStorageOption = new TrmrkObservable<DriveStorageOption | null>(null);
-  public currentStorageOption = new TrmrkObservable<AppDriveStorageOption | null>(null);
+export class StorageOptionService implements OnDestroy {
+  public currentStorageOption =
+    new TrmrkObservable<AppDriveStorageOption<FileSystemDirectoryHandle> | null>(null);
 
   private basicAppSettingsDbAdapter: BasicAppSettingsDbAdapter;
 
@@ -39,17 +40,27 @@ export class StorageOptionService {
     this.keyPath = [this.choiceCatKey, this.choiceKey];
   }
 
+  ngOnDestroy(): void {
+    this.currentStorageOption.dispose();
+    this.currentStorageOption.dispose();
+  }
+
+  updateCurrentStorageOption(storageOption: AppDriveStorageOption) {
+    this.currentStorageOption.next(storageOption);
+    this.writeCurrentToIndexedDb();
+  }
+
   loadCurrentFromIndexedDb() {
     return new Promise<DriveStorageOption | null>((resolve, reject) => {
       this.basicAppSettingsDbAdapter.open(
         (_, db) => {
-          dbRequestToPromise<AppSettingsChoice<DriveStorageOption>>(
+          dbRequestToPromise<AppSettingsChoice<AppDriveStorageOption<FileSystemDirectoryHandle>>>(
             this.basicAppSettingsDbAdapter.stores.choices.store(db).get(this.keyPath)
           ).then((dbResponse) => {
             const choice = dbResponse.value;
 
             if (choice) {
-              this.currentLoadedStorageOption.next(choice.value);
+              this.currentStorageOption.next(choice.value);
               resolve(choice.value);
             } else {
               resolve(null);
@@ -67,12 +78,12 @@ export class StorageOptionService {
     return new Promise<void>((resolve, reject) => {
       this.basicAppSettingsDbAdapter.open(
         (_, db) => {
-          if (this.currentLoadedStorageOption) {
+          if (this.currentStorageOption) {
             dbRequestToPromise(
               this.basicAppSettingsDbAdapter.stores.choices.store(db, null, 'readwrite').put({
                 catKey: this.choiceCatKey,
                 key: this.choiceKey,
-                value: this.currentLoadedStorageOption,
+                value: this.currentStorageOption.value,
               })
             ).then(() => resolve(), reject);
           } else {

@@ -50,7 +50,7 @@ export class App implements OnDestroy {
     });
 
     setTimeout(() => {
-      if (appService.storageOptionService.currentLoadedStorageOption.value) {
+      if (appService.storageOptionService.currentStorageOption.value) {
         this.appService.appStateService.hasBeenSetUp.next(true, true);
       } else {
         this.appService.appStateSvc.performAppSetup.next(true, true);
@@ -83,7 +83,7 @@ export class App implements OnDestroy {
             data: {
               modalIdAvailable: (modalId) => (this.setupModalId = modalId),
               optionChosen: (option) => {
-                this.appService.storageOptionService.currentLoadedStorageOption.next(option);
+                this.appService.storageOptionService.currentStorageOption.next(option);
                 this.appService.appStateService.performAppSetup.next(false);
                 this.appService.appStateService.hasBeenSetUp.next(true, true);
                 this.appService.storageOptionService.writeCurrentToIndexedDb();

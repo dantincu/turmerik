@@ -2,7 +2,7 @@ import { Subject, Observable, Subscription } from 'rxjs';
 
 import { NullOrUndef } from '../../../trmrk/core';
 
-export class TrmrkObservable<T> {
+export class TrmrkObservable<T> implements Disposable {
   private readonly $obs: Observable<T>;
   private readonly subject: Subject<T>;
 
@@ -13,6 +13,15 @@ export class TrmrkObservable<T> {
   constructor(private _value: T) {
     this.subject = new Subject<T>();
     this.$obs = this.subject.asObservable();
+  }
+
+  [Symbol.dispose]() {
+    this.dispose();
+  }
+
+  dispose() {
+    this.subject.unsubscribe();
+    this._value = null!;
   }
 
   public next(
