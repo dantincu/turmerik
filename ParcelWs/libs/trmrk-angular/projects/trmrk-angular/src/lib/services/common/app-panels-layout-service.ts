@@ -7,6 +7,7 @@ import { TouchOrMouseCoords } from '../../../trmrk-browser/domUtils/touchAndMous
 import { getElemIdx } from '../../../trmrk-browser/domUtils/getDomElemBounds';
 import { htmlCollectionToArr } from '../../../trmrk-browser/domUtils/common';
 import { mapPropNamesToThemselves, PropNameWordsConvention } from '../../../trmrk/propNames';
+
 import { AppServiceBase, extractAppObjectKeyParts } from './app-service-base';
 
 import {

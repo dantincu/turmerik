@@ -90,7 +90,7 @@ export class TrmrkAppSetupModal implements OnDestroy {
     this.cloudStorageOptions = driveStorageOptions.filter(
       (option) => option.storageType === DriveStorageType.RestApi
     );
-    ``;
+
     this.hasCloudStorageOptions = !!this.cloudStorageOptions.length;
 
     this.otherStorageOptions = driveStorageOptions.filter(

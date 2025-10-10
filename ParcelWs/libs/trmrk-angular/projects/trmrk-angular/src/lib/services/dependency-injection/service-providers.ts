@@ -43,7 +43,7 @@ export interface GetCommonServiceProviderOpts<TAppConfig extends AppConfigCore =
   appConfig?: LoadAppConfigOpts<TAppConfig> | NullOrUndef;
   appServiceType?: Type<any> | NullOrUndef;
   appStateServiceType?: Type<any> | NullOrUndef;
-  basicAppSettingsIDbAdapter?: BasicAppSettingsDbAdapter | NullOrUndef;
+  basicAppSettingsIDbAdapter?: (() => BasicAppSettingsDbAdapter) | NullOrUndef;
   asyncRequestStateManagerFactory?: boolean | NullOrUndef;
   intIdServiceFactory?: boolean | NullOrUndef;
   darkModeAppInitializer?: boolean | NullOrUndef;
@@ -153,7 +153,7 @@ export const getServiceProviders = <TAppConfig extends AppConfigCore = AppConfig
     opts.basicAppSettingsIDbAdapter
       ? {
           provide: injectionTokens.basicAppSettingsDbAdapter.token,
-          useValue: opts.basicAppSettingsIDbAdapter,
+          useFactory: opts.basicAppSettingsIDbAdapter,
         }
       : null,
 

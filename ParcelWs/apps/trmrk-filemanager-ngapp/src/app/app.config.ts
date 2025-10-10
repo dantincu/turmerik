@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, inject, provideAppInitializer } from '@angular/core';
 
 import { getServiceProviders } from '../trmrk-angular/services/dependency-injection/service-providers';
 
@@ -7,8 +7,9 @@ import { environment } from '../environments/environment';
 import { AppService } from './services/common/app-service';
 import { AppStateService } from './services/common/app-state-service';
 import { AppConfig } from './services/common/app-config';
-import { iDbAdapters } from './services/common/adapters';
 import { routes } from './app.routes';
+import { IndexedDbDatabasesService } from './services/common/indexedDb/indexed-db-databases-service';
+import { StorageOptionService } from './services/common/storage-option-service';
 
 export const appConfig: ApplicationConfig = {
   providers: getServiceProviders<AppConfig>({
@@ -30,9 +31,18 @@ export const appConfig: ApplicationConfig = {
       },
       appServiceType: AppService,
       appStateServiceType: AppStateService,
-      basicAppSettingsIDbAdapter: iDbAdapters.basicAppSettings,
+      basicAppSettingsIDbAdapter: () => {
+        const indexedDbDatabasesService = inject(IndexedDbDatabasesService);
+        const adapter = indexedDbDatabasesService.basicAppSettings.value;
+        return adapter;
+      },
     },
     routes,
-    appProviders: [],
+    appProviders: [
+      provideAppInitializer(async () => {
+        const storageOptionService = inject(StorageOptionService);
+        await storageOptionService.loadCurrentFromIndexedDb();
+      }),
+    ],
   }),
 };

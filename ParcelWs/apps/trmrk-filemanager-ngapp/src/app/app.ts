@@ -50,7 +50,11 @@ export class App implements OnDestroy {
     });
 
     setTimeout(() => {
-      appService.appStateSvc.performAppSetup.next(true);
+      if (appService.storageOptionService.currentLoadedStorageOption.value) {
+        this.appService.appStateService.hasBeenSetUp.next(true, true);
+      } else {
+        this.appService.appStateSvc.performAppSetup.next(true, true);
+      }
     });
 
     this.setupKeyboardShortcuts();
@@ -79,9 +83,10 @@ export class App implements OnDestroy {
             data: {
               modalIdAvailable: (modalId) => (this.setupModalId = modalId),
               optionChosen: (option) => {
-                this.appService.currentDriveStorageOption = option;
+                this.appService.storageOptionService.currentLoadedStorageOption.next(option);
                 this.appService.appStateService.performAppSetup.next(false);
                 this.appService.appStateService.hasBeenSetUp.next(true, true);
+                this.appService.storageOptionService.writeCurrentToIndexedDb();
               },
               errorMessage: this.appService.appStateSvc.appSetupModalErrorMsg.value,
             },

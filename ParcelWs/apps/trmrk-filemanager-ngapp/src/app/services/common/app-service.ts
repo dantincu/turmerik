@@ -10,16 +10,17 @@ import { injectionTokens } from '../../../trmrk-angular/services/dependency-inje
 import { AppStateService } from './app-state-service';
 import { AppConfig } from './app-config';
 import { AppDriveStorageOption } from './driveStorageOption';
+import { StorageOptionService } from './storage-option-service';
 
 @Injectable()
 export class AppService extends AppServiceBase {
-  currentDriveStorageOption: AppDriveStorageOption | null = null;
   appStateSvc: AppStateService;
 
   constructor(
     @Inject(injectionTokens.appConfig.token) appConfig: TrmrkObservable<AppConfig>,
     @Inject(AppStateServiceBase) appStateService: AppStateService,
-    darkModeService: DarkModeService
+    darkModeService: DarkModeService,
+    public storageOptionService: StorageOptionService
   ) {
     super(appConfig as unknown as TrmrkObservable<AppConfigCore>, appStateService, darkModeService);
     this.appStateSvc = appStateService;
