@@ -2,18 +2,18 @@ import { Injectable, OnDestroy, Inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import {
-  BasicAppSettingsDbAdapter,
+  SharedBasicAppSettingsDbAdapter,
   KeyPress,
   KeyboardShortcut,
   KeyboardShortcutSrlzbl,
-} from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
+} from '../../../trmrk-browser/indexedDB/databases/SharedBasicAppSettings';
 
 import { NullOrUndef } from '../../../trmrk/core';
 
-import { injectionTokens } from '../dependency-injection/injection-tokens';
 import { TrmrkObservable } from './TrmrkObservable';
 import { KeyboardShortcutMatcher } from './keyboard-shortcut-matcher-service';
 import { unsubscribeAll } from './rxjs/subscription';
+import { IndexedDbDatabasesServiceCore } from './indexedDb/indexed-db-databases-service-core';
 
 export interface KeyboardShortcutServiceSetupArgs {
   shortcuts: KeyboardShortcut[];
@@ -36,13 +36,14 @@ export class KeyboardShortcutService implements OnDestroy {
   shortcuts: KeyboardShortcut[] = [];
   scopeObserversMap: { [scope: string]: TrmrkObservable<KeyboardShortcut> } = {};
 
+  private sharedBasicAppSettings: SharedBasicAppSettingsDbAdapter;
   private readonly containers: KeyboardShortcutContainer[] = [];
 
   constructor(
-    @Inject(injectionTokens.basicAppSettingsDbAdapter.token)
-    private trmrkBasicAppSettings: BasicAppSettingsDbAdapter,
-    private keyboardShortcutMatcher: KeyboardShortcutMatcher
+    private keyboardShortcutMatcher: KeyboardShortcutMatcher,
+    private indexedDbDatabasesService: IndexedDbDatabasesServiceCore
   ) {
+    this.sharedBasicAppSettings = indexedDbDatabasesService.sharedBasicAppSettings.value;
     this.handleKeyDown = this.handleKeyDown.bind(this);
     window.addEventListener('keydown', this.handleKeyDown);
   }
@@ -65,9 +66,9 @@ export class KeyboardShortcutService implements OnDestroy {
         this.scopeObserversMap[obj.key] = obj.obs;
       }
 
-      this.trmrkBasicAppSettings.open(
+      this.sharedBasicAppSettings.open(
         (_, db) => {
-          const req = this.trmrkBasicAppSettings.stores.keyboardShortcuts.store(db).getAll();
+          const req = this.sharedBasicAppSettings.stores.keyboardShortcuts.store(db).getAll();
 
           req.onsuccess = (event) => {
             const target = event.target as IDBRequest<KeyboardShortcutSrlzbl[]>;

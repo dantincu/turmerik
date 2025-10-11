@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.Helpers;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Core.FileManager
 {
@@ -107,14 +108,12 @@ namespace Turmerik.Core.FileManager
         public async Task<FilesAndFoldersTuple<string>> CopyEntriesAsync(
             DriveEntryCore[] foldersArr,
             DriveEntryCore[] filesArr,
-            DateTime clientFetchTimeStamp,
             bool overWrite = false)
         {
             var tuple = ExtractPaths(
                 foldersArr,
                 filesArr,
-                overWrite,
-                clientFetchTimeStamp);
+                overWrite);
 
             var retTuple = new FilesAndFoldersTuple<string>
             {
@@ -132,14 +131,12 @@ namespace Turmerik.Core.FileManager
         public async Task RenameOrMoveEntriesAsync(
             DriveEntryCore[] foldersArr,
             DriveEntryCore[] filesArr,
-            DateTime clientFetchTimeStamp,
             bool overWrite = false)
         {
             var tuple = ExtractPaths(
                 foldersArr,
                 filesArr,
-                overWrite,
-                clientFetchTimeStamp);
+                overWrite);
 
             tuple.folderIdnfsArr.ForEach((folderIdnf, idx, @break) =>
                 FsH.MoveDirectory(
@@ -154,14 +151,13 @@ namespace Turmerik.Core.FileManager
 
         public async Task DeleteEntriesAsync(
             DriveEntryCore[] foldersArr,
-            DriveEntryCore[] filesArr,
-            DateTime clientFetchTimeStamp)
+            DriveEntryCore[] filesArr)
         {
             var fileIdnfsArr = ValidatePaths(
-                filesArr.Select(entry => entry.Idnf!), false, false, clientFetchTimeStamp);
+                filesArr.Select(entry => entry.Idnf!), false, false);
 
             var folderIdnfsArr = ValidatePaths(
-                foldersArr.Select(entry => entry.Idnf!), false, true, clientFetchTimeStamp);
+                foldersArr.Select(entry => entry.Idnf!), false, true);
 
             folderIdnfsArr.ForEach((folderIdnf, idx, @break) => Directory.Delete(folderIdnf, true));
             fileIdnfsArr.ForEach((fileIdnf, idx, @break) => File.Delete(fileIdnf));
@@ -169,10 +165,9 @@ namespace Turmerik.Core.FileManager
 
         public async Task<DriveEntryCore[]> WriteFileTextContentsAsync(
             DriveEntry<string>[] entriesArr,
-            DateTime clientFetchTimeStamp,
             bool overWrite = false)
         {
-            var idnfsArr = ExtractPaths(entriesArr, clientFetchTimeStamp, overWrite, false);
+            var idnfsArr = ExtractPaths(entriesArr, overWrite, false);
             idnfsArr.ForEach((idnf, idx, @break) => File.WriteAllText(idnf, entriesArr[idx].Content));
 
             var retArr = entriesArr.Select((entry, idx) => new DriveEntryCore
@@ -187,10 +182,9 @@ namespace Turmerik.Core.FileManager
 
         public async Task<DriveEntryCore[]> WriteFileRawContentsAsync(
             DriveEntry<Func<Stream, Task>>[] entriesArr,
-            DateTime clientFetchTimeStamp,
             bool overWrite = false)
         {
-            var idnfsArr = ExtractPaths(entriesArr, clientFetchTimeStamp, overWrite, false);
+            var idnfsArr = ExtractPaths(entriesArr, overWrite, false);
 
             for (int i = 0; i < entriesArr.Length; i++)
             {
@@ -220,7 +214,7 @@ namespace Turmerik.Core.FileManager
             IEnumerable<string> pathsArr,
             bool allowsRootPath,
             bool? areFolders = null,
-            DateTime? clientTimeStamp = null)
+            long?[]? clientTimeStamps = null)
         {
             var retArr = new string[pathsArr.Count()];
             var areFoldersVal = areFolders ?? false;
@@ -232,9 +226,20 @@ namespace Turmerik.Core.FileManager
 
                 retArr[idx] = rootedPath;
 
-                clientTimeStamp.HasValue.ActIf(() => ThrowIfClientTimeStampIsOutdated(
-                    areFoldersVal ? new DirectoryInfo(path) : new FileInfo(path),
-                    clientTimeStamp!.Value));
+                if (clientTimeStamps != null)
+                {
+                    for (int i = 0; i < clientTimeStamps.Length; i++)
+                    {
+                        var clientTimeStamp = clientTimeStamps[i];
+
+                        if (clientTimeStamp.HasValue)
+                        {
+                            ThrowIfClientTimeStampIsOutdated(
+                                areFoldersVal ? new DirectoryInfo(path) : new FileInfo(path),
+                                clientTimeStamp.Value);
+                        }
+                    }
+                }
             });
 
             return retArr;
@@ -242,8 +247,8 @@ namespace Turmerik.Core.FileManager
 
         private void ThrowIfClientTimeStampIsOutdated(
             FileSystemInfo fsInfo,
-            DateTime clientTimeStamp) => fsInfo.CreationTimeUtc.Arr(
-                fsInfo.LastWriteTimeUtc).Any(refTimeStamp => refTimeStamp >= clientTimeStamp).ActIf(
+            long clientTimeStamp) => fsInfo.CreationTimeUtc.Arr(
+                fsInfo.LastWriteTimeUtc).Any(refTimeStamp => refTimeStamp.Ticks.TicksToMillis() >= clientTimeStamp).ActIf(
                 () => throw new FileManagerException(
                     $"Entry {fsInfo.FullName} is newer than the client's version",
                     System.Net.HttpStatusCode.BadRequest,
@@ -256,11 +261,13 @@ namespace Turmerik.Core.FileManager
         private OnBeforeCopyOrRenameOrMoveTuple ExtractPaths(
             DriveEntryCore[] foldersArr,
             DriveEntryCore[] filesArr,
-            bool overWriteAllowed,
-            DateTime clientTimeStamp)
+            bool overWriteAllowed)
         {
+            var fileTmStmpsArr = filesArr.Select(
+                file => file.ClientFetchTimeUtcMillis).ToArray();
+
             var fileIdnfsArr = ValidatePaths(
-                filesArr.Select(entry => entry.Idnf!), false, false, clientTimeStamp);
+                filesArr.Select(entry => entry.Idnf!), false, false, fileTmStmpsArr);
 
             var fileNewPrIdnfsArr = ValidatePaths(
                 filesArr.Select(entry => entry.PrIdnf!), true);
@@ -268,8 +275,11 @@ namespace Turmerik.Core.FileManager
             var fileNewIdnfsArr = fileNewPrIdnfsArr.Select(
                 (fileNewPrIdnf, idx) => Path.Combine(fileNewPrIdnf, filesArr[idx].Name)).ToArray();
 
+            var folderTmStmpsArr = foldersArr.Select(
+                file => file.ClientFetchTimeUtcMillis).ToArray();
+
             var folderIdnfsArr = ValidatePaths(
-                foldersArr.Select(entry => entry.Idnf!), false, true, clientTimeStamp);
+                foldersArr.Select(entry => entry.Idnf!), false, true, folderTmStmpsArr);
 
             var folderNewPrIdnfsArr = ValidatePaths(
                 foldersArr.Select(entry => entry.PrIdnf!), true);
@@ -284,13 +294,29 @@ namespace Turmerik.Core.FileManager
             }
             else
             {
-                fileNewIdnfsArr.ForEach(
-                    idnf => ThrowIfClientTimeStampIsOutdated(
-                        new FileInfo(idnf), clientTimeStamp));
+                for (int i = 0; i < fileNewIdnfsArr.Length; i++)
+                {
+                    var idnf = fileNewIdnfsArr[i];
+                    var tmStmp = fileTmStmpsArr[i];
 
-                folderNewIdnfsArr.ForEach(
-                    idnf => ThrowIfClientTimeStampIsOutdated(
-                        new DirectoryInfo(idnf), clientTimeStamp));
+                    if (tmStmp.HasValue)
+                    {
+                        ThrowIfClientTimeStampIsOutdated(
+                            new FileInfo(idnf), tmStmp.Value);
+                    }
+                }
+
+                for (int i = 0; i < folderNewIdnfsArr.Length; i++)
+                {
+                    var idnf = folderNewIdnfsArr[i];
+                    var tmStmp = folderTmStmpsArr[i];
+
+                    if (tmStmp.HasValue)
+                    {
+                        ThrowIfClientTimeStampIsOutdated(
+                            new FileInfo(idnf), tmStmp.Value);
+                    }
+                }
             }
 
             return new()
@@ -306,7 +332,6 @@ namespace Turmerik.Core.FileManager
 
         private string[] ExtractPaths<TContent>(
             DriveEntry<TContent>[] entriesArr,
-            DateTime? clientTimeStamp,
             bool overWrite,
             bool areFolders)
         {
@@ -317,7 +342,7 @@ namespace Turmerik.Core.FileManager
                         entry.Name)),
                 false,
                 areFolders,
-                clientTimeStamp);
+                entriesArr.Select(entry => entry.ClientFetchTimeUtcMillis).ToArray());
 
             if (!overWrite)
             {

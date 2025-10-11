@@ -52,7 +52,7 @@ export class ModalService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy();
+    this.dispose();
   }
 
   setup(args: ModalServiceSetupArgs) {
@@ -77,7 +77,7 @@ export class ModalService implements OnDestroy {
     this.dialogRef?.close();
   }
 
-  destroy() {
+  dispose() {
     this.currentModalIdChangedSubscription.unsubscribe();
     this.closeModalSubscription.unsubscribe();
     this.closeAllModalsSubscription.unsubscribe();

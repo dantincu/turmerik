@@ -1,6 +1,15 @@
 import { NullOrUndef } from '../../trmrk/core';
 import { getDOMExceptionErrorMsg } from '../../trmrk-browser/domUtils/core';
 
+export interface ActiveDataItemCore {
+  createdAtMillis: number;
+  lastAccessedAtMillis: number;
+}
+
+export interface CachedItemCore {
+  clientFetchTmStmpMillis: number;
+}
+
 export const getIDbRequestOpenErrorMsg = (error: DOMException | null): string =>
   getDOMExceptionErrorMsg(error, 'Unknown error occurred while opening IndexedDB.');
 
@@ -19,7 +28,11 @@ export const createDbStoreIfNotExists = (
   return dbStore;
 };
 
-export const getDbObjName = (parts: string[]) => parts.map((part) => `[${part}]`).join('');
+export const getDbObjName = (parts: (string | NullOrUndef)[]) =>
+  parts
+    .filter((part) => (part ?? null) !== null)
+    .map((part) => `[${part}]`)
+    .join('');
 
 export interface DbResponse<T> {
   value: T;

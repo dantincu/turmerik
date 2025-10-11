@@ -1,41 +1,38 @@
 import { Injectable, Inject, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
 
 import {
-  BasicAppSettingsDbAdapter,
-  AppSettingsChoice,
-} from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
+  SharedBasicAppSettingsDbAdapter,
+  SharedAppSettingsChoice,
+} from '../../../trmrk-browser/indexedDB/databases/SharedBasicAppSettings';
 
-import { DriveStorageOption } from '../../../trmrk/driveStorage/appConfig';
 import { injectionTokens } from '../../../trmrk-angular/services/dependency-injection';
 import { dbRequestToPromise } from '../../../trmrk-browser/indexedDB/core';
 import { getAppObjectKey } from '../../../trmrk-angular/services/common/app-service-base';
 import { AppStateServiceBase } from '../../../trmrk-angular/services/common/app-state-service-base';
 import { TrmrkObservable } from '../../../trmrk-angular/services/common/TrmrkObservable';
 
-import { IndexedDbDatabasesService } from './indexedDb/indexed-db-databases-service';
+import { IndexedDbDatabasesServiceCore } from '../../../trmrk-angular/services/common/indexedDb/indexed-db-databases-service-core';
 import { appSettingsChoiceKeys } from './indexedDb/core';
 import { AppDriveStorageOption } from './driveStorageOption';
 
 @Injectable({
   providedIn: 'root',
 })
-export class StorageOptionService implements OnDestroy {
-  public currentStorageOption =
-    new TrmrkObservable<AppDriveStorageOption<FileSystemDirectoryHandle> | null>(null);
+export class StorageOptionServiceCore implements OnDestroy {
+  public currentStorageOption = new TrmrkObservable<AppDriveStorageOption | null>(null);
 
-  private basicAppSettingsDbAdapter: BasicAppSettingsDbAdapter;
+  private basicAppSettingsDbAdapter: SharedBasicAppSettingsDbAdapter;
 
   private choiceCatKey: string;
   private choiceKey: string;
   private keyPath: string[];
 
   constructor(
-    private indexedDbDatabasesService: IndexedDbDatabasesService,
+    private indexedDbDatabasesService: IndexedDbDatabasesServiceCore,
     private appStateService: AppStateServiceBase,
     @Inject(injectionTokens.appName.token) private appName: string
   ) {
-    this.basicAppSettingsDbAdapter = indexedDbDatabasesService.basicAppSettings.value;
+    this.basicAppSettingsDbAdapter = indexedDbDatabasesService.sharedBasicAppSettings.value;
     this.choiceCatKey = getAppObjectKey([appSettingsChoiceKeys.driveStorageOption]);
     this.choiceKey = getAppObjectKey([appSettingsChoiceKeys.current]);
     this.keyPath = [this.choiceCatKey, this.choiceKey];
@@ -52,10 +49,10 @@ export class StorageOptionService implements OnDestroy {
   }
 
   loadCurrentFromIndexedDb() {
-    return new Promise<DriveStorageOption | null>((resolve, reject) => {
+    return new Promise<AppDriveStorageOption | null>((resolve, reject) => {
       this.basicAppSettingsDbAdapter.open(
         (_, db) => {
-          dbRequestToPromise<AppSettingsChoice<AppDriveStorageOption<FileSystemDirectoryHandle>>>(
+          dbRequestToPromise<SharedAppSettingsChoice<AppDriveStorageOption>>(
             this.basicAppSettingsDbAdapter.stores.choices.store(db).get(this.keyPath)
           ).then((dbResponse) => {
             const choice = dbResponse.value;

@@ -19,10 +19,14 @@ import { AppServiceBase } from '../common/app-service-base';
 import { AppStateServiceBase } from '../common/app-state-service-base';
 import { IntIdServiceFactory } from '../common/int-id-service-factory';
 
-import { NullOrUndef } from '../../../trmrk/core';
+import { NullOrUndef, withVal } from '../../../trmrk/core';
 import { AsyncRequestStateManagerFactory } from '../../../trmrk/AsyncRequestStateManager';
+import { SharedBasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedDB/databases/SharedBasicAppSettings';
 import { BasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
+import { AppSessionsDbAdapter } from '../../../trmrk-browser/indexedDB/databases/AppSessions';
 import { loadAppConfig, LoadAppConfigOpts } from '../common/app-config-loader';
+import { TrmrkStrIdGeneratorBase } from '../common/trmrk-str-id-generator-base';
+import { TrmrkDefaultStrIdGenerator } from '../common/trmrk-default-str-id-generator';
 import { AppConfigCore } from '../common/app-config';
 import { DarkModeService } from '../common/dark-mode-service';
 import { TrmrkObservable } from '../common/TrmrkObservable';
@@ -35,6 +39,7 @@ export interface ServiceProviderOpts<TOpts> {
 }
 
 export interface GetCommonServiceProviderOpts<TAppConfig extends AppConfigCore = AppConfigCore> {
+  includeAllByDefault?: boolean | NullOrUndef;
   browserGlobalErrorListeners?: boolean | NullOrUndef;
   zoneChangeDetection?: ServiceProviderOpts<NgZoneOptions>;
   httpClient?: boolean | NullOrUndef;
@@ -43,7 +48,7 @@ export interface GetCommonServiceProviderOpts<TAppConfig extends AppConfigCore =
   appConfig?: LoadAppConfigOpts<TAppConfig> | NullOrUndef;
   appServiceType?: Type<any> | NullOrUndef;
   appStateServiceType?: Type<any> | NullOrUndef;
-  basicAppSettingsIDbAdapter?: (() => BasicAppSettingsDbAdapter) | NullOrUndef;
+  defaultStrIdGenerator?: boolean | NullOrUndef;
   asyncRequestStateManagerFactory?: boolean | NullOrUndef;
   intIdServiceFactory?: boolean | NullOrUndef;
   darkModeAppInitializer?: boolean | NullOrUndef;
@@ -121,19 +126,22 @@ export const getServiceProviders = <TAppConfig extends AppConfigCore = AppConfig
   args: GetCommonServiceProvidersArgs<TAppConfig>
 ) => {
   const opts = args.provide;
+  const includeAllByDefault = opts.includeAllByDefault ?? true;
 
   const providersArr: (Provider | EnvironmentProviders | null)[] = [
-    opts.browserGlobalErrorListeners ?? true ? provideBrowserGlobalErrorListeners() : null,
+    opts.browserGlobalErrorListeners ?? includeAllByDefault
+      ? provideBrowserGlobalErrorListeners()
+      : null,
 
     opts.zoneChangeDetection?.provide
       ? provideZoneChangeDetection(opts.zoneChangeDetection.opts ?? {})
       : null,
 
-    opts.httpClient ?? true ? provideHttpClient() : null,
+    opts.httpClient ?? includeAllByDefault ? provideHttpClient() : null,
 
-    opts.matDialogModule ?? true ? importProvidersFrom(MatDialogModule) : null,
+    opts.matDialogModule ?? includeAllByDefault ? importProvidersFrom(MatDialogModule) : null,
 
-    ...(opts.appConfig?.provide ?? true
+    ...(opts.appConfig?.provide ?? includeAllByDefault
       ? new AppConfigProvidersFactory<TAppConfig>().getProviders(
           opts.appConfig ?? {
             values: {} as TAppConfig,
@@ -150,25 +158,25 @@ export const getServiceProviders = <TAppConfig extends AppConfigCore = AppConfig
       ? { provide: AppStateServiceBase, useClass: opts.appStateServiceType }
       : null,
 
-    opts.basicAppSettingsIDbAdapter
-      ? {
-          provide: injectionTokens.basicAppSettingsDbAdapter.token,
-          useFactory: opts.basicAppSettingsIDbAdapter,
-        }
-      : null,
-
-    opts.asyncRequestStateManagerFactory ?? true
+    opts.asyncRequestStateManagerFactory ?? includeAllByDefault
       ? { provide: AsyncRequestStateManagerFactory }
       : null,
 
-    opts.intIdServiceFactory ?? true
+    opts.intIdServiceFactory ?? includeAllByDefault
       ? {
           provide: injectionTokens.intIdServiceFactory,
           useClass: IntIdServiceFactory,
         }
       : null,
 
-    opts.darkModeAppInitializer ?? true ? getDarkModeAppInitializer() : null,
+    opts.darkModeAppInitializer ?? includeAllByDefault ? getDarkModeAppInitializer() : null,
+
+    opts.defaultStrIdGenerator ?? includeAllByDefault
+      ? withVal(new TrmrkDefaultStrIdGenerator(), (defaultStrIdGenerator) => ({
+          provide: injectionTokens.strIdGenerator,
+          useValue: defaultStrIdGenerator,
+        }))
+      : null,
 
     args.routes ? provideRouter(args.routes) : null,
     ...args.appProviders,

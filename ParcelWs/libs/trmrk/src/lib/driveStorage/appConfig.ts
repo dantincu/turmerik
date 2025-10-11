@@ -3,8 +3,8 @@ import { NullOrUndef } from '../core';
 export enum DriveStorageType {
   IndexedDb = 0,
   FileSystemApi = 1,
-  PostMessage = 2,
-  RestApi = 3,
+  RestApi = 2,
+  PostMessage = 3,
 }
 
 export interface DriveStorageOption {

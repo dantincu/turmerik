@@ -9,8 +9,8 @@ import { injectionTokens } from '../../../trmrk-angular/services/dependency-inje
 
 import { AppStateService } from './app-state-service';
 import { AppConfig } from './app-config';
-import { AppDriveStorageOption } from './driveStorageOption';
-import { StorageOptionService } from './storage-option-service';
+import { AppDriveStorageOption } from '../../../trmrk-filemanager-nglib/services/common/driveStorageOption';
+import { StorageOptionServiceCore } from '../../../trmrk-filemanager-nglib/services/common/storage-option-service-core';
 
 @Injectable()
 export class AppService extends AppServiceBase {
@@ -20,7 +20,7 @@ export class AppService extends AppServiceBase {
     @Inject(injectionTokens.appConfig.token) appConfig: TrmrkObservable<AppConfig>,
     @Inject(AppStateServiceBase) appStateService: AppStateService,
     darkModeService: DarkModeService,
-    public storageOptionService: StorageOptionService
+    public storageOptionService: StorageOptionServiceCore
   ) {
     super(appConfig as unknown as TrmrkObservable<AppConfigCore>, appStateService, darkModeService);
     this.appStateSvc = appStateService;

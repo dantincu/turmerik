@@ -3,7 +3,7 @@ import { mapPropNamesToThemselves, PropNameWordsConvention } from '../../../trmr
 export const urlQueryKeys = mapPropNamesToThemselves(
   {
     tabId: '',
-    sessionUuid: '',
+    sessionId: '',
     csPfKey: '',
     csUserIdnf: '',
   },

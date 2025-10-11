@@ -1,11 +1,9 @@
-import { Injectable, Inject } from '@angular/core';
-
-import { BasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
+import { Injectable } from '@angular/core';
 
 import { IntIdMappedServiceFactoryBase } from './int-id-mapped-service-factory-base';
 import { AppPanelsLayoutService } from './app-panels-layout-service';
-import { injectionTokens } from '../dependency-injection/injection-tokens';
 import { AppServiceBase } from './app-service-base';
+import { IndexedDbDatabasesServiceCore } from './indexedDb/indexed-db-databases-service-core';
 
 @Injectable({
   providedIn: 'root',
@@ -13,14 +11,13 @@ import { AppServiceBase } from './app-service-base';
 export class IntIdMappedAppPanelsLayoutServiceFactory extends IntIdMappedServiceFactoryBase<AppPanelsLayoutService> {
   constructor(
     private appService: AppServiceBase,
-    @Inject(injectionTokens.basicAppSettingsDbAdapter.token)
-    private basicAppSettingsDbAdapter: BasicAppSettingsDbAdapter
+    private indexedDbDatabasesService: IndexedDbDatabasesServiceCore
   ) {
     super();
   }
 
   override create(id: number): AppPanelsLayoutService {
-    const service = new AppPanelsLayoutService(this.appService, this.basicAppSettingsDbAdapter);
+    const service = new AppPanelsLayoutService(this.appService, this.indexedDbDatabasesService);
 
     service.id = id;
     return service;

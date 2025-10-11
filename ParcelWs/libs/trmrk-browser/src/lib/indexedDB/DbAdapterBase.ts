@@ -9,21 +9,48 @@ export const commonDbNamePrefixes = Object.freeze(
   })
 );
 
+export interface DbAdapterOpts {
+  fullName?: string | string[] | NullOrUndef;
+  dbName?: string | NullOrUndef;
+  appName?: string | NullOrUndef;
+  version?: number | NullOrUndef;
+  dbNamePfx?: string | NullOrUndef;
+  isCacheDb?: boolean | NullOrUndef;
+  isSharedDb?: boolean | NullOrUndef;
+}
+
 export abstract class DbAdapterBase {
   public readonly dbNameStr: string;
+  public readonly version: number;
+  public readonly isSharedDb: boolean;
 
-  constructor(
-    public readonly dbName: string,
-    public readonly appName: string,
-    public version: number = 1
-  ) {
-    this.dbNameStr = this.getDbNameStr();
+  constructor(opts: DbAdapterOpts) {
+    this.dbNameStr = this.getDbNameStr(opts);
+    this.version = opts.version ?? 1;
+    this.isSharedDb = opts.isSharedDb ?? true;
   }
 
   abstract onUpgradeNeeded(event: IDBVersionChangeEvent, db: IDBDatabase): void;
 
-  getDbNameStr() {
-    return getDbObjName([this.appName, this.dbName]);
+  getDbNameStr(opts: DbAdapterOpts) {
+    let dbNameStr: string;
+
+    if ((opts.fullName ?? null) !== null) {
+      if (typeof opts.fullName === 'string') {
+        dbNameStr = opts.fullName;
+      } else {
+        dbNameStr = getDbObjName(opts.fullName!);
+      }
+    } else {
+      dbNameStr = getDbObjName([
+        opts.appName,
+        opts.isCacheDb ? commonDbNamePrefixes.cache : null,
+        opts.dbNamePfx,
+        opts.dbName,
+      ]);
+    }
+
+    return dbNameStr;
   }
 
   open = (

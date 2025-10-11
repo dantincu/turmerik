@@ -1,11 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
 
 import {
-  BasicAppSettingsDbAdapter,
   KeyPress,
   KeyboardShortcut,
-  KeyboardShortcutSrlzbl,
-} from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
+} from '../../../trmrk-browser/indexedDB/databases/SharedBasicAppSettings';
 
 import { KeyboardShortcutContainer } from './keyboard-shortcut-service';
 

@@ -7,8 +7,7 @@ export const epoch1970Milliseconds = new Date(1970, 0, 1).getTime(); // 0 millis
 export const epoch0001Milliseconds = new Date(0).setFullYear(1, 0, 1); // Adjust the starting year
 
 // Calculate the difference in milliseconds
-export const millisecondsBetweenEpochs0001And1970 =
-  epoch1970Milliseconds - epoch0001Milliseconds;
+export const millisecondsBetweenEpochs0001And1970 = epoch1970Milliseconds - epoch0001Milliseconds;
 
 export const ticksToMillis = (ticks: number, round?: boolean | NullOrUndef) => {
   let millis = ticks / 10000;
@@ -43,6 +42,13 @@ export const addMillis = (date: Date, millisToAdd: number) => {
 
 export const moveUtcDateToLocalTime = (date: Date, offsetInMillis?: number) => {
   offsetInMillis ??= getOffsetInMilliseconds();
+  addMillis(date, offsetInMillis);
+
+  return date;
+};
+
+export const moveLocalTimeToUtcDate = (date: Date, offsetInMillis?: number) => {
+  offsetInMillis ??= -1 * getOffsetInMilliseconds();
   addMillis(date, offsetInMillis);
 
   return date;

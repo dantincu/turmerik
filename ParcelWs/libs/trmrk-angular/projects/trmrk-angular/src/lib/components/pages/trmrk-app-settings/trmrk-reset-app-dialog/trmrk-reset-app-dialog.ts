@@ -86,7 +86,7 @@ export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.modalService.destroy();
+    this.modalService.dispose();
   }
 
   okClick() {

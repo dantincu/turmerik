@@ -6,64 +6,29 @@ using System.Threading.Tasks;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.Helpers;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Core.FileManager
 {
-    public interface IFileManagerService
-    {
-        Task<DriveEntryCore[]> ReadPrIdnfsAsync(
-            string[] idnfsArr);
-
-        Task<DriveEntryCore[]> ReadNamesAsync(
-            string[] idnfsArr);
-
-        Task<DriveEntryCore[]> ReadFileSizesAsync(
-            string[] idnfsArr);
-
-        Task<DriveEntryCore[]> ReadTimeStampsAsync(
-            string[] idnfsArr,
-            bool returnMillis = false);
-
-        Task<DriveEntry<string>[]> ReadFileTextContentsAsync(
-            string[] idnfsArr);
-
-        Task ReadFileRawContentsAsync(
-            DriveEntry<Func<Stream, Task>>[] entriesArr);
-
-        Task<FilesAndFoldersTuple<string>> CopyEntriesAsync(
-            DriveEntryCore[] foldersArr,
-            DriveEntryCore[] filesArr,
-            DateTime clientFetchTimeStamp,
-            bool overWrite = false);
-
-        Task RenameOrMoveEntriesAsync(
-            DriveEntryCore[] foldersArr,
-            DriveEntryCore[] filesArr,
-            DateTime clientFetchTimeStamp,
-            bool overWrite = false);
-
-        Task DeleteEntriesAsync(
-            DriveEntryCore[] foldersArr,
-            DriveEntryCore[] filesArr,
-            DateTime clientFetchTimeStamp);
-
-        Task<DriveEntryCore[]> WriteFileTextContentsAsync(
-            DriveEntry<string>[] entriesArr,
-            DateTime clientFetchTimeStamp,
-            bool overWrite = false);
-
-        Task<DriveEntryCore[]> WriteFileRawContentsAsync(
-            DriveEntry<Func<Stream, Task>>[] entriesArr,
-            DateTime clientFetchTimeStamp,
-            bool overWrite = false);
-    }
-
     public interface IFsManagerService : IFileManagerService
     {
     }
 
     public class FileManagerCoreBase
     {
+        protected void AssignClientFetchTmStmpMillis<TDriveEntry>(
+            IEnumerable<TDriveEntry> driveEntriesNmrbl,
+            long clientFetchTmStmpMillis)
+            where TDriveEntry : DriveEntryCore
+        {
+            foreach (var driveEntry in driveEntriesNmrbl)
+            {
+                driveEntry.ClientFetchTimeUtcMillis = clientFetchTmStmpMillis;
+            }
+        }
+
+        protected long GetClientFetchTmStmpMillis() => DateTime.UtcNow.Ticks.TicksToMillis();
+
         protected DriveEntryCore GetTimeStampsCore(
             DateTime? creationTime,
             DateTime? lastWriteTime,

@@ -18,6 +18,7 @@ import { TrmrkDialog } from '../../../../trmrk-angular/components/common/trmrk-d
 import { ModalService } from '../../../../trmrk-angular/services/common/modal-service';
 import { ModalServiceFactory } from '../../../../trmrk-angular/services/common/modal-service-factory';
 import { TrmrkObservable } from '../../../../trmrk-angular/services/common/TrmrkObservable';
+import { TimeStampGenerator } from '../../../../trmrk-angular/services/common/timestamp-generator';
 
 import {
   TrmrkDialogData,
@@ -31,7 +32,7 @@ import { DriveStorageOption, DriveStorageType } from '../../../../trmrk/driveSto
 import { AppStateService } from '../../../services/common/app-state-service';
 import { AppService } from '../../../services/common/app-service';
 import { AppConfig } from '../../../services/common/app-config';
-import { AppDriveStorageOption } from '../../../services/common/driveStorageOption';
+import { AppDriveStorageOption } from '../../../../trmrk-filemanager-nglib/services/common/driveStorageOption';
 
 export interface TrmrkAppSetupDialogComponentData extends TrmrkDialogComponentDataCore {
   isUpdate?: boolean | NullOrUndef;
@@ -66,7 +67,8 @@ export class TrmrkAppSetupModal implements OnDestroy {
     @Inject(AppStateServiceBase) private appStateService: AppStateService,
     private modalServiceFactory: ModalServiceFactory,
     private hostEl: ElementRef,
-    @Inject(injectionTokens.appConfig.token) appConfig: TrmrkObservable<AppConfig>
+    @Inject(injectionTokens.appConfig.token) appConfig: TrmrkObservable<AppConfig>,
+    private timeStampGenerator: TimeStampGenerator
   ) {
     this.fileSystemApiFolderPickerId = appService.getAppObjectKey(
       [getVarName(() => TrmrkAppSetupModal)],
@@ -102,7 +104,8 @@ export class TrmrkAppSetupModal implements OnDestroy {
   ngAfterViewInit() {}
 
   ngOnDestroy(): void {
-    this.modalService.destroy();
+    this.fileSystemApiDirHandle = null;
+    this.modalService.dispose();
   }
 
   chooseStorageOption(option: DriveStorageOption) {
@@ -117,6 +120,7 @@ export class TrmrkAppSetupModal implements OnDestroy {
     this.data.data.optionChosen({
       ...this.selectedStorageOption!,
       rootFolder: this.fileSystemApiDirHandle,
+      tmStmpMillis: this.timeStampGenerator.millis(),
     });
   }
 }

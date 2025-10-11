@@ -2,7 +2,7 @@ import { Injectable, Inject, OnDestroy } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { BasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
+import { SharedBasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedDB/databases/SharedBasicAppSettings';
 
 import {
   AsyncRequestStateManager,
@@ -11,9 +11,10 @@ import {
 
 import { getIDbRequestOpenErrorMsg } from '../../../trmrk-browser/indexedDB/core';
 import { TouchOrMouseCoords } from '../../../trmrk-browser/domUtils/touchAndMouseEvents';
-import { AppTheme } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
+import { AppTheme } from '../../../trmrk-browser/indexedDB/databases/SharedBasicAppSettings';
 
-import { TrmrkPanelListServiceRow } from '../../services/common/trmrk-panel-list-service';
+import { TrmrkPanelListServiceRow } from '../common/trmrk-panel-list-service';
+import { IndexedDbDatabasesServiceCore } from '../common/indexedDb/indexed-db-databases-service-core';
 
 import {
   openDialog,
@@ -47,12 +48,13 @@ export class TrmrkAppThemesService implements OnDestroy {
 
   trmrkEditAppThemeDialogComponent: any;
   editEntityDialog!: MatDialog;
+  trmrkBasicAppSettings: SharedBasicAppSettingsDbAdapter;
 
   constructor(
-    @Inject(injectionTokens.basicAppSettingsDbAdapter.token)
-    public trmrkBasicAppSettings: BasicAppSettingsDbAdapter,
-    asyncRequestStateManagerFactory: AsyncRequestStateManagerFactory
+    asyncRequestStateManagerFactory: AsyncRequestStateManagerFactory,
+    private indexedDbDatabasesService: IndexedDbDatabasesServiceCore
   ) {
+    this.trmrkBasicAppSettings = indexedDbDatabasesService.sharedBasicAppSettings.value;
     this.reqStateManager = asyncRequestStateManagerFactory.create<DOMException | null>(
       null,
       (error) => ['Error opening IndexedDB', getIDbRequestOpenErrorMsg(error)]

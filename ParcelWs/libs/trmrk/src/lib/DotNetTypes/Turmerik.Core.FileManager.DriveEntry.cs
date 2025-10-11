@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -18,8 +18,6 @@ namespace Turmerik.Core.FileManager
         public long? CreationTimeUtcMillis { get; set; }
         public long? LastWriteTimeUtcMillis { get; set; }
         public long? LastAccessTimeUtcMillis { get; set; }
-
-        public long? ClientFetchTimeUtcMillis { get; set; }
     }
 
     public class DriveEntry<TContent> : DriveEntryCore

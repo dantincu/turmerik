@@ -9,13 +9,14 @@ import { htmlCollectionToArr } from '../../../trmrk-browser/domUtils/common';
 import { mapPropNamesToThemselves, PropNameWordsConvention } from '../../../trmrk/propNames';
 
 import { AppServiceBase, extractAppObjectKeyParts } from './app-service-base';
+import { IndexedDbDatabasesServiceCore } from './indexedDb/indexed-db-databases-service-core';
 
 import {
-  AppSettingsChoice,
-  BasicAppSettingsDbAdapter,
+  SharedAppSettingsChoice,
+  SharedBasicAppSettingsDbAdapter,
   commonAppSettingsChoiceCatKeys,
   commonAppSettingsChoiceKeys,
-} from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
+} from '../../../trmrk-browser/indexedDB/databases/SharedBasicAppSettings';
 
 import { dbRequestToPromise } from '../../../trmrk-browser/indexedDB/core';
 
@@ -109,6 +110,8 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
   activePanel: PanelPosition = PanelPosition.None;
   optionsMenuOpenForPanel: PanelPosition = PanelPosition.None;
 
+  private basicAppSettingsDbAdapter: SharedBasicAppSettingsDbAdapter;
+
   private indexedDb = {
     appSettings: {
       choices: {
@@ -149,8 +152,10 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
 
   constructor(
     private appService: AppServiceBase,
-    private basicAppSettingsDbAdapter: BasicAppSettingsDbAdapter
+    private indexedDbDatabasesService: IndexedDbDatabasesServiceCore
   ) {
+    this.basicAppSettingsDbAdapter = indexedDbDatabasesService.sharedBasicAppSettings.value;
+
     this.appResetSubscription = this.appService.onAppReset.subscribe(() => {
       this.loadAppSettingsChoices();
     });
@@ -619,7 +624,7 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
 
           Promise.all(
             keyPathsArr.map((keyPath) =>
-              dbRequestToPromise<AppSettingsChoice>(
+              dbRequestToPromise<SharedAppSettingsChoice>(
                 this.basicAppSettingsDbAdapter.stores.choices.store(db).get(keyPath)
               )
             )

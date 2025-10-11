@@ -21,7 +21,7 @@ export class TrmrkAppLinkService {
     this.getDefaultOpenInNewBrowserTabUrl = this.getDefaultOpenInNewBrowserTabUrl.bind(this);
 
     this.getDefaultShareableTabUrl = (trmrkUrl) =>
-      this.getDefaultTabUrlCore(trmrkUrl, [urlQueryKeys.tabId, urlQueryKeys.sessionUuid]);
+      this.getDefaultTabUrlCore(trmrkUrl, [urlQueryKeys.tabId, urlQueryKeys.sessionId]);
 
     this.getDefaultShareableTabUrl = this.getDefaultShareableTabUrl.bind(this);
   }
