@@ -10,14 +10,14 @@ namespace Turmerik.HtmlToPdf.WebApi.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class HtmlToPdfController : ControllerBase
+    public class HtmlToPdfController : BaseController
     {
         private readonly ILogger<HtmlToPdfController> logger;
         private readonly HtmlToPdfService htmlToPdfService;
 
         public HtmlToPdfController(
             ILogger<HtmlToPdfController> logger,
-            HtmlToPdfService htmlToPdfService)
+            HtmlToPdfService htmlToPdfService) : base(logger)
         {
             this.logger = logger ?? throw new ArgumentNullException(
                 nameof(logger));
@@ -25,13 +25,6 @@ namespace Turmerik.HtmlToPdf.WebApi.Controllers
             this.htmlToPdfService = htmlToPdfService ?? throw new ArgumentNullException(
                 nameof(htmlToPdfService));
         }
-
-        [HttpGet]
-        [Route("[action]")]
-        public Task<IActionResult> TestError() => ExecuteCoreAsync(async () =>
-        {
-            throw new Exception("This is a test error");
-        });
 
         [HttpPost]
         [Route("[action]")]
@@ -65,44 +58,5 @@ namespace Turmerik.HtmlToPdf.WebApi.Controllers
 
                 return Ok(new { Message = "PDF generated successfully." });
             });
-
-        private async Task<IActionResult> ExecuteCoreAsync(
-            Func<Task<IActionResult>> action)
-        {
-            try
-            {
-                return (await action());
-            }
-            catch (Exception ex)
-            {
-                return HandleException(ex);
-            }
-        }
-
-        private IActionResult HandleException(
-            Exception exc)
-        {
-            logger.LogError(exc.ToString());
-
-            if (exc is TrmrkException<HttpStatusCode> trmrkExc)
-            {
-                return StatusCode((int)trmrkExc.AdditionalData, trmrkExc.AdditionalData switch
-                {
-                    HttpStatusCode.TooManyRequests => new
-                    {
-                        Message = "Cannot generate multiple pdfs at the same time."
-                    },
-                    HttpStatusCode.InternalServerError => new
-                    {
-                        Message = "An internal server error occurred while generating the PDF."
-                    },
-                    _ => null
-                });
-            }
-            else
-            {
-                return StatusCode(500);
-            }
-        }
     }
 }
