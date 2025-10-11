@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { NullOrUndef } from '../../../trmrk/core';
 import { splice } from '../../../trmrk/arr';
 import { observableToPromise } from './rxjs/observable';
-import { AppConfigCore } from './app-config';
+import { NgAppConfigCore } from './app-config';
 
-export interface LoadAppConfigOpts<TConfig extends AppConfigCore = AppConfigCore> {
+export interface LoadAppConfigOpts<TConfig extends NgAppConfigCore = NgAppConfigCore> {
   provide?: boolean | NullOrUndef;
   values?: TConfig | NullOrUndef;
   appConfigUrl?: string | NullOrUndef;
@@ -22,7 +22,7 @@ export const defaultEnvConfigUrlFactory: (baseAppConfigUrl: string, envName: str
   envName
 ) => splice(baseAppConfigUrl.split('.'), -1, 0, envName).join('.');
 
-export const loadAppConfig = async <TConfig extends AppConfigCore = AppConfigCore>(
+export const loadAppConfig = async <TConfig extends NgAppConfigCore = NgAppConfigCore>(
   httpClient: HttpClient,
   opts: LoadAppConfigOpts<TConfig>,
   envName: string

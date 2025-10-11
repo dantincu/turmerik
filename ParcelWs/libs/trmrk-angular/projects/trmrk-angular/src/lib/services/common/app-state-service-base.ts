@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { TrmrkObservable } from './TrmrkObservable';
-import { AppConfigCore } from './app-config';
+import { NgAppConfigCore } from './app-config';
 
 export interface AppBarControlsVisibility {
   backBtn: boolean;
@@ -65,5 +65,5 @@ export abstract class AppStateServiceBase {
 
   defaults = getAppDefaultValues();
 
-  constructor(public appConfig: TrmrkObservable<AppConfigCore>) {}
+  constructor(public appConfig: TrmrkObservable<NgAppConfigCore>) {}
 }

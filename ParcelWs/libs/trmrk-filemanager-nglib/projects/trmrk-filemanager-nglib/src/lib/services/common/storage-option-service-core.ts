@@ -40,7 +40,6 @@ export class StorageOptionServiceCore implements OnDestroy {
 
   ngOnDestroy(): void {
     this.currentStorageOption.dispose();
-    this.currentStorageOption.dispose();
   }
 
   updateCurrentStorageOption(storageOption: AppDriveStorageOption) {
@@ -83,7 +82,7 @@ export class StorageOptionServiceCore implements OnDestroy {
                 catKey: this.choiceCatKey,
                 key: this.choiceKey,
                 value: this.currentStorageOption.value,
-              })
+              } as SharedAppSettingsChoice)
             ).then(() => resolve(), reject);
           } else {
             reject(new Error('No storage option has been choosen'));

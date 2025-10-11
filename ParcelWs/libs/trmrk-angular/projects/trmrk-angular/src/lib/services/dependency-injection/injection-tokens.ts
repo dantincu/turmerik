@@ -3,8 +3,7 @@ import { InjectionToken } from '@angular/core';
 import { mapObjProps } from '../../../trmrk/obj';
 
 import { IntIdServiceFactory } from '../common/int-id-service-factory';
-import { TrmrkStrIdGeneratorBase } from '../common/trmrk-str-id-generator-base';
-import { AppConfigCore } from '../common/app-config';
+import { NgAppConfigCore } from '../common/app-config';
 import { TrmrkObservable } from '../common/TrmrkObservable';
 
 export interface InjectionTokenWrapper<T> {
@@ -15,9 +14,8 @@ export interface InjectionTokenWrapper<T> {
 export const injectionTokens = mapObjProps(
   {
     intIdServiceFactory: {} as InjectionTokenWrapper<IntIdServiceFactory>,
-    appConfig: {} as InjectionTokenWrapper<TrmrkObservable<AppConfigCore>>,
+    appConfig: {} as InjectionTokenWrapper<TrmrkObservable<NgAppConfigCore>>,
     appName: {} as InjectionTokenWrapper<string>,
-    strIdGenerator: {} as InjectionTokenWrapper<TrmrkStrIdGeneratorBase>,
   },
   (_, propName): InjectionTokenWrapper<any> => ({
     name: propName,

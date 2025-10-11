@@ -50,7 +50,7 @@ export class AppSessionsDbAdapter extends DbAdapterBase {
     const dbStores = AppSessionsDbAdapter.DB_STORES;
 
     createDbStoreIfNotExists(db, dbStores.AppSessions.name, () => ({
-      keyPath: [...dbStores.AppSessions.keyPath],
+      keyPath: dbStores.AppSessions.keyPath,
     }));
   }
 }

@@ -2,7 +2,7 @@
  * Public API Surface of trmrk-angular
  */
 
-import { AppConfigCore as AppConfigCoreTsIntf } from './services/common/app-config';
+import { NgAppConfigCore as AppConfigCoreTsIntf } from './services/common/app-config';
 import { EnvironmentCore as EnvironmentCoreTsIntf } from './services/common/environment';
 
 import {

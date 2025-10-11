@@ -1,4 +1,4 @@
-import { AppConfigCore as NgAppConfigCore } from '../../../trmrk-angular/services/common/app-config';
+import { NgAppConfigCore as NgAppConfigCore } from '../../../trmrk-angular/services/common/app-config';
 
 import {
   AppConfig as AppConfigCore,

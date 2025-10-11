@@ -15,21 +15,20 @@ import { provideHttpClient, HttpClient } from '@angular/common/http';
 
 import { MatDialogModule } from '@angular/material/dialog';
 
+import { NullOrUndef, withVal } from '../../../trmrk/core';
+import { normalizeAppConfigCore } from '../../../trmrk/app-config';
+import { AsyncRequestStateManagerFactory } from '../../../trmrk/AsyncRequestStateManager';
+
 import { AppServiceBase } from '../common/app-service-base';
 import { AppStateServiceBase } from '../common/app-state-service-base';
 import { IntIdServiceFactory } from '../common/int-id-service-factory';
-
-import { NullOrUndef, withVal } from '../../../trmrk/core';
-import { AsyncRequestStateManagerFactory } from '../../../trmrk/AsyncRequestStateManager';
-import { SharedBasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedDB/databases/SharedBasicAppSettings';
-import { BasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
-import { AppSessionsDbAdapter } from '../../../trmrk-browser/indexedDB/databases/AppSessions';
 import { loadAppConfig, LoadAppConfigOpts } from '../common/app-config-loader';
 import { TrmrkStrIdGeneratorBase } from '../common/trmrk-str-id-generator-base';
 import { TrmrkDefaultStrIdGenerator } from '../common/trmrk-default-str-id-generator';
-import { AppConfigCore } from '../common/app-config';
+import { NgAppConfigCore } from '../common/app-config';
 import { DarkModeService } from '../common/dark-mode-service';
 import { TrmrkObservable } from '../common/TrmrkObservable';
+import { TrmrkSessionService } from '../common/trmrk-session-service';
 
 import { injectionTokens } from './injection-tokens';
 
@@ -38,7 +37,9 @@ export interface ServiceProviderOpts<TOpts> {
   opts?: TOpts | NullOrUndef;
 }
 
-export interface GetCommonServiceProviderOpts<TAppConfig extends AppConfigCore = AppConfigCore> {
+export interface GetCommonServiceProviderOpts<
+  TAppConfig extends NgAppConfigCore = NgAppConfigCore
+> {
   includeAllByDefault?: boolean | NullOrUndef;
   browserGlobalErrorListeners?: boolean | NullOrUndef;
   zoneChangeDetection?: ServiceProviderOpts<NgZoneOptions>;
@@ -52,9 +53,12 @@ export interface GetCommonServiceProviderOpts<TAppConfig extends AppConfigCore =
   asyncRequestStateManagerFactory?: boolean | NullOrUndef;
   intIdServiceFactory?: boolean | NullOrUndef;
   darkModeAppInitializer?: boolean | NullOrUndef;
+  sessionServiceAppInitializer?: boolean | NullOrUndef;
 }
 
-export interface GetCommonServiceProvidersArgs<TAppConfig extends AppConfigCore = AppConfigCore> {
+export interface GetCommonServiceProvidersArgs<
+  TAppConfig extends NgAppConfigCore = NgAppConfigCore
+> {
   envName?: string | NullOrUndef;
   isProdEnv: boolean;
   appName: string;
@@ -63,19 +67,16 @@ export interface GetCommonServiceProvidersArgs<TAppConfig extends AppConfigCore 
   appProviders: (Provider | EnvironmentProviders | null)[];
 }
 
-export const defaultConfigNormalizeFactory = async <TConfig extends AppConfigCore = AppConfigCore>(
+export const defaultConfigNormalizeFactory = async <
+  TConfig extends NgAppConfigCore = NgAppConfigCore
+>(
   appConfig: TConfig
 ) => {
-  appConfig.isWebApp ??= true;
-  appConfig.routeBasePath ??= '/app';
-  appConfig.requiresSetup ??= false;
-  appConfig.listDefaultPageSize ??= 50;
-  appConfig.maxSimultaneousRequestsCount ??= 4;
-  appConfig.cacheValidIntervalMillis ??= 0;
+  appConfig = normalizeAppConfigCore(appConfig);
   return appConfig;
 };
 
-export class AppConfigProvidersFactory<TAppConfig extends AppConfigCore = AppConfigCore> {
+export class AppConfigProvidersFactory<TAppConfig extends NgAppConfigCore = NgAppConfigCore> {
   appConfig = new TrmrkObservable<TAppConfig>(null!);
 
   getProviders(
@@ -122,7 +123,13 @@ export const getDarkModeAppInitializer = () =>
     darkModeService.init();
   });
 
-export const getServiceProviders = <TAppConfig extends AppConfigCore = AppConfigCore>(
+export const getSessionServiceAppInitializer = () =>
+  provideAppInitializer(async () => {
+    const service = inject(TrmrkSessionService);
+    await service.assureSessionIsSet();
+  });
+
+export const getServiceProviders = <TAppConfig extends NgAppConfigCore = NgAppConfigCore>(
   args: GetCommonServiceProvidersArgs<TAppConfig>
 ) => {
   const opts = args.provide;
@@ -173,9 +180,13 @@ export const getServiceProviders = <TAppConfig extends AppConfigCore = AppConfig
 
     opts.defaultStrIdGenerator ?? includeAllByDefault
       ? withVal(new TrmrkDefaultStrIdGenerator(), (defaultStrIdGenerator) => ({
-          provide: injectionTokens.strIdGenerator,
+          provide: TrmrkStrIdGeneratorBase,
           useValue: defaultStrIdGenerator,
         }))
+      : null,
+
+    opts.sessionServiceAppInitializer ?? includeAllByDefault
+      ? getSessionServiceAppInitializer()
       : null,
 
     args.routes ? provideRouter(args.routes) : null,

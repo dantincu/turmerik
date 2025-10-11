@@ -170,3 +170,27 @@ export const serializeMap = <T>(map: UnifiedMap<T>, opts: SerializeMapOpts<T>) =
   retStr = [opts.startStr ?? '', retStr, opts.endStr ?? ''].join('');
   return retStr;
 };
+
+export const splitStr = (str: string, delimsArr: string[]) => {
+  const retArr: string[] = [];
+  let idx = 0;
+
+  while (idx < str.length) {
+    for (let delim of delimsArr) {
+      idx = str.indexOf(delim);
+
+      if (idx >= 0) {
+        retArr.push(str.substring(idx + delim.length));
+        str = str.substring(idx + delim.length);
+        break;
+      }
+    }
+
+    if (idx < 0) {
+      retArr.push(str);
+      break;
+    }
+  }
+
+  return retArr;
+};

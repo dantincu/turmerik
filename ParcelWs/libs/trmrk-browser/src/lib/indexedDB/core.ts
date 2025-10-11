@@ -50,3 +50,19 @@ export const dbRequestToPromise = <T>(req: IDBRequest<T>) =>
       reject(target.error);
     };
   });
+
+export const openDbRequestToPromise = (req: IDBOpenDBRequest) =>
+  new Promise<DbResponse<IDBDatabase>>((resolve, reject) => {
+    req.onsuccess = (event) => {
+      const target = event.target as IDBOpenDBRequest;
+      resolve({ value: target.result, event });
+    };
+    req.onerror = (event) => {
+      const target = event.target as IDBRequest;
+      reject(target.error);
+    };
+    req.onblocked = (event) => {
+      const target = event.target as IDBRequest;
+      reject(target.error);
+    };
+  });

@@ -24,7 +24,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { whenChanged } from '../../../services/common/simpleChanges';
 import { NullOrUndef, VoidOrAny } from '../../../../trmrk/core';
 import { injectionTokens } from '../../../services/dependency-injection/injection-tokens';
-import { AppConfigCore } from '../../../services/common/app-config';
+import { NgAppConfigCore } from '../../../services/common/app-config';
 import { AppStateServiceBase } from '../../../services/common/app-state-service-base';
 import { TrmrkObservable } from '../../../services/common/TrmrkObservable';
 
@@ -68,7 +68,7 @@ export class TrmrkAppBar implements AfterViewInit, OnChanges, OnDestroy {
 
   constructor(
     public hostEl: ElementRef,
-    @Inject(injectionTokens.appConfig.token) public appConfig: TrmrkObservable<AppConfigCore>,
+    @Inject(injectionTokens.appConfig.token) public appConfig: TrmrkObservable<NgAppConfigCore>,
     public appStateService: AppStateServiceBase
   ) {
     this.updateBackBtnDisabled();

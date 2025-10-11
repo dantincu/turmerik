@@ -5,7 +5,7 @@ import { NullOrUndef } from '../../../trmrk/core';
 
 import { AppStateServiceBase } from './app-state-service-base';
 import { DarkModeService } from './dark-mode-service';
-import { AppConfigCore } from './app-config';
+import { NgAppConfigCore } from './app-config';
 import { TrmrkObservable } from './TrmrkObservable';
 import { injectionTokens } from '../dependency-injection/injection-tokens';
 
@@ -88,7 +88,7 @@ export class AppServiceBase implements OnDestroy {
   private appResetSubscription: Subscription;
 
   constructor(
-    @Inject(injectionTokens.appConfig.token) public appConfig: TrmrkObservable<AppConfigCore>,
+    @Inject(injectionTokens.appConfig.token) public appConfig: TrmrkObservable<NgAppConfigCore>,
     public appStateService: AppStateServiceBase,
     private darkModeService: DarkModeService
   ) {

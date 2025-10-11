@@ -835,7 +835,7 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
         catKey: this.indexedDb.appSettings.choices.appPanelsLayout.catKey,
         key: this.appService.getAppObjectKey([commonAppSettingsChoiceKeys.panelWidthRatios]),
         value: this.corePanelWidthRatios,
-      });
+      } as SharedAppSettingsChoice);
     });
   }
 
@@ -845,7 +845,7 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
         catKey: this.indexedDb.appSettings.choices.appPanelsLayout.catKey,
         key: this.appService.getAppObjectKey([commonAppSettingsChoiceKeys.panelVisibilities]),
         value: [this.showLeftPanel, this.showMiddlePanel, this.showRightPanel],
-      });
+      } as SharedAppSettingsChoice);
     });
   }
 

@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 
 import { TrmrkUrl } from './types';
-import { urlQueryKeys } from './trmrk-multitab';
-import { NullOrUndef, jsonBool } from '../../../trmrk/core';
-import { toMap } from '../../../trmrk/map';
+import { urlQueryKeys } from './trmrk-session-service';
+import { NullOrUndef } from '../../../trmrk/core';
 
 @Injectable({
   providedIn: 'root',

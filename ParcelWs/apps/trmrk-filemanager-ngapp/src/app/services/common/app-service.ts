@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 
 import { AppStateServiceBase } from '../../../trmrk-angular/services/common/app-state-service-base';
-import { AppConfigCore } from '../../../trmrk-angular/services/common/app-config';
+import { NgAppConfigCore } from '../../../trmrk-angular/services/common/app-config';
 import { DarkModeService } from '../../../trmrk-angular/services/common/dark-mode-service';
 import { AppServiceBase } from '../../../trmrk-angular/services/common/app-service-base';
 import { TrmrkObservable } from '../../../trmrk-angular/services/common/TrmrkObservable';
@@ -22,7 +22,11 @@ export class AppService extends AppServiceBase {
     darkModeService: DarkModeService,
     public storageOptionService: StorageOptionServiceCore
   ) {
-    super(appConfig as unknown as TrmrkObservable<AppConfigCore>, appStateService, darkModeService);
+    super(
+      appConfig as unknown as TrmrkObservable<NgAppConfigCore>,
+      appStateService,
+      darkModeService
+    );
     this.appStateSvc = appStateService;
   }
 }
