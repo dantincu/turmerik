@@ -5,6 +5,8 @@ import {
   letterRegex,
   NullOrUndef,
   UnifiedMap,
+  StrMap,
+  Kvp,
 } from './core';
 
 import { numIsBetween } from './math';
@@ -171,26 +173,52 @@ export const serializeMap = <T>(map: UnifiedMap<T>, opts: SerializeMapOpts<T>) =
   return retStr;
 };
 
+export interface SplitStrItem {
+  part: string;
+  delim: string | null;
+  isLast?: boolean | NullOrUndef;
+}
+
 export const splitStr = (str: string, delimsArr: string[]) => {
-  const retArr: string[] = [];
-  let idx = 0;
+  const retArr: SplitStrItem[] = [];
 
-  while (idx < str.length) {
-    for (let delim of delimsArr) {
-      idx = str.indexOf(delim);
+  const getMatchingDelims = () =>
+    delimsArr
+      .map((delim) => ({
+        delim,
+        idx: str.indexOf(delim),
+      }))
+      .filter((match) => match.idx >= 0)
+      .sort((a, b) => (a.idx <= b.idx ? -1 : 1));
 
-      if (idx >= 0) {
-        retArr.push(str.substring(idx + delim.length));
-        str = str.substring(idx + delim.length);
-        break;
-      }
+  let matchingDelims = getMatchingDelims();
+
+  while (matchingDelims.length) {
+    while (matchingDelims.length) {
+      const firstMatch = matchingDelims.splice(0, 1)[0];
+
+      retArr.push({
+        part: str.substring(0, firstMatch.idx),
+        delim: firstMatch.delim,
+      });
+
+      str = str.substring(firstMatch.idx + firstMatch.delim.length);
+
+      matchingDelims.forEach((delim) => {
+        delim.idx -= firstMatch.idx + firstMatch.delim.length;
+      });
+
+      matchingDelims = matchingDelims.filter((match) => match.idx >= 0);
     }
 
-    if (idx < 0) {
-      retArr.push(str);
-      break;
-    }
+    matchingDelims = getMatchingDelims();
   }
+
+  retArr.push({
+    part: str,
+    delim: null,
+    isLast: true,
+  });
 
   return retArr;
 };

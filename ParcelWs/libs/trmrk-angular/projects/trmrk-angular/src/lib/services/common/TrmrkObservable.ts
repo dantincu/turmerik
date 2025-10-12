@@ -51,7 +51,7 @@ export class TrmrkObservable<T> implements Disposable {
 export const runOnceWhenValueIs = async <TValue, TResult = any | void>(
   $obs: TrmrkObservable<TValue>,
   value: TValue,
-  callback: (val: TValue) => TResult,
+  callback?: ((val: TValue) => TResult) | NullOrUndef,
   eqCompr?: ((refVal: TValue, trgVal: TValue) => boolean) | NullOrUndef
 ) =>
   new Promise<TResult>((resolve, reject) => {
@@ -62,8 +62,12 @@ export const runOnceWhenValueIs = async <TValue, TResult = any | void>(
 
       if (matches) {
         try {
-          const retVal = callback(val);
-          resolve(retVal);
+          if (callback) {
+            const retVal = callback(val);
+            resolve(retVal);
+          } else {
+            resolve(null!);
+          }
         } catch (err) {
           reject(err);
         }

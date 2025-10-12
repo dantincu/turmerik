@@ -8,6 +8,7 @@ import { AppServiceBase } from '../trmrk-angular/services/common/app-service-bas
 import { KeyboardShortcutService } from '../trmrk-angular/services/common/keyboard-shortcut-service';
 import { ComponentIdService } from '../trmrk-angular/services/common/component-id-service';
 import { runOnceWhenValueIs } from '../trmrk-angular/services/common/TrmrkObservable';
+import { TrmrkSessionService } from '../trmrk-angular/services/common/trmrk-session-service';
 
 import { KeyboardServiceRegistrar } from './services/common/keyboard-service-registrar';
 
@@ -41,7 +42,8 @@ export class App implements OnDestroy {
     private appSetupDialog: MatDialog,
     private keyboardShortcutService: KeyboardShortcutService,
     private componentIdService: ComponentIdService,
-    private keyboardServiceRegistrar: KeyboardServiceRegistrar
+    private keyboardServiceRegistrar: KeyboardServiceRegistrar,
+    private sessionService: TrmrkSessionService
   ) {
     this.id = this.componentIdService.getNextId();
     this.toggleAppSetupModal = this.toggleAppSetupModal.bind(this);
@@ -52,9 +54,7 @@ export class App implements OnDestroy {
 
     this.setupKeyboardShortcuts();
 
-    if (appService.storageOptionService.currentStorageOption.value) {
-      this.appService.appStateService.hasBeenSetUp.next(true, true);
-    } else {
+    if (!appService.storageOptionService.currentStorageOption.value) {
       this.appService.appStateSvc.performAppSetup.next(true, true);
     }
   }
@@ -85,7 +85,9 @@ export class App implements OnDestroy {
                 this.appService.storageOptionService.currentStorageOption.next(option);
                 this.appService.appStateService.performAppSetup.next(false);
                 this.appService.appStateService.hasBeenSetUp.next(true, true);
-                this.appService.storageOptionService.writeCurrentToIndexedDb();
+                this.appService.storageOptionService.writeCurrentToIndexedDb(
+                  this.sessionService.currentSession.value.sessionId
+                );
               },
               errorMessage: this.appService.appStateSvc.appSetupModalErrorMsg.value,
               isUpdate: this.appService.appStateService.hasBeenSetUp.value,

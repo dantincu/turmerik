@@ -1,9 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { mapPropNamesToThemselves, PropNameWordsConvention } from '../../../trmrk/propNames';
 import { dbRequestToPromise, openDbRequestToPromise } from '../../../trmrk-browser/indexedDB/core';
 import { AppSession } from '../../../trmrk-browser/indexedDB/databases/AppSessions';
-import { transformRelUrl } from '../../../trmrk/url';
+import { transformUrl, getRelUri } from '../../../trmrk/url';
 
 import { IndexedDbDatabasesServiceCore } from './indexedDb/indexed-db-databases-service-core';
 import { TrmrkObservable } from './TrmrkObservable';
@@ -33,7 +34,8 @@ export class TrmrkSessionService implements OnDestroy {
   constructor(
     private indexedDbDatabasesService: IndexedDbDatabasesServiceCore,
     private strIdGenerator: TrmrkStrIdGeneratorBase,
-    private timeStampGenerator: TimeStampGenerator
+    private timeStampGenerator: TimeStampGenerator,
+    private router: Router
   ) {}
 
   ngOnDestroy(): void {}
@@ -45,6 +47,7 @@ export class TrmrkSessionService implements OnDestroy {
         return;
       } else if (this.queryingDb) {
         reject(new Error('Query params changed too quickly'));
+        return;
       } else {
         this.queryingDb = true;
       }
@@ -93,17 +96,18 @@ export class TrmrkSessionService implements OnDestroy {
                     } as AppSession)
                   )
                 ).then((response) => {
-                  onSuccess(value);
+                  onSuccess(session);
                 }, reject);
               }
             } else {
-              const url = transformRelUrl(document.location.href, {
+              const url = transformUrl(getRelUri(document.location.href), {
                 queryParamsTransformer: (map) => {
                   map[urlQueryKeys.sessionId] = sessionId!;
                   return map;
                 },
               });
-              history.pushState(null, '', url);
+
+              this.router.navigateByUrl(url);
               onSuccess(value);
             }
           }, reject);

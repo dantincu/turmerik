@@ -3,8 +3,12 @@ import { Injectable, Inject, OnDestroy } from '@angular/core';
 import {
   SharedBasicAppSettingsDbAdapter,
   SharedAppSettingsChoice,
+  AppSettingsChoice,
 } from '../../../trmrk-browser/indexedDB/databases/SharedBasicAppSettings';
 
+import { BasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
+
+import { NullOrUndef } from '../../../trmrk/core';
 import { injectionTokens } from '../../../trmrk-angular/services/dependency-injection';
 import { dbRequestToPromise } from '../../../trmrk-browser/indexedDB/core';
 import { getAppObjectKey } from '../../../trmrk-angular/services/common/app-service-base';
@@ -21,7 +25,8 @@ import { AppDriveStorageOption } from './driveStorageOption';
 export class StorageOptionServiceCore implements OnDestroy {
   public currentStorageOption = new TrmrkObservable<AppDriveStorageOption | null>(null);
 
-  private basicAppSettingsDbAdapter: SharedBasicAppSettingsDbAdapter;
+  private sharedBasicAppSettingsDbAdapter: SharedBasicAppSettingsDbAdapter;
+  private basicAppSettingsDbAdapter: BasicAppSettingsDbAdapter;
 
   private choiceCatKey: string;
   private choiceKey: string;
@@ -32,7 +37,8 @@ export class StorageOptionServiceCore implements OnDestroy {
     private appStateService: AppStateServiceBase,
     @Inject(injectionTokens.appName.token) private appName: string
   ) {
-    this.basicAppSettingsDbAdapter = indexedDbDatabasesService.sharedBasicAppSettings.value;
+    this.sharedBasicAppSettingsDbAdapter = indexedDbDatabasesService.sharedBasicAppSettings.value;
+    this.basicAppSettingsDbAdapter = indexedDbDatabasesService.basicAppSettings.value;
     this.choiceCatKey = getAppObjectKey([appSettingsChoiceKeys.driveStorageOption]);
     this.choiceKey = getAppObjectKey([appSettingsChoiceKeys.current]);
     this.keyPath = [this.choiceCatKey, this.choiceKey];
@@ -42,17 +48,25 @@ export class StorageOptionServiceCore implements OnDestroy {
     this.currentStorageOption.dispose();
   }
 
-  updateCurrentStorageOption(storageOption: AppDriveStorageOption) {
+  updateCurrentStorageOption(
+    storageOption: AppDriveStorageOption,
+    sessionId?: string | NullOrUndef
+  ) {
     this.currentStorageOption.next(storageOption);
-    this.writeCurrentToIndexedDb();
+    this.writeCurrentToIndexedDb(sessionId);
   }
 
-  loadCurrentFromIndexedDb() {
+  loadCurrentFromIndexedDb(sessionId?: string | NullOrUndef) {
     return new Promise<AppDriveStorageOption | null>((resolve, reject) => {
-      this.basicAppSettingsDbAdapter.open(
+      const basicAppSettingsDbAdapter = this.getBasicAppSettingsDbAdapter(sessionId);
+
+      basicAppSettingsDbAdapter.open(
         (_, db) => {
-          dbRequestToPromise<SharedAppSettingsChoice<AppDriveStorageOption>>(
-            this.basicAppSettingsDbAdapter.stores.choices.store(db).get(this.keyPath)
+          dbRequestToPromise<
+            | SharedAppSettingsChoice<AppDriveStorageOption>
+            | AppSettingsChoice<AppDriveStorageOption>
+          >(
+            basicAppSettingsDbAdapter.stores.choices.store(db).get(this.getKeyPath(sessionId))
           ).then((dbResponse) => {
             const choice = dbResponse.value;
 
@@ -72,17 +86,17 @@ export class StorageOptionServiceCore implements OnDestroy {
     });
   }
 
-  writeCurrentToIndexedDb() {
+  writeCurrentToIndexedDb(sessionId?: string | NullOrUndef) {
     return new Promise<void>((resolve, reject) => {
-      this.basicAppSettingsDbAdapter.open(
+      const basicAppSettingsDbAdapter = this.getBasicAppSettingsDbAdapter(sessionId);
+
+      basicAppSettingsDbAdapter.open(
         (_, db) => {
           if (this.currentStorageOption) {
             dbRequestToPromise(
-              this.basicAppSettingsDbAdapter.stores.choices.store(db, null, 'readwrite').put({
-                catKey: this.choiceCatKey,
-                key: this.choiceKey,
-                value: this.currentStorageOption.value,
-              } as SharedAppSettingsChoice)
+              basicAppSettingsDbAdapter.stores.choices
+                .store(db, null, 'readwrite')
+                .put(this.getAppSettingsChoiceToWrite(sessionId))
             ).then(() => resolve(), reject);
           } else {
             reject(new Error('No storage option has been choosen'));
@@ -93,5 +107,35 @@ export class StorageOptionServiceCore implements OnDestroy {
         }
       );
     });
+  }
+
+  getKeyPath(sessionId: string | NullOrUndef) {
+    const keyPath = (sessionId ?? null) !== null ? [...this.keyPath, sessionId!] : this.keyPath;
+    return keyPath;
+  }
+
+  getBasicAppSettingsDbAdapter(sessionId: string | NullOrUndef) {
+    const basicAppSettingsDbAdapter =
+      (sessionId ?? null) !== null
+        ? this.basicAppSettingsDbAdapter
+        : this.sharedBasicAppSettingsDbAdapter;
+
+    return basicAppSettingsDbAdapter;
+  }
+
+  getAppSettingsChoiceToWrite(
+    sessionId: string | NullOrUndef
+  ): AppSettingsChoice | SharedAppSettingsChoice {
+    const appSettingsChoice = {
+      catKey: this.choiceCatKey,
+      key: this.choiceKey,
+      value: this.currentStorageOption.value,
+    } as AppSettingsChoice;
+
+    if ((sessionId ?? null) !== null) {
+      appSettingsChoice.sessionId = sessionId!;
+    }
+
+    return appSettingsChoice;
   }
 }

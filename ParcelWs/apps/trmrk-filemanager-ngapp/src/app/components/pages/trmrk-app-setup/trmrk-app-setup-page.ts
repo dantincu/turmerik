@@ -36,9 +36,13 @@ export class TrmrkAppSetup implements OnDestroy {
       }
     });
 
-    this.hasBeenSetupSubscription = this.appService.appStateService.hasBeenSetUp.subscribe(() => {
-      this.router.navigateByUrl(this.returnToUrl);
-    });
+    this.hasBeenSetupSubscription = this.appService.appStateService.hasBeenSetUp.subscribe(
+      (value) => {
+        if (value) {
+          this.router.navigateByUrl(this.returnToUrl);
+        }
+      }
+    );
   }
 
   ngOnDestroy(): void {

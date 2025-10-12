@@ -18,12 +18,21 @@ export const normalizeAbsoluteUri = (uri: string, baseLocation?: string | NullOr
   return uri;
 };
 
-export const getRelUri = (uri: string) => {
+export const getRelUri = (uri: string) => getHostAndRelUri(uri)[1];
+
+export const getHostAndRelUri = (uri: string) => {
+  let retArr: string[];
+
   if (isAbsoluteUri(uri)) {
-    uri = uri.split('/').slice(3).join('/');
+    const parts = uri.split('/');
+    const host = parts.slice(0, 3).join('/');
+    const relUri = parts.slice(3).join('/');
+    retArr = [host, relUri];
+  } else {
+    retArr = [null!, uri];
   }
 
-  return uri;
+  return retArr;
 };
 
 export const newRelUri = (
@@ -110,19 +119,42 @@ export const strMapToQueryParams = (params: StrMap<string>) => {
 };
 
 export interface TransformUrlOpts {
+  hostTranformer?: ((host: string | null) => string) | NullOrUndef;
   pathTransformer?: ((path: string) => string) | NullOrUndef;
   queryParamsTransformer?: ((params: StrMap<string>) => StrMap<string>) | NullOrUndef;
   fragmentTransformer?: ((fragment: string | null) => string | null) | NullOrUndef;
 }
 
-export const transformRelUrl = (url: string, opts: TransformUrlOpts) => {
-  const queryIdx = url.indexOf('?');
-  const fragmentIdx = url.indexOf('#');
-  const urlParts = splitStr(url, ['?', '#']);
+export const transformUrl = (url: string, opts: TransformUrlOpts) => {
+  let [host, relUrl] = getHostAndRelUri(url);
+  const urlParts = splitStr(relUrl, ['?', '#']);
+  let nextIsQuery = false;
+  let nextIsFragment = false;
 
-  let path = urlParts[0];
-  let query = queryIdx >= 0 ? urlParts[1] : null;
-  let fragment = fragmentIdx >= 0 ? (queryIdx >= 0 ? urlParts[2] : urlParts[1]) : null;
+  const extractFirstUrlPart = () => {
+    const part = urlParts.splice(0, 1)[0];
+
+    switch (part.delim) {
+      case '?':
+        nextIsQuery = true;
+        nextIsFragment = false;
+        break;
+      case '#':
+        nextIsQuery = false;
+        nextIsFragment = true;
+        break;
+    }
+
+    return part.part;
+  };
+
+  let path = extractFirstUrlPart();
+  let query = nextIsQuery ? extractFirstUrlPart() : null;
+  let fragment = nextIsFragment ? extractFirstUrlPart() : null;
+
+  if (opts.hostTranformer) {
+    host = opts.hostTranformer(host);
+  }
 
   if (opts.pathTransformer) {
     path = opts.pathTransformer(path);
@@ -140,6 +172,10 @@ export const transformRelUrl = (url: string, opts: TransformUrlOpts) => {
   }
 
   let retUrl = path;
+
+  if ((host ?? null) !== null) {
+    retUrl = [host, retUrl].join('/');
+  }
 
   if ((query ?? null) !== null) {
     retUrl = [retUrl, query].join('?');
