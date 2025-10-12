@@ -2,7 +2,7 @@
   "maxSimultaneousRequestsCount": 2,
   "driveStorageOptions": [
     {
-      "key": "browser-indexeddb",
+      "key": "indexeddb",
       "isEnabled": false,
       "displayName": "Browser's IndexedDB",
       "description": "lives only in your browser",
@@ -11,7 +11,7 @@
       "cacheValidIntervalMillis": 0
     },
     {
-      "key": "browser-file-system-api",
+      "key": "file-system-api",
       "displayName": "Browser's File System Api",
       "description": "needs access to a folder on your device",
       "storageType": 1,

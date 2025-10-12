@@ -1,15 +1,16 @@
 import { Injectable, OnDestroy } from '@angular/core';
 
-import { TrmrkDisaposable } from '../../../trmrk-angular/services/common/types';
+import { TrmrkDisaposable } from '../../../../trmrk-angular/services/common/types';
 
 import {
   DriveEntryCore,
   DriveEntry,
   DriveEntryX,
   FilesAndFoldersTuple,
-} from '../../../trmrk/DotNetTypes/Turmerik.Core.FileManager.DriveEntry';
+} from '../../../../trmrk/DotNetTypes/Turmerik.Core.FileManager.DriveEntry';
 
-import { AppDriveStorageOption, StorageUserIdnf } from './driveStorageOption';
+import { AppDriveStorageOption, StorageUserIdnf } from '../driveStorageOption';
+import { NullOrUndef } from '../../../../trmrk/core';
 
 export interface ITrmrkFileManagerServiceCore {
   readPrIdnfs: (idnfsArr: string[]) => Promise<DriveEntryCore[]>;
@@ -34,14 +35,17 @@ export interface ITrmrkFileManagerServiceCore {
   ) => Promise<DriveEntryCore[]>;
 }
 
+export interface TrmrkFileManagerServiceSetupArgs<TRootFolder> {
+  currentStorageOption: AppDriveStorageOption<TRootFolder>;
+  currentStorageUserIdnf: StorageUserIdnf | NullOrUndef;
+}
+
 @Injectable()
 export abstract class TrmrkFileManagerServiceBase<TRootFolder>
   implements OnDestroy, Disposable, TrmrkDisaposable, ITrmrkFileManagerServiceCore
 {
-  constructor(
-    protected currentStorageOption: AppDriveStorageOption<TRootFolder>,
-    protected currentStorageUserIdnf: StorageUserIdnf
-  ) {}
+  protected currentStorageOption!: AppDriveStorageOption<TRootFolder>;
+  protected currentStorageUserIdnf: StorageUserIdnf | NullOrUndef;
 
   ngOnDestroy(): void {
     this.dispose();
@@ -55,6 +59,14 @@ export abstract class TrmrkFileManagerServiceBase<TRootFolder>
     this.currentStorageOption = null!;
     this.currentStorageUserIdnf = null!;
   }
+
+  async setup(args: TrmrkFileManagerServiceSetupArgs<TRootFolder>) {
+    this.currentStorageOption = args.currentStorageOption;
+    this.currentStorageUserIdnf = args.currentStorageUserIdnf;
+    await this.setupCore();
+  }
+
+  abstract setupCore(): Promise<void>;
 
   abstract readPrIdnfs(idnfsArr: string[]): Promise<DriveEntryCore[]>;
 

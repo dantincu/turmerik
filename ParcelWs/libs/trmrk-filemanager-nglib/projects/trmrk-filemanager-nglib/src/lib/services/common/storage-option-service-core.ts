@@ -17,13 +17,19 @@ import { TrmrkObservable } from '../../../trmrk-angular/services/common/TrmrkObs
 
 import { IndexedDbDatabasesServiceCore } from '../../../trmrk-angular/services/common/indexedDb/indexed-db-databases-service-core';
 import { appSettingsChoiceKeys } from './indexedDb/core';
-import { AppDriveStorageOption } from './driveStorageOption';
+import { AppDriveStorageOption, StorageUserIdnf } from './driveStorageOption';
+
+export interface StorageOptionWrapperSrlzbl {
+  option: AppDriveStorageOption;
+  userIdnf: StorageUserIdnf;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class StorageOptionServiceCore implements OnDestroy {
   public currentStorageOption = new TrmrkObservable<AppDriveStorageOption | null>(null);
+  public currentUserIdnf = new TrmrkObservable<StorageUserIdnf | null>(null);
 
   private sharedBasicAppSettingsDbAdapter: SharedBasicAppSettingsDbAdapter;
   private basicAppSettingsDbAdapter: BasicAppSettingsDbAdapter;
@@ -57,21 +63,28 @@ export class StorageOptionServiceCore implements OnDestroy {
   }
 
   loadCurrentFromIndexedDb(sessionId?: string | NullOrUndef) {
-    return new Promise<AppDriveStorageOption | null>((resolve, reject) => {
+    return new Promise<StorageOptionWrapperSrlzbl | null>((resolve, reject) => {
       const basicAppSettingsDbAdapter = this.getBasicAppSettingsDbAdapter(sessionId);
 
       basicAppSettingsDbAdapter.open(
         (_, db) => {
           dbRequestToPromise<
-            | SharedAppSettingsChoice<AppDriveStorageOption>
-            | AppSettingsChoice<AppDriveStorageOption>
+            | SharedAppSettingsChoice<StorageOptionWrapperSrlzbl>
+            | AppSettingsChoice<StorageOptionWrapperSrlzbl>
           >(
             basicAppSettingsDbAdapter.stores.choices.store(db).get(this.getKeyPath(sessionId))
           ).then((dbResponse) => {
             const choice = dbResponse.value;
 
             if (choice) {
-              this.currentStorageOption.next(choice.value);
+              this.currentStorageOption.next(choice.value.option);
+
+              this.currentUserIdnf.next(
+                choice.value.userIdnf,
+                true,
+                (prev, next) => (prev ?? null) !== (next ?? null)
+              );
+
               this.appStateService.hasBeenSetUp.next(true, true);
               resolve(choice.value);
             } else {
@@ -129,8 +142,11 @@ export class StorageOptionServiceCore implements OnDestroy {
     const appSettingsChoice = {
       catKey: this.choiceCatKey,
       key: this.choiceKey,
-      value: this.currentStorageOption.value,
-    } as AppSettingsChoice;
+      value: {
+        option: this.currentStorageOption.value,
+        userIdnf: this.currentUserIdnf.value,
+      },
+    } as AppSettingsChoice<StorageOptionWrapperSrlzbl>;
 
     if ((sessionId ?? null) !== null) {
       appSettingsChoice.sessionId = sessionId!;
