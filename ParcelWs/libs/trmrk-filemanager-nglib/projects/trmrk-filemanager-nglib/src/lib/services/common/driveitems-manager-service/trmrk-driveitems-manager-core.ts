@@ -5,11 +5,11 @@ import { AppDriveStorageOption, StorageUserIdnf } from '../driveStorageOption';
 
 export interface DriveItemsManagerCore<TRootFolder, TDriveItem, TTextFile> {
   setup: (args: TrmrkDriveItemsManagerSetupArgsCore<TRootFolder>) => Promise<void>;
-  readPrIdnfs: (idnfsArr: string[]) => Promise<TDriveItem[]>;
-  readNames: (idnfsArr: string[]) => Promise<TDriveItem[]>;
-  readFileSizes: (idnfsArr: string[]) => Promise<TDriveItem[]>;
-  readTimeStamps: (idnfsArr: string[]) => Promise<TDriveItem[]>;
-  readFileTextContents: (idnfsArr: string[]) => Promise<TTextFile[]>;
+  readPrIdnfs: (idnfsArr: string[], forceRefresh: boolean) => Promise<TDriveItem[]>;
+  readNames: (idnfsArr: string[], forceRefresh: boolean) => Promise<TDriveItem[]>;
+  readFileSizes: (idnfsArr: string[], forceRefresh: boolean) => Promise<TDriveItem[]>;
+  readTimeStamps: (idnfsArr: string[], forceRefresh: boolean) => Promise<TDriveItem[]>;
+  readFileTextContents: (idnfsArr: string[], forceRefresh: boolean) => Promise<TTextFile[]>;
   copyEntries: (
     foldersArr: TDriveItem[],
     filesArr: TDriveItem[],

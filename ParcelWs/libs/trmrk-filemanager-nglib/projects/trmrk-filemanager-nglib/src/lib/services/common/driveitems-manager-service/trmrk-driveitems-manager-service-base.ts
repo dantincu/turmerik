@@ -26,16 +26,29 @@ export abstract class TrmrkDriveItemsManagerServiceBase<
 
   abstract setup(args: TrmrkDriveItemsManagerSetupArgsCore<TRootFolder>): Promise<void>;
 
-  abstract readPrIdnfs(idnfsArr: string[]): Promise<DriveItem<TDriveItemType>[]>;
+  abstract readPrIdnfs(
+    idnfsArr: string[],
+    forceRefresh: boolean
+  ): Promise<DriveItem<TDriveItemType>[]>;
 
-  abstract readNames(idnfsArr: string[]): Promise<DriveItem<TDriveItemType>[]>;
+  abstract readNames(
+    idnfsArr: string[],
+    forceRefresh: boolean
+  ): Promise<DriveItem<TDriveItemType>[]>;
 
-  abstract readFileSizes(idnfsArr: string[]): Promise<DriveItem<TDriveItemType>[]>;
+  abstract readFileSizes(
+    idnfsArr: string[],
+    forceRefresh: boolean
+  ): Promise<DriveItem<TDriveItemType>[]>;
 
-  abstract readTimeStamps(idnfsArr: string[]): Promise<DriveItem<TDriveItemType>[]>;
+  abstract readTimeStamps(
+    idnfsArr: string[],
+    forceRefresh: boolean
+  ): Promise<DriveItem<TDriveItemType>[]>;
 
   abstract readFileTextContents(
-    idnfsArr: string[]
+    idnfsArr: string[],
+    forceRefresh: boolean
   ): Promise<DriveItem<TDriveItemType, FileTextContentsDataCore>[]>;
 
   abstract copyEntries(

@@ -49,15 +49,18 @@ export abstract class TrmrkFileManagerServiceBase<TRootFolder>
 
   abstract setupCore(): Promise<void>;
 
-  abstract readPrIdnfs(idnfsArr: string[]): Promise<DriveEntryCore[]>;
+  abstract readPrIdnfs(idnfsArr: string[], forceRefresh: boolean): Promise<DriveEntryCore[]>;
 
-  abstract readNames(idnfsArr: string[]): Promise<DriveEntryCore[]>;
+  abstract readNames(idnfsArr: string[], forceRefresh: boolean): Promise<DriveEntryCore[]>;
 
-  abstract readFileSizes(idnfsArr: string[]): Promise<DriveEntryCore[]>;
+  abstract readFileSizes(idnfsArr: string[], forceRefresh: boolean): Promise<DriveEntryCore[]>;
 
-  abstract readTimeStamps(idnfsArr: string[]): Promise<DriveEntryCore[]>;
+  abstract readTimeStamps(idnfsArr: string[], forceRefresh: boolean): Promise<DriveEntryCore[]>;
 
-  abstract readFileTextContents(idnfsArr: string[]): Promise<DriveEntry<string>[]>;
+  abstract readFileTextContents(
+    idnfsArr: string[],
+    forceRefresh: boolean
+  ): Promise<DriveEntry<string>[]>;
 
   abstract copyEntries(
     foldersArr: DriveEntryCore[],

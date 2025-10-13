@@ -31,8 +31,11 @@ export class DefaultDriveItemsManagerService<
     return this.fileManagerService.setup(args);
   }
 
-  async readPrIdnfs(idnfsArr: string[]): Promise<DriveItem<DriveItemTypeCore>[]> {
-    const fsEntriesArr = await this.fileManagerService.readPrIdnfs(idnfsArr);
+  async readPrIdnfs(
+    idnfsArr: string[],
+    forceRefresh: boolean = false
+  ): Promise<DriveItem<DriveItemTypeCore>[]> {
+    const fsEntriesArr = await this.fileManagerService.readPrIdnfs(idnfsArr, forceRefresh);
 
     const driveItemsArr = fsEntriesArr.map(
       (entry) => ({ ...entry } as DriveItem<DriveItemTypeCore>)
@@ -41,8 +44,11 @@ export class DefaultDriveItemsManagerService<
     return driveItemsArr;
   }
 
-  async readNames(idnfsArr: string[]): Promise<DriveItem<DriveItemTypeCore>[]> {
-    const fsEntriesArr = await this.fileManagerService.readNames(idnfsArr);
+  async readNames(
+    idnfsArr: string[],
+    forceRefresh: boolean = false
+  ): Promise<DriveItem<DriveItemTypeCore>[]> {
+    const fsEntriesArr = await this.fileManagerService.readNames(idnfsArr, forceRefresh);
 
     const driveItemsArr = fsEntriesArr.map(
       (entry) => ({ ...entry } as DriveItem<DriveItemTypeCore>)
@@ -51,8 +57,11 @@ export class DefaultDriveItemsManagerService<
     return driveItemsArr;
   }
 
-  async readFileSizes(idnfsArr: string[]): Promise<DriveItem<DriveItemTypeCore>[]> {
-    const fsEntriesArr = await this.fileManagerService.readFileSizes(idnfsArr);
+  async readFileSizes(
+    idnfsArr: string[],
+    forceRefresh: boolean = false
+  ): Promise<DriveItem<DriveItemTypeCore>[]> {
+    const fsEntriesArr = await this.fileManagerService.readFileSizes(idnfsArr, forceRefresh);
 
     const driveItemsArr = fsEntriesArr.map(
       (entry) => ({ ...entry } as DriveItem<DriveItemTypeCore>)
@@ -61,8 +70,11 @@ export class DefaultDriveItemsManagerService<
     return driveItemsArr;
   }
 
-  async readTimeStamps(idnfsArr: string[]): Promise<DriveItem<DriveItemTypeCore>[]> {
-    const fsEntriesArr = await this.fileManagerService.readTimeStamps(idnfsArr);
+  async readTimeStamps(
+    idnfsArr: string[],
+    forceRefresh: boolean = false
+  ): Promise<DriveItem<DriveItemTypeCore>[]> {
+    const fsEntriesArr = await this.fileManagerService.readTimeStamps(idnfsArr, forceRefresh);
 
     const driveItemsArr = fsEntriesArr.map(
       (entry) => ({ ...entry } as DriveItem<DriveItemTypeCore>)
@@ -72,9 +84,13 @@ export class DefaultDriveItemsManagerService<
   }
 
   async readFileTextContents(
-    idnfsArr: string[]
+    idnfsArr: string[],
+    forceRefresh: boolean = false
   ): Promise<DriveItem<DriveItemTypeCore, FileTextContentsDataCore>[]> {
-    const fileTextContentsArr = await this.fileManagerService.readFileTextContents(idnfsArr);
+    const fileTextContentsArr = await this.fileManagerService.readFileTextContents(
+      idnfsArr,
+      forceRefresh
+    );
 
     const driveItemsArr = fileTextContentsArr.map(
       (entry) => ({ ...entry } as unknown as DriveItem<DriveItemTypeCore, FileTextContentsDataCore>)

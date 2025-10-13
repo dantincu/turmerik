@@ -13,23 +13,35 @@ import {
 export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServiceBase<FileSystemDirectoryHandle> {
   async setupCore() {}
 
-  override readPrIdnfs(idnfsArr: string[]): Promise<DriveEntryCore[]> {
+  override readPrIdnfs(
+    idnfsArr: string[],
+    forceRefresh: boolean = false
+  ): Promise<DriveEntryCore[]> {
     throw new Error('Method not implemented.');
   }
 
-  override readNames(idnfsArr: string[]): Promise<DriveEntryCore[]> {
+  override readNames(idnfsArr: string[], forceRefresh: boolean = false): Promise<DriveEntryCore[]> {
     throw new Error('Method not implemented.');
   }
 
-  override readFileSizes(idnfsArr: string[]): Promise<DriveEntryCore[]> {
+  override readFileSizes(
+    idnfsArr: string[],
+    forceRefresh: boolean = false
+  ): Promise<DriveEntryCore[]> {
     throw new Error('Method not implemented.');
   }
 
-  override readTimeStamps(idnfsArr: string[]): Promise<DriveEntryCore[]> {
+  override readTimeStamps(
+    idnfsArr: string[],
+    forceRefresh: boolean = false
+  ): Promise<DriveEntryCore[]> {
     throw new Error('Method not implemented.');
   }
 
-  override readFileTextContents(idnfsArr: string[]): Promise<DriveEntry<string>[]> {
+  override readFileTextContents(
+    idnfsArr: string[],
+    forceRefresh: boolean = false
+  ): Promise<DriveEntry<string>[]> {
     throw new Error('Method not implemented.');
   }
 
