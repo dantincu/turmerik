@@ -35,7 +35,9 @@ export class TrmrkFolderViewService implements OnDestroy {
     await this.fileManagerService.setup(args.fileManagerServiceArgs);
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.fileManagerService.dispose();
+  }
 
   runAppSetupClicked() {
     this.appStateService.performAppSetup.next(true, true);

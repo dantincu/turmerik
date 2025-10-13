@@ -62,6 +62,7 @@ export abstract class AppStateServiceBase {
   currentModalId = new TrmrkObservable<number>(0);
   hasBeenSetUp = new TrmrkObservable<boolean>(false);
   performAppSetup = new TrmrkObservable<boolean>(false);
+  currentBrowserTabId = new TrmrkObservable<string>(null!);
 
   defaults = getAppDefaultValues();
 

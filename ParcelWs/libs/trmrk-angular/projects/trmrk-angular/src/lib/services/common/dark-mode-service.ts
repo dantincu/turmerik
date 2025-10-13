@@ -60,11 +60,11 @@ export class DarkModeService {
 
   darkModeStateChange(isDarkModeValue: boolean) {
     document.body.classList.remove(
-      isDarkModeValue ? appThemeCssClasses.light : appThemeCssClasses.dark
+      isDarkModeValue ? appThemeCssClasses.trmrkAppThemeLight : appThemeCssClasses.trmrkAppThemeDark
     );
 
     document.body.classList.add(
-      isDarkModeValue ? appThemeCssClasses.dark : appThemeCssClasses.light
+      isDarkModeValue ? appThemeCssClasses.trmrkAppThemeDark : appThemeCssClasses.trmrkAppThemeLight
     );
   }
 

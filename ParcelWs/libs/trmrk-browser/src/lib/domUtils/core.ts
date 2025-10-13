@@ -1,4 +1,5 @@
 import trmrk from '../../trmrk';
+import { mapPropNamesToThemselves, PropNameWordsConvention } from '../../trmrk/propNames';
 
 import { MtblRefValue, jsonBool, actWithIf, NullOrUndef } from '../../trmrk/core';
 
@@ -6,32 +7,45 @@ export const supportedFeatures = {
   fileSystemApi: !!(window as any).showDirectoryPicker,
 };
 
-export const localStorageKeys = Object.freeze({
-  appThemeIsDarkMode: 'appThemeIsDarkMode',
-  appIsCompactMode: 'appIsCompactMode',
-  textCaretPositionerOpts: 'textCaretPositionerOpts',
-});
+export const localStorageKeys = Object.freeze(
+  mapPropNamesToThemselves({
+    appThemeIsDarkMode: '',
+    appIsCompactMode: '',
+    textCaretPositionerOpts: '',
+    currentBrowserTabId: '',
+  })
+);
 
-export const appModeCssClasses = Object.freeze({
-  compactMode: 'trmrk-app-mode-compact',
-  fullMode: 'trmrk-app-mode-full',
-});
+export const appModeCssClasses = Object.freeze(
+  mapPropNamesToThemselves({
+    trmrkAppModeCompact: '',
+    trmrkAppModeFull: '',
+  })
+);
 
-export const appThemeCssClasses = Object.freeze({
-  dark: 'trmrk-app-theme-dark',
-  light: 'trmrk-app-theme-light',
-});
+export const appThemeCssClasses = Object.freeze(
+  mapPropNamesToThemselves(
+    {
+      trmrkAppThemeDark: '',
+      trmrkAppThemeLight: '',
+    },
+    PropNameWordsConvention.KebabCase,
+    PropNameWordsConvention.CamelCase
+  )
+);
 
 export const getAppModeCssClassName = (isCompactMode: boolean) => {
   const appModeClassName = isCompactMode
-    ? appModeCssClasses.compactMode
-    : appModeCssClasses.fullMode;
+    ? appModeCssClasses.trmrkAppModeCompact
+    : appModeCssClasses.trmrkAppModeFull;
 
   return appModeClassName;
 };
 
 export const getAppThemeCssClassName = (isDarkMode: boolean) => {
-  const appThemeClassName = isDarkMode ? appThemeCssClasses.dark : appThemeCssClasses.light;
+  const appThemeClassName = isDarkMode
+    ? appThemeCssClasses.trmrkAppThemeDark
+    : appThemeCssClasses.trmrkAppThemeLight;
 
   return appThemeClassName;
 };

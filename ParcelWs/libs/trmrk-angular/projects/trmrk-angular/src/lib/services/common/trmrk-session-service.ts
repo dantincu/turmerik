@@ -13,6 +13,7 @@ import { TrmrkStrIdGeneratorBase } from './trmrk-str-id-generator-base';
 
 export const urlQueryKeys = mapPropNamesToThemselves(
   {
+    browserTabId: '',
     tabId: '',
     sessionId: '',
     userIdnf: '',

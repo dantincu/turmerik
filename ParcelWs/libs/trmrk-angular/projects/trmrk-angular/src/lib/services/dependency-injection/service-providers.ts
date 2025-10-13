@@ -15,7 +15,7 @@ import { provideHttpClient, HttpClient } from '@angular/common/http';
 
 import { MatDialogModule } from '@angular/material/dialog';
 
-import { NullOrUndef, withVal } from '../../../trmrk/core';
+import { NullOrUndef, withVal, RefLazyValue } from '../../../trmrk/core';
 import { normalizeAppConfigCore } from '../../../trmrk/app-config';
 import { AsyncRequestStateManagerFactory } from '../../../trmrk/AsyncRequestStateManager';
 
@@ -29,6 +29,8 @@ import { NgAppConfigCore } from '../common/app-config';
 import { DarkModeService } from '../common/dark-mode-service';
 import { TrmrkObservable } from '../common/TrmrkObservable';
 import { TrmrkSessionService } from '../common/trmrk-session-service';
+import { TrmrkBrowserTabIdServiceBase } from '../common/trmrk-browser-tab-id-service-base';
+import { TrmrkDefaultBrowserTabIdService } from '../common/trmrk-default-browser-tab-id-service';
 
 import { injectionTokens } from './injection-tokens';
 
@@ -50,6 +52,7 @@ export interface GetCommonServiceProviderOpts<
   appServiceType?: Type<any> | NullOrUndef;
   appStateServiceType?: Type<any> | NullOrUndef;
   defaultStrIdGenerator?: boolean | NullOrUndef;
+  defaultBrowserTabIdService?: boolean | NullOrUndef;
   asyncRequestStateManagerFactory?: boolean | NullOrUndef;
   intIdServiceFactory?: boolean | NullOrUndef;
   darkModeAppInitializer?: boolean | NullOrUndef;
@@ -129,6 +132,12 @@ export const getSessionServiceAppInitializer = () =>
     await service.assureSessionIsSet();
   });
 
+export const getBrowserTabIdAppInitializer = () =>
+  provideAppInitializer(() => {
+    const browserTabIdService = inject(TrmrkBrowserTabIdServiceBase);
+    browserTabIdService.init();
+  });
+
 export const getServiceProviders = <TAppConfig extends NgAppConfigCore = NgAppConfigCore>(
   args: GetCommonServiceProvidersArgs<TAppConfig>
 ) => {
@@ -184,6 +193,31 @@ export const getServiceProviders = <TAppConfig extends NgAppConfigCore = NgAppCo
           useValue: defaultStrIdGenerator,
         }))
       : null,
+
+    ...(opts.defaultBrowserTabIdService ?? includeAllByDefault
+      ? [
+          withVal(
+            new RefLazyValue(() => {
+              const appStateService = inject(AppStateServiceBase);
+              const strIdGenerator = inject(TrmrkStrIdGeneratorBase);
+              const appName = args.appName;
+
+              const defaultBrowserTabIdService = new TrmrkDefaultBrowserTabIdService(
+                appStateService,
+                appName,
+                strIdGenerator
+              );
+
+              return defaultBrowserTabIdService;
+            }),
+            (lazy) => ({
+              provide: TrmrkBrowserTabIdServiceBase,
+              useFactory: () => lazy.value,
+            })
+          ),
+          getBrowserTabIdAppInitializer(),
+        ]
+      : []),
 
     opts.sessionServiceAppInitializer ?? includeAllByDefault
       ? getSessionServiceAppInitializer()
