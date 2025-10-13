@@ -3,7 +3,8 @@ import { NullOrUndef } from '../../../../trmrk/core';
 
 import { AppDriveStorageOption, StorageUserIdnf } from '../driveStorageOption';
 
-export interface DriveItemsManagerCore<TDriveItem, TTextFile> {
+export interface DriveItemsManagerCore<TRootFolder, TDriveItem, TTextFile> {
+  setup: (args: TrmrkDriveItemsManagerSetupArgsCore<TRootFolder>) => Promise<void>;
   readPrIdnfs: (idnfsArr: string[]) => Promise<TDriveItem[]>;
   readNames: (idnfsArr: string[]) => Promise<TDriveItem[]>;
   readFileSizes: (idnfsArr: string[]) => Promise<TDriveItem[]>;
@@ -20,7 +21,7 @@ export interface DriveItemsManagerCore<TDriveItem, TTextFile> {
     overwrite: boolean
   ) => Promise<void>;
   deleteEntries: (foldersArr: TDriveItem[], filesArr: TDriveItem[]) => Promise<void>;
-  writeFileTextContents: (filesArr: TDriveItem[], overwrite: boolean) => Promise<TDriveItem[]>;
+  writeFileTextContents: (filesArr: TTextFile[], overwrite: boolean) => Promise<TDriveItem[]>;
 }
 
 export interface TrmrkDriveItemsManagerSetupArgsCore<TRootFolder> {

@@ -1,14 +1,19 @@
 import { ApplicationConfig, inject, provideAppInitializer } from '@angular/core';
 
-import { AppSession } from '../trmrk-browser/indexedDB/databases/AppSessions';
-
 import { getServiceProviders } from '../trmrk-angular/services/dependency-injection/service-providers';
-import {
-  runOnceWhenValueIs,
-  TrmrkObservable,
-} from '../trmrk-angular/services/common/TrmrkObservable';
+import { runOnceWhenValueIs } from '../trmrk-angular/services/common/TrmrkObservable';
 import { TrmrkSessionService } from '../trmrk-angular/services/common/trmrk-session-service';
 import { StorageOptionServiceCore } from '../trmrk-filemanager-nglib/services/common/storage-option-service-core';
+
+import {
+  TrmrkDriveItemsManagerServiceFactory,
+  TrmrkDriveItemsManagerServiceFactoryBase,
+} from '../trmrk-filemanager-nglib/services/common/driveitems-manager-service/trmrk-driveitems-manager-service-factory';
+
+import {
+  TrmrkFileManagerServiceFactory,
+  TrmrkFileManagerServiceFactoryBase,
+} from '../trmrk-filemanager-nglib/services/common/filemanager-service/trmrk-filemanager-service-factory';
 
 import { APP_NAME } from './services/common/core';
 import { environment } from '../environments/environment';
@@ -55,6 +60,14 @@ export const appConfig: ApplicationConfig = {
           appSessionService.currentSession.value.sessionId
         );
       }),
+      {
+        provide: TrmrkDriveItemsManagerServiceFactoryBase,
+        useClass: TrmrkDriveItemsManagerServiceFactory,
+      },
+      {
+        provide: TrmrkFileManagerServiceFactoryBase,
+        useClass: TrmrkFileManagerServiceFactory,
+      },
     ],
   }),
 };

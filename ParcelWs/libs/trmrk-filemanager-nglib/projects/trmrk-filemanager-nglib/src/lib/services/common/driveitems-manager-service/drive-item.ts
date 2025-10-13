@@ -8,20 +8,18 @@ export enum DriveItemTypeCore {
 }
 
 export interface FileTextContentsDataCore {
-  contents: string;
+  content: string;
 }
 
 export interface DriveItemCore<
   TDriveItem extends DriveItemCore<TDriveItem, TDriveItemType>,
-  TDriveItemType extends DriveItemTypeCore = DriveItemTypeCore
+  TDriveItemType = DriveItemTypeCore
 > extends DriveEntryCore {
   itemType: TDriveItemType;
   childItems?: TDriveItem[] | NullOrUndef;
 }
 
-export interface DriveItem<
-  TDriveItemType extends DriveItemTypeCore = DriveItemTypeCore,
-  TData = any
-> extends DriveItemCore<DriveItem<TDriveItemType>, TDriveItemType> {
+export interface DriveItem<TDriveItemType = DriveItemTypeCore, TData = any>
+  extends DriveItemCore<DriveItem<TDriveItemType>, TDriveItemType> {
   data: TData;
 }

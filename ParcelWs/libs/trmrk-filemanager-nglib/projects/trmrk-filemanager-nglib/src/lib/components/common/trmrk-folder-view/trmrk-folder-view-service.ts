@@ -1,45 +1,22 @@
 import { Injectable, OnDestroy } from '@angular/core';
 
-import { NullOrUndef } from '../../../../trmrk/core';
-import { AppStateServiceBase } from '../../../../trmrk-angular/services/common/app-state-service-base';
-import { TrmrkFileManagerServiceFactory } from '../../../services/common/filemanager-service/trmrk-filemanager-service-factory';
-import {
-  TrmrkFileManagerServiceBase,
-  TrmrkFileManagerServiceSetupArgs,
-} from '../../../services/common/filemanager-service/trmrk-filemanager-service-base';
+import { StorageOptionServiceCore } from '../../../services/common/storage-option-service-core';
 
-export interface TrmrkFolderViewServiceSetupArgs<TRootFolder> {
-  fileManagerServiceArgs: TrmrkFileManagerServiceSetupArgs<TRootFolder>;
-}
+import { TrmrkDriveItemsViewService } from '../trmrk-drive-items-view/trmrk-drive-items-view-service';
 
 @Injectable()
 export class TrmrkFolderViewService implements OnDestroy {
-  public fileManagerService!: TrmrkFileManagerServiceBase<any>;
-
-  errorTitle: string | null = null;
-  errorMessage: string | null = null;
-  hasError = false;
-  showAppSetupLink = false;
-  isLoading = false;
-
   constructor(
-    public appStateService: AppStateServiceBase,
-    private fileManagerServiceFactory: TrmrkFileManagerServiceFactory
+    private storageOptionService: StorageOptionServiceCore,
+    private driveItemsViewService: TrmrkDriveItemsViewService
   ) {}
 
-  async setup<TRootFolder>(args: TrmrkFolderViewServiceSetupArgs<TRootFolder>) {
-    this.fileManagerService = this.fileManagerServiceFactory.create(
-      args.fileManagerServiceArgs.currentStorageOption
-    );
+  ngOnDestroy(): void {}
 
-    await this.fileManagerService.setup(args.fileManagerServiceArgs);
-  }
-
-  ngOnDestroy(): void {
-    this.fileManagerService.dispose();
-  }
-
-  runAppSetupClicked() {
-    this.appStateService.performAppSetup.next(true, true);
+  setup() {
+    return this.driveItemsViewService.setup({
+      currentStorageOption: this.storageOptionService.currentStorageOption.value!,
+      currentStorageUserIdnf: this.storageOptionService.currentUserIdnf.value,
+    });
   }
 }

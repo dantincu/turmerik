@@ -16,17 +16,14 @@ import { AppDriveStorageOption, StorageUserIdnf } from '../driveStorageOption';
 import {
   DriveItemsManagerCore,
   TrmrkDriveItemsManagerSetupArgsCore,
-} from '../driveitems-manager-service/driveitems-manager-core';
+} from '../driveitems-manager-service/trmrk-driveitems-manager-core';
 
-export interface ITrmrkFileManagerServiceCore
-  extends DriveItemsManagerCore<DriveEntryCore, DriveEntry<string>> {}
-
-export interface TrmrkFileManagerServiceSetupArgs<TRootFolder>
-  extends TrmrkDriveItemsManagerSetupArgsCore<TRootFolder> {}
+export interface TrmrkFileManagerServiceCore<TRootFolder>
+  extends DriveItemsManagerCore<TRootFolder, DriveEntryCore, DriveEntry<string>> {}
 
 @Injectable()
 export abstract class TrmrkFileManagerServiceBase<TRootFolder>
-  implements OnDestroy, Disposable, TrmrkDisaposable, ITrmrkFileManagerServiceCore
+  implements OnDestroy, Disposable, TrmrkDisaposable, TrmrkFileManagerServiceCore<TRootFolder>
 {
   public currentStorageOption!: AppDriveStorageOption<TRootFolder>;
   public currentStorageUserIdnf: StorageUserIdnf | NullOrUndef;
@@ -44,7 +41,7 @@ export abstract class TrmrkFileManagerServiceBase<TRootFolder>
     this.currentStorageUserIdnf = null!;
   }
 
-  async setup(args: TrmrkFileManagerServiceSetupArgs<TRootFolder>) {
+  async setup(args: TrmrkDriveItemsManagerSetupArgsCore<TRootFolder>) {
     this.currentStorageOption = args.currentStorageOption;
     this.currentStorageUserIdnf = args.currentStorageUserIdnf;
     await this.setupCore();
@@ -77,7 +74,7 @@ export abstract class TrmrkFileManagerServiceBase<TRootFolder>
   abstract deleteEntries(foldersArr: DriveEntryCore[], filesArr: DriveEntryCore[]): Promise<void>;
 
   abstract writeFileTextContents(
-    filesArr: DriveEntryCore[],
+    filesArr: DriveEntry<string>[],
     overwrite: boolean
   ): Promise<DriveEntryCore[]>;
 }
