@@ -69,6 +69,27 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirsPairCfg
         {
             var config = programConfig.Data;
 
+            var list = new List<string>();
+
+            foreach (var chunkKvp in config.ChunksMap)
+            {
+                list.AddRange(chunkKvp.Value.Map.Keys);
+            }
+
+            var distinctList = list.Distinct().ToList();
+
+            if (list.Count != distinctList.Count)
+            {
+                foreach (var key in distinctList)
+                {
+                    list.Remove(key);
+                }
+
+                string conflictingKeysStr = string.Join(", ", list);
+
+                throw new TrmrkException($"There are conflicting macro keys: {conflictingKeysStr}");
+            }
+
             foreach (var chunkKvp in config.ChunksMap)
             {
                 Run(pgArgs, chunkKvp.Key, chunkKvp.Value.Map);

@@ -15,8 +15,7 @@
       "displayName": "Browser's File System Api",
       "description": "needs access to a folder on your device",
       "storageType": 1,
-      "itemIdnfIsPath": true,
-      "cacheValidIntervalMillis": 0
+      "itemIdnfIsPath": true
     }
   ]
 }

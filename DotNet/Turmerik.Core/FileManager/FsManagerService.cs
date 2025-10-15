@@ -21,6 +21,33 @@ namespace Turmerik.Core.FileManager
                 nameof(fsManagerGuard));
         }
 
+        public async Task<DriveEntryCore[]> ReadPathIdnfsAsync(
+            DriveEntryCore[] itemsArr)
+        {
+            ValidatePaths(itemsArr.Select(item => item.Idnf!).NotNull().ToArray(), true);
+
+            for (int i = 0; i < itemsArr.Length; i++)
+            {
+                var item = itemsArr[i];
+
+                if (item.Idnf == null)
+                {
+                    if (i == 0)
+                    {
+                        item.Idnf = item.Name;
+                    }
+                    else
+                    {
+                        item.Idnf = Path.Combine(
+                            itemsArr[i - 1].Idnf,
+                            item.Name);
+                    }
+                }
+            }
+
+            return itemsArr;
+        }
+
         public async Task<DriveEntryCore[]> ReadPrIdnfsAsync(
             string[] idnfsArr)
         {
@@ -35,10 +62,36 @@ namespace Turmerik.Core.FileManager
             return retArr;
         }
 
+        public async Task<DriveEntryCore[][]> ReadSubFolderIdnfsAsync(
+            string[] idnfsArr)
+        {
+            idnfsArr = ValidatePaths(idnfsArr, true);
+
+            var retMx = idnfsArr.Select(idnf => Directory.GetDirectories(idnf).Select(dir => new DriveEntryCore
+            {
+                Name = Path.GetFileName(dir),
+            }).ToArray()).ToArray();
+
+            return retMx;
+        }
+
+        public async Task<DriveEntryCore[][]> ReadFolderFileIdnfsAsync(
+            string[] idnfsArr)
+        {
+            idnfsArr = ValidatePaths(idnfsArr, true);
+
+            var retMx = idnfsArr.Select(idnf => Directory.GetFiles(idnf).Select(dir => new DriveEntryCore
+            {
+                Name = Path.GetFileName(dir),
+            }).ToArray()).ToArray();
+
+            return retMx;
+        }
+
         public async Task<DriveEntryCore[]> ReadNamesAsync(
             string[] idnfsArr)
         {
-            idnfsArr = ValidatePaths(idnfsArr, false);
+            idnfsArr = ValidatePaths(idnfsArr, true);
 
             var retArr = idnfsArr.Select(idnf => new DriveEntryCore
             {
@@ -52,7 +105,7 @@ namespace Turmerik.Core.FileManager
         public async Task<DriveEntryCore[]> ReadFileSizesAsync(
             string[] idnfsArr)
         {
-            idnfsArr = ValidatePaths(idnfsArr, false);
+            idnfsArr = ValidatePaths(idnfsArr, true);
 
             var retArr = idnfsArr.Select(idnf => new DriveEntryCore
             {
@@ -67,7 +120,7 @@ namespace Turmerik.Core.FileManager
             string[] idnfsArr,
             bool returnMillis = false)
         {
-            idnfsArr = ValidatePaths(idnfsArr, false);
+            idnfsArr = ValidatePaths(idnfsArr, true);
 
             var retArr = idnfsArr.Select(idnf => new FileInfo(
                 idnf).With(fileInfo => GetTimeStampsCore(
@@ -82,7 +135,7 @@ namespace Turmerik.Core.FileManager
         public async Task<DriveEntry<string>[]> ReadFileTextContentsAsync(
             string[] idnfsArr)
         {
-            idnfsArr = ValidatePaths(idnfsArr, false);
+            idnfsArr = ValidatePaths(idnfsArr, true);
 
             var retArr = idnfsArr.Select(idnf => new DriveEntry<string>
             {
@@ -96,7 +149,7 @@ namespace Turmerik.Core.FileManager
         public async Task ReadFileRawContentsAsync(
             DriveEntry<Func<Stream, Task>>[] entriesArr)
         {
-            ValidatePaths(entriesArr.Select(item => item.Idnf!), false);
+            ValidatePaths(entriesArr.Select(item => item.Idnf!), true);
 
             foreach (var entry in entriesArr)
             {
@@ -154,10 +207,10 @@ namespace Turmerik.Core.FileManager
             DriveEntryCore[] filesArr)
         {
             var fileIdnfsArr = ValidatePaths(
-                filesArr.Select(entry => entry.Idnf!), false, false);
+                filesArr.Select(entry => entry.Idnf!), true, false);
 
             var folderIdnfsArr = ValidatePaths(
-                foldersArr.Select(entry => entry.Idnf!), false, true);
+                foldersArr.Select(entry => entry.Idnf!), true, true);
 
             folderIdnfsArr.ForEach((folderIdnf, idx, @break) => Directory.Delete(folderIdnf, true));
             fileIdnfsArr.ForEach((fileIdnf, idx, @break) => File.Delete(fileIdnf));
@@ -167,7 +220,7 @@ namespace Turmerik.Core.FileManager
             DriveEntry<string>[] entriesArr,
             bool overWrite = false)
         {
-            var idnfsArr = ExtractPaths(entriesArr, overWrite, false);
+            var idnfsArr = ExtractPaths(entriesArr, overWrite, true);
             idnfsArr.ForEach((idnf, idx, @break) => File.WriteAllText(idnf, entriesArr[idx].Content));
 
             var retArr = entriesArr.Select((entry, idx) => new DriveEntryCore
@@ -184,7 +237,7 @@ namespace Turmerik.Core.FileManager
             DriveEntry<Func<Stream, Task>>[] entriesArr,
             bool overWrite = false)
         {
-            var idnfsArr = ExtractPaths(entriesArr, overWrite, false);
+            var idnfsArr = ExtractPaths(entriesArr, overWrite, true);
 
             for (int i = 0; i < entriesArr.Length; i++)
             {

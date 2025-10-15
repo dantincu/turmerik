@@ -18,7 +18,7 @@ import { TrmrkDialog } from '../../../../trmrk-angular/components/common/trmrk-d
 import { ModalService } from '../../../../trmrk-angular/services/common/modal-service';
 import { ModalServiceFactory } from '../../../../trmrk-angular/services/common/modal-service-factory';
 import { TrmrkObservable } from '../../../../trmrk-angular/services/common/TrmrkObservable';
-import { TimeStampGenerator } from '../../../../trmrk-angular/services/common/timestamp-generator';
+import { TimeStampGeneratorBase } from '../../../../trmrk-angular/services/common/timestamp-generator-base';
 
 import {
   TrmrkDialogData,
@@ -68,7 +68,7 @@ export class TrmrkAppSetupModal implements OnDestroy {
     private modalServiceFactory: ModalServiceFactory,
     private hostEl: ElementRef,
     @Inject(injectionTokens.appConfig.token) appConfig: TrmrkObservable<AppConfig>,
-    private timeStampGenerator: TimeStampGenerator
+    private timeStampGenerator: TimeStampGeneratorBase
   ) {
     this.fileSystemApiFolderPickerId = appService.getAppObjectKey(
       [getVarName(() => TrmrkAppSetupModal)],

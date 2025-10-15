@@ -8,7 +8,16 @@ namespace Turmerik.Core.FileManager
 {
     public interface IFileManagerServiceCore
     {
+        Task<DriveEntryCore[]> ReadPathIdnfsAsync(
+            DriveEntryCore[] itemsArr);
+
         Task<DriveEntryCore[]> ReadPrIdnfsAsync(
+            string[] idnfsArr);
+
+        Task<DriveEntryCore[][]> ReadSubFolderIdnfsAsync(
+            string[] idnfsArr);
+
+        Task<DriveEntryCore[][]> ReadFolderFileIdnfsAsync(
             string[] idnfsArr);
 
         Task<DriveEntryCore[]> ReadNamesAsync(
