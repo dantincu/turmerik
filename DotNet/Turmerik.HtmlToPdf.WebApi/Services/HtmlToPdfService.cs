@@ -6,6 +6,8 @@ namespace Turmerik.HtmlToPdf.WebApi.Services
 {
     public class HtmlToPdfService : IDisposable
     {
+        private readonly ILogger<HtmlToPdfService> logger;
+
         private readonly Semaphore browserInitSem = new(1, 1);
         private readonly Semaphore pageInitSem = new(1, 1);
 
@@ -13,6 +15,12 @@ namespace Turmerik.HtmlToPdf.WebApi.Services
         private IPage page;
 
         private int isGenerating;
+
+        public HtmlToPdfService(
+            ILogger<HtmlToPdfService> logger)
+        {
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
         public void Dispose()
         {
@@ -23,9 +31,16 @@ namespace Turmerik.HtmlToPdf.WebApi.Services
         public Task<Stream> GenerateAsync(
             string html) => GenerateCoreAsync(async () =>
             {
+                this.logger.LogTrace("Setting html content");
                 await page.SetContentAsync(html);
+
+                this.logger.LogTrace("Evaluating document fonts");
                 await page.EvaluateExpressionHandleAsync("document.fonts.ready"); // Wait for fonts to be loaded. Omitting this might result in no text rendered in pdf.
+
+                this.logger.LogTrace("Generating the document bytes");
                 var stream = await page.PdfStreamAsync();
+
+                this.logger.LogTrace("The document bytes generated successfully");
                 return stream;
             });
 
@@ -33,9 +48,16 @@ namespace Turmerik.HtmlToPdf.WebApi.Services
             string htmlFilePath,
             string pdfFilePath) => GenerateCoreAsync<object?>(async () =>
             {
+                this.logger.LogTrace("Setting html file path");
                 await page.GoToAsync($"file:///{htmlFilePath}");
+
+                this.logger.LogTrace("Evaluating document fonts");
                 await page.EvaluateExpressionHandleAsync("document.fonts.ready"); // Wait for fonts to be loaded. Omitting this might result in no text rendered in pdf.
+
+                this.logger.LogTrace("Generating the document file");
                 await page.PdfAsync(pdfFilePath);
+
+                this.logger.LogTrace("The document file generated successfully");
                 return null;
             });
 
@@ -55,7 +77,7 @@ namespace Turmerik.HtmlToPdf.WebApi.Services
                 catch (Exception ex)
                 {
                     throw new TrmrkException<HttpStatusCode>(
-                        HttpStatusCode.InternalServerError);
+                        "An error occurred while generating the document", ex, HttpStatusCode.InternalServerError);
                 }
                 finally
                 {
