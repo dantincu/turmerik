@@ -88,6 +88,22 @@ namespace Turmerik.Core.FileManager
             return retMx;
         }
 
+        public async Task<DriveEntryX<DriveEntryCore>[]> ReadFolderChildIdnfsAsync(
+            string[] idnfsArr)
+        {
+            var subFoldersMx = await this.ReadSubFolderIdnfsAsync(idnfsArr);
+            var folderFilesMx = await this.ReadFolderFileIdnfsAsync(idnfsArr);
+
+            var retArr = subFoldersMx.Select((foldersArr, i) => new DriveEntryX<DriveEntryCore>
+            {
+                Idnf = idnfsArr[i],
+                SubFolders = foldersArr.ToList(),
+                FolderFiles = folderFilesMx[i].ToList()
+            }).ToArray();
+
+            return retArr;
+        }
+
         public async Task<DriveEntryCore[]> ReadNamesAsync(
             string[] idnfsArr)
         {

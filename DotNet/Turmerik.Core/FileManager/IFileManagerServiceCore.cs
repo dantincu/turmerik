@@ -20,6 +20,9 @@ namespace Turmerik.Core.FileManager
         Task<DriveEntryCore[][]> ReadFolderFileIdnfsAsync(
             string[] idnfsArr);
 
+        Task<DriveEntryX<DriveEntryCore>[]> ReadFolderChildIdnfsAsync(
+            string[] idnfsArr);
+
         Task<DriveEntryCore[]> ReadNamesAsync(
             string[] idnfsArr);
 

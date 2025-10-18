@@ -9,6 +9,7 @@ namespace Turmerik.Core.FileManager
         public string? Idnf { get; set; }
         public string? PrIdnf { get; set; }
         public string? Name { get; set; }
+        public string? Path { get; set; }
         public long? FileSizeBytes { get; set; }
 
         public long? CreationTimeUtcTicks { get; set; }
@@ -28,7 +29,7 @@ namespace Turmerik.Core.FileManager
     }
 
     public class DriveEntryX<TDriveEntry> : DriveEntryCore
-        where TDriveEntry : DriveEntryX<TDriveEntry>
+        where TDriveEntry : DriveEntryCore
     {
         public List<TDriveEntry> SubFolders { get; set; }
         public List<TDriveEntry> FolderFiles { get; set; }

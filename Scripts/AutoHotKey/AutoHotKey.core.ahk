@@ -59,31 +59,19 @@
 }
 
 ; --------------------
-; [Ctrl + Win + Alt + arrow keys] send 16 [arrow keys]
+; [Ctrl + Win + Alt + arrow keys] lower mouse DPI while holding
 ; --------------------
 
-^#!Right:: {
-    Loop 16 {
-        Send '{Right}'
-    }
+SetMouseSpeed(speed) {
+    DllCall("SystemParametersInfo", "UInt", 0x71, "UInt", 0, "UInt", speed, "UInt", 0x01)
 }
 
-#^!Left:: {
-    Loop 16 {
-        Send '{Left}'
-    }
+^#!z:: {
+    SetMouseSpeed(1)  ; Slow
 }
 
-^#!Up:: {
-    Loop 16 {
-        Send '{Up}'
-    }
-}
-
-^#!Down:: {
-    Loop 16 {
-        Send '{Down}'
-    }
+^#!z up:: {
+    SetMouseSpeed(10) ; Restore
 }
 
 ; --------------------

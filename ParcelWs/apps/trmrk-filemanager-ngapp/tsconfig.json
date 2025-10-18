@@ -24,7 +24,7 @@
     "typeCheckHostBindings": true,
     "strictTemplates": true
   },
-  "files": ["src/node-types.d.ts"],
+  "files": ["src/d.ts/node-types.d.ts"],
   "references": [
     {
       "path": "./tsconfig.app.json"
