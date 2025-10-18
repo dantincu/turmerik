@@ -68,7 +68,7 @@ export class SharedBasicAppSettingsDbStores {
 }
 
 export class SharedBasicAppSettingsDbAdapter extends DbAdapterBase {
-  public static readonly DB_NAME = 'SharedBasicAppSettings';
+  public static readonly DB_NAME = 'BasicAppSettings';
   public static readonly DB_VERSION = 1;
 
   public static readonly DB_STORES = Object.freeze(
@@ -106,6 +106,7 @@ export class SharedBasicAppSettingsDbAdapter extends DbAdapterBase {
       appName,
       version,
       dbName: SharedBasicAppSettingsDbAdapter.DB_NAME,
+      isSharedDb: true,
     });
   }
 

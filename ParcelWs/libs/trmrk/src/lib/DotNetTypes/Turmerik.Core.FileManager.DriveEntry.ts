@@ -2,6 +2,7 @@ export interface DriveEntryCore {
   Idnf: string | null;
   PrIdnf: string | null;
   Name: string | null;
+  Path: string | null;
   FileSizeBytes: number | null;
   CreationTimeUtcTicks: number | null;
   LastWriteTimeUtcTicks: number | null;

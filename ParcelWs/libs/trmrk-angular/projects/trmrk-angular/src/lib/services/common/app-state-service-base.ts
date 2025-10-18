@@ -63,6 +63,7 @@ export abstract class AppStateServiceBase {
   hasBeenSetUp = new TrmrkObservable<boolean>(false);
   performAppSetup = new TrmrkObservable<boolean>(false);
   currentBrowserTabId = new TrmrkObservable<string>(null!);
+  clientFetchTmStmpMillis = new TrmrkObservable<number>(null!);
 
   defaults = getAppDefaultValues();
 

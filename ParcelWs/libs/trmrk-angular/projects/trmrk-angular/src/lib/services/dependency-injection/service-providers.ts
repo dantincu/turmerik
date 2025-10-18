@@ -23,6 +23,8 @@ import { AppServiceBase } from '../common/app-service-base';
 import { AppStateServiceBase } from '../common/app-state-service-base';
 import { IntIdServiceFactory } from '../common/int-id-service-factory';
 import { loadAppConfig, LoadAppConfigOpts } from '../common/app-config-loader';
+import { TimeStampGeneratorBase } from '../common/timestamp-generator-base';
+import { DefaultTimeStampGenerator } from '../common/default-timestamp-generator';
 import { TrmrkStrIdGeneratorBase } from '../common/trmrk-str-id-generator-base';
 import { TrmrkDefaultStrIdGenerator } from '../common/trmrk-default-str-id-generator';
 import { NgAppConfigCore } from '../common/app-config';
@@ -33,6 +35,8 @@ import { TrmrkBrowserTabIdServiceBase } from '../common/trmrk-browser-tab-id-ser
 import { TrmrkDefaultBrowserTabIdService } from '../common/trmrk-default-browser-tab-id-service';
 
 import { injectionTokens } from './injection-tokens';
+import { DefaultClientFetchTmStmpMillisService } from '../common/default-client-fetch-tm-stmp-millis-service';
+import { ClientFetchTmStmpMillisServiceBase } from '../common/client-fetch-tm-stmp-millis-service-base';
 
 export interface ServiceProviderOpts<TOpts> {
   provide?: boolean | NullOrUndef;
@@ -51,12 +55,14 @@ export interface GetCommonServiceProviderOpts<
   appConfig?: LoadAppConfigOpts<TAppConfig> | NullOrUndef;
   appServiceType?: Type<any> | NullOrUndef;
   appStateServiceType?: Type<any> | NullOrUndef;
+  defaultTimeStampGenerator?: boolean | NullOrUndef;
   defaultStrIdGenerator?: boolean | NullOrUndef;
   defaultBrowserTabIdService?: boolean | NullOrUndef;
   asyncRequestStateManagerFactory?: boolean | NullOrUndef;
   intIdServiceFactory?: boolean | NullOrUndef;
   darkModeAppInitializer?: boolean | NullOrUndef;
   sessionServiceAppInitializer?: boolean | NullOrUndef;
+  clientFetchTmStmpServiceAppInitializer?: boolean | NullOrUndef;
 }
 
 export interface GetCommonServiceProvidersArgs<
@@ -138,6 +144,12 @@ export const getBrowserTabIdAppInitializer = () =>
     browserTabIdService.init();
   });
 
+export const getClientFetchTmStmpMillisServiceAppInitializer = () =>
+  provideAppInitializer(() => {
+    const clientFetchTmStmpMillisService = inject(ClientFetchTmStmpMillisServiceBase);
+    clientFetchTmStmpMillisService.init();
+  });
+
 export const getServiceProviders = <TAppConfig extends NgAppConfigCore = NgAppConfigCore>(
   args: GetCommonServiceProvidersArgs<TAppConfig>
 ) => {
@@ -187,6 +199,13 @@ export const getServiceProviders = <TAppConfig extends NgAppConfigCore = NgAppCo
 
     opts.darkModeAppInitializer ?? includeAllByDefault ? getDarkModeAppInitializer() : null,
 
+    opts.defaultTimeStampGenerator ?? includeAllByDefault
+      ? withVal(new DefaultTimeStampGenerator(), (defaultTimeStampGenerator) => ({
+          provide: TimeStampGeneratorBase,
+          useValue: defaultTimeStampGenerator,
+        }))
+      : null,
+
     opts.defaultStrIdGenerator ?? includeAllByDefault
       ? withVal(new TrmrkDefaultStrIdGenerator(), (defaultStrIdGenerator) => ({
           provide: TrmrkStrIdGeneratorBase,
@@ -216,6 +235,27 @@ export const getServiceProviders = <TAppConfig extends NgAppConfigCore = NgAppCo
             })
           ),
           getBrowserTabIdAppInitializer(),
+        ]
+      : []),
+
+    ...(opts.clientFetchTmStmpServiceAppInitializer ?? includeAllByDefault
+      ? [
+          withVal(
+            new RefLazyValue<DefaultClientFetchTmStmpMillisService>(() => {
+              const appStateService = inject(AppStateServiceBase);
+              const timeStampGenerator = inject(TimeStampGeneratorBase);
+
+              const defaultClientFetchTmStmpMillisService =
+                new DefaultClientFetchTmStmpMillisService(appStateService, timeStampGenerator);
+
+              return defaultClientFetchTmStmpMillisService;
+            }),
+            (lazy) => ({
+              provide: ClientFetchTmStmpMillisServiceBase,
+              useFactory: () => lazy.value,
+            })
+          ),
+          getClientFetchTmStmpMillisServiceAppInitializer(),
         ]
       : []),
 

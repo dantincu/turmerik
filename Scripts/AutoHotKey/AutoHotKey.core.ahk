@@ -59,18 +59,18 @@
 }
 
 ; --------------------
-; [Ctrl + Win + Alt + arrow keys] lower mouse DPI while holding
+; [Ctrl + Win + z] lower mouse DPI while holding
 ; --------------------
 
 SetMouseSpeed(speed) {
     DllCall("SystemParametersInfo", "UInt", 0x71, "UInt", 0, "UInt", speed, "UInt", 0x01)
 }
 
-^#!z:: {
+^#z:: {
     SetMouseSpeed(1)  ; Slow
 }
 
-^#!z up:: {
+^#z up:: {
     SetMouseSpeed(10) ; Restore
 }
 

@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
 
 import { NullOrUndef } from '../../../trmrk/core';
+
 import {
   moveLocalTimeToUtcDate,
   dateToDisplayStr,
   moveUtcDateToLocalTime,
 } from '../../../trmrk/date';
 
+import { TimeStampGeneratorBase } from './timestamp-generator-base';
+
 @Injectable({
   providedIn: 'root',
 })
-export class TimeStampGenerator {
+export class DefaultTimeStampGenerator extends TimeStampGeneratorBase {
   millis(timeStamp?: Date | NullOrUndef) {
     timeStamp ??= moveLocalTimeToUtcDate(new Date());
     const millis = timeStamp.getTime();

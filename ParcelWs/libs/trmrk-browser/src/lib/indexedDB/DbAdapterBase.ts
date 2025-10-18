@@ -6,6 +6,7 @@ import { getDbObjName } from './core';
 export const commonDbNamePrefixes = Object.freeze(
   mapPropNamesToThemselves({
     cache: '',
+    shared: '',
   })
 );
 
@@ -45,6 +46,7 @@ export abstract class DbAdapterBase {
       dbNameStr = getDbObjName([
         opts.appName,
         opts.isCacheDb ? commonDbNamePrefixes.cache : null,
+        opts.isSharedDb ? commonDbNamePrefixes.shared : null,
         opts.dbNamePfx,
         opts.dbName,
       ]);

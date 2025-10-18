@@ -8,6 +8,7 @@ export interface AppConfigCore {
   cacheValidIntervalMillis: number;
   inactiveDataCleanupIntervalMillis: number;
   storageCleanupIntervalRatio: number;
+  blobChunkDefaultSize: number;
   listDefaultPageSize: number;
 }
 
@@ -17,10 +18,11 @@ export const normalizeAppConfigCore = <TConfig extends AppConfigCore = AppConfig
   appConfig.isWebApp ??= true;
   appConfig.routeBasePath ??= '/app';
   appConfig.requiresSetup ??= false;
-  appConfig.listDefaultPageSize ??= 50;
   appConfig.maxSimultaneousRequestsCount ??= 4;
   appConfig.cacheValidIntervalMillis ??= 24 * 3600 * 1000;
   appConfig.inactiveDataCleanupIntervalMillis ??= 30 * 24 * 3600 * 1000;
   appConfig.storageCleanupIntervalRatio ??= 0.1;
+  appConfig.blobChunkDefaultSize ??= 1024 * 1024;
+  appConfig.listDefaultPageSize ??= 50;
   return appConfig;
 };

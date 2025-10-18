@@ -8,7 +8,7 @@ import { transformUrl, getRelUri } from '../../../trmrk/url';
 
 import { IndexedDbDatabasesServiceCore } from './indexedDb/indexed-db-databases-service-core';
 import { TrmrkObservable } from './TrmrkObservable';
-import { TimeStampGenerator } from './timestamp-generator';
+import { TimeStampGeneratorBase } from './timestamp-generator-base';
 import { TrmrkStrIdGeneratorBase } from './trmrk-str-id-generator-base';
 
 export const urlQueryKeys = mapPropNamesToThemselves(
@@ -35,7 +35,7 @@ export class TrmrkSessionService implements OnDestroy {
   constructor(
     private indexedDbDatabasesService: IndexedDbDatabasesServiceCore,
     private strIdGenerator: TrmrkStrIdGeneratorBase,
-    private timeStampGenerator: TimeStampGenerator,
+    private timeStampGenerator: TimeStampGeneratorBase,
     private router: Router
   ) {}
 

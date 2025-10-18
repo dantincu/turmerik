@@ -2,6 +2,10 @@ import { Injectable, OnDestroy } from '@angular/core';
 
 import { DriveStorageType } from '../../../../trmrk/driveStorage/appConfig';
 
+import {
+  TrmrkDriveItemsManagerSetupArgsCore,
+  TrmrkDriveItemsManagerWorkArgsCore,
+} from './trmrk-driveitems-manager-core';
 import { TrmrkDriveItemsManagerServiceBase } from './trmrk-driveitems-manager-service-base';
 import { DefaultDriveItemsManagerService } from './trmrk-default-driveitems-manager-service';
 import { AppDriveStorageOption, StorageUserIdnf } from '../driveStorageOption';
@@ -9,9 +13,13 @@ import { TrmrkFileManagerServiceFactoryBase } from '../filemanager-service/trmrk
 
 @Injectable()
 export abstract class TrmrkDriveItemsManagerServiceFactoryBase {
-  abstract create<TRootFolder>(
+  abstract create<
+    TSetupArgs extends TrmrkDriveItemsManagerSetupArgsCore<TRootFolder>,
+    TWorkArgs extends TrmrkDriveItemsManagerWorkArgsCore,
+    TRootFolder
+  >(
     currentStorageOption: AppDriveStorageOption<TRootFolder>
-  ): TrmrkDriveItemsManagerServiceBase<TRootFolder>;
+  ): TrmrkDriveItemsManagerServiceBase<TSetupArgs, TWorkArgs, TRootFolder>;
 }
 
 @Injectable({
@@ -25,33 +33,43 @@ export class TrmrkDriveItemsManagerServiceFactory
     super();
   }
 
-  override create<TRootFolder>(
+  override create<
+    TSetupArgs extends TrmrkDriveItemsManagerSetupArgsCore<TRootFolder>,
+    TWorkArgs extends TrmrkDriveItemsManagerWorkArgsCore,
+    TRootFolder
+  >(
     currentStorageOption: AppDriveStorageOption<TRootFolder>
-  ): TrmrkDriveItemsManagerServiceBase<TRootFolder> {
-    let service: TrmrkDriveItemsManagerServiceBase<TRootFolder>;
+  ): TrmrkDriveItemsManagerServiceBase<TSetupArgs, TWorkArgs, TRootFolder> {
+    let service: TrmrkDriveItemsManagerServiceBase<TSetupArgs, TWorkArgs, TRootFolder> = null!;
 
     switch (currentStorageOption.storageType) {
-      case DriveStorageType.FileSystemApi:
-        service = this.getDefaultDriveItemsManagerService(currentStorageOption);
+      case DriveStorageType.PostMessage:
         break;
-      default:
-        throw new Error(
-          `File manager service type not supported: ${
-            DriveStorageType[currentStorageOption.storageType]
-          }: ${currentStorageOption.key}`
-        );
     }
 
+    service ??= this.getDefaultDriveItemsManagerService(currentStorageOption);
     return service;
   }
 
   ngOnDestroy(): void {}
 
-  getDefaultDriveItemsManagerService<TRootFolder>(
-    currentStorageOption: AppDriveStorageOption<TRootFolder>
-  ) {
-    const fileManagerService = this.fileManagerServiceFactory.create(currentStorageOption);
-    const driveItemsService = new DefaultDriveItemsManagerService(fileManagerService);
+  getDefaultDriveItemsManagerService<
+    TSetupArgs extends TrmrkDriveItemsManagerSetupArgsCore<TRootFolder>,
+    TWorkArgs extends TrmrkDriveItemsManagerWorkArgsCore,
+    TRootFolder
+  >(currentStorageOption: AppDriveStorageOption<TRootFolder>) {
+    const fileManagerService = this.fileManagerServiceFactory.create<
+      TSetupArgs,
+      TWorkArgs,
+      TRootFolder
+    >(currentStorageOption);
+
+    const driveItemsService = new DefaultDriveItemsManagerService<
+      TSetupArgs,
+      TWorkArgs,
+      TRootFolder
+    >(fileManagerService);
+
     return driveItemsService;
   }
 }

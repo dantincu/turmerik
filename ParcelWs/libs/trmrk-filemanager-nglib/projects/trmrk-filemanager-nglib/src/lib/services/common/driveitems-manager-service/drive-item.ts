@@ -1,20 +1,23 @@
 import { NullOrUndef } from '../../../../trmrk/core';
 import { DriveEntryCore } from '../../../../trmrk/DotNetTypes/Turmerik.Core.FileManager.DriveEntry';
 
+import { NamedItemCore } from '../indexedDb/core';
+
 export enum DriveItemTypeCore {
   None = 0,
   Folder,
   File,
 }
 
-export interface FileTextContentsDataCore {
-  content: string;
+export interface ContentItemCore<TContent> extends NamedItemCore {
+  Content: TContent;
 }
 
 export interface DriveItemCore<
   TDriveItem extends DriveItemCore<TDriveItem, TDriveItemType>,
   TDriveItemType = DriveItemTypeCore
-> extends DriveEntryCore {
+> extends NamedItemCore,
+    DriveEntryCore {
   itemType: TDriveItemType;
   childItems?: TDriveItem[] | NullOrUndef;
 }

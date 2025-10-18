@@ -15,7 +15,10 @@ export class TrmrkDriveItemsViewService {
   showAppSetupLink = false;
   isLoading = false;
 
-  private driveItemsManagerService!: TrmrkDriveItemsManagerServiceBase<any>;
+  private driveItemsManagerService!: TrmrkDriveItemsManagerServiceBase<
+    TrmrkDriveItemsManagerSetupArgsCore<any>,
+    any
+  >;
 
   constructor(
     public appStateService: AppStateServiceBase,
