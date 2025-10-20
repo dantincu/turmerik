@@ -148,7 +148,7 @@ export const distinct = <T>(
 
 export const filterAsync = async <TIn>(
   inArr: TIn[],
-  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean>
+  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean | AnyOrUnknown>
 ) => {
   const outArr: TIn[] = [];
   const syncLock = new Uint32Array(new SharedArrayBuffer(32));
@@ -178,7 +178,7 @@ export const mapAsync = async <TIn, TOut>(
 
 export const findIdxAsync = async <TIn>(
   inArr: TIn[],
-  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean>
+  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean | AnyOrUnknown>
 ) => {
   let idx = -1;
 
@@ -196,7 +196,7 @@ export const findIdxAsync = async <TIn>(
 
 export const findAsync = async <TIn>(
   inArr: TIn[],
-  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean>
+  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean | AnyOrUnknown>
 ) => {
   const idx = await findIdxAsync(inArr, predicate);
   let retVal: TIn | null = null;
@@ -206,6 +206,32 @@ export const findAsync = async <TIn>(
   }
 
   return retVal;
+};
+
+export const someAsync = async <TIn>(
+  inArr: TIn[],
+  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean | AnyOrUnknown>
+) => {
+  for (let i = 0; i < inArr.length; i++) {
+    if (await predicate(inArr[i], i, inArr)) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+export const allAsync = async <TIn>(
+  inArr: TIn[],
+  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean | AnyOrUnknown>
+) => {
+  for (let i = 0; i < inArr.length; i++) {
+    if (!(await predicate(inArr[i], i, inArr))) {
+      return false;
+    }
+  }
+
+  return true;
 };
 
 export const flatten = <T>(

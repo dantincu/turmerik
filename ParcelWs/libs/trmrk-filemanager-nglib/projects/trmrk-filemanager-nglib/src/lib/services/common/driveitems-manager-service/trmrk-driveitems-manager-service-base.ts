@@ -35,116 +35,126 @@ export abstract class TrmrkDriveItemsManagerServiceBase<
 
   abstract readPathIdnfs(
     wka: TWorkArgs,
-    itemsMx: DriveItem<TDriveItemType>[][] | string[],
+    itemsMx: (DriveItem<TDriveItemType>[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveItem<TDriveItemType>[][]>;
 
   abstract readSubFolderIdnfs(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<TDriveItemType>[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveItem<TDriveItemType>[][]>;
 
   abstract readFolderFileIdnfs(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<TDriveItemType>[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveItem<TDriveItemType>[][]>;
 
   abstract readFolderChildIdnfs(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<TDriveItemType>[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveItem<TDriveItemType>[][][]>;
 
   abstract readNames(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<TDriveItemType>[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | boolean | NullOrUndef | NullOrUndef,
     forceRefresh: boolean
   ): Promise<DriveItem<TDriveItemType>[]>;
 
   abstract readFileSizes(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<TDriveItemType>[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveItem<TDriveItemType>[]>;
 
   abstract readTimeStamps(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<TDriveItemType>[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | boolean | NullOrUndef | NullOrUndef,
     forceRefresh: boolean
   ): Promise<DriveItem<TDriveItemType>[]>;
 
   abstract readFolderDetails(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<TDriveItemType>[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveItem<TDriveItemType>[]>;
 
   abstract readFileDetails(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<TDriveItemType>[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveItem<TDriveItemType>[]>;
 
   abstract readItemDetails(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<TDriveItemType>[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | boolean | NullOrUndef | NullOrUndef,
     forceRefresh: boolean
   ): Promise<DriveItem<TDriveItemType>[][]>;
 
   abstract readFileTextContents(
     wka: TWorkArgs,
-    pathsArr: string[] | string,
-    forceRefresh: boolean
+    pathsArr: (DriveItem<TDriveItemType>[] | string)[] | string,
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<ContentItemCore<string>[]>;
 
   abstract readFileContents(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<TDriveItemType>[] | string)[],
     callback: ContentFileCallback,
-    forceRefresh: boolean
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<DriveItem<TDriveItemType>[]>;
 
   abstract copyEntries(
     wka: TWorkArgs,
     foldersArr: DriveItem<TDriveItemType, any>[],
     filesArr: DriveItem<TDriveItemType, any>[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean
   ): Promise<FilesAndFoldersTuple<string>>;
 
   abstract renameOrMoveEntries(
     wka: TWorkArgs,
     foldersArr: DriveItem<TDriveItemType, any>[],
     filesArr: DriveItem<TDriveItemType, any>[],
-    overwrite: boolean
-  ): Promise<void>;
+    overwrite: boolean,
+    forceRefresh: boolean
+  ): Promise<FilesAndFoldersTuple<string>>;
 
   abstract deleteEntries(
     wka: TWorkArgs,
     foldersArr: DriveItem<TDriveItemType, any>[],
-    filesArr: DriveItem<TDriveItemType, any>[]
+    filesArr: DriveItem<TDriveItemType, any>[],
+    forceRefresh: boolean
   ): Promise<void>;
 
   abstract writeFileTextContents(
     wka: TWorkArgs,
     filesArr: ContentItemCore<string>[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<DriveItem<TDriveItemType>[]>;
 
   abstract writeFileContents(
     wka: TWorkArgs,
     filesArr: DriveItem<TDriveItemType>[],
     callback: FileContentFactory,
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<DriveItem<TDriveItemType>[]>;
 
   abstract createFolders(
     wka: TWorkArgs,
     foldersArr: DriveItem<TDriveItemType>[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean
   ): Promise<DriveItem<TDriveItemType>[]>;
 }

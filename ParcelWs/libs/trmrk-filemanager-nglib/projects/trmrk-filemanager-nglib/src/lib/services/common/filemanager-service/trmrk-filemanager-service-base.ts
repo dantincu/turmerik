@@ -64,116 +64,126 @@ export abstract class TrmrkFileManagerServiceBase<
 
   abstract readPathIdnfs(
     wka: TWorkArgs,
-    itemsMx: DriveEntryCore[][] | string[],
+    itemsMx: (DriveEntryCore[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveEntryCore[][]>;
 
   abstract readNames(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | boolean | NullOrUndef | NullOrUndef,
     forceRefresh: boolean
   ): Promise<DriveEntryCore[]>;
 
   abstract readSubFolderIdnfs(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveEntryCore[][]>;
 
   abstract readFolderFileIdnfs(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveEntryCore[][]>;
 
   abstract readFolderChildIdnfs(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveEntryCore[][][]>;
 
   abstract readFileSizes(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveEntryCore[]>;
 
   abstract readTimeStamps(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | boolean | NullOrUndef | NullOrUndef,
     forceRefresh: boolean
   ): Promise<DriveEntryCore[]>;
 
   abstract readFolderDetails(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveEntryCore[]>;
 
   abstract readFileDetails(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveEntryCore[]>;
 
   abstract readItemDetails(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | boolean | NullOrUndef | NullOrUndef,
     forceRefresh: boolean
   ): Promise<DriveEntryCore[][]>;
 
   abstract readFileTextContents(
     wka: TWorkArgs,
-    pathsArr: string[],
-    forceRefresh: boolean
+    pathsArr: (DriveEntryCore[] | string)[],
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<DriveEntry<string>[]>;
 
   abstract readFileContents(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     callback: ContentFileCallback,
-    forceRefresh: boolean
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<DriveEntryCore[]>;
 
   abstract copyEntries(
     wka: TWorkArgs,
     foldersArr: DriveEntryCore[],
     filesArr: DriveEntryCore[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean
   ): Promise<FilesAndFoldersTuple<string>>;
 
   abstract renameOrMoveEntries(
     wka: TWorkArgs,
     foldersArr: DriveEntryCore[],
     filesArr: DriveEntryCore[],
-    overwrite: boolean
-  ): Promise<void>;
+    overwrite: boolean,
+    forceRefresh: boolean
+  ): Promise<FilesAndFoldersTuple<string>>;
 
   abstract deleteEntries(
     wka: TWorkArgs,
     foldersArr: DriveEntryCore[],
-    filesArr: DriveEntryCore[]
+    filesArr: DriveEntryCore[],
+    forceRefresh: boolean
   ): Promise<void>;
 
   abstract writeFileTextContents(
     wka: TWorkArgs,
     filesArr: ContentItemCore<string>[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<DriveEntryCore[]>;
 
   abstract writeFileContents(
     wka: TWorkArgs,
     filesArr: DriveEntryCore[],
     callback: FileContentFactory,
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<DriveEntryCore[]>;
 
   abstract createFolders(
     wka: TWorkArgs,
     foldersArr: DriveEntryCore[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean
   ): Promise<DriveEntryCore[]>;
 }

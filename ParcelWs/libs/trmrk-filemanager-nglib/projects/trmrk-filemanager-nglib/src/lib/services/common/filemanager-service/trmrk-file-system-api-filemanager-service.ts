@@ -1,4 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import {
   AnyOrUnknown,
@@ -6,9 +7,13 @@ import {
   RefLazyValue,
   MtblRefValue,
   actWithVal,
+  withVal,
 } from '../../../../trmrk/core';
 
-import { getTextFromUint8ArrayChunks } from '../../../../trmrk/text';
+import { timeoutToPromise } from '../../../../trmrk/timeout';
+import { mapAsync } from '../../../../trmrk/arr';
+import { trimFullStr, splitStr } from '../../../../trmrk/str';
+import { getTextFromUint8ArrayChunks, textToUint8ArrayChunks } from '../../../../trmrk/text';
 import { sortCachedItems } from '../../../../trmrk-browser/indexedDB/core';
 import { AppStateServiceBase } from '../../../../trmrk-angular/services/common/app-state-service-base';
 import { TimeStampGeneratorBase } from '../../../../trmrk-angular/services/common/timestamp-generator-base';
@@ -46,7 +51,10 @@ import {
   IntIdnfFileContent,
   ContentFileCallback,
   FileContentFactory,
-  writeFileContentToIndexDb,
+  writeFileContentToIndexedDbIfReq,
+  StreamReaderReadResult,
+  writeFileContentFromBuffObsToIndexedDbIfReq,
+  readFileContentFromIndexedDbToBuffObs,
 } from '../indexedDb/core';
 
 import {
@@ -56,7 +64,8 @@ import {
 } from '../indexedDb/databases/FsApiDriveItems';
 
 import { FileManagerIndexedDbDatabasesService } from '../indexedDb/filemanager-indexed-db-databases-service';
-import { ContentItemCore } from '../driveitems-manager-service/drive-item';
+import { ContentItemCore, pathSplitChars } from '../driveitems-manager-service/drive-item';
+import { TrmrkBufferedObservable } from '../../../../trmrk-angular/services/common/TrmrkBufferedObservable';
 
 export interface TrmrkFileSystemApiFileManagerServiceWorkArgs
   extends TrmrkDriveItemsManagerWorkArgsCore {
@@ -226,7 +235,7 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
 
   override async readPathIdnfs(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
-    itemsMx: DriveEntryCore[][] | string[],
+    itemsMx: (DriveEntryCore[] | string)[],
     forceRefresh: boolean = false
   ): Promise<DriveEntryCore[][]> {
     wka.useItems = true;
@@ -256,10 +265,10 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
 
     itemsMx = itemsMx.map((itemsArr) =>
       'string' === typeof itemsArr
-        ? itemsArr.split('/').map(
-            (name) =>
+        ? splitStr(trimFullStr(itemsArr, pathSplitChars), pathSplitChars).map(
+            (part) =>
               ({
-                Name: name,
+                Name: part.part,
               } as DriveEntryCore)
           )
         : itemsArr
@@ -268,7 +277,7 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
     for (let i = 0; i < itemsMx.length; i++) {
       wka.wkItemPrIdx!.value = i;
       wka.wkItemScIdx!.value = 0;
-      const itemsArr = itemsMx[i];
+      const itemsArr = itemsMx[i] as DriveEntryCore[];
 
       for (let j = 0; j < itemsArr.length; j++) {
         wka.wkItemScIdx!.value = j;
@@ -281,17 +290,20 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
 
           if ((dbItem.Idnf ?? null) === null) {
             dbItem = (
-              await wka
-                .items!.value.index(
-                  FsApiDriveItemsDbAdapter.DB_STORES.Items.indexes.nameAndPrIdnf.name
-                )
-                .get([item.Name!, prIntIdnf])
-            ).result as IntIdnfItem;
+              await dbRequestToPromise(
+                wka
+                  .items!.value.index(
+                    FsApiDriveItemsDbAdapter.DB_STORES.Items.indexes.nameAndPrIdnf.name
+                  )
+                  .get([item.Name!, prIntIdnf])
+              )
+            ).value as IntIdnfItem;
 
             if (dbItem) {
               intIdnf = dbItem.Idnf;
             } else {
-              intIdnf = (await wka.items!.value.put(resolvedItem)).result as number;
+              intIdnf = (await dbRequestToPromise(wka.items!.value.put(resolvedItem)))
+                .value as number;
             }
           } else {
             intIdnf = dbItem.Idnf;
@@ -308,12 +320,12 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
     }
 
     wka.wkIdx!.value++;
-    return itemsMx;
+    return itemsMx as DriveEntryCore[][];
   }
 
   override async readSubFolderIdnfs(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveEntryCore[][]> {
     const folderFileIdnfs = (await this.readFolderChildIdnfs(wka, pathsArr, forceRefresh))[0];
@@ -322,7 +334,7 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
 
   override async readFolderFileIdnfs(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveEntryCore[][]> {
     const folderFileIdnfs = (await this.readFolderChildIdnfs(wka, pathsArr, forceRefresh))[1];
@@ -331,7 +343,7 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
 
   override async readFolderChildIdnfs(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveEntryCore[][][]> {
     wka.useItems = true;
@@ -350,8 +362,8 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
       const idnf = folder.Idnf!;
       const intIdnf = parseInt(idnf);
 
-      const dbFolder = (await wka.folderChildrenIdnfs!.value.get([intIdnf]))
-        .result as IntIdnfDirChildrenIdnfs;
+      const dbFolder = (await dbRequestToPromise(wka.folderChildrenIdnfs!.value.get([intIdnf])))
+        .value as IntIdnfDirChildrenIdnfs;
 
       wka.wkItemScIdx!.value++;
 
@@ -380,7 +392,7 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
 
   override async readNames(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | NullOrUndef,
     forceRefresh: boolean = false
   ): Promise<DriveEntryCore[]> {
@@ -395,7 +407,7 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
 
   override async readFileSizes(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     forceRefresh: boolean = false
   ): Promise<DriveEntryCore[]> {
     const itemsMx = await this.readItemDetailsCore(wka, pathsArr, null, true, forceRefresh, {
@@ -408,7 +420,7 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
 
   override async readTimeStamps(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | NullOrUndef,
     forceRefresh: boolean = false
   ): Promise<DriveEntryCore[]> {
@@ -422,7 +434,7 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
 
   override async readFolderDetails(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveEntryCore[]> {
     const itemsMx = await this.readItemDetailsCore(wka, pathsArr, null, false, forceRefresh);
@@ -432,7 +444,7 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
 
   override async readFileDetails(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveEntryCore[]> {
     const itemsMx = await this.readItemDetailsCore(wka, pathsArr, null, true, forceRefresh);
@@ -442,7 +454,7 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
 
   override async readItemDetails(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | boolean | NullOrUndef,
     forceRefresh: boolean
   ): Promise<DriveEntryCore[][]> {
@@ -452,8 +464,9 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
 
   override async readFileTextContents(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
-    pathsArr: string[],
-    forceRefresh: boolean = false
+    pathsArr: (DriveEntryCore[] | string)[],
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<DriveEntry<string>[]> {
     const retArr: DriveEntry<string>[] = [];
     const retContentArr: Uint8Array<ArrayBuffer>[][] = [];
@@ -476,7 +489,8 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
           retContentArr.push((currentContent = []));
         }
       },
-      forceRefresh
+      forceRefresh,
+      cacheContent
     );
 
     wka.wkIdx!.value++;
@@ -491,9 +505,10 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
 
   override async readFileContents(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveEntryCore[] | string)[],
     callback: ContentFileCallback,
-    forceRefresh: boolean
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<DriveEntryCore[]> {
     wka.useItems = true;
     wka.useFileHandles = true;
@@ -519,62 +534,617 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
         item,
         timeStamp,
         forceRefresh,
-        (fileHandle) => this.writeFileContentToIndexDb(wka, fileHandle, callback, item, intIdnf)
+        (fileHandle) =>
+          this.writeFileContentToIndexDb(
+            wka,
+            fileHandle,
+            callback,
+            item,
+            intIdnf,
+            cacheContent ?? true
+          )
       );
     }
 
     return retArr;
   }
 
-  override copyEntries(
+  override async copyEntries(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
     foldersArr: DriveEntryCore[],
     filesArr: DriveEntryCore[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean
   ): Promise<FilesAndFoldersTuple<string>> {
-    throw new Error('Method not implemented.');
+    const retTuple = await this.copyEntriesCore(wka, foldersArr, filesArr, overwrite, forceRefresh);
+    wka.tran!.commit();
+    return retTuple;
   }
 
-  override renameOrMoveEntries(
+  override async renameOrMoveEntries(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
     foldersArr: DriveEntryCore[],
     filesArr: DriveEntryCore[],
-    overwrite: boolean
-  ): Promise<void> {
-    throw new Error('Method not implemented.');
+    overwrite: boolean,
+    forceRefresh: boolean
+  ): Promise<FilesAndFoldersTuple<string>> {
+    const retTuple = await this.renameOrMoveEntriesCore(
+      wka,
+      foldersArr,
+      filesArr,
+      overwrite,
+      forceRefresh
+    );
+
+    wka.tran!.commit();
+    return retTuple;
   }
 
-  override deleteEntries(
+  override async deleteEntries(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
     foldersArr: DriveEntryCore[],
-    filesArr: DriveEntryCore[]
+    filesArr: DriveEntryCore[],
+    forceRefresh: boolean
   ): Promise<void> {
-    throw new Error('Method not implemented.');
+    await this.deleteEntriesCore(wka, foldersArr, filesArr, forceRefresh);
+    wka.tran!.commit();
   }
 
-  override writeFileTextContents(
+  override async writeFileTextContents(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
     filesArr: ContentItemCore<string>[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<DriveEntryCore[]> {
-    throw new Error('Method not implemented.');
+    const buffer: StreamReaderReadResult[] = [];
+    const obs = new TrmrkBufferedObservable<StreamReaderReadResult>(buffer);
+
+    for (let file of filesArr) {
+      const chunksArr = textToUint8ArrayChunks(file.Content, this.appConfig.blobChunkDefaultSize);
+
+      for (let chunk of chunksArr) {
+        buffer.push({
+          value: chunk,
+          done: false,
+        });
+      }
+    }
+
+    const entriesArr = filesArr.map(
+      (file) =>
+        ({
+          Idnf: file.Idnf,
+          Name: file.Name,
+        } as DriveEntryCore)
+    );
+
+    await this.writeFileContents(wka, entriesArr, () => obs, overwrite, forceRefresh, cacheContent);
+    return entriesArr;
   }
 
-  override writeFileContents(
+  override async writeFileContents(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
     filesArr: DriveEntryCore[],
     callback: FileContentFactory,
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<DriveEntryCore[]> {
-    throw new Error('Method not implemented.');
+    const retArr = await this.writeFileContentsCore(
+      wka,
+      filesArr,
+      callback,
+      overwrite,
+      forceRefresh,
+      cacheContent
+    );
+
+    wka.tran!.commit();
+    return retArr;
   }
 
-  override createFolders(
+  override async createFolders(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
     foldersArr: DriveEntryCore[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean
   ): Promise<DriveEntryCore[]> {
-    throw new Error('Method not implemented.');
+    const retArr = await this.createFoldersCore(wka, foldersArr, overwrite, forceRefresh);
+    wka.tran!.commit();
+    return retArr;
+  }
+
+  private async copyEntriesCore(
+    wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
+    foldersArr: DriveEntryCore[],
+    filesArr: DriveEntryCore[],
+    overwrite: boolean,
+    forceRefresh: boolean
+  ): Promise<FilesAndFoldersTuple<string>> {
+    wka.useItems = true;
+    wka.useFolderChildrenIdnfs = true;
+    wka.useDirHandles = true;
+    wka.useFileHandles = true;
+    wka.useFileContentRefs = true;
+    wka.useFileContents = true;
+
+    wka = await this.normalizeWorkItems(wka);
+    const timeStamp = this.timeStampGenerator.millis();
+
+    for (let { itemsArr, areFiles } of [
+      { itemsArr: filesArr, areFiles: true },
+      { itemsArr: foldersArr, areFiles: false },
+    ]) {
+      let mx = itemsArr
+        .map((item) =>
+          [item.Idnf, item.PrIdnf].map((idnf) =>
+            withVal(
+              splitStr(idnf!, pathSplitChars).map((part) => part.part),
+              (parts) => parts.map((part) => ({ Name: part } as DriveEntryCore))
+            )
+          )
+        )
+        .map((itemsArr) => itemsArr.map((arr) => ({ srcItem: arr[0], destnItem: arr[1] })));
+
+      let srcPathItemsMx = mx
+        .map((arr) => arr.slice(0, arr.length - 1))
+        .map((arr) => arr.map((obj) => obj.srcItem));
+
+      let destnPathFoldersMx = mx.map((arr) => arr.map((obj) => obj.destnItem));
+      destnPathFoldersMx = await this.readPathIdnfs(wka, destnPathFoldersMx);
+
+      let srcItemsMx = srcPathItemsMx.map((arr, i) => [
+        ...arr,
+        withVal(mx[i], (oldArr) => oldArr[oldArr.length - 1].srcItem),
+      ]);
+
+      const srcFolderChildrenMx = await this.readFolderChildIdnfs(wka, srcItemsMx, forceRefresh);
+
+      const destnFolderChildrenMx = await this.readFolderChildIdnfs(
+        wka,
+        destnPathFoldersMx,
+        forceRefresh
+      );
+
+      let destnPath: DriveEntryCore[] | null = null;
+      let destnFolder: DriveEntryCore | null = null;
+      let destnFolderIntIdnf: number | null = null;
+      let destnSubFolders: DriveEntryCore[] | null = null;
+      let destnFolderFiles: DriveEntryCore[] | null = null;
+
+      const assignDestnObjs = (i: number) => {
+        destnPath = destnPathFoldersMx[i];
+        destnFolder = destnPath.at(-1)!;
+        destnFolderIntIdnf = parseInt(destnFolder.Idnf!);
+        destnSubFolders = destnFolderChildrenMx[i][0];
+        destnFolderFiles = destnFolderChildrenMx[i][1];
+      };
+
+      const onEntryCreated = async (i: number, isFile: boolean) => {
+        const srcItem = srcItemsMx[i].at(-1)!;
+
+        const itemIntIdnf = (
+          await dbRequestToPromise(
+            wka.items!.value.put({
+              Name: srcItem.Name,
+              clientFetchTmStmpMillis: timeStamp,
+              PrIdnf: destnFolderIntIdnf,
+            } as IntIdnfItem)
+          )
+        ).value as number;
+
+        await dbRequestToPromise(
+          wka.folderChildrenIdnfs!.value.put({
+            Idnf: destnFolderIntIdnf,
+            clientFetchTmStmpMillis: timeStamp,
+            subFolderIdnfs: withVal(
+              destnSubFolders!.map((folder) => parseInt(folder.Idnf!)),
+              (arr) => (isFile ? arr : [...arr, itemIntIdnf])
+            ),
+            folderFileIdnfs: withVal(
+              destnFolderFiles!.map((folder) => parseInt(folder.Idnf!)),
+              (arr) => (isFile ? [...arr, itemIntIdnf] : arr)
+            ),
+          } as IntIdnfDirChildrenIdnfs)
+        );
+
+        srcItem.Idnf = itemIntIdnf.toString();
+      };
+
+      if (areFiles) {
+        let i = -1;
+        let writable: FileSystemWritableFileStream | null = null;
+
+        const onFileWritten = async () => {
+          await (writable as FileSystemWritableFileStream).close();
+          await onEntryCreated(i, true);
+        };
+
+        await this.readFileContents(
+          wka,
+          srcItemsMx,
+          async (item, result) => {
+            if (!result) {
+              if (writable) {
+                await onFileWritten();
+              }
+
+              assignDestnObjs(++i);
+
+              await this.getDirHandle(
+                wka,
+                destnPath!,
+                timeStamp,
+                async (prDirHandle) => {
+                  const fileHandle = await prDirHandle.getFileHandle(item.Name!, {
+                    create: true,
+                  });
+
+                  await this.requestPermission(fileHandle);
+                  writable = await fileHandle.createWritable();
+                  await writable!.write('');
+                },
+                forceRefresh
+              );
+            } else {
+              if (result.value) {
+                await writable!.write(result.value);
+              }
+            }
+          },
+          forceRefresh,
+          false
+        );
+
+        if (writable) {
+          await onFileWritten();
+        }
+      } else {
+        for (let i = 0; i < srcItemsMx.length; i++) {
+          const srcFoldersArr = srcItemsMx[i];
+          const srcFolder = srcFoldersArr.at(-1)!;
+          const srcFolderChildrenArr = srcFolderChildrenMx[i];
+          const srcSubFoldersArr = srcFolderChildrenArr[0];
+          const srcFolderFilesArr = srcFolderChildrenArr[1];
+          assignDestnObjs(i);
+
+          await this.getDirHandle(
+            wka,
+            destnPath!,
+            timeStamp,
+            async (prDirHandle) => {
+              await prDirHandle.getDirectoryHandle(srcFolder.Name!, {
+                create: true,
+              });
+
+              await onEntryCreated(i, false);
+
+              await this.copyEntriesCore(
+                wka,
+                srcSubFoldersArr.map((folder) => ({ ...folder, PrIdnf: destnFolder!.Idnf })),
+                srcFolderFilesArr.map((file) => ({ ...file, PrIdnf: destnFolder!.Idnf })),
+                overwrite,
+                forceRefresh
+              );
+            },
+            forceRefresh
+          );
+        }
+      }
+    }
+
+    const retTuple: FilesAndFoldersTuple<string> = {
+      Folders: foldersArr.map((folder) => folder.Idnf!),
+      Files: filesArr.map((file) => file.Idnf!),
+    };
+
+    return retTuple;
+  }
+
+  private async renameOrMoveEntriesCore(
+    wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
+    foldersArr: DriveEntryCore[],
+    filesArr: DriveEntryCore[],
+    overwrite: boolean,
+    forceRefresh: boolean
+  ): Promise<FilesAndFoldersTuple<string>> {
+    const retTuple = await this.copyEntriesCore(wka, foldersArr, filesArr, overwrite, forceRefresh);
+    await this.deleteEntriesCore(wka, foldersArr, filesArr, forceRefresh);
+    wka.tran!.commit();
+    return retTuple;
+  }
+
+  private async deleteEntriesCore(
+    wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
+    foldersArr: DriveEntryCore[],
+    filesArr: DriveEntryCore[],
+    forceRefresh: boolean
+  ) {
+    wka.useItems = true;
+    wka.useFolderChildrenIdnfs = true;
+    wka.useDirHandles = true;
+    wka.useFileHandles = true;
+
+    wka = await this.normalizeWorkItems(wka);
+    const timeStamp = this.timeStampGenerator.millis();
+
+    for (let { itemsArr, areFiles } of [
+      { itemsArr: filesArr, areFiles: true },
+      { itemsArr: foldersArr, areFiles: false },
+    ]) {
+      let itemsMx = itemsArr.map((item) =>
+        withVal(
+          splitStr(item.Idnf!, pathSplitChars).map((part) => part.part),
+          (parts) =>
+            parts.map(
+              (part) =>
+                ({
+                  Name: part,
+                } as DriveEntryCore)
+            )
+        )
+      );
+
+      let pathItemsMx = itemsMx.map((arr) => arr.slice(0, arr.length - 1));
+      pathItemsMx = await this.readPathIdnfs(wka, pathItemsMx);
+
+      itemsMx = pathItemsMx.map((arr, i) => [
+        ...arr,
+        withVal(itemsMx[i], (oldArr) => oldArr[oldArr.length - 1]),
+      ]);
+
+      for (let i = 0; i < pathItemsMx.length; i++) {
+        const path = pathItemsMx[i];
+        const currentItemsArr = itemsMx[i];
+        const currentItem = currentItemsArr.at(-1)!;
+
+        const prItemIntIdnf =
+          currentItemsArr.length > 1 ? parseInt(currentItemsArr.at(-2)!.Idnf!) : 0;
+
+        await this.getDirHandle(
+          wka,
+          path,
+          timeStamp,
+          async (prDirHandle) => {
+            const intIdnf = parseInt(currentItem.Idnf!);
+            await dbRequestToPromise(wka.folderChildrenIdnfs!.value.delete([prItemIntIdnf]));
+            await dbRequestToPromise(wka.items!.value.delete([intIdnf]));
+
+            if (areFiles) {
+              await prDirHandle.removeEntry(currentItem.Name!);
+            } else {
+              await this.deleteFolderCore(wka, prDirHandle, currentItem.Name!);
+            }
+          },
+          forceRefresh
+        );
+      }
+    }
+  }
+
+  private async writeFileContentsCore(
+    wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
+    filesArr: DriveEntryCore[],
+    callback: FileContentFactory,
+    overwrite: boolean,
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
+  ): Promise<DriveEntryCore[]> {
+    wka.useItems = true;
+    wka.useFileHandles = true;
+    wka.useFileContentRefs = true;
+    wka.useFileContents = true;
+    wka = await this.normalizeWorkItems(wka);
+    const timeStamp = this.timeStampGenerator.millis();
+
+    let pathItemsMx = filesArr.map((file) =>
+      withVal(
+        splitStr(file.Idnf!, pathSplitChars).map((part) => part.part),
+        (parts) =>
+          parts.map(
+            (part) =>
+              ({
+                Name: part,
+              } as DriveEntryCore)
+          )
+      )
+    );
+
+    let dirPathItemsMx = pathItemsMx.map((arr) => arr.slice(0, arr.length - 1));
+    dirPathItemsMx = await this.readPathIdnfs(wka, dirPathItemsMx);
+
+    pathItemsMx = dirPathItemsMx.map((arr, i) => [
+      ...arr,
+      withVal(pathItemsMx[i], (oldArr) => oldArr[oldArr.length - 1]),
+    ]);
+
+    const retArr: DriveEntryCore[] = [];
+
+    for (let i = 0; i < pathItemsMx.length; i++) {
+      wka.wkItemPrIdx!.value = i;
+      wka.wkItemScIdx!.value = 0;
+      const path = pathItemsMx[i];
+      const item = path[path.length - 1];
+      retArr[i] = item;
+
+      await this.getDirHandle(
+        wka,
+        path.slice(0, path.length - 1),
+        timeStamp,
+        async (prDirHandle) => {
+          let error: any = null;
+          let fileHandle: FileSystemFileHandle | null = null;
+
+          try {
+            fileHandle = await prDirHandle.getFileHandle(item.Name!);
+          } catch (err) {
+            this.throwIfErrNotNotFoundError(err);
+            error = err;
+          }
+
+          if (!error && !overwrite) {
+            throw new Error('File already exists and the overwrite flag is not set to true');
+          }
+
+          if (!fileHandle) {
+            fileHandle = await prDirHandle.getFileHandle(item.Name!, {
+              create: true,
+            });
+          }
+
+          let writable = await fileHandle.createWritable();
+          let writableIsOpen = true;
+
+          let totalSize = 0;
+          let size = 0;
+
+          try {
+            await writable.write('');
+
+            await writeFileContentFromBuffObsToIndexedDbIfReq({
+              appConfig: this.appConfig,
+              cacheContent: cacheContent ?? true,
+              fileContentRefs: wka.fileContentRefs!,
+              fileContents: wka.fileContents!,
+              fileContentRefsIdxName:
+                FsApiDriveItemsDbAdapter.DB_STORES.FileContentRefs.indexes.idnf.name,
+              idnf: parseInt(item.Idnf!),
+              item,
+              wkItemScIdx: wka.wkItemScIdx!,
+              callback,
+              readCallback: async (_, chunk) => {
+                if (chunk?.value) {
+                  if (!writableIsOpen) {
+                    writable = await fileHandle.createWritable();
+                    writableIsOpen = true;
+                  }
+
+                  await writable.write({ type: 'write', position: totalSize, data: chunk.value });
+                  const writtenLength = chunk.value.byteLength;
+                  size += writtenLength;
+                  totalSize += writtenLength;
+
+                  if (size >= this.appConfig.blobChunkDefaultSize) {
+                    await writable.close();
+                    writableIsOpen = false;
+                    size = 0;
+                  }
+                }
+              },
+            });
+          } finally {
+            if (writableIsOpen) {
+              writable.close();
+            }
+          }
+        },
+        forceRefresh
+      );
+    }
+
+    return retArr;
+  }
+
+  private async createFoldersCore(
+    wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
+    foldersArr: DriveEntryCore[],
+    overwrite: boolean,
+    forceRefresh: boolean
+  ): Promise<DriveEntryCore[]> {
+    wka.useItems = true;
+    wka.useDirHandles = true;
+    wka.useFolderChildrenIdnfs = true;
+    wka = await this.normalizeWorkItems(wka);
+    const timeStamp = this.timeStampGenerator.millis();
+
+    let pathItemsMx = foldersArr.map((folder) =>
+      withVal(
+        splitStr(folder.Idnf!, pathSplitChars).map((part) => part.part),
+        (parts) =>
+          parts.map(
+            (part) =>
+              ({
+                Name: part,
+              } as DriveEntryCore)
+          )
+      )
+    );
+
+    let dirPathItemsMx = pathItemsMx.map((arr) => arr.slice(0, arr.length - 1));
+    dirPathItemsMx = await this.readPathIdnfs(wka, dirPathItemsMx);
+
+    pathItemsMx = dirPathItemsMx.map((arr, i) => [
+      ...arr,
+      withVal(pathItemsMx[i], (oldArr) => oldArr[oldArr.length - 1]),
+    ]);
+
+    const retArr: DriveEntryCore[] = [];
+
+    for (let i = 0; i < pathItemsMx.length; i++) {
+      wka.wkItemPrIdx!.value = i;
+      wka.wkItemScIdx!.value = 0;
+      const path = pathItemsMx[i];
+      const item = path[path.length - 1];
+      retArr[i] = item;
+
+      await this.getDirHandle(
+        wka,
+        path.slice(0, path.length - 1),
+        timeStamp,
+        async (prDirHandle) => {
+          const dirHandle = await prDirHandle.getDirectoryHandle(item.Name!, {
+            create: true,
+          });
+
+          const intIdnf = (
+            await dbRequestToPromise(
+              wka.items!.value.put({
+                Name: item.Name!,
+                clientFetchTmStmpMillis: timeStamp,
+              } as IntIdnfItem)
+            )
+          ).value as number;
+
+          item.Idnf = intIdnf.toString();
+
+          await dbRequestToPromise(
+            wka.dirHandles!.value.put({
+              Idnf: intIdnf,
+              clientFetchTmStmpMillis: timeStamp,
+              dirHandle,
+            } as IntIdnfDirHandleItem)
+          );
+
+          await dbRequestToPromise(
+            wka.folderChildrenIdnfs!.value.delete([
+              path.length > 1 ? parseInt(path[path.length - 2].Idnf!) : 0,
+            ])
+          );
+        },
+        forceRefresh
+      );
+    }
+
+    return retArr;
+  }
+
+  private async deleteFolderCore(
+    wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
+    prDirHandle: FileSystemDirectoryHandle,
+    itemName: string
+  ) {
+    const entries = await prDirHandle.entries();
+
+    for await (let [entryName, handle] of entries) {
+      if (handle.kind === 'directory') {
+        await this.deleteFolderCore(wka, handle as FileSystemDirectoryHandle, entryName);
+      } else {
+        await prDirHandle.removeEntry(entryName);
+      }
+    }
+
+    await prDirHandle.removeEntry(itemName);
   }
 
   private async readNamesCore(
@@ -592,7 +1162,8 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
       const idnf = item.Idnf!;
       const intIdnf = parseInt(idnf);
 
-      const dbItem = (await wka.items!.value.get([intIdnf])).result as IntIdnfItem;
+      const dbItem = (await dbRequestToPromise(wka.items!.value.get([intIdnf])))
+        .value as IntIdnfItem;
 
       retArr[i] = {
         Idnf: idnf,
@@ -608,14 +1179,15 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
     fileHandle: FileSystemFileHandle,
     callback: ContentFileCallback,
     item: DriveEntryCore,
-    intIdnf: number
+    intIdnf: number,
+    cacheContent: boolean
   ) {
     wka.wkItemScIdx!.value++;
     const file = await fileHandle.getFile();
     const stream = file.stream();
     const reader = stream.getReader();
 
-    await writeFileContentToIndexDb({
+    await writeFileContentToIndexedDbIfReq({
       wkItemScIdx: wka.wkItemScIdx!,
       appConfig: this.appConfig,
       callback,
@@ -625,12 +1197,13 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
       idnf: intIdnf,
       item,
       readBytes: () => reader.read(),
+      cacheContent,
     });
   }
 
   private async readItemDetailsCore(
     wka: TrmrkFileSystemApiFileManagerServiceWorkArgs,
-    pathsArr: string[] | null,
+    pathsArr: (DriveEntryCore[] | string)[],
     pathItemsMx: DriveEntryCore[][] | null,
     areFilesArr: (boolean | NullOrUndef)[] | boolean | NullOrUndef,
     forceRefresh: boolean,
@@ -800,7 +1373,8 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
       const isFile = opts.isFile;
 
       if (opts.canBeFolder !== false || isFile.value !== false) {
-        dbItem = (await opts.dbStore.value.get([opts.intIdnf])).result as TDbItem;
+        dbItem = (await dbRequestToPromise(opts.dbStore.value.get([opts.intIdnf])))
+          .value as TDbItem;
 
         if (!this.dbItemIsStale(dbItem, opts.forceRefresh)) {
           await opts.dbItemIsNotStaleCallback(opts, dbItem);
@@ -871,12 +1445,14 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
           wka.wkItemScIdx!.value = 0;
 
           let dbItem = (
-            await wka
-              .items!.value.index(
-                FsApiDriveItemsDbAdapter.DB_STORES.Items.indexes.nameAndPrIdnf.name
-              )
-              .get([key, intIdnf])
-          ).result as IntIdnfItem;
+            await dbRequestToPromise(
+              wka
+                .items!.value.index(
+                  FsApiDriveItemsDbAdapter.DB_STORES.Items.indexes.nameAndPrIdnf.name
+                )
+                .get([key, intIdnf])
+            )
+          ).value as IntIdnfItem;
 
           wka.wkItemScIdx!.value++;
 
@@ -930,10 +1506,12 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
     forceRefresh: boolean,
     callback:
       | ((itemHandle: IntIdnfDirHandleItem | IntIdnfFileHandleItem) => Promise<T>)
-      | null = null
+      | null = null,
+    createPredicate: ((offset: number) => boolean) | NullOrUndef = null
   ) {
     let retVal: T = undefined as T;
     callback ??= async (h) => h as T;
+    createPredicate ??= () => false;
     const itemIntIdnf = parseInt(itemEntry.Idnf!);
 
     if (isFile === false) {
@@ -946,7 +1524,9 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
             dirHandle,
           } as IntIdnfDirHandleItem);
         },
-        forceRefresh
+        forceRefresh,
+        0,
+        createPredicate
       );
     } else if (isFile === true) {
       const fileHandleRef: MtblRefValue<FileSystemFileHandle | null> = {
@@ -973,18 +1553,24 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
           pathFoldersArr,
           timeStamp,
           async (prDirHandle) => {
-            const fileHandle = await prDirHandle.getFileHandle(itemEntry.Name!);
+            const fileHandle = await prDirHandle.getFileHandle(itemEntry.Name!, {
+              create: createPredicate(-1),
+            });
 
-            await wka.fileHandles!.value.put({
-              Idnf: itemIntIdnf,
-              fileHandle: fileHandle,
-              clientFetchTmStmpMillis: timeStamp,
-            } as IntIdnfFileHandleItem);
+            await dbRequestToPromise(
+              wka.fileHandles!.value.put({
+                Idnf: itemIntIdnf,
+                fileHandle: fileHandle,
+                clientFetchTmStmpMillis: timeStamp,
+              } as IntIdnfFileHandleItem)
+            );
 
             retVal = await callback({ fileHandle } as IntIdnfFileHandleItem);
             return retVal;
           },
-          forceRefresh
+          forceRefresh,
+          0,
+          createPredicate
         );
       }
     } else {
@@ -1013,7 +1599,13 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
           ))!;
 
           if (!itemHandleRef.value) {
-            const handleItem = await this.getItemHandleCore(prDirHandle, itemEntry.Name!, isFile);
+            const handleItem = await this.getItemHandleCore(
+              prDirHandle,
+              itemEntry.Name!,
+              isFile,
+              createPredicate
+            );
+
             const dirHandle = (handleItem as IntIdnfDirHandleItem).dirHandle;
             const fileHandle = (handleItem as IntIdnfFileHandleItem).fileHandle;
 
@@ -1042,7 +1634,9 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
 
           return retVal;
         },
-        forceRefresh
+        forceRefresh,
+        0,
+        createPredicate
       );
     }
 
@@ -1052,41 +1646,63 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
   private async getItemHandleCore(
     prDirHandle: FileSystemDirectoryHandle,
     entryName: string,
-    isFile: boolean | NullOrUndef
+    isFile: boolean | NullOrUndef,
+    createPredicate: ((offset: number) => boolean) | NullOrUndef = null
   ) {
     if (isFile === false) {
-      return (await this.getDirHandleItem(prDirHandle, entryName))!;
+      return (await this.getDirHandleItem(prDirHandle, entryName, createPredicate))!;
     } else if (isFile === true) {
-      return await this.getFileHandleItem(prDirHandle, entryName);
+      return await this.getFileHandleItem(prDirHandle, entryName, createPredicate);
     }
 
-    const handleItem = await this.getHandleItem(prDirHandle, entryName);
+    const handleItem = await this.getHandleItem(prDirHandle, entryName, createPredicate);
     return handleItem;
   }
 
-  private async getHandleItem(prDirHandle: FileSystemDirectoryHandle, entryName: string) {
+  private async getHandleItem(
+    prDirHandle: FileSystemDirectoryHandle,
+    entryName: string,
+    createPredicate: ((offset: number) => boolean) | NullOrUndef = null
+  ) {
     try {
-      return this.getDirHandleItem(prDirHandle, entryName);
+      return this.getDirHandleItem(prDirHandle, entryName, createPredicate);
     } catch (err) {
       this.throwErrIfNotTypeMismatch(err);
     }
 
-    return await this.getFileHandleItem(prDirHandle, entryName);
+    return await this.getFileHandleItem(prDirHandle, entryName, createPredicate);
   }
 
-  private async getDirHandleItem(prDirHandle: FileSystemDirectoryHandle, entryName: string) {
+  private async getDirHandleItem(
+    prDirHandle: FileSystemDirectoryHandle,
+    entryName: string,
+    createPredicate: ((offset: number) => boolean) | NullOrUndef = null
+  ) {
+    createPredicate ??= () => false;
+
     const dirHandleItem = {
-      dirHandle: await prDirHandle.getDirectoryHandle(entryName),
+      dirHandle: await prDirHandle.getDirectoryHandle(entryName, {
+        create: createPredicate(0),
+      }),
     } as IntIdnfDirHandleItem;
 
     return dirHandleItem;
   }
 
-  private async getFileHandleItem(prDirHandle: FileSystemDirectoryHandle, entryName: string) {
+  private async getFileHandleItem(
+    prDirHandle: FileSystemDirectoryHandle,
+    entryName: string,
+    createPredicate: ((offset: number) => boolean) | NullOrUndef = null
+  ) {
+    createPredicate ??= () => false;
+
     const fileHandleItem = {
-      fileHandle: await prDirHandle.getFileHandle(entryName),
+      fileHandle: await prDirHandle.getFileHandle(entryName, {
+        create: createPredicate(0),
+      }),
     } as IntIdnfFileHandleItem;
 
+    await this.requestPermission(fileHandleItem.fileHandle);
     return fileHandleItem;
   }
 
@@ -1096,16 +1712,19 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
     timeStamp: number,
     callback: ((dirHandle: FileSystemDirectoryHandle) => Promise<T>) | null = null,
     forceRefresh: boolean,
-    offset = 0
+    offset = 0,
+    createPredicate: ((offset: number) => boolean) | NullOrUndef = null
   ) {
     let retVal: T = undefined as T;
     callback ??= async (h) => h as T;
+    createPredicate ??= () => false;
     const dirHandleRef: MtblRefValue<FileSystemDirectoryHandle | null> = {
       value: null,
     };
 
     if (offset == pathFoldersArr.length) {
       dirHandleRef.value = this.currentStorageOption.rootFolder;
+      await this.requestPermission(dirHandleRef.value);
       retVal = await callback(dirHandleRef.value);
     } else {
       const folder = pathFoldersArr[pathFoldersArr.length - 1 - offset];
@@ -1125,7 +1744,9 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
           pathFoldersArr,
           timeStamp,
           async (prDirHandle) => {
-            dirHandleRef.value = await prDirHandle.getDirectoryHandle(folder.Name!);
+            dirHandleRef.value = await prDirHandle.getDirectoryHandle(folder.Name!, {
+              create: createPredicate(offset),
+            });
 
             await wka.dirHandles!.value.put({
               Idnf: intIdnf,
@@ -1133,6 +1754,7 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
               clientFetchTmStmpMillis: timeStamp,
             } as IntIdnfDirHandleItem);
 
+            await this.requestPermission(dirHandleRef.value);
             retVal = await callback(dirHandleRef.value);
           },
           forceRefresh,
@@ -1150,7 +1772,8 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
     fileEntry: DriveEntryCore,
     timeStamp: number,
     forceRefresh: boolean,
-    callback: ((dirHandle: FileSystemFileHandle) => Promise<T>) | null = null
+    callback: ((dirHandle: FileSystemFileHandle) => Promise<T>) | null = null,
+    createPredicate: ((offset: number) => boolean) | NullOrUndef = null
   ) {
     callback ??= async (h) => h as T;
 
@@ -1163,7 +1786,8 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
       forceRefresh,
       async (handleItem) => {
         return await callback((handleItem as IntIdnfFileHandleItem).fileHandle);
-      }
+      },
+      createPredicate
     );
 
     return retVal;
@@ -1220,6 +1844,8 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
       handleMtblRef.value = isFile.value
         ? (handleItem as IntIdnfFileHandleItem).fileHandle
         : (handleItem as IntIdnfDirHandleItem).dirHandle;
+
+      await this.requestPermission(handleMtblRef.value);
     }
 
     let retVal: T | null = null;
@@ -1250,13 +1876,13 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
     let dbItem: IntIdnfDirHandleItem | IntIdnfFileHandleItem | null;
 
     if (isFile.value === false) {
-      dbItem = (await wka.dirHandles!.value.get([intIdnf])).result;
+      dbItem = (await dbRequestToPromise(wka.dirHandles!.value.get([intIdnf]))).value;
     } else if (isFile.value === true) {
-      dbItem = (await wka.fileHandles!.value.get([intIdnf])).result;
+      dbItem = (await dbRequestToPromise(wka.fileHandles!.value.get([intIdnf]))).value;
     } else {
       dbItem =
-        (await wka.dirHandles!.value.get([intIdnf])).result ??
-        (await wka.fileHandles!.value.get([intIdnf])).result;
+        (await dbRequestToPromise(wka.dirHandles!.value.get([intIdnf]))).value ??
+        (await dbRequestToPromise(wka.fileHandles!.value.get([intIdnf]))).value;
 
       if (dbItem) {
         isFile.value = !!(dbItem as IntIdnfFileHandleItem).fileHandle;
@@ -1282,5 +1908,40 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
   private throwIfErrNotTipeMismatchOrStale(err: any) {
     let additionalCondition: boolean | null = null;
     this.throwErrIfNotTypeMismatch(err, additionalCondition);
+  }
+
+  private throwIfErrNotNotFoundError(err: any) {
+    if ((err as DOMException).name !== 'NotFoundError') {
+      throw err;
+    }
+  }
+
+  private async requestPermission(
+    handle: FileSystemHandle,
+    mode?: string | NullOrUndef,
+    errMsgFactory?: (() => string | NullOrUndef) | NullOrUndef
+  ) {
+    mode ??= 'readwrite';
+    errMsgFactory ??= () => null;
+    const status = await handle.queryPermission({ mode });
+
+    if (status !== 'granted') {
+      const permission = await handle.requestPermission({ mode });
+
+      if (permission === 'granted') {
+        return true;
+      }
+
+      let errMsg = errMsgFactory();
+
+      if (errMsg !== '') {
+        errMsg ??= `Permission ${mode} denied`;
+        throw new Error(errMsg);
+      }
+
+      return false;
+    }
+
+    return true;
   }
 }

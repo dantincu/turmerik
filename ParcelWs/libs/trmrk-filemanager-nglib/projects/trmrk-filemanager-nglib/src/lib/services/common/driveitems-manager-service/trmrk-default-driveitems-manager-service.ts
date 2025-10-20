@@ -44,7 +44,7 @@ export class DefaultDriveItemsManagerService<
 
   async readPathIdnfs(
     wka: TWorkArgs,
-    itemsMx: DriveItem<DriveItemTypeCore>[][] | string[],
+    itemsMx: (DriveItem<DriveItemTypeCore>[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveItem<DriveItemTypeCore>[][]> {
     const fsEntriesMx = await this.fileManagerService.readPathIdnfs(wka, itemsMx, forceRefresh);
@@ -58,7 +58,7 @@ export class DefaultDriveItemsManagerService<
 
   async readSubFolderIdnfs(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<DriveItemTypeCore>[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveItem<DriveItemTypeCore>[][]> {
     const fsEntriesMx = await this.fileManagerService.readSubFolderIdnfs(
@@ -76,7 +76,7 @@ export class DefaultDriveItemsManagerService<
 
   async readFolderFileIdnfs(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<DriveItemTypeCore>[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveItem<DriveItemTypeCore>[][]> {
     const fsEntriesMx = await this.fileManagerService.readFolderFileIdnfs(
@@ -94,7 +94,7 @@ export class DefaultDriveItemsManagerService<
 
   async readFolderChildIdnfs(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<DriveItemTypeCore>[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveItem<DriveItemTypeCore>[][][]> {
     const fsEntriesMx = await this.fileManagerService.readFolderChildIdnfs(
@@ -112,7 +112,7 @@ export class DefaultDriveItemsManagerService<
 
   async readNames(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<DriveItemTypeCore>[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | boolean | NullOrUndef | NullOrUndef,
     forceRefresh: boolean = false
   ): Promise<DriveItem<DriveItemTypeCore>[]> {
@@ -132,7 +132,7 @@ export class DefaultDriveItemsManagerService<
 
   async readFileSizes(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<DriveItemTypeCore>[] | string)[],
     forceRefresh: boolean = false
   ): Promise<DriveItem<DriveItemTypeCore>[]> {
     const fsEntriesArr = await this.fileManagerService.readFileSizes(wka, pathsArr, forceRefresh);
@@ -146,7 +146,7 @@ export class DefaultDriveItemsManagerService<
 
   async readTimeStamps(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<DriveItemTypeCore>[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | boolean | NullOrUndef | NullOrUndef,
     forceRefresh: boolean = false
   ): Promise<DriveItem<DriveItemTypeCore>[]> {
@@ -166,7 +166,7 @@ export class DefaultDriveItemsManagerService<
 
   override async readFolderDetails(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<DriveItemTypeCore>[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveItem<DriveItemTypeCore>[]> {
     const fsEntriesArr = await this.fileManagerService.readFolderDetails(
@@ -184,7 +184,7 @@ export class DefaultDriveItemsManagerService<
 
   override async readFileDetails(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<DriveItemTypeCore>[] | string)[],
     forceRefresh: boolean
   ): Promise<DriveItem<DriveItemTypeCore>[]> {
     const fsEntriesArr = await this.fileManagerService.readFileDetails(wka, pathsArr, forceRefresh);
@@ -198,7 +198,7 @@ export class DefaultDriveItemsManagerService<
 
   override async readItemDetails(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<DriveItemTypeCore>[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | boolean | NullOrUndef | NullOrUndef,
     forceRefresh: boolean
   ): Promise<DriveItem<DriveItemTypeCore>[][]> {
@@ -218,13 +218,15 @@ export class DefaultDriveItemsManagerService<
 
   async readFileTextContents(
     wka: TWorkArgs,
-    pathsArr: string[],
-    forceRefresh: boolean = false
+    pathsArr: (DriveItem<DriveItemTypeCore>[] | string)[],
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<ContentItemCore<string>[]> {
     const fileTextContentsArr = await this.fileManagerService.readFileTextContents(
       wka,
       pathsArr,
-      forceRefresh
+      forceRefresh,
+      cacheContent
     );
 
     return fileTextContentsArr;
@@ -232,15 +234,17 @@ export class DefaultDriveItemsManagerService<
 
   async readFileContents(
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (DriveItem<DriveItemTypeCore>[] | string)[],
     callback: ContentFileCallback,
-    forceRefresh: boolean
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<DriveItem<DriveItemTypeCore>[]> {
     const fileTextContentsArr = await this.fileManagerService.readFileContents(
       wka,
       pathsArr,
       callback,
-      forceRefresh
+      forceRefresh,
+      cacheContent
     );
 
     const driveItemsArr = fileTextContentsArr.map(
@@ -254,7 +258,8 @@ export class DefaultDriveItemsManagerService<
     wka: TWorkArgs,
     foldersArr: DriveItem<DriveItemTypeCore, any>[],
     filesArr: DriveItem<DriveItemTypeCore, any>[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean
   ): Promise<FilesAndFoldersTuple<string>> {
     const folderEntriesArr = foldersArr.map(
       (folder) => ({ ...folder } as unknown as DriveEntryCore)
@@ -266,7 +271,8 @@ export class DefaultDriveItemsManagerService<
       wka,
       folderEntriesArr,
       fileEntriesArr,
-      overwrite
+      overwrite,
+      forceRefresh
     );
 
     return tuple;
@@ -276,38 +282,52 @@ export class DefaultDriveItemsManagerService<
     wka: TWorkArgs,
     foldersArr: DriveItem<DriveItemTypeCore, any>[],
     filesArr: DriveItem<DriveItemTypeCore, any>[],
-    overwrite: boolean
-  ): Promise<void> {
+    overwrite: boolean,
+    forceRefresh: boolean
+  ): Promise<FilesAndFoldersTuple<string>> {
     const folderEntriesArr = foldersArr.map(
       (folder) => ({ ...folder } as unknown as DriveEntryCore)
     );
 
     const fileEntriesArr = filesArr.map((file) => ({ ...file } as unknown as DriveEntryCore));
-    await this.fileManagerService.renameOrMoveEntries(
+
+    const retTuple = await this.fileManagerService.renameOrMoveEntries(
       wka,
       folderEntriesArr,
       fileEntriesArr,
-      overwrite
+      overwrite,
+      forceRefresh
     );
+
+    return retTuple;
   }
 
   async deleteEntries(
     wka: TWorkArgs,
     foldersArr: DriveItem<DriveItemTypeCore, any>[],
-    filesArr: DriveItem<DriveItemTypeCore, any>[]
+    filesArr: DriveItem<DriveItemTypeCore, any>[],
+    forceRefresh: boolean
   ): Promise<void> {
     const folderEntriesArr = foldersArr.map(
       (folder) => ({ ...folder } as unknown as DriveEntryCore)
     );
 
     const fileEntriesArr = filesArr.map((file) => ({ ...file } as unknown as DriveEntryCore));
-    await this.fileManagerService.deleteEntries(wka, folderEntriesArr, fileEntriesArr);
+
+    await this.fileManagerService.deleteEntries(
+      wka,
+      folderEntriesArr,
+      fileEntriesArr,
+      forceRefresh
+    );
   }
 
   async writeFileTextContents(
     wka: TWorkArgs,
     filesArr: ContentItemCore<string>[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<DriveItem<DriveItemTypeCore>[]> {
     const fileEntriesArr = filesArr.map((file) => ({ ...file } as unknown as DriveEntry<string>));
 
@@ -320,7 +340,9 @@ export class DefaultDriveItemsManagerService<
     const retEntriesArr = await this.fileManagerService.writeFileTextContents(
       wka,
       fileEntriesArr,
-      overwrite
+      overwrite,
+      forceRefresh,
+      cacheContent
     );
 
     const retArr = retEntriesArr.map(
@@ -334,13 +356,17 @@ export class DefaultDriveItemsManagerService<
     wka: TWorkArgs,
     filesArr: DriveItem<DriveItemTypeCore>[],
     callback: FileContentFactory,
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ): Promise<DriveItem<DriveItemTypeCore>[]> {
     const retEntriesArr = await this.fileManagerService.writeFileContents(
       wka,
       filesArr,
       callback,
-      overwrite
+      overwrite,
+      forceRefresh,
+      cacheContent
     );
 
     const retArr = retEntriesArr.map(
@@ -353,9 +379,15 @@ export class DefaultDriveItemsManagerService<
   async createFolders(
     wka: TWorkArgs,
     foldersArr: DriveItem<DriveItemTypeCore>[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean
   ): Promise<DriveItem<DriveItemTypeCore>[]> {
-    const retEntriesArr = await this.fileManagerService.createFolders(wka, foldersArr, overwrite);
+    const retEntriesArr = await this.fileManagerService.createFolders(
+      wka,
+      foldersArr,
+      overwrite,
+      forceRefresh
+    );
 
     const retArr = retEntriesArr.map(
       (entry) => ({ ...entry } as unknown as DriveItem<DriveItemTypeCore>)

@@ -17,117 +17,127 @@ export interface DriveItemsManagerCore<
 
   readPathIdnfs: (
     wka: TWorkArgs,
-    itemsMx: TDriveItem[][] | string[],
+    itemsMx: (TDriveItem[] | string)[],
     forceRefresh: boolean
   ) => Promise<TDriveItem[][]>;
 
   readSubFolderIdnfs: (
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (TDriveItem[] | string)[],
     forceRefresh: boolean
   ) => Promise<TDriveItem[][]>;
 
   readFolderFileIdnfs: (
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (TDriveItem[] | string)[],
     forceRefresh: boolean
   ) => Promise<TDriveItem[][]>;
 
   readFolderChildIdnfs: (
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (TDriveItem[] | string)[],
     forceRefresh: boolean
   ) => Promise<TDriveItem[][][]>;
 
   readNames: (
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (TDriveItem[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | boolean | NullOrUndef | NullOrUndef,
     forceRefresh: boolean
   ) => Promise<TDriveItem[]>;
 
   readFileSizes: (
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (TDriveItem[] | string)[],
     forceRefresh: boolean
   ) => Promise<TDriveItem[]>;
 
   readTimeStamps: (
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (TDriveItem[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | boolean | NullOrUndef | NullOrUndef,
     forceRefresh: boolean
   ) => Promise<TDriveItem[]>;
 
   readFolderDetails: (
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (TDriveItem[] | string)[],
     forceRefresh: boolean
   ) => Promise<TDriveItem[]>;
 
   readFileDetails: (
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (TDriveItem[] | string)[],
     forceRefresh: boolean
   ) => Promise<TDriveItem[]>;
 
   readItemDetails: (
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (TDriveItem[] | string)[],
     areFilesArr: (boolean | NullOrUndef)[] | boolean | NullOrUndef | NullOrUndef,
     forceRefresh: boolean
   ) => Promise<TDriveItem[][]>;
 
   readFileTextContents: (
     wka: TWorkArgs,
-    pathsArr: string[],
-    forceRefresh: boolean
+    pathsArr: (TDriveItem[] | string)[],
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ) => Promise<ContentItemCore<string>[]>;
 
   readFileContents: (
     wka: TWorkArgs,
-    pathsArr: string[],
+    pathsArr: (TDriveItem[] | string)[],
     callback: ContentFileCallback,
-    forceRefresh: boolean
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ) => Promise<NamedItemCore[]>;
 
   copyEntries: (
     wka: TWorkArgs,
     foldersArr: TDriveItem[],
     filesArr: TDriveItem[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean
   ) => Promise<FilesAndFoldersTuple<string>>;
 
   renameOrMoveEntries: (
     wka: TWorkArgs,
     foldersArr: TDriveItem[],
     filesArr: TDriveItem[],
-    overwrite: boolean
-  ) => Promise<void>;
+    overwrite: boolean,
+    forceRefresh: boolean
+  ) => Promise<FilesAndFoldersTuple<string>>;
 
   deleteEntries: (
     wka: TWorkArgs,
     foldersArr: TDriveItem[],
-    filesArr: TDriveItem[]
+    filesArr: TDriveItem[],
+    forceRefresh: boolean
   ) => Promise<void>;
 
   writeFileTextContents: (
     wka: TWorkArgs,
     filesArr: ContentItemCore<string>[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ) => Promise<TDriveItem[]>;
 
   writeFileContents: (
     wka: TWorkArgs,
     filesArr: TDriveItem[],
     callback: FileContentFactory,
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean,
+    cacheContent: boolean | NullOrUndef
   ) => Promise<TDriveItem[]>;
 
   createFolders: (
     wka: TWorkArgs,
     foldersArr: TDriveItem[],
-    overwrite: boolean
+    overwrite: boolean,
+    forceRefresh: boolean
   ) => Promise<TDriveItem[]>;
 }
 

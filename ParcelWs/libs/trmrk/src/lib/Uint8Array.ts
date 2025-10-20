@@ -16,3 +16,21 @@ export const mergeUint8Arrays = <TArrayBuffer extends ArrayBufferLike>(
 
   return retArray;
 };
+
+export const splitArray = <TArrayBuffer extends ArrayBufferLike>(
+  array: Uint8Array<TArrayBuffer>,
+  maxArraySize: number,
+  factory?: ((totalLength: number) => Uint8Array<TArrayBuffer>) | NullOrUndef
+) => {
+  const retMx: Uint8Array<TArrayBuffer>[] = [];
+  factory ??= (len) => new Uint8Array(len) as Uint8Array<TArrayBuffer>;
+
+  for (let i = 0; i < array.length; i += maxArraySize) {
+    const nextArrSize = Math.min(maxArraySize, array.length - i);
+    const nextArr = factory(nextArrSize);
+    nextArr.set(array.slice(i, i + nextArrSize));
+    retMx.push(nextArr);
+  }
+
+  return retMx;
+};

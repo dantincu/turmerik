@@ -80,7 +80,7 @@ export const trimStr = (
   str: string,
   trimOpts?:
     | {
-        trimStr: string;
+        trimStr: string | string[];
         fullTrim?: boolean | NullOrUndef;
         trimStart?: boolean | NullOrUndef;
         trimEnd?: boolean | NullOrUndef;
@@ -93,19 +93,29 @@ export const trimStr = (
 
   let trimStr = trimOpts.trimStr;
 
-  if (!isNonEmptyStr(trimStr)) {
+  if ((trimStr ?? '') === '') {
     trimStr = ' ';
   }
 
+  if ('string' === typeof trimStr) {
+    trimStr = [trimStr];
+  }
+
   if (trimOpts.fullTrim || trimOpts.trimStart) {
-    while (str.startsWith(trimStr)) {
-      str = str.substring(trimStr.length);
+    let idx = trimStr.findIndex((s) => str.startsWith(s));
+
+    while (idx >= 0) {
+      str = str.substring(trimStr[idx].length);
+      idx = trimStr.findIndex((s) => str.startsWith(s));
     }
   }
 
   if (trimOpts.fullTrim || trimOpts.trimEnd) {
-    while (str.endsWith(trimStr)) {
-      str = str.substring(0, str.length - trimStr.length);
+    let idx = trimStr.findIndex((s) => str.endsWith(s));
+
+    while (idx >= 0) {
+      str = str.substring(0, str.length - trimStr[idx].length);
+      idx = trimStr.findIndex((s) => str.endsWith(s));
     }
   }
 
@@ -118,7 +128,7 @@ export const trimStartStr = (str: string, trimStrVal: string) =>
 export const trimEndStr = (str: string, trimStrVal: string) =>
   trimStr(str, { trimStr: trimStrVal, trimEnd: true });
 
-export const trimFullStr = (str: string, trimStrVal: string) =>
+export const trimFullStr = (str: string, trimStrVal: string | string[]) =>
   trimStr(str, { trimStr: trimStrVal, fullTrim: true });
 
 export const capitalizeFirstLetter = (str: string) => {

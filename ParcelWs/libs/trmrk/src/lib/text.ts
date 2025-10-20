@@ -1,5 +1,5 @@
 import { NullOrUndef } from './core';
-import { mergeUint8Arrays } from './Uint8Array';
+import { mergeUint8Arrays, splitArray } from './Uint8Array';
 
 export const encodings = Object.freeze({
   utf8: 'utf-8',
@@ -34,4 +34,16 @@ export const getTextFromUint8ArrayChunks = <TArrayBuffer extends ArrayBufferLike
   const text = getTextFromUint8Array(array, encoding);
 
   return text;
+};
+
+export const textToUint8Array = (text: string) => {
+  const encoder = new TextEncoder();
+  const array = encoder.encode(text);
+  return array;
+};
+
+export const textToUint8ArrayChunks = (text: string, maxChunkSize: number) => {
+  const array = textToUint8Array(text);
+  const retMx = splitArray(array, maxChunkSize);
+  return retMx;
 };

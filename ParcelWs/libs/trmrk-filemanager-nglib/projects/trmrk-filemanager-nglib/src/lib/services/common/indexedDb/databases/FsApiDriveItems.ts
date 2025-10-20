@@ -137,7 +137,22 @@ export class FsApiDriveItemsDbAdapter extends DbAdapterBase {
         },
         FileContents: {
           name: '',
-          keyPath: Object.freeze(namesOf(() => cast<IntIdnfFileContent>(), [(v) => v.ContentIdnf])),
+          keyPath: Object.freeze(
+            namesOf(() => cast<IntIdnfFileContent>(), [(v) => v.ContentIdnf, (v) => v.ChunkIdx])
+          ),
+          indexes: Object.freeze(
+            mapObjProps(
+              {
+                contentIdnf: {
+                  name: '',
+                  keyPath: Object.freeze(
+                    namesOf(() => cast<IntIdnfFileContent>(), [(v) => v.ContentIdnf])
+                  ),
+                },
+              },
+              (propVal, propName) => Object.freeze({ ...propVal, name: propName })
+            )
+          ),
         },
       },
       (propVal, propName) => Object.freeze({ ...propVal, name: propName })
@@ -171,9 +186,14 @@ export class FsApiDriveItemsDbAdapter extends DbAdapterBase {
       }),
       (dbStore) => {
         withVal(dbStores.Items.indexes.nameAndPrIdnf, (nameAndPrIdnfIdx) => {
-          createIndexIfNotExists(dbStore, nameAndPrIdnfIdx.name, [...nameAndPrIdnfIdx.keyPath], () => ({
-            unique: true,
-          }));
+          createIndexIfNotExists(
+            dbStore,
+            nameAndPrIdnfIdx.name,
+            [...nameAndPrIdnfIdx.keyPath],
+            () => ({
+              unique: true,
+            })
+          );
         });
       }
     );
@@ -214,8 +234,19 @@ export class FsApiDriveItemsDbAdapter extends DbAdapterBase {
       }
     );
 
-    createDbStoreIfNotExists(db, dbStores.FileContents.name, () => ({
-      keyPath: [...dbStores.FileContents.keyPath],
-    }));
+    createDbStoreIfNotExists(
+      db,
+      dbStores.FileContents.name,
+      () => ({
+        keyPath: [...dbStores.FileContents.keyPath],
+      }),
+      (dbStore) => {
+        withVal(dbStores.FileContents.indexes.contentIdnf, (nameIdx) => {
+          createIndexIfNotExists(dbStore, nameIdx.name, [...nameIdx.keyPath], () => ({
+            unique: true,
+          }));
+        });
+      }
+    );
   }
 }

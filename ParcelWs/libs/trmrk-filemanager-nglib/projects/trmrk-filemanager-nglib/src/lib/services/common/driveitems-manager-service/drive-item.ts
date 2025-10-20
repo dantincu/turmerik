@@ -3,6 +3,8 @@ import { DriveEntryCore } from '../../../../trmrk/DotNetTypes/Turmerik.Core.File
 
 import { NamedItemCore } from '../indexedDb/core';
 
+export const pathSplitChars = ['/', '\\'];
+
 export enum DriveItemTypeCore {
   None = 0,
   Folder,
