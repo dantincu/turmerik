@@ -17,7 +17,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 import { NullOrUndef, withVal, RefLazyValue } from '../../../trmrk/core';
 import { normalizeAppConfigCore } from '../../../trmrk/app-config';
-import { AsyncRequestStateManagerFactory } from '../../../trmrk/AsyncRequestStateManager1';
+import { AsyncRequestStateManagerFactory } from '../../../trmrk/AsyncRequestStateManager';
 
 import { AppServiceBase } from '../common/app-service-base';
 import { AppStateServiceBase } from '../common/app-state-service-base';

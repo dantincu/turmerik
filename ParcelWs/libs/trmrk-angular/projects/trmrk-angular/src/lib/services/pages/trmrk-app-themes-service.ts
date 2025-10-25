@@ -7,7 +7,7 @@ import { SharedBasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedD
 import {
   AsyncRequestStateManager,
   AsyncRequestStateManagerFactory,
-} from '../../../trmrk/AsyncRequestStateManager1';
+} from '../../../trmrk/AsyncRequestStateManager';
 
 import { getIDbRequestOpenErrorMsg } from '../../../trmrk-browser/indexedDB/core';
 import { TouchOrMouseCoords } from '../../../trmrk-browser/domUtils/touchAndMouseEvents';
