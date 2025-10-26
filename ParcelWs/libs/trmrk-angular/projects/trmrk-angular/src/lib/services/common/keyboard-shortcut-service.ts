@@ -2,11 +2,11 @@ import { Injectable, OnDestroy, Inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import {
-  SharedBasicAppSettingsDbAdapter,
+  BasicAppSettingsDbAdapter,
   KeyPress,
   KeyboardShortcut,
   KeyboardShortcutSrlzbl,
-} from '../../../trmrk-browser/indexedDB/databases/SharedBasicAppSettings';
+} from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
 import { NullOrUndef } from '../../../trmrk/core';
 
@@ -36,7 +36,7 @@ export class KeyboardShortcutService implements OnDestroy {
   shortcuts: KeyboardShortcut[] = [];
   scopeObserversMap: { [scope: string]: TrmrkObservable<KeyboardShortcut> } = {};
 
-  private sharedBasicAppSettings: SharedBasicAppSettingsDbAdapter;
+  private sharedBasicAppSettings: BasicAppSettingsDbAdapter;
   private readonly containers: KeyboardShortcutContainer[] = [];
 
   constructor(

@@ -82,12 +82,13 @@ export class App implements OnDestroy {
             data: {
               modalIdAvailable: (modalId) => (this.setupModalId = modalId),
               optionChosen: (option) => {
-                this.appService.storageOptionService.currentStorageOption.next(option);
+                this.appService.storageOptionService.updateCurrentStorageOption(
+                  option,
+                  this.sessionService.currentTab.value.tabId
+                );
+
                 this.appService.appStateService.performAppSetup.next(false);
                 this.appService.appStateService.hasBeenSetUp.next(true, true);
-                this.appService.storageOptionService.writeCurrentToIndexedDb(
-                  this.sessionService.currentSession.value.sessionId
-                );
               },
               errorMessage: this.appService.appStateSvc.appSetupModalErrorMsg.value,
               isUpdate: this.appService.appStateService.hasBeenSetUp.value,

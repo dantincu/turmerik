@@ -12,11 +12,11 @@ import { AppServiceBase, extractAppObjectKeyParts } from './app-service-base';
 import { IndexedDbDatabasesServiceCore } from './indexedDb/indexed-db-databases-service-core';
 
 import {
-  SharedAppSettingsChoice,
-  SharedBasicAppSettingsDbAdapter,
+  AppSettingsChoice,
+  BasicAppSettingsDbAdapter,
   commonAppSettingsChoiceCatKeys,
   commonAppSettingsChoiceKeys,
-} from '../../../trmrk-browser/indexedDB/databases/SharedBasicAppSettings';
+} from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
 import { dbRequestToPromise } from '../../../trmrk-browser/indexedDB/core';
 
@@ -110,7 +110,7 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
   activePanel: PanelPosition = PanelPosition.None;
   optionsMenuOpenForPanel: PanelPosition = PanelPosition.None;
 
-  private basicAppSettingsDbAdapter: SharedBasicAppSettingsDbAdapter;
+  private basicAppSettingsDbAdapter: BasicAppSettingsDbAdapter;
 
   private indexedDb = {
     appSettings: {
@@ -624,7 +624,7 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
 
           Promise.all(
             keyPathsArr.map((keyPath) =>
-              dbRequestToPromise<SharedAppSettingsChoice>(
+              dbRequestToPromise<AppSettingsChoice>(
                 this.basicAppSettingsDbAdapter.stores.choices.store(db).get(keyPath)
               )
             )
@@ -835,7 +835,7 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
         catKey: this.indexedDb.appSettings.choices.appPanelsLayout.catKey,
         key: this.appService.getAppObjectKey([commonAppSettingsChoiceKeys.panelWidthRatios]),
         value: this.corePanelWidthRatios,
-      } as SharedAppSettingsChoice);
+      } as AppSettingsChoice);
     });
   }
 
@@ -845,7 +845,7 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
         catKey: this.indexedDb.appSettings.choices.appPanelsLayout.catKey,
         key: this.appService.getAppObjectKey([commonAppSettingsChoiceKeys.panelVisibilities]),
         value: [this.showLeftPanel, this.showMiddlePanel, this.showRightPanel],
-      } as SharedAppSettingsChoice);
+      } as AppSettingsChoice);
     });
   }
 

@@ -136,6 +136,7 @@ export const getSessionServiceAppInitializer = () =>
   provideAppInitializer(async () => {
     const service = inject(TrmrkSessionService);
     await service.assureSessionIsSet();
+    await service.assureSessionTabIsSet();
   });
 
 export const getBrowserTabIdAppInitializer = () =>

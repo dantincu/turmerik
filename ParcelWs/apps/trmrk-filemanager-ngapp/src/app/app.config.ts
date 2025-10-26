@@ -50,14 +50,14 @@ export const appConfig: ApplicationConfig = {
         const storageOptionService = inject(StorageOptionServiceCore);
 
         await runOnceWhenValueIs(
-          appSessionService.currentSession,
+          appSessionService.currentTab,
           null!,
           null,
           (value) => (value ?? null) !== null
         );
 
         await storageOptionService.loadCurrentFromIndexedDb(
-          appSessionService.currentSession.value.sessionId
+          appSessionService.currentTab.value.tabId
         );
       }),
       {

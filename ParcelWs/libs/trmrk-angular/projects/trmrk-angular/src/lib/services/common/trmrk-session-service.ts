@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { mapPropNamesToThemselves, PropNameWordsConvention } from '../../../trmrk/propNames';
 import { dbRequestToPromise, openDbRequestToPromise } from '../../../trmrk-browser/indexedDB/core';
-import { AppSession } from '../../../trmrk-browser/indexedDB/databases/AppSessions';
+import { AppSession, AppSessionTab } from '../../../trmrk-browser/indexedDB/databases/AppSessions';
 import { transformUrl, getRelUri } from '../../../trmrk/url';
 
 import { IndexedDbDatabasesServiceCore } from './indexedDb/indexed-db-databases-service-core';
@@ -29,6 +29,7 @@ export const urlQueryKeys = mapPropNamesToThemselves(
 })
 export class TrmrkSessionService implements OnDestroy {
   public currentSession = new TrmrkObservable<AppSession>(null!);
+  public currentTab = new TrmrkObservable<AppSessionTab>(null!);
 
   private queryingDb = false;
 
@@ -104,6 +105,89 @@ export class TrmrkSessionService implements OnDestroy {
               const url = transformUrl(getRelUri(document.location.href), {
                 queryParamsTransformer: (map) => {
                   map[urlQueryKeys.sessionId] = sessionId!;
+                  return map;
+                },
+              });
+
+              this.router.navigateByUrl(url);
+              onSuccess(value);
+            }
+          }, reject);
+        },
+        reject
+      );
+    });
+  }
+
+  assureSessionTabIsSet() {
+    return new Promise<AppSessionTab>((resolve, reject) => {
+      if (!this.currentSession.value) {
+        reject(new Error('The session has to be set before setting the tab'));
+        return;
+      } else if (this.currentTab.value) {
+        resolve(this.currentTab.value);
+        return;
+      } else if (this.queryingDb) {
+        reject(new Error('Query params changed too quickly'));
+        return;
+      } else {
+        this.queryingDb = true;
+      }
+
+      let tab: AppSessionTab;
+      const params = new URLSearchParams(document.location.search);
+      let tabId = params.get(urlQueryKeys.tabId);
+      const urlQueryTabIdIsSet = (tabId ?? null) !== null;
+
+      const onSuccess = (value: AppSessionTab) => {
+        tab = value;
+        this.currentTab.next(tab);
+        this.queryingDb = false;
+        resolve(tab);
+      };
+
+      openDbRequestToPromise(this.indexedDbDatabasesService.appSessions.value.open()).then(
+        (response) => {
+          const store =
+            this.indexedDbDatabasesService.appSessions.value.stores.appSessionTabs.store(
+              response.value,
+              null,
+              'readwrite'
+            );
+
+          const request = urlQueryTabIdIsSet
+            ? (store.get(tabId!) as IDBRequest<IDBValidKey | AppSessionTab>)
+            : (store.put(
+                (tab = {
+                  tabId: (tabId = this.strIdGenerator.newId()),
+                  sessionId: this.currentSession.value!.sessionId,
+                  createdAtMillis: this.timeStampGenerator.millis(),
+                } as AppSessionTab)
+              ) as IDBRequest<IDBValidKey | AppSessionTab>);
+
+          dbRequestToPromise(request).then((response) => {
+            let value = response.value as AppSessionTab;
+
+            if (urlQueryTabIdIsSet) {
+              if (value) {
+                onSuccess(value);
+              } else {
+                dbRequestToPromise(
+                  store.put(
+                    (tab = {
+                      tabId,
+                      sessionId: this.currentSession.value!.sessionId,
+                      createdAtMillis: this.timeStampGenerator.millis(),
+                    } as AppSessionTab)
+                  )
+                ).then((response) => {
+                  onSuccess(tab);
+                }, reject);
+              }
+            } else {
+              const url = transformUrl(getRelUri(document.location.href), {
+                queryParamsTransformer: (map) => {
+                  map[urlQueryKeys.tabId] = tabId!;
                   return map;
                 },
               });

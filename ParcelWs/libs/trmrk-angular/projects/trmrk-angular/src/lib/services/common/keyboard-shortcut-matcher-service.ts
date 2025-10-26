@@ -3,7 +3,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import {
   KeyPress,
   KeyboardShortcut,
-} from '../../../trmrk-browser/indexedDB/databases/SharedBasicAppSettings';
+} from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
 import { KeyboardShortcutContainer } from './keyboard-shortcut-service';
 

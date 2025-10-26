@@ -1,8 +1,8 @@
-import { cast, NullOrUndef } from '../../../trmrk/core';
+import { cast, NullOrUndef, withVal } from '../../../trmrk/core';
 import { DbAdapterBase, DbStoreAdapter } from '../DbAdapterBase';
-import { createDbStoreIfNotExists } from '../core';
+import { createDbStoreIfNotExists, createIndexIfNotExists } from '../core';
 import { mapObjProps } from '../../../trmrk/obj';
-import { nameOf } from '../../../trmrk/Reflection/core';
+import { nameOf, namesOf } from '../../../trmrk/Reflection/core';
 
 import { ActiveDataItemCore } from '../core';
 
@@ -11,8 +11,17 @@ export interface AppSession extends ActiveDataItemCore {
   displayName?: string | NullOrUndef;
 }
 
+export interface AppSessionTab extends ActiveDataItemCore {
+  sessionId: string;
+  tabId: string;
+}
+
 export class AppSessionsDbStores {
   public readonly appSessions = new DbStoreAdapter(AppSessionsDbAdapter.DB_STORES.AppSessions.name);
+
+  public readonly appSessionTabs = new DbStoreAdapter(
+    AppSessionsDbAdapter.DB_STORES.AppSessionTabs.name
+  );
 }
 
 export class AppSessionsDbAdapter extends DbAdapterBase {
@@ -28,6 +37,28 @@ export class AppSessionsDbAdapter extends DbAdapterBase {
             nameOf(
               () => cast<AppSession>(),
               (v) => v.sessionId
+            )
+          ),
+        },
+        AppSessionTabs: {
+          name: '',
+          keyPath: Object.freeze(
+            nameOf(
+              () => cast<AppSessionTab>(),
+              (v) => v.tabId
+            )
+          ),
+          indexes: Object.freeze(
+            mapObjProps(
+              {
+                sessionId: {
+                  name: '',
+                  keyPath: Object.freeze(
+                    namesOf(() => cast<AppSessionTab>(), [(v) => v.sessionId])
+                  ),
+                },
+              },
+              (propVal, propName) => Object.freeze({ ...propVal, name: propName })
             )
           ),
         },
@@ -52,5 +83,18 @@ export class AppSessionsDbAdapter extends DbAdapterBase {
     createDbStoreIfNotExists(db, dbStores.AppSessions.name, () => ({
       keyPath: dbStores.AppSessions.keyPath,
     }));
+
+    createDbStoreIfNotExists(
+      db,
+      dbStores.AppSessionTabs.name,
+      () => ({
+        keyPath: dbStores.AppSessionTabs.keyPath,
+      }),
+      (dbStore) => {
+        withVal(dbStores.AppSessionTabs.indexes.sessionId, (sessionIdIdx) => {
+          createIndexIfNotExists(dbStore, sessionIdIdx.name, [...sessionIdIdx.keyPath]);
+        });
+      }
+    );
   }
 }

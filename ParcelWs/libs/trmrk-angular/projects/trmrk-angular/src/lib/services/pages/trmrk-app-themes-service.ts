@@ -2,7 +2,7 @@ import { Injectable, Inject, OnDestroy } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { SharedBasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedDB/databases/SharedBasicAppSettings';
+import { BasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
 import {
   AsyncRequestStateManager,
@@ -11,7 +11,7 @@ import {
 
 import { getIDbRequestOpenErrorMsg } from '../../../trmrk-browser/indexedDB/core';
 import { TouchOrMouseCoords } from '../../../trmrk-browser/domUtils/touchAndMouseEvents';
-import { AppTheme } from '../../../trmrk-browser/indexedDB/databases/SharedBasicAppSettings';
+import { AppTheme } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
 import { TrmrkPanelListServiceRow } from '../common/trmrk-panel-list-service';
 import { IndexedDbDatabasesServiceCore } from '../common/indexedDb/indexed-db-databases-service-core';
@@ -48,7 +48,7 @@ export class TrmrkAppThemesService implements OnDestroy {
 
   trmrkEditAppThemeDialogComponent: any;
   editEntityDialog!: MatDialog;
-  trmrkBasicAppSettings: SharedBasicAppSettingsDbAdapter;
+  trmrkBasicAppSettings: BasicAppSettingsDbAdapter;
 
   constructor(
     asyncRequestStateManagerFactory: AsyncRequestStateManagerFactory,
