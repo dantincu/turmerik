@@ -114,7 +114,7 @@ namespace Turmerik.HtmlToPdf.WebApi.Services
                 }
             }
 
-            if (page == null)
+            if (page == null || page.IsClosed)
             {
                 pageInitSem.WaitOne();
                 try
