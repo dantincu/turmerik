@@ -2,7 +2,7 @@
   "profiles": {
     "Turmerik.DotNetTypesToTypescript.ConsoleApp": {
       "commandName": "Project",
-      // "commandLineArgs": ":pf:parcel-ws"
+      // "commandLineArgs": ":pf:jsws"
       "commandLineArgs": ":pf:test-all :sc:Turmerik-All :rem"
     }
   }

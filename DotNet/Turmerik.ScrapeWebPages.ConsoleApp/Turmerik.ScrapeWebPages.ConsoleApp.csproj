@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Turmerik.Jint\Turmerik.Jint.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="program-behavior\" />
+  </ItemGroup>
+
 </Project>

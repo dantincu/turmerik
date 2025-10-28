@@ -9,11 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Turmerik.NetCore\Turmerik.NetCore.csproj" />
+    <Compile Remove="program-behavior\profiles\**" />
+    <EmbeddedResource Remove="program-behavior\profiles\**" />
+    <None Remove="program-behavior\profiles\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="program-behavior\profiles\turmerik-parcel-ws-notes-app\" />
+    <ProjectReference Include="..\Turmerik.NetCore\Turmerik.NetCore.csproj" />
   </ItemGroup>
 
 </Project>

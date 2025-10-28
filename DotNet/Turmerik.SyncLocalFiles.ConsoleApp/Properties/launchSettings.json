@@ -2,11 +2,11 @@
   "profiles": {
     "Turmerik.SyncLocalFiles.ConsoleApp": {
       "commandName": "Project",
-      // "commandLineArgs": ":wd:F::\\T\\turmerik\\ParcelWs\\apps\\trmrk-notes-lithtmlapp\\src\\_ :fst:pull :pf:turmerik-parcelws *:trmrk-notes-lithtmlapp"
-      // "commandLineArgs": ":fst:pull :pf:turmerik-parcelws trmrk-browser"
-      "commandLineArgs": ":fst:pull :pf:turmerik-parcelws"
-      // "commandLineArgs": ":fst:pull :pf:turmerik-parcelws trmrk-solidjs:trmrk-notes-solidjsapp"
-      // "commandLineArgs": ":fst:diff :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior:trmrk-mkscripts-parcelws-sync-behavior-testapp"
+      // "commandLineArgs": ":wd:F::\\T\\turmerik\\JsWs\\apps\\trmrk-notes-lithtmlapp\\src\\_ :fst:pull :pf:turmerik-jsws *:trmrk-notes-lithtmlapp"
+      // "commandLineArgs": ":fst:pull :pf:turmerik-jsws trmrk-browser"
+      "commandLineArgs": ":fst:pull :pf:turmerik-jsws"
+      // "commandLineArgs": ":fst:pull :pf:turmerik-jsws trmrk-solidjs:trmrk-notes-solidjsapp"
+      // "commandLineArgs": ":fst:diff :pf:turmerik-jsws trmrk-mkscripts-jsws-sync-behavior:trmrk-mkscripts-jsws-sync-behavior-testapp"
     }
   }
 }

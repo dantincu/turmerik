@@ -1,10 +1,10 @@
 {
   "Profiles": [
     {
-      "ProfileRelFilePath": "profiles\\turmerik-parcel-ws.config.json"
+      "ProfileRelFilePath": "profiles\\turmerik-jsws.config.json"
     },
     {
-      "ProfileBehaviorRelFilePath": "profiles\\trmrk-mkscripts-parcelws-sync.behavior.js"
+      "ProfileBehaviorRelFilePath": "profiles\\trmrk-mkscripts-jsws-sync.behavior.js"
     }
   ]
 }

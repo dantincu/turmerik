@@ -43,7 +43,7 @@
       "ProfileRelFilePath": "profiles\\cp-notes-blazorapp.config.json"
     },
     {
-      "ProfileRelFilePath": "profiles\\cp-mkscripts-parcelws-sync-behavior.config.json"
+      "ProfileRelFilePath": "profiles\\cp-mkscripts-jsws-sync-behavior.config.json"
     }
   ]
 }

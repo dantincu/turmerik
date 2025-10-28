@@ -1,1 +1,1 @@
-_bckp :pf:cp-mkscripts-parcelws-sync-behavior
+_bckp :pf:cp-mkscripts-jsws-sync-behavior

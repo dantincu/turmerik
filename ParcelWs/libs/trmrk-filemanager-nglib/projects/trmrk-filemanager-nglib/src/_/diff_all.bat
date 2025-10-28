@@ -1,1 +1,0 @@
-CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-filemanager-nglib

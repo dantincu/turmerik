@@ -2,7 +2,7 @@
   "ProfileName": "arch-ignored-src-files",
   "FileGroups": [
     {
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs\\apps\\trmrk-filemanager-ngapp\\src\\env",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\JsWs\\apps\\trmrk-filemanager-ngapp\\src\\env",
       "CloneDirPath": "|$LARGEFILESCSDRIVE_DIR|\\|$LARGEFILESCSDRIVE_PROJECTS_RELDIR|\\199\\399\\399\\399\\998\\01\\env",
       "Files": [
         {
