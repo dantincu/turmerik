@@ -12,6 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\**" />
+    <EmbeddedResource Remove="Data\**" />
+    <None Remove="Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Icon32x30.ico" />
   </ItemGroup>
 
@@ -20,10 +26,6 @@
     <ProjectReference Include="..\Turmerik.Logging\Turmerik.Logging.csproj" />
     <ProjectReference Include="..\Turmerik.WinForms\Turmerik.WinForms.csproj" />
     <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\" />
   </ItemGroup>
 
   <ItemGroup>
