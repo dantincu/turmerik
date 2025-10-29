@@ -1,0 +1,1 @@
+CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-mkscripts-jsws-sync-behavior-testapp

@@ -1,0 +1,46 @@
+@if ((trmrkRow.html ?? null) === null) {
+<div [ngClass]="cssClass" [trmrkDynamicAttributes]="attrs">
+  @if ((trmrkRow!.label ?? null) !== null) {
+  <trmrk-horiz-strip
+    [trmrkLeadingTemplate]="headingToggleBtn"
+    [trmrkUseContentInsteadOfTextRow]="true"
+  >
+    <h3 [trmrkDynamicAttributes]="controlAttrs" [ngClass]="controlCssClass">
+      {{trmrkRow!.label}}
+    </h3></trmrk-horiz-strip
+  >
+  <ng-template #headingToggleBtn>
+    <button mat-icon-button class="trmrk-icon-btn" (click)="toggleSection()">
+      <mat-icon class="trmrk-icon"
+        >{{ (trmrkRow!.isExpanded ?? true) ? 'keyboard_arrow_up' :
+        'keyboard_arrow_down' }}</mat-icon
+      >
+    </button></ng-template
+  >
+  } @if (trmrkRow!.isExpanded ?? true) { @if (trmrkRow!.nodes) { @for (node of
+  trmrkRow!.nodes; let idx = $index; track node.id;) {
+  <trmrk-form-node
+    [trmrkNode]="node"
+    [trmrkPath]="childPath(idx)"
+    [trmrkTemplatesMap]="trmrkTemplatesMap"
+  ></trmrk-form-node>
+  } } @if (trmrkRow!.rows) { @for (row of trmrkRow!.rows; let idx = $index;
+  track row.id;) {
+  <trmrk-form-row
+    [trmrkRow]="row"
+    [trmrkPath]="childPath(idx)"
+    [trmrkTemplatesMap]="trmrkTemplatesMap"
+  ></trmrk-form-row>
+  } } }
+</div>
+} @if ((trmrkRow.html ?? null) !== null) { @if (hasRawHtml) {
+<div
+  [ngClass]="cssClass"
+  [trmrkDynamicAttributes]="attrs"
+  [innerHtml]="safeHtml"
+></div>
+} @if (hasHtmlTemplate) {
+<ng-container
+  *ngTemplateOutlet="trmrkTemplatesMap![htmlTemplateName]; context: { path: trmrkPath, node: trmrkRow }"
+></ng-container>
+} }

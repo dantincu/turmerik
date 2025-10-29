@@ -1,0 +1,1921 @@
+{
+  "ProfileName": "trmrk-mkscripts-jsws-sync",
+  "RelDirPaths": {
+    "DirPath": "|$TURMERIK_REPO_DIR|\\jsws"
+  },
+  "Sections": [
+    {
+      "SectionName": "sync",
+      "RelDirPaths": {
+        "DirPath": "scripts\\sync"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_src_trmrk",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk\\src\\lib\\_"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk"
+            },
+            {
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_src_trmrk-angular",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-angular\\projects\\trmrk-angular\\src\\lib\\_"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-angular"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-angular"
+            },
+            {
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-angular"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_src_trmrk-axios",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-axios\\src\\lib\\_"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-axios"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-axios"
+            },
+            {
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-axios"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_src_trmrk-browser",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-browser\\src\\lib\\_"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-browser"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-browser"
+            },
+            {
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-browser"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_src_trmrk-filemanager-nglib",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib\\src\\lib\\_"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-filemanager-nglib"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-filemanager-nglib"
+            },
+            {
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-filemanager-nglib"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_src_trmrk-mailbox-nglib",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-mailbox-nglib\\projects\\trmrk-mailbox-nglib\\src\\lib\\_"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-mailbox-nglib"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-mailbox-nglib"
+            },
+            {
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-mailbox-nglib"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_src_trmrk-mkscripts-jsws-sync-behavior",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-mkscripts-jsws-sync-behavior\\src\\lib\\_"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-mkscripts-jsws-sync-behavior"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-mkscripts-jsws-sync-behavior"
+            },
+            {
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-mkscripts-jsws-sync-behavior"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_src_trmrk-notes-nglib",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-notes-nglib\\projects\\trmrk-notes-nglib\\src\\lib\\_"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-notes-nglib"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_src_trmrk-text-transform-behavior",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-text-transform-behavior\\src\\lib\\_"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-text-transform-behavior"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-text-transform-behavior"
+            },
+            {
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-text-transform-behavior"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_src_trmrk-text-transform-defaultbehavior",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-text-transform-defaultbehavior\\src\\lib\\_"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-text-transform-defaultbehavior"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_src_trmrk-text-transform-mybehavior",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-text-transform-mybehavior\\src\\lib\\_"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-text-transform-mybehavior"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-angular",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-angular\\projects\\trmrk-angular\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-angular"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-angular"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-angular"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-angular"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-angular"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-angular"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-angular"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-angular"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-browser:trmrk-angular"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-browser:trmrk-angular"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-browser:trmrk-angular"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-browser:trmrk-angular"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk\ntrmrk-browser"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-angular-testapp",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-angular\\projects\\trmrk-angular-testapp\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-angular-testapp"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-angular-testapp"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-angular-testapp"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-angular-testapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-angular-testapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-angular-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-angular-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-angular-testapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-browser:trmrk-angular-testapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-browser:trmrk-angular-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-browser:trmrk-angular-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-browser:trmrk-angular-testapp"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk\ntrmrk-browser"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-axios",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-axios\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-axios"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-axios"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-axios"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-axios"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-axios"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-axios"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-axios"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-axios"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-browser",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-browser\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-browser"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-browser"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-browser"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-browser"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-browser"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-browser"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-browser"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-browser"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-axios\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-axios:trmrk-browser"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-axios:trmrk-browser"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-axios:trmrk-browser"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-axios:trmrk-browser"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk\ntrmrk-axios"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-filemanager-nglib",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-filemanager-nglib"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-filemanager-nglib"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-filemanager-nglib"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-filemanager-nglib"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-filemanager-nglib"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-filemanager-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-filemanager-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-filemanager-nglib"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-browser:trmrk-filemanager-nglib"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-browser:trmrk-filemanager-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-browser:trmrk-filemanager-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-browser:trmrk-filemanager-nglib"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-angular\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-angular:trmrk-filemanager-nglib"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-angular:trmrk-filemanager-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-angular:trmrk-filemanager-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-angular_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-angular:trmrk-filemanager-nglib"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk\ntrmrk-browser\ntrmrk-angular"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-mailbox-nglib",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-mailbox-nglib\\projects\\trmrk-mailbox-nglib\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-mailbox-nglib"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-mailbox-nglib"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-mailbox-nglib"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-mailbox-nglib"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-mailbox-nglib"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-mailbox-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-mailbox-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-mailbox-nglib"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-browser:trmrk-mailbox-nglib"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-browser:trmrk-mailbox-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-browser:trmrk-mailbox-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-browser:trmrk-mailbox-nglib"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-angular\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-angular:trmrk-mailbox-nglib"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-angular:trmrk-mailbox-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-angular:trmrk-mailbox-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-angular_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-angular:trmrk-mailbox-nglib"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk\ntrmrk-browser\ntrmrk-angular"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-text-transform-behavior",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-text-transform-behavior\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-text-transform-behavior"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-text-transform-behavior"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-text-transform-behavior"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-text-transform-behavior"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-text-transform-behavior"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-text-transform-behavior"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-text-transform-behavior"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-text-transform-behavior"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-text-transform-defaultbehavior",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-text-transform-defaultbehavior\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-text-transform-defaultbehavior"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-text-transform-defaultbehavior"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-text-transform-behavior\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-text-transform-behavior.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-text-transform-behavior:trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-text-transform-behavior.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-text-transform-behavior:trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-text-transform-behavior.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-text-transform-behavior:trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-text-transform-behavior_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-text-transform-behavior:trmrk-text-transform-defaultbehavior"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk\ntrmrk-text-transform-behavior"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-text-transform-mybehavior",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-text-transform-mybehavior\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-text-transform-mybehavior"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-text-transform-mybehavior"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-text-transform-behavior\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-text-transform-behavior.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-text-transform-behavior:trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-text-transform-behavior.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-text-transform-behavior:trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-text-transform-behavior.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-text-transform-behavior:trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-text-transform-behavior_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-text-transform-behavior:trmrk-text-transform-mybehavior"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk\ntrmrk-text-transform-behavior"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-text-transform-behavior-testapp",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-text-transform-behavior-testapp\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-text-transform-behavior-testapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-text-transform-behavior-testapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-text-transform-behavior\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-text-transform-behavior.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-text-transform-behavior:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-text-transform-behavior.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-text-transform-behavior:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-text-transform-behavior.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-text-transform-behavior:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-text-transform-behavior_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-text-transform-behavior:trmrk-text-transform-behavior-testapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-text-transform-mybehavior\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-text-transform-mybehavior.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-text-transform-mybehavior:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-text-transform-mybehavior.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-text-transform-mybehavior:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-text-transform-mybehavior.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-text-transform-mybehavior:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-text-transform-mybehavior_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-text-transform-mybehavior:trmrk-text-transform-behavior-testapp"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk\ntrmrk-text-transform-behavior\ntrmrk-text-transform-mybehavior"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-notes-nglib",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-notes-nglib\\projects\\trmrk-notes-nglib\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-notes-nglib"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-notes-nglib"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-browser:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-browser:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-browser:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-browser:trmrk-notes-nglib"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-angular\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-angular:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-angular:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-angular:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-angular_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-angular:trmrk-notes-nglib"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-filemanager-nglib\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-filemanager-nglib.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-filemanager-nglib:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-filemanager-nglib.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-filemanager-nglib:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-filemanager-nglib.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-filemanager-nglib:trmrk-notes-nglib"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-filemanager-nglib_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-filemanager-nglib:trmrk-notes-nglib"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk\ntrmrk-browser\ntrmrk-angular\ntrmrk-filemanager-nglib"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-mkscripts-jsws-sync-behavior",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-mkscripts-jsws-sync-behavior\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-mkscripts-jsws-sync-behavior"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-mkscripts-jsws-sync-behavior"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-mkscripts-jsws-sync-behavior"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-mkscripts-jsws-sync-behavior"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-mkscripts-jsws-sync-behavior"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-mkscripts-jsws-sync-behavior"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-mkscripts-jsws-sync-behavior"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-mkscripts-jsws-sync-behavior"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-mkscripts-jsws-sync-behavior-testapp",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-mkscripts-jsws-sync-behavior-testapp\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-mkscripts-jsws-sync-behavior-testapp"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-mkscripts-jsws-sync-behavior-testapp"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-mkscripts-jsws-sync-behavior-testapp"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-mkscripts-jsws-sync-behavior-testapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-mkscripts-jsws-sync-behavior-testapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-mkscripts-jsws-sync-behavior-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-mkscripts-jsws-sync-behavior-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-mkscripts-jsws-sync-behavior-testapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-mkscripts-jsws-sync-behavior\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-mkscripts-jsws-sync-behavior.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-mkscripts-jsws-sync-behavior:trmrk-mkscripts-jsws-sync-behavior-testapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-mkscripts-jsws-sync-behavior.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-mkscripts-jsws-sync-behavior:trmrk-mkscripts-jsws-sync-behavior-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-mkscripts-jsws-sync-behavior.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-mkscripts-jsws-sync-behavior:trmrk-mkscripts-jsws-sync-behavior-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-mkscripts-jsws-sync-behavior_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-mkscripts-jsws-sync-behavior:trmrk-mkscripts-jsws-sync-behavior-testapp"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk\ntrmrk-mkscripts-jsws-sync-behavior"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-filemanager-ngapp",
+      "RelDirPaths": {
+        "DirPath": "apps\\trmrk-filemanager-ngapp\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-filemanager-ngapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-filemanager-ngapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-browser:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-browser:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-browser:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-browser:trmrk-filemanager-ngapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-angular\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-angular:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-angular:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-angular:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-angular_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-angular:trmrk-filemanager-ngapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-filemanager-nglib\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-filemanager-nglib.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-filemanager-nglib:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-filemanager-nglib.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-filemanager-nglib:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-filemanager-nglib.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-filemanager-nglib:trmrk-filemanager-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-filemanager-nglib_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-filemanager-nglib:trmrk-filemanager-ngapp"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk\ntrmrk-browser\ntrmrk-angular\ntrmrk-filemanager-nglib"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-http-proxy-nodejsapp",
+      "RelDirPaths": {
+        "DirPath": "apps\\trmrk-http-proxy-nodejsapp\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-http-proxy-nodejsapp"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-http-proxy-nodejsapp"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-http-proxy-nodejsapp"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-http-proxy-nodejsapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-http-proxy-nodejsapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-http-proxy-nodejsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-http-proxy-nodejsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-http-proxy-nodejsapp"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-mailbox-ngapp",
+      "RelDirPaths": {
+        "DirPath": "apps\\trmrk-mailbox-ngapp\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-mailbox-ngapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-mailbox-ngapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-browser:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-browser:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-browser:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-browser:trmrk-mailbox-ngapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-angular\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-angular:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-angular:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-angular:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-angular_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-angular:trmrk-mailbox-ngapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-mailbox-nglib\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-mailbox-nglib.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-mailbox-nglib:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-mailbox-nglib.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-mailbox-nglib:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-mailbox-nglib.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-mailbox-nglib:trmrk-mailbox-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-mailbox-nglib_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-mailbox-nglib:trmrk-mailbox-ngapp"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk\ntrmrk-browser\ntrmrk-angular\ntrmrk-mailbox-nglib"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-notes-ngapp",
+      "RelDirPaths": {
+        "DirPath": "apps\\trmrk-notes-ngapp\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws *:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws *:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws *:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws *:trmrk-notes-ngapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk:trmrk-notes-ngapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-browser:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-browser:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-browser:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-browser:trmrk-notes-ngapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-angular\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-angular:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-angular:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-angular.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-angular:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-angular_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-angular:trmrk-notes-ngapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-filemanager-nglib\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-filemanager-nglib.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-filemanager-nglib:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-filemanager-nglib.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-filemanager-nglib:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-filemanager-nglib.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-filemanager-nglib:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-filemanager-nglib_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-filemanager-nglib:trmrk-notes-ngapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-notes-nglib\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-notes-nglib.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-jsws trmrk-notes-nglib:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-notes-nglib.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-jsws trmrk-notes-nglib:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-notes-nglib.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-jsws trmrk-notes-nglib:trmrk-notes-ngapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-notes-nglib_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-jsws trmrk-notes-nglib:trmrk-notes-ngapp"
+            }
+          ]
+        },
+        {
+          "Files": [
+            {
+              "FileRelPath": ".gitignore",
+              "TextContent": "trmrk\ntrmrk-browser\ntrmrk-angular\ntrmrk-filemanager-nglib\ntrmrk-notes-nglib"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

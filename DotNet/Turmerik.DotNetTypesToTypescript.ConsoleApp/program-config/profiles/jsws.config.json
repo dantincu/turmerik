@@ -1,0 +1,26 @@
+{
+  "ProfileName": "jsws",
+  "DirPaths": {
+    "SrcPath": "|$TURMERIK_REPO_DIR|\\DotNet",
+    "DestnPath": "|$TURMERIK_REPO_DIR|\\jsws\\libs\\trmrk\\src\\lib\\DotNetTypeDefs"
+  },
+  "TreatAllEnumerablesAsArraysOrMaps": true,
+  "Sections": [
+    {
+      "SectionName": "Turmerik.Core",
+      "CsProjectsArr": [
+        {
+          "Name": "Turmerik.Core",
+          "IsDotNetStandard": true,
+          "CsProjectAssembly": {
+            "TypesArr": [
+              {
+                "FullName": "Turmerik.Core.DriveExplorer.IDriveExplorerService"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

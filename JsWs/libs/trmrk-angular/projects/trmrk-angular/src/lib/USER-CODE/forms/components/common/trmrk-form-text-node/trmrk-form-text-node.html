@@ -1,0 +1,20 @@
+@if ((trmrkNode.html ?? null) === null) {
+<div [ngClass]="cssClass" [trmrkDynamicAttributes]="attrs">
+  @if ((trmrkNode.text ?? null) !== null) { {{ trmrkNode!.text }} } @if
+  ((trmrkNode.iconName ?? null) !== null) {
+  <mat-icon [ngClass]="controlCssClass" [trmrkDynamicAttributes]="controlAttrs"
+    >{{trmrkNode.iconName}}</mat-icon
+  >
+  }
+</div>
+} @if ((trmrkNode.html ?? null) !== null) { @if (hasRawHtml) {
+<div
+  [ngClass]="cssClass"
+  [trmrkDynamicAttributes]="attrs"
+  [innerHtml]="safeHtml"
+></div>
+} @if (hasHtmlTemplate) {
+<ng-container
+  *ngTemplateOutlet="trmrkTemplatesMap![htmlTemplateName]; context: { path: trmrkPath, node: trmrkNode }"
+></ng-container>
+} }

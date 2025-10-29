@@ -1,0 +1,254 @@
+{
+  "ProfileName": "turmerik-jsws",
+  "RelDirPaths": {
+    "DirPath": "|$TURMERIK_REPO_DIR|\\JsWs"
+  },
+  "Sections": [
+    {
+      "SectionName": "workspace-lvl",
+      "RelDirPaths": {
+        "DirPath": "scripts\\all"
+      },
+      "FileGroups": [
+        {
+          "DefaultContentSpecs": {
+            "Args": [
+              [ "..\\..\\libs\\trmrk" ],
+              [ "..\\..\\libs\\trmrk-angular\\projects\\trmrk-angular" ],
+              [ "..\\..\\libs\\trmrk-axios" ],
+              [ "..\\..\\libs\\trmrk-browser" ],
+              [ "..\\..\\libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib" ],
+              [ "..\\..\\libs\\trmrk-mailbox-nglib\\projects\\trmrk-mailbox-nglib" ],
+              [ "..\\..\\libs\\trmrk-mkscripts-jsws-sync-behavior" ],
+              [ "..\\..\\libs\\trmrk-mkscripts-jsws-sync-behavior-testapp" ],
+              [ "..\\..\\libs\\trmrk-notes-nglib\\projects\\trmrk-notes-nglib" ],
+              [ "..\\..\\libs\\trmrk-text-transform-behavior" ],
+              [ "..\\..\\libs\\trmrk-text-transform-behavior-testapp" ],
+              [ "..\\..\\libs\\trmrk-text-transform-defaultbehavior" ],
+              [ "..\\..\\libs\\trmrk-text-transform-mybehavior" ],
+
+              [ "..\\..\\libs\\trmrk-angular\\projects\\trmrk-angular-testapp" ],
+              [ "..\\..\\apps\\trmrk-filemanager-ngapp" ],
+              [ "..\\..\\apps\\trmrk-http-proxy-nodejsapp" ],
+              [ "..\\..\\apps\\trmrk-mailbox-ngapp" ],
+              [ "..\\..\\apps\\trmrk-notes-ngapp" ]
+            ],
+            "ArgFilters": {
+              "libs": {
+                "Regexes": [ "^\\.\\.\\\\\\.\\.\\\\libs\\.*" ]
+              },
+              "apps": {
+                "Regexes": [ "^\\.\\.\\\\\\.\\.\\\\apps\\.*" ]
+              }
+            },
+            "ArgsSetTpl": "\"{0}\"",
+            "ArgsSetsJoinTpl": ",\n"
+          },
+          "Files": [
+            {
+              "FileRelPath": "upd-pcks.bat",
+              "FileRelPathsMap": {
+                "libs": "upd-libs-pcks.bat",
+                "apps": "upd-apps-pcks.bat"
+              },
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\upd-pcks.bat",
+                    ")",
+                    "",
+                    "@echo on"
+                  ]
+                }
+              ]
+            },
+            {
+              "FileRelPath": "rm.bat",
+              "FileRelPathsMap": {
+                "libs": "rm-libs.bat",
+                "apps": "rm-apps.bat"
+              },
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm.bat",
+                    ")",
+                    "",
+                    "@echo on"
+                  ]
+                }
+              ]
+            },
+            {
+              "FileRelPath": "rm-pcks.bat",
+              "FileRelPathsMap": {
+                "libs": "rm-libs-pcks.bat",
+                "apps": "rm-apps-pcks.bat"
+              },
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm-pcks.bat",
+                    ")",
+                    "",
+                    "@echo on"
+                  ]
+                }
+              ]
+            },
+            {
+              "FileRelPath": "rm-nd_mods.bat",
+              "FileRelPathsMap": {
+                "libs": "rm-libs-nd_mods.bat",
+                "apps": "rm-apps-nd_mods.bat"
+              },
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm-nd_mods.bat",
+                    ")",
+                    "",
+                    "@echo on"
+                  ]
+                }
+              ]
+            },
+            {
+              "FileRelPath": "rm-ch_dst.bat",
+              "FileRelPathsMap": {
+                "libs": "rm-libs-ch_dst.bat",
+                "apps": "rm-apps-ch_dst.bat"
+              },
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm-ch_dst.bat",
+                    ")",
+                    "@echo on"
+                  ]
+                }
+              ]
+            },
+            {
+              "FileRelPath": "rebuild.bat",
+              "FileRelPathsMap": {
+                "libs": "rebuild-libs.bat",
+                "apps": "rebuild-apps.bat"
+              },
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm-ch_dst.bat",
+                    "  npm run build",
+                    ")",
+                    "@echo on"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "package-lvl",
+      "RelDirPaths": {
+        "DirPathsArr": [
+          "libs\\trmrk\\_",
+          "libs\\trmrk-angular\\projects\\trmrk-angular\\_",
+          "libs\\trmrk-axios\\_",
+          "libs\\trmrk-browser\\_",
+          "libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib\\_",
+          "libs\\trmrk-mailbox-nglib\\projects\\trmrk-mailbox-nglib\\_",
+          "libs\\trmrk-mkscripts-jsws-sync-behavior\\_",
+          "libs\\trmrk-mkscripts-jsws-sync-behavior-testapp\\_",
+          "libs\\trmrk-notes-nglib\\projects\\trmrk-notes-nglib\\_",
+          "libs\\trmrk-text-transform-behavior\\_",
+          "libs\\trmrk-text-transform-behavior-testapp\\_",
+          "libs\\trmrk-text-transform-defaultbehavior\\_",
+          "libs\\trmrk-text-transform-mybehavior\\_",
+
+          "libs\\trmrk-angular\\projects\\trmrk-angular-testapp\\_",
+          "apps\\trmrk-filemanager-ngapp\\_",
+          "apps\\trmrk-http-proxy-nodejsapp\\_",
+          "apps\\trmrk-mailbox-ngapp\\_",
+          "apps\\trmrk-notes-ngapp\\_"
+        ],
+        "Filters": {
+          "libs": {
+            "Regex": "^libs\\\\.*"
+          },
+          "apps": {
+            "Regex": "^apps\\\\.*"
+          }
+        }
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "upd-pcks.bat",
+              "TextContentLines": [
+                "CALL ncu -u",
+                "CALL npm i"
+              ]
+            },
+            {
+              "FileRelPath": "rm.bat",
+              "TextContentLines": [
+                "CALL rimraf .\\.parcel-cache",
+                "CALL rimraf .\\dist",
+                "CALL rimraf .\\node_modules",
+                "CALL del .\\package-lock.json"
+              ]
+            },
+            {
+              "FileRelPath": "rm-pcks.bat",
+              "TextContentLines": [
+                "CALL rimraf .\\node_modules",
+                "CALL del .\\package-lock.json"
+              ]
+            },
+            {
+              "FileRelPath": "rm-nd_mods.bat",
+              "TextContentLines": [
+                "CALL rimraf .\\node_modules"
+              ]
+            },
+            {
+              "FileRelPath": "rm-ch_dst.bat",
+              "TextContentLines": [
+                "CALL rimraf .\\.parcel-cache",
+                "CALL rimraf .\\dist"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+<trmrk-app-page
+  [trmrkAppBarTitle]="'Turmerik Notes'"
+  [trmrkOptionsMenuTemplate]="options"
+></trmrk-app-page>
+
+<ng-template #options>
+  <a mat-menu-item class="trmrk-menu-item" [routerLink]="[`forms`]"> Forms </a>
+  <a mat-menu-item class="trmrk-menu-item" [routerLink]="[`companies`]">
+    Companies
+  </a>
+  <a mat-menu-item class="trmrk-menu-item" [routerLink]="[`app-tree`]">
+    App Tree
+  </a>
+  <a mat-menu-item class="trmrk-menu-item" [routerLink]="[`buttons`]">
+    Buttons
+  </a>
+  <a mat-menu-item class="trmrk-menu-item" [routerLink]="[`form-fields`]">
+    Form Fields
+  </a>
+  <a mat-menu-item class="trmrk-menu-item" [routerLink]="[`horiz-strips`]">
+    Horiz Strips
+  </a>
+  <a mat-menu-item class="trmrk-menu-item" [routerLink]="[`user-messages`]">
+    User Messages
+  </a>
+  <a mat-menu-item class="trmrk-menu-item" [routerLink]="[`colored-text`]">
+    Colored Text
+  </a>
+  <a mat-menu-item class="trmrk-menu-item" [routerLink]="[`misc`]">
+    Miscellaneous
+  </a>
+</ng-template>

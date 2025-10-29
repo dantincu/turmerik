@@ -1,0 +1,35 @@
+{
+  "name": "trmrk-http-proxy-nodejsapp",
+  "version": "0.1.0",
+  "description": "A http proxy nodeJs app",
+  "source": "src/app/app.ts",
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c rollup.config.mjs",
+    "start": "set NODE_TLS_REJECT_UNAUTHORIZED=0& node dist/app.js"
+  },
+  "author": "Daniel Tincu",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-typescript": "^12.1.1",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "rollup": "^4.27.4",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "http-proxy-middleware": "^3.0.3",
+    "https": "^1.0.0"
+  },
+  "targets": {
+    "node": {
+      "includeNodeModules": false
+    }
+  }
+}

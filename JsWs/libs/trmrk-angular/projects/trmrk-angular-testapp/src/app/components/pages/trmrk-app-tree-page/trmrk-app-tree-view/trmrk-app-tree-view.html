@@ -1,0 +1,9 @@
+<div class="trmrk-tree-view trmrk-scrollable trmrk-scrollable-x">
+  @for (node of rootNodes; track node.nodeValue.id) {
+  <trmrk-app-tree-view-node
+    [trmrkTreeData]="trmrkData"
+    [trmrkData]="trmrkData.rootNodes[$index]"
+    [trmrkPath]="[$index]"
+  ></trmrk-app-tree-view-node>
+  }
+</div>

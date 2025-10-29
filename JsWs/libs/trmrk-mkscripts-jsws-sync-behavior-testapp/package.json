@@ -1,0 +1,19 @@
+{
+  "name": "trmrk-mkscripts-jsws-sync-behavior",
+  "version": "0.1.0",
+  "description": "Turmierk MkScripts JsWs Sync Behavior Test App",
+  "source": "src/lib/env/any/index.ts",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "parcel build",
+    "exec": "node ./dist/index.js"
+  },
+  "author": "Daniel Tincu",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.9.3",
+    "buffer": "^6.0.3",
+    "parcel": "^2.13.0"
+  }
+}

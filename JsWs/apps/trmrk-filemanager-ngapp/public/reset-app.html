@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>App Reset</title>
+  </head>
+  <body>
+    <h3 id="msg">Resetting the app...</h3>
+  </body>
+  <script src="db-obj-name-pfx.js"></script>
+  <script>
+    const domContentLoaded = async () => {
+      const params = new URLSearchParams(document.location.search);
+      const dbObjNamePrefixVarName = params.get('db-obj-name-pfx') ?? 'trmrkDbObjNamePrefix';
+      const dbObjNamePrefix = window[dbObjNamePrefixVarName] ?? '';
+
+      for (let storage of [localStorage, sessionStorage]) {
+        for (let i = 0; i < storage.length; i++) {
+          const key = storage.key(i);
+
+          if (key?.startsWith(dbObjNamePrefix)) {
+            storage.removeItem(key);
+          }
+        }
+      }
+
+      let databases = await indexedDB.databases();
+      databases = databases.filter((db) => db.name?.startsWith(dbObjNamePrefix));
+      const promises = databases.map((db) => indexedDB.deleteDatabase(db.name));
+      await Promise.all(promises);
+
+      const msgEl = document.getElementById('msg');
+      msgEl.innerText = 'The app has been reset';
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () {
+        domContentLoaded();
+      });
+    } else {
+      domContentLoaded();
+    }
+  </script>
+</html>

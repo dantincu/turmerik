@@ -1,0 +1,41 @@
+<trmrk-tree-view-node
+  [trmrkTreeData]="trmrkTreeData"
+  [trmrkData]="trmrkData"
+  [trmrkPath]="trmrkPath"
+  [contentTemplate]="treeNodeContent"
+  [childNodeTemplate]="childTreeNode"
+></trmrk-tree-view-node>
+
+<ng-template #treeNodeContent>
+  <trmrk-panel-list-item
+    [trmrkMainText]="data.nodeValue.text"
+    [trmrkLeadingIconTemplate]="treeNodeIcon"
+    [trmrkIsExpandable]="data.isHcyNode"
+    [trmrkIsExpanded]="data.isExpanded ?? false"
+    (trmrkExpandedToggled)="expandedToggled($event)"
+    (trmrkCheckBoxToggled)="checkBoxToggled($event)"
+    (trmrkLeadingBtnShortPressOrLeftClick)="nodeIconShortPressOrLeftClick($event)"
+    (trmrkLeadingBtnLongPressOrRightClick)="nodeIconLongPressOrRightClick($event)"
+    (trmrkColorLabelBtnShortPressOrLeftClick)="nodeColorLabelShortPressOrLeftClick($event)"
+    (trmrkColorLabelBtnLongPressOrRightClick)="nodeColorLabelLongPressOrRightClick($event)"
+    (trmrkTextShortPressOrLeftClick)="nodeTextShortPressOrLeftClick($event)"
+    (trmrkTextLongPressOrRightClick)="nodeTextLongPressOrRightClick($event)"
+  ></trmrk-panel-list-item>
+</ng-template>
+
+<ng-template #treeNodeIcon>
+  <mat-icon class="trmrk-icon trmrk-leading-icon">folder</mat-icon>
+</ng-template>
+
+<ng-template
+  #childTreeNode
+  let-idx="idx"
+  let-treeData="treeData"
+  let-data="data"
+  let-path="path"
+  ><trmrk-app-tree-view-node
+    [trmrkTreeData]="treeData"
+    [trmrkData]="data"
+    [trmrkPath]="path"
+  ></trmrk-app-tree-view-node
+></ng-template>

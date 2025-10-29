@@ -1,0 +1,117 @@
+@use '@angular/material' as mat;
+@use "./mixins.scss" as mixins;
+
+// Light theme configuration
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+  )
+);
+
+// Dark theme configuration
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$magenta-palette,
+      tertiary: mat.$violet-palette,
+    ),
+  )
+);
+
+@include mat.core();
+
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  @include mat.all-component-themes($light-theme);
+}
+
+// Dynamic theme switching (only colors)
+.trmrk-app-theme-dark {
+  @include mat.all-component-colors($dark-theme);
+}
+.trmrk-app-theme-light {
+  @include mat.all-component-colors($light-theme);
+}
+/*
+* ------------ App Styles ------------
+*/
+
+.trmrk-companies-app-panel, trmrk-app-themes-list-view {
+  trmrk-panel-list {
+    .trmrk-list-item {
+      .trmrk-is-focused {
+        .trmrk-horiz-strip {
+          border-width: 2px;
+          border-style: solid;
+        }
+      }
+    }
+  }
+}
+
+.my-thin-horiz-strip .trmrk-thin-horiz-strip {
+  &.trmrk-has-border-x2 {
+    border-width: 2px;
+    border-style: solid;
+  }
+}
+
+.my-horiz-strip .trmrk-horiz-strip {
+  border-width: 2px;
+  border-style: solid;
+}
+
+.my-horiz-strip1 .trmrk-horiz-strip {
+  border-width: 1px;
+  border-style: solid;
+}
+
+.my-app-bar .trmrk-app-bar,
+.my-app-bar1 .trmrk-app-bar {
+  border-width: 2px;
+  border-style: solid;
+}
+
+.trmrk-file-item {
+  &.trmrk-is-focused {
+    .trmrk-horiz-strip {
+      border-width: 2px;
+      border-style: solid;
+    }
+  }
+
+  &.trmrk-is-selected {
+    .trmrk-horiz-strip {
+      border-width: 2px;
+      border-style: solid;
+    }
+  }
+
+  &.trmrk-is-current {
+    .trmrk-horiz-strip {
+      border-width: 2px;
+      border-style: solid;
+    }
+  }
+}
+
+.my-horiz-strip .trmrk-horiz-strip,
+.my-horiz-strip1 .trmrk-horiz-strip,
+.my-horiz-strip2 .trmrk-horiz-strip {
+  margin: 3px;
+  width: calc(100% - 6px);
+}
+
+trmrk-home-page, trmrk-app-themes {
+  display: block;
+  @include mixins.rel-stretch-to-parent-size();
+}
+
+trmrk-companies-app-panel {
+  @include mixins.rel-flex-stretch-to-parent-size();
+}

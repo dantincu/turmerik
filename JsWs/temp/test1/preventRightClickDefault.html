@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prevent right click default</title>
+  </head>
+  <body>
+    <span id="myEl">asdfasdf</span>
+    <script>
+      const onMouseUp = (event) => {
+        /* event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        event.cancelBubble = true;
+        event.bubbles = false; */
+        console.log("onMouseUp", event);
+        // return false;
+      };
+
+      document.addEventListener("DOMContentLoaded", (event) => {
+        const myEl = document.getElementById("myEl");
+        myEl.addEventListener("mouseup", onMouseUp, {
+          capture: true,
+        });
+
+        myEl.addEventListener("contextmenu", (event) => {
+          event.preventDefault();
+          // event.stopPropagation();
+          // event.stopImmediatePropagation();
+          // event.cancelBubble = true;
+          // event.bubbles = false;
+          console.log("contextmenu", event);
+          return false;
+        });
+      });
+    </script>
+  </body>
+</html>
