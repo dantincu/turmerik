@@ -245,20 +245,23 @@ namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
             while (!isAllWhitespace)
             {
                 string newLinkTitle = null;
+                string url = null;
 
                 if (!isNullOrEmpty && line.StartsWith(":"))
                 {
-                    newLinkTitle = line.Substring(1);
-                    refreshLine();
+                    string[] restOfLineParts = line.Substring(1).Split(":");
+                    url = string.Join(":", restOfLineParts.Take(2));
+                    newLinkTitle = string.Join(":", restOfLineParts.Skip(2));
                 }
 
                 if (!isNullOrEmpty)
                 {
-                    string url = line.Trim();
                     bool crashed = true;
 
                     if (newLinkTitle == null)
                     {
+                        url = line.Trim();
+
                         WriteSectionToConsole(
                             "Fetching resource from the following url: ",
                             url, ConsoleColor.Blue);

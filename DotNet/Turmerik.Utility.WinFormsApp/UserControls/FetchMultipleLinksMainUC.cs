@@ -149,9 +149,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             if (e.Control && !e.Shift && !e.Alt)
             {
-                if (e.KeyCode >= Keys.D0 && e.KeyCode < (Keys)Math.Min(
+                if (e.KeyCode >= Keys.D0 && e.KeyCode <= (Keys)Math.Min(
                     (int)Keys.D9,
-                    (int)Keys.D0 + itemControlsList.Count))
+                    (int)Keys.D0 + fetchMultipleLinksService.UrlScripts.Count - 1))
                 {
                     actionComponent.Execute(
                         new WinFormsActionOpts<int>
@@ -230,10 +230,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     throw new TrmrkException($"Unsupported item type: {mtblKvp.Value.GetType().FullName}");
                 }
 
-                control.SetItem(mtblKvp.Value);
                 itemControlsList[mtblKvp.Key] = control;
             }
 
+            control.SetItem(mtblKvp.Value);
             var ctrl = (Control)control;
             ctrl.Dock = DockStyle.Fill;
             splitContainerMain.Panel2.Controls.Add(ctrl);
@@ -254,16 +254,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
             itemsList[currentItemKvp.Key] = currentItemKvp.Value;
             ShowItem(currentItemKvp);
-        }
-
-        private void RefreshCurrentItem()
-        {
-            var currentItemKvp = GetCurrentItemKvp();
-
-            if (currentItemKvp.Value is FetchLinkDataUrlItemMtbl urlItem)
-            {
-
-            }
         }
 
         #region UI Event Handlers
@@ -390,17 +380,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 Action = () =>
                 {
                     ReloadCurrentItem();
-                    return ActionResultH.Create(0);
-                }
-            });
-
-        private void ButtonRefreshCurrentItem_Click(object sender, EventArgs e) => actionComponent.Execute(
-            new WinFormsActionOpts<int>
-            {
-                ActionName = nameof(ButtonRefreshCurrentItem_Click),
-                Action = () =>
-                {
-                    RefreshCurrentItem();
                     return ActionResultH.Create(0);
                 }
             });

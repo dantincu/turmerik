@@ -55,11 +55,13 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
         private ToolTipHintsGroup toolTipHintsGroup;
 
-        private FetchLinkDataUrlItemMtbl item;
-
         private WebView2 webView;
-
         private bool splitContainerMainSplitterMoving;
+
+        private FetchLinkDataUrlItemMtbl item;
+        private string? urlTitle;
+        private List<UrlScript> urlScripts;
+        private List<UrlScriptUC> urlScriptControls;
 
         public FetchLinkUrlItemUC()
         {
@@ -98,19 +100,41 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         public void SetItem(FetchLinkDataItemCoreMtbl item)
         {
             this.item = (FetchLinkDataUrlItemMtbl)item;
+            ClearTitle();
             webView ??= GetWebView2();
 
             if (this.item.Url.StartsWith("https://") || DialogResult.Yes == MessageBox.Show(
                 "The url you chose to open doesn't start with https://\nAre you sure you want to open it?",
                 "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
             {
-                webView.Source = new Uri(this.item.Url);
+                var url = new Uri(this.item.Url);
+
+                if (webView.Source != null && webView.Source.Equals(url))
+                {
+                    webView.Reload();
+                }
+                else
+                {
+                    webView.Source = url;
+                }
+            }
+            else
+            {
+                SetUrlTitle(null);
             }
         }
 
         public void FocusControl(Keys key)
         {
+            int index = (key - Keys.D0);
 
+            var kvp = urlScripts.FirstKvp(
+                (script, _) => script.Index == index);
+
+            if (kvp.Key >= 0)
+            {
+                urlScriptControls[kvp.Key].FocusTextBox();
+            }
         }
 
         public void ReleaseResources()
@@ -123,6 +147,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
+        private void ClearTitle()
+        {
+            urlTitle = null!;
+            panelScripts.Controls.Clear();
+            urlScripts = new();
+            urlScriptControls = new();
+        }
+
         private WebView2 GetWebView2()
         {
             var control = new WebView2()
@@ -131,8 +163,40 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             };
 
             control.SourceChanged += WebView_SourceChanged;
+            control.ContentLoading += WebView_ContentLoading;
+
             panelWebView.Controls.Add(control);
             return control;
+        }
+
+        private void SetUrlTitle(string? title)
+        {
+            ClearTitle();
+            urlTitle = title;
+
+            var urlScripts = fetchMultipleLinksService.UrlScripts;
+
+            if (urlTitle == null)
+            {
+                urlTitle = item.Url;
+                urlScripts = urlScripts.First().Arr().RdnlC();
+            }
+
+            this.urlScripts = urlScripts.Select(urlScript => new UrlScript(urlScript)
+            {
+                Text = urlScript.Factory(item.Url, urlTitle)
+            }).ToList();
+
+            urlScriptControls = this.urlScripts.Select(urlScript =>
+            {
+                var control = new UrlScriptUC();
+                control.Dock = DockStyle.Top;
+                control.SetScript(urlScript);
+                return control;
+            }).ToList();
+
+            panelScripts.Controls.AddRange(
+                urlScriptControls.ToArray().Reverse().ToArray());
         }
 
         #region UI Event Handlers
@@ -153,6 +217,21 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             textBoxWebViewAddress.Text = webView.Source.ToString();
         }
+
+        private void WebView_ContentLoading(object? sender,
+            Microsoft.Web.WebView2.Core.CoreWebView2ContentLoadingEventArgs e) => actionComponent.ExecuteAsync(
+                new WinFormsAsyncActionOpts<int>
+                {
+                    ActionName = nameof(WebView_ContentLoading),
+                    Action = async () =>
+                    {
+                        string title = await webView.ExecuteScriptAsync("document.title");
+                        title = jsonConversion.Adapter.Deserialize<string>(title);
+
+                        SetUrlTitle(title);
+                        return ActionResultH.Create(0);
+                    }
+                });
 
         private void SplitContainerMain_SplitterMoving(object sender, SplitterCancelEventArgs e)
         {

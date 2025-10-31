@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -37,6 +38,40 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                 fetchMultipleLinksDataContainer.JsonDirPath,
                 FetchMultipleLinksH.ITEMS_DIR_NAME);
         }
+
+        public ReadOnlyCollection<UrlScript> UrlScripts { get; } = new UrlScript[]
+        {
+            new()
+            {
+                Factory = (url, title) => title
+            },
+            new()
+            {
+                Factory = (url, title) => $":{url}:{title}"
+            },
+            new()
+            {
+                Factory = (url, title) => string.Join(" ",
+                    title.Split(['\n', '\r', '\t'], StringSplitOptions.RemoveEmptyEntries)).Replace(
+                        "&", "&amp;").Replace(
+                        "\\", "\\\\").Replace(
+                        "[", "\\[").Replace(
+                        "]", "\\]").With(
+                    title => $"[{title}]({url})")
+            },
+            new()
+            {
+                Factory = (url, title) => string.Join(" ",
+                    title.Split(['\n', '\r', '\t'], StringSplitOptions.RemoveEmptyEntries)).Replace(
+                        "&", "&&").Replace(
+                        "\"", "\"\"").Replace(
+                        ":", "::").With(
+                    title =>  $"\":url:{url}\" \":t:{title}\"")
+            }
+        }.Select((item, i) => new UrlScript(item)
+        {
+            Index = i
+        }).RdnlC();
 
         public void DeleteSerializedLinks()
         {

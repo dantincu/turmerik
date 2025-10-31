@@ -29,10 +29,12 @@
         private void InitializeComponent()
         {
             splitContainerMain = new SplitContainer();
+            panelScripts = new Panel();
             panelWebView = new Panel();
             panelWebViewTopControls = new Panel();
             textBoxWebViewAddress = new TextBox();
             ((System.ComponentModel.ISupportInitialize)splitContainerMain).BeginInit();
+            splitContainerMain.Panel1.SuspendLayout();
             splitContainerMain.Panel2.SuspendLayout();
             splitContainerMain.SuspendLayout();
             panelWebViewTopControls.SuspendLayout();
@@ -44,6 +46,10 @@
             splitContainerMain.Location = new Point(0, 0);
             splitContainerMain.Name = "splitContainerMain";
             // 
+            // splitContainerMain.Panel1
+            // 
+            splitContainerMain.Panel1.Controls.Add(panelScripts);
+            // 
             // splitContainerMain.Panel2
             // 
             splitContainerMain.Panel2.Controls.Add(panelWebView);
@@ -51,8 +57,16 @@
             splitContainerMain.Size = new Size(1000, 800);
             splitContainerMain.SplitterDistance = 498;
             splitContainerMain.TabIndex = 2;
-            splitContainerMain.SplitterMoved += SplitContainerMain_SplitterMoved;
             splitContainerMain.SplitterMoving += SplitContainerMain_SplitterMoving;
+            splitContainerMain.SplitterMoved += SplitContainerMain_SplitterMoved;
+            // 
+            // panelScripts
+            // 
+            panelScripts.Dock = DockStyle.Fill;
+            panelScripts.Location = new Point(0, 0);
+            panelScripts.Name = "panelScripts";
+            panelScripts.Size = new Size(498, 800);
+            panelScripts.TabIndex = 3;
             // 
             // panelWebView
             // 
@@ -88,6 +102,7 @@
             Name = "FetchLinkUrlItemUC";
             Size = new Size(1000, 800);
             Load += FetchLinkUrlItemUC_Load;
+            splitContainerMain.Panel1.ResumeLayout(false);
             splitContainerMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainerMain).EndInit();
             splitContainerMain.ResumeLayout(false);
@@ -102,5 +117,6 @@
         private Panel panelWebViewTopControls;
         private TextBox textBoxWebViewAddress;
         private Panel panelWebView;
+        private Panel panelScripts;
     }
 }

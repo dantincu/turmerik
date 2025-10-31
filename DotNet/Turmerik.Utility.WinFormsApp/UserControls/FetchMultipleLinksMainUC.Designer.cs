@@ -37,7 +37,6 @@
             buttonPrevItem = new Button();
             buttonNextItem = new Button();
             buttonReloadCurrentItem = new Button();
-            buttonRefreshCurrentItem = new Button();
             buttonResetItemsList = new Button();
             buttonReloadItemsList = new Button();
             ((System.ComponentModel.ISupportInitialize)splitContainerMain).BeginInit();
@@ -60,8 +59,8 @@
             splitContainerMain.Size = new Size(1600, 800);
             splitContainerMain.SplitterDistance = 617;
             splitContainerMain.TabIndex = 0;
-            splitContainerMain.SplitterMoved += SplitContainerMain_SplitterMoved;
             splitContainerMain.SplitterMoving += SplitContainerMain_SplitterMoving;
+            splitContainerMain.SplitterMoved += SplitContainerMain_SplitterMoved;
             // 
             // dataGridViewItemsList
             // 
@@ -111,7 +110,6 @@
             panelMainSplitContainerTopControls.Controls.Add(buttonPrevItem);
             panelMainSplitContainerTopControls.Controls.Add(buttonNextItem);
             panelMainSplitContainerTopControls.Controls.Add(buttonReloadCurrentItem);
-            panelMainSplitContainerTopControls.Controls.Add(buttonRefreshCurrentItem);
             panelMainSplitContainerTopControls.Controls.Add(buttonResetItemsList);
             panelMainSplitContainerTopControls.Controls.Add(buttonReloadItemsList);
             panelMainSplitContainerTopControls.Dock = DockStyle.Top;
@@ -123,7 +121,7 @@
             // buttonPrevItem
             // 
             buttonPrevItem.Dock = DockStyle.Right;
-            buttonPrevItem.Location = new Point(186, 0);
+            buttonPrevItem.Location = new Point(339, 0);
             buttonPrevItem.Name = "buttonPrevItem";
             buttonPrevItem.Size = new Size(55, 30);
             buttonPrevItem.TabIndex = 3;
@@ -134,7 +132,7 @@
             // buttonNextItem
             // 
             buttonNextItem.Dock = DockStyle.Right;
-            buttonNextItem.Location = new Point(241, 0);
+            buttonNextItem.Location = new Point(394, 0);
             buttonNextItem.Name = "buttonNextItem";
             buttonNextItem.Size = new Size(64, 30);
             buttonNextItem.TabIndex = 2;
@@ -145,24 +143,13 @@
             // buttonReloadCurrentItem
             // 
             buttonReloadCurrentItem.Dock = DockStyle.Right;
-            buttonReloadCurrentItem.Location = new Point(305, 0);
+            buttonReloadCurrentItem.Location = new Point(458, 0);
             buttonReloadCurrentItem.Name = "buttonReloadCurrentItem";
             buttonReloadCurrentItem.Size = new Size(159, 30);
             buttonReloadCurrentItem.TabIndex = 5;
             buttonReloadCurrentItem.Text = "&Reload Current";
             buttonReloadCurrentItem.UseVisualStyleBackColor = true;
             buttonReloadCurrentItem.Click += ButtonReloadCurrentItem_Click;
-            // 
-            // buttonRefreshCurrentItem
-            // 
-            buttonRefreshCurrentItem.Dock = DockStyle.Right;
-            buttonRefreshCurrentItem.Location = new Point(464, 0);
-            buttonRefreshCurrentItem.Name = "buttonRefreshCurrentItem";
-            buttonRefreshCurrentItem.Size = new Size(153, 30);
-            buttonRefreshCurrentItem.TabIndex = 4;
-            buttonRefreshCurrentItem.Text = "Refres&h Current";
-            buttonRefreshCurrentItem.UseVisualStyleBackColor = true;
-            buttonRefreshCurrentItem.Click += ButtonRefreshCurrentItem_Click;
             // 
             // buttonResetItemsList
             // 
@@ -212,7 +199,6 @@
         private Button buttonNextItem;
         private Button buttonPrevItem;
         private DataGridViewTextBoxColumn dataGridViewItemsListColumnItemText;
-        private Button buttonRefreshCurrentItem;
         private Button buttonReloadCurrentItem;
     }
 }
