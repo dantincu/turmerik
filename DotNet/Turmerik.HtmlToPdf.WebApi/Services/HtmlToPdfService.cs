@@ -69,6 +69,9 @@ namespace Turmerik.HtmlToPdf.WebApi.Services
             if (Interlocked.CompareExchange(
                 ref isGenerating, 1, 0) == 0)
             {
+                Exception? exc = null;
+                bool refreshPage = false;
+
                 try
                 {
                     var result = await generateFunc();
@@ -76,13 +79,22 @@ namespace Turmerik.HtmlToPdf.WebApi.Services
                 }
                 catch (Exception ex)
                 {
-                    throw new TrmrkException<HttpStatusCode>(
-                        "An error occurred while generating the document", ex, HttpStatusCode.InternalServerError);
+                    exc = ex;
+                    refreshPage = true;
                 }
                 finally
                 {
                     Interlocked.Exchange(ref isGenerating, 0);
                 }
+
+                if (refreshPage)
+                {
+                    page = null;
+                    await AssureIsInitialized();
+                }
+
+                throw new TrmrkException<HttpStatusCode>(
+                    "An error occurred while generating the document", exc, HttpStatusCode.InternalServerError);
             }
             else
             {
