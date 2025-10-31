@@ -55,7 +55,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private ITextTransformItem? currentTextTransformItem;
         private ITextTransformItem? currentRichTextTransformItem;
 
-        private bool splitContainerWidthsInitialized;
+        private bool splitContainerTransformersSplitterMoving;
+        private bool splitContainerTextAreasSplitterMoving;
 
         public TextTransformUC()
         {
@@ -390,7 +391,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     splitContainerTransformers.ApplySplitContainerWidthRatioIfFound(
                         uISettingsData, splitContainerTransformersWidthRatiosMapKey);
 
-                    this.splitContainerWidthsInitialized = true;
                     return ActionResultH.Create(0);
                 }
             });
@@ -432,18 +432,30 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
+        private void SplitContainerTransformers_SplitterMoving(object sender, SplitterCancelEventArgs e)
+        {
+            splitContainerTransformersSplitterMoving = true;
+        }
+
+        private void SplitContainerTextAreas_SplitterMoving(object sender, SplitterCancelEventArgs e)
+        {
+            splitContainerTextAreasSplitterMoving = true;
+        }
+
         private void SplitContainerTransformers_SplitterMoved(
             object sender, EventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
             {
                 ActionName = nameof(SplitContainerTransformers_SplitterMoved),
                 Action = () =>
                 {
-                    if (splitContainerWidthsInitialized)
+                    if (splitContainerTransformersSplitterMoving)
                     {
+                        splitContainerTransformersSplitterMoving = false;
+
                         uISettingsRetriever.Update(mtbl =>
-                        mtbl.UpdateSplitContainerWidthRatio(
-                            splitContainerTransformers,
-                            splitContainerTransformersWidthRatiosMapKey));
+                            mtbl.UpdateSplitContainerWidthRatio(
+                                splitContainerTransformers,
+                                splitContainerTransformersWidthRatiosMapKey));
                     }
 
                     return ActionResultH.Create(0);
@@ -456,12 +468,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             ActionName = nameof(SplitContainerTextAreas_SplitterMoved),
             Action = () =>
             {
-                if (splitContainerWidthsInitialized)
+                if (splitContainerTextAreasSplitterMoving)
                 {
+                    splitContainerTextAreasSplitterMoving = false;
+
                     uISettingsRetriever.Update(mtbl =>
-                    mtbl.UpdateSplitContainerWidthRatio(
-                        splitContainerTextAreas,
-                        UserControlsH.SplitContainerWidthRatiosMapDefaultKey));
+                        mtbl.UpdateSplitContainerWidthRatio(
+                            splitContainerTextAreas,
+                            UserControlsH.SplitContainerWidthRatiosMapDefaultKey));
                 }
 
                 return ActionResultH.Create(0);

@@ -59,7 +59,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private WebView2 webView;
 
-        private bool splitContainerWidthsInitialized;
+        private bool splitContainerMainSplitterMoving;
 
         public FetchLinkUrlItemUC()
         {
@@ -145,7 +145,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 splitContainerMain.ApplySplitContainerWidthRatioIfFound(
                     uISettingsData, splitContainerMainWidthRatiosMapKey);
 
-                splitContainerWidthsInitialized = true;
                 return ActionResultH.Create(0);
             }
         });
@@ -155,17 +154,24 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             textBoxWebViewAddress.Text = webView.Source.ToString();
         }
 
+        private void SplitContainerMain_SplitterMoving(object sender, SplitterCancelEventArgs e)
+        {
+            splitContainerMainSplitterMoving = true;
+        }
+
         private void SplitContainerMain_SplitterMoved(object sender, SplitterEventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
         {
             ActionName = nameof(SplitContainerMain_SplitterMoved),
             Action = () =>
             {
-                if (splitContainerWidthsInitialized)
+                if (splitContainerMainSplitterMoving)
                 {
+                    splitContainerMainSplitterMoving = false;
+
                     uISettingsRetriever.Update(mtbl =>
-                    mtbl.UpdateSplitContainerWidthRatio(
-                        splitContainerMain,
-                        splitContainerMainWidthRatiosMapKey));
+                        mtbl.UpdateSplitContainerWidthRatio(
+                            splitContainerMain,
+                            splitContainerMainWidthRatiosMapKey));
                 }
 
                 return ActionResultH.Create(0);

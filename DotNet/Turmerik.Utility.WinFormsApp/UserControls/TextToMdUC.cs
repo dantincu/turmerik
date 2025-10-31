@@ -56,7 +56,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
         private ToolTipHintsGroup toolTipHintsGroup;
 
-        private bool splitContainerWidthsInitialized;
+        private bool splitContainerMainSplitterMoving;
 
         public TextToMdUC()
         {
@@ -534,7 +534,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     splitContainerTextAreas.ApplySplitContainerWidthRatioIfFound(
                         uISettingsData, UserControlsH.SplitContainerWidthRatiosMapDefaultKey);
 
-                    splitContainerWidthsInitialized = true;
                     return ActionResultH.Create(0);
                 }
             });
@@ -642,18 +641,25 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
+        private void SplitContainerTextAreas_SplitterMoving(object sender, SplitterCancelEventArgs e)
+        {
+            splitContainerMainSplitterMoving = true;
+        }
+
         private void SplitContainerTextAreas_SplitterMoved(
             object sender, SplitterEventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
             {
                 ActionName = nameof(SplitContainerTextAreas_SplitterMoved),
                 Action = () =>
                 {
-                    if (splitContainerWidthsInitialized)
+                    if (splitContainerMainSplitterMoving)
                     {
+                        splitContainerMainSplitterMoving = false;
+
                         uISettingsRetriever.Update(mtbl =>
-                        mtbl.UpdateSplitContainerWidthRatio(
-                            splitContainerTextAreas,
-                            UserControlsH.SplitContainerWidthRatiosMapDefaultKey));
+                            mtbl.UpdateSplitContainerWidthRatio(
+                                splitContainerTextAreas,
+                                UserControlsH.SplitContainerWidthRatiosMapDefaultKey));
                     }
 
                     return ActionResultH.Create(0);

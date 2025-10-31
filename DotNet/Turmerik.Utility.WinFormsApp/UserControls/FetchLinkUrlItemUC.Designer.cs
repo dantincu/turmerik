@@ -52,6 +52,7 @@
             splitContainerMain.SplitterDistance = 498;
             splitContainerMain.TabIndex = 2;
             splitContainerMain.SplitterMoved += SplitContainerMain_SplitterMoved;
+            splitContainerMain.SplitterMoving += SplitContainerMain_SplitterMoving;
             // 
             // panelWebView
             // 

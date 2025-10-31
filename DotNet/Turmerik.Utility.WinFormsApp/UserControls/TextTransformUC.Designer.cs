@@ -73,6 +73,7 @@
             splitContainerTextAreas.TabIndex = 0;
             splitContainerTextAreas.TabStop = false;
             splitContainerTextAreas.SplitterMoved += SplitContainerTextAreas_SplitterMoved;
+            splitContainerTextAreas.SplitterMoving += SplitContainerTextAreas_SplitterMoving;
             // 
             // richTextBoxUCSrc
             // 
@@ -127,6 +128,7 @@
             splitContainerTransformers.SplitterDistance = 533;
             splitContainerTransformers.TabIndex = 0;
             splitContainerTransformers.SplitterMoved += SplitContainerTransformers_SplitterMoved;
+            splitContainerTransformers.SplitterMoving += SplitContainerTransformers_SplitterMoving;
             // 
             // treeViewTransformers
             // 

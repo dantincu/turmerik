@@ -391,6 +391,7 @@
             splitContainerTextAreas.TabIndex = 0;
             splitContainerTextAreas.TabStop = false;
             splitContainerTextAreas.SplitterMoved += SplitContainerTextAreas_SplitterMoved;
+            splitContainerTextAreas.SplitterMoving += SplitContainerTextAreas_SplitterMoving;
             // 
             // richTextBoxSrcText
             // 

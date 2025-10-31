@@ -61,6 +61,7 @@
             splitContainerMain.SplitterDistance = 617;
             splitContainerMain.TabIndex = 0;
             splitContainerMain.SplitterMoved += SplitContainerMain_SplitterMoved;
+            splitContainerMain.SplitterMoving += SplitContainerMain_SplitterMoving;
             // 
             // dataGridViewItemsList
             // 
