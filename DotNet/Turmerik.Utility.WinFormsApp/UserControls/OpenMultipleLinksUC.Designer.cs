@@ -76,7 +76,7 @@
             btnFixNewLines.TabIndex = 1;
             btnFixNewLines.Text = "Fix new lines";
             btnFixNewLines.UseVisualStyleBackColor = true;
-            btnFixNewLines.Click += btnFixNewLines_Click;
+            btnFixNewLines.Click += BtnFixNewLines_Click;
             // 
             // OpenMultipleLinksUC
             // 

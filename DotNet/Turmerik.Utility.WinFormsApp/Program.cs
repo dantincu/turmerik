@@ -14,6 +14,7 @@ using Turmerik.NetCore.Dependencies;
 using Turmerik.NetCore.Md;
 using Turmerik.NetCore.Utility;
 using Turmerik.Utility.WinFormsApp.Services;
+using Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks;
 using Turmerik.Utility.WinFormsApp.Settings;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.Utility.WinFormsApp.UserControls;
@@ -171,6 +172,8 @@ namespace Turmerik.Utility.WinFormsApp
                     services.AddSingleton<ToolTipHintsOrchestratorRetriever>();
                     services.AddSingleton<TextTransformBehavior>();
                     services.AddSingleton<CustomCommandService>();
+                    services.AddSingleton<IFetchMultipleLinksDataContainer, FetchMultipleLinksDataContainer>();
+                    services.AddSingleton<FetchMultipleLinksService>();
                 }));
 
             return svcProv;

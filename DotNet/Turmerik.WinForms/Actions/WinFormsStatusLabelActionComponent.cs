@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Actions;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.Logging;
 using Turmerik.Core.UIActions;
 
@@ -34,8 +35,9 @@ namespace Turmerik.WinForms.Actions
             base.OnBeforeExecutionLogMsg(opts, msgTuple);
             string message = msgTuple?.StatusMessage;
 
-            SetStatusLabelMessage(message,
-                OptsRetriever().DefaultForeColor);
+            OptsRetriever()?.ActWith(opts =>
+                SetStatusLabelMessage(message,
+                    opts.DefaultForeColor));
         }
 
         protected override void OnUnhandledErrorLogMsg<T>(
@@ -48,8 +50,9 @@ namespace Turmerik.WinForms.Actions
                 OnUnhandledErrorUIMsgTpl,
                 ex.Message);
 
-            SetStatusLabelMessage(statusMessage,
-                OptsRetriever().ErrorForeColor);
+            OptsRetriever()?.ActWith(opts =>
+                SetStatusLabelMessage(statusMessage,
+                opts.ErrorForeColor));
 
             if (msgTuple != null)
             {
@@ -76,8 +79,9 @@ namespace Turmerik.WinForms.Actions
 
             string message = msgTuple?.StatusMessage;
 
-            SetStatusLabelMessage(message,
-                OptsRetriever().DefaultForeColor);
+            OptsRetriever()?.ActWith(opts =>
+                SetStatusLabelMessage(message,
+                opts.DefaultForeColor));
         }
 
         private void SetStatusLabelMessage(
@@ -86,9 +90,11 @@ namespace Turmerik.WinForms.Actions
         {
             if (!string.IsNullOrEmpty(statusMessage))
             {
-                var statusLabel = OptsRetriever().StatusLabel;
-                statusLabel.Text = statusMessage;
-                statusLabel.ForeColor = foreColor;
+                OptsRetriever()?.StatusLabel.ActWith(statusLabel =>
+                {
+                    statusLabel.Text = statusMessage;
+                    statusLabel.ForeColor = foreColor;
+                });
             }
         }
     }

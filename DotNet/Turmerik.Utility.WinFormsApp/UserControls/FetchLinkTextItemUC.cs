@@ -3,21 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web.Services.Description;
 using System.Windows.Forms;
-using Turmerik.Core.Actions;
-using Turmerik.Core.Text;
+using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Threading;
-using Turmerik.NetCore.Md;
+using Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks;
 using Turmerik.Utility.WinFormsApp.Settings;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
-using Turmerik.Ux;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
@@ -25,12 +20,12 @@ using Turmerik.WinForms.MatUIIcons;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
-    public partial class OpenMultipleLinksUC : UserControl, IMainFormTabPageContentControl
+    public partial class FetchLinkTextItemUC : UserControl, IFetchLinkItemUC
     {
-        private const string EDGE_BROWSER_PATH = @"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe";
-
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
+        private readonly IJsonConversion jsonConversion;
+
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
 
         private readonly ISynchronizedValueAdapter<bool> controlsSynchronizer;
@@ -41,8 +36,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly IAppSettings appSettings;
 
         private readonly IWinFormsStatusLabelActionComponent actionComponent;
-
-        private readonly ToolTip toolTip;
+        private readonly IFetchMultipleLinksDataContainer fetchMultipleLinksDataContainer;
+        private readonly FetchMultipleLinksService fetchMultipleLinksService;
 
         private UISettingsDataImmtbl uISettingsData;
         private UIThemeDataImmtbl uIThemeData;
@@ -50,13 +45,17 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
         private ToolTipHintsGroup toolTipHintsGroup;
 
-        public OpenMultipleLinksUC()
+        private FetchLinkDataTextItemMtbl item;
+
+        public FetchLinkTextItemUC()
         {
             svcProvContnr = ServiceProviderContainer.Instance.Value;
 
             if (svcProvContnr.IsRegistered)
             {
                 svcProv = svcProvContnr.Data;
+                jsonConversion = svcProv.GetRequiredService<IJsonConversion>();
+
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
 
                 controlsSynchronizer = svcProv.GetRequiredService<ISynchronizedValueAdapterFactory>().Create(
@@ -67,6 +66,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 uISettingsRetriever = svcProv.GetRequiredService<IUISettingsRetriever>();
                 uIThemeRetriever = svcProv.GetRequiredService<IUIThemeRetriever>();
                 appSettings = svcProv.GetRequiredService<IAppSettings>();
+                fetchMultipleLinksDataContainer = svcProv.GetRequiredService<IFetchMultipleLinksDataContainer>();
+                fetchMultipleLinksService = svcProv.GetRequiredService<FetchMultipleLinksService>();
             }
 
             InitializeComponent();
@@ -77,56 +78,26 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     ).StatusLabel(GetType());
 
                 uISettingsData = uISettingsRetriever.Data;
-                uIThemeData = uIThemeRetriever.Data;
-
-                uIThemeData.ApplyBgColor(
-                    [this.textBoxLinks,
-                    this.btnFixNewLines,
-                    this.btnOpenLinks],
-                    uIThemeData.InputBackColor);
             }
         }
 
-        public void HandleKeyDown(KeyEventArgs e)
+        public void SetItem(FetchLinkDataItemCoreMtbl item)
+        {
+            this.item = (FetchLinkDataTextItemMtbl)item;
+            textBoxMain.Text = item.Text;
+        }
+
+        public void FocusControl(Keys key)
+        {
+            textBoxMain.Focus();
+            textBoxMain.SelectAll();
+        }
+
+        public void ReleaseResources()
         {
         }
 
         #region UI Event Handlers
-
-        private void BtnOpenLinks_Click(object sender, EventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
-        {
-            ActionName = nameof(BtnOpenLinks_Click),
-            Action = () =>
-            {
-                var linksArr = textBoxLinks.Text.Split('\n').Select(
-                    s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToArray();
-
-                foreach (var link in linksArr)
-                {
-                    if (UriH.UriSchemeStartRegex.Match(link)?.Success == true)
-                    {
-                        Process.Start(EDGE_BROWSER_PATH, link);
-                    }
-                }
-
-                return ActionResultH.Create(0);
-            }
-        });
-
-        private void BtnFixNewLines_Click(object sender, EventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
-        {
-            ActionName = nameof(BtnFixNewLines_Click),
-            Action = () =>
-            {
-                var lines = textBoxLinks.Text.Split(
-                new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-
-                string newText = string.Join(Environment.NewLine, lines);
-                textBoxLinks.Text = newText;
-
-                return ActionResultH.Create(0);
-            }
-        });
 
         #endregion UI Event Handlers
     }

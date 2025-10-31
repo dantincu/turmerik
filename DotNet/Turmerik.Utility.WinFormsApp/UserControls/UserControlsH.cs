@@ -14,6 +14,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 {
     public static class UserControlsH
     {
+        public static readonly string SplitContainerWidthRatiosMapDefaultKey = typeof(MainForm).FullName!;
+
         public static IActionResult<string?> CopyTextToClipboard(
             this IWinFormsStatusLabelActionComponent actionComponent,
             ControlBlinkTimersManagerAdapter controlBlinkTimersManagerAdapter,

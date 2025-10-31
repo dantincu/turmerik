@@ -22,6 +22,7 @@ namespace Turmerik.WinForms.Dependencies
             services.AddSingleton<IToolTipHintsOrchestratorFactory, ToolTipHintsOrchestratorFactory>();
             services.AddSingleton<IRichTextBoxPseudoMarkupRetriever, RichTextBoxPseudoMarkupRetriever>();
             services.AddSingleton<IRichTextBoxPseudoMarkupAdapter, RichTextBoxPseudoMarkupAdapter>();
+            services.AddSingleton<IContinuousEventHandlerFactory, ContinuousEventHandlerFactory>();
 
             return services;
         }

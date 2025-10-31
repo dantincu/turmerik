@@ -1,4 +1,6 @@
-﻿namespace Turmerik.Utility.WinFormsApp
+﻿using Turmerik.Utility.WinFormsApp.UserControls;
+
+namespace Turmerik.Utility.WinFormsApp
 {
     partial class MainForm
     {
@@ -33,11 +35,13 @@
             toolStripStatusLabelMain = new ToolStripStatusLabel();
             tabControlMain = new TabControl();
             tabPageTextUtils = new TabPage();
-            textUtilsUC = new Turmerik.Utility.WinFormsApp.UserControls.TextUtilsUC();
+            textUtilsUC = new TextUtilsUC();
             tabPageTextTransform = new TabPage();
-            textTransformUC = new Turmerik.Utility.WinFormsApp.UserControls.TextTransformUC();
+            textTransformUC = new TextTransformUC();
             tabPageOpenMultipleLinks = new TabPage();
-            openMultipleLinksuc1 = new Turmerik.Utility.WinFormsApp.UserControls.OpenMultipleLinksUC();
+            openMultipleLinksuc1 = new OpenMultipleLinksUC();
+            tabPageFetchMultipleLinks = new TabPage();
+            fetchMultipleLinksuc1 = new FetchMultipleLinksUC();
             menuStripMain = new MenuStrip();
             textUtilsActionsToolStripMenuItem = new ToolStripMenuItem();
             goToWebResourceUrlToolStripMenuItem = new ToolStripMenuItem();
@@ -57,6 +61,7 @@
             tabPageTextUtils.SuspendLayout();
             tabPageTextTransform.SuspendLayout();
             tabPageOpenMultipleLinks.SuspendLayout();
+            tabPageFetchMultipleLinks.SuspendLayout();
             menuStripMain.SuspendLayout();
             panelCustomCommand.SuspendLayout();
             SuspendLayout();
@@ -80,6 +85,7 @@
             tabControlMain.Controls.Add(tabPageTextUtils);
             tabControlMain.Controls.Add(tabPageTextTransform);
             tabControlMain.Controls.Add(tabPageOpenMultipleLinks);
+            tabControlMain.Controls.Add(tabPageFetchMultipleLinks);
             tabControlMain.Dock = DockStyle.Fill;
             tabControlMain.Font = new Font("Arial", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tabControlMain.Location = new Point(0, 47);
@@ -144,6 +150,24 @@
             openMultipleLinksuc1.Name = "openMultipleLinksuc1";
             openMultipleLinksuc1.Size = new Size(192, 71);
             openMultipleLinksuc1.TabIndex = 0;
+            // 
+            // tabPageFetchMultipleLinks
+            // 
+            tabPageFetchMultipleLinks.Controls.Add(fetchMultipleLinksuc1);
+            tabPageFetchMultipleLinks.Location = new Point(4, 25);
+            tabPageFetchMultipleLinks.Name = "tabPageFetchMultipleLinks";
+            tabPageFetchMultipleLinks.Size = new Size(192, 71);
+            tabPageFetchMultipleLinks.TabIndex = 3;
+            tabPageFetchMultipleLinks.Text = "Fetch Multiple Links";
+            tabPageFetchMultipleLinks.UseVisualStyleBackColor = true;
+            // 
+            // fetchMultipleLinksuc1
+            // 
+            fetchMultipleLinksuc1.Dock = DockStyle.Fill;
+            fetchMultipleLinksuc1.Location = new Point(0, 0);
+            fetchMultipleLinksuc1.Name = "fetchMultipleLinksuc1";
+            fetchMultipleLinksuc1.Size = new Size(192, 71);
+            fetchMultipleLinksuc1.TabIndex = 0;
             // 
             // menuStripMain
             // 
@@ -241,6 +265,7 @@
             textBoxCustomCommand.Name = "textBoxCustomCommand";
             textBoxCustomCommand.Size = new Size(1621, 23);
             textBoxCustomCommand.TabIndex = 1;
+            textBoxCustomCommand.KeyDown += TextBoxCustomCommand_KeyDown;
             textBoxCustomCommand.KeyPress += TextBoxCustomCommand_KeyPress;
             // 
             // labelTitleCustomCommand
@@ -269,13 +294,18 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Turmerik Utility";
             Load += MainForm_Load;
+            Shown += MainForm_Shown;
+            ResizeEnd += MainForm_ResizeEnd;
+            KeyDown += MainForm_KeyDown;
             KeyUp += MainForm_KeyUp;
+            Move += MainForm_Move;
             statusStripMain.ResumeLayout(false);
             statusStripMain.PerformLayout();
             tabControlMain.ResumeLayout(false);
             tabPageTextUtils.ResumeLayout(false);
             tabPageTextTransform.ResumeLayout(false);
             tabPageOpenMultipleLinks.ResumeLayout(false);
+            tabPageFetchMultipleLinks.ResumeLayout(false);
             menuStripMain.ResumeLayout(false);
             menuStripMain.PerformLayout();
             panelCustomCommand.ResumeLayout(false);
@@ -309,5 +339,7 @@
         private Panel panelCustomCommand;
         private Label labelTitleCustomCommand;
         private TextBox textBoxCustomCommand;
+        private TabPage tabPageFetchMultipleLinks;
+        private UserControls.FetchMultipleLinksUC fetchMultipleLinksuc1;
     }
 }

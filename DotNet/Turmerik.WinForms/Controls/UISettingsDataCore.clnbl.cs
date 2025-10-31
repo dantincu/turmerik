@@ -11,11 +11,15 @@ namespace Turmerik.WinForms.Controls
 {
     public interface IUISettingsDataCore
     {
+        Size? MainFormSize { get; }
+        Point? MainFormLocation { get; }
         int SlowBlinkIntervalMillis { get; }
         int DefaultBlinkIntervalMillis { get; }
         int FastBlinkIntervalMillis { get; }
 
         IEnumerable<IToolTipDelay> GetToolTipDelays();
+
+        IReadOnlyDictionary<string, decimal> GetSplitContainerWidthRatiosMap();
     }
 
     public static class UISettingsDataCore
@@ -129,19 +133,28 @@ namespace Turmerik.WinForms.Controls
         public UISettingsDataCoreImmtbl(
             IUISettingsDataCore src)
         {
+            MainFormSize = src.MainFormSize;
+            MainFormLocation = src.MainFormLocation;
             SlowBlinkIntervalMillis = src.SlowBlinkIntervalMillis;
             DefaultBlinkIntervalMillis = src.DefaultBlinkIntervalMillis;
             FastBlinkIntervalMillis = src.FastBlinkIntervalMillis;
             ToolTipDelays = src.GetToolTipDelays()?.Select(o => o.ToImmtbl()).RdnlC();
+            SplitContainerWidthRatiosMap = src.GetSplitContainerWidthRatiosMap()?.Dictnr().RdnlD();
         }
 
+        public Size? MainFormSize { get; }
+        public Point? MainFormLocation { get; }
         public int SlowBlinkIntervalMillis { get; }
         public int DefaultBlinkIntervalMillis { get; }
         public int FastBlinkIntervalMillis { get; }
 
         public ReadOnlyCollection<ToolTipDelayImmtbl> ToolTipDelays { get; }
+        public ReadOnlyDictionary<string, decimal> SplitContainerWidthRatiosMap { get; }
 
         public IEnumerable<IToolTipDelay> GetToolTipDelays() => ToolTipDelays;
+
+        public IReadOnlyDictionary<string, decimal> GetSplitContainerWidthRatiosMap(
+            ) => SplitContainerWidthRatiosMap;
     }
 
     public class UISettingsDataCoreMtbl : IUISettingsDataCore
@@ -153,18 +166,27 @@ namespace Turmerik.WinForms.Controls
         public UISettingsDataCoreMtbl(
             IUISettingsDataCore src)
         {
+            MainFormSize = src.MainFormSize;
+            MainFormLocation = src.MainFormLocation;
             SlowBlinkIntervalMillis = src.SlowBlinkIntervalMillis;
             DefaultBlinkIntervalMillis = src.DefaultBlinkIntervalMillis;
             FastBlinkIntervalMillis = src.FastBlinkIntervalMillis;
             ToolTipDelays = src.GetToolTipDelays()?.Select(o => o.ToMtbl()).ToList();
+            SplitContainerWidthRatiosMap = src.GetSplitContainerWidthRatiosMap()?.Dictnr();
         }
 
+        public Size? MainFormSize { get; set; }
+        public Point? MainFormLocation { get; set; }
         public int SlowBlinkIntervalMillis { get; set; }
         public int DefaultBlinkIntervalMillis { get; set; }
         public int FastBlinkIntervalMillis { get; set; }
 
         public List<ToolTipDelayMtbl> ToolTipDelays { get; set; }
+        public Dictionary<string, decimal> SplitContainerWidthRatiosMap { get; set; }
 
         public IEnumerable<IToolTipDelay> GetToolTipDelays() => ToolTipDelays;
+
+        public IReadOnlyDictionary<string, decimal> GetSplitContainerWidthRatiosMap(
+            ) => SplitContainerWidthRatiosMap;
     }
 }

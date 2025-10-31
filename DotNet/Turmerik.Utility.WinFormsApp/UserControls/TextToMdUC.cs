@@ -22,6 +22,7 @@ using Turmerik.Core.Text;
 using Turmerik.Md;
 using Turmerik.NetCore.Md;
 using System.Web;
+using Turmerik.WinForms.Helpers;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -49,13 +50,13 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxAddMdQtLvlAndHtmlEncode_EvtAdapter;
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxInsertSpacesBetweenTokens_EvtAdapter;
 
-        private readonly ToolTip toolTip;
-
         private UISettingsDataImmtbl uISettingsData;
         private UIThemeDataImmtbl uIThemeData;
         private ControlBlinkTimersManagerAdapter controlBlinkTimersManagerAdapter;
         private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
         private ToolTipHintsGroup toolTipHintsGroup;
+
+        private bool splitContainerWidthsInitialized;
 
         public TextToMdUC()
         {
@@ -78,7 +79,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
 
             InitializeComponent();
-            toolTip = new ToolTip();
 
             UpdateMainSplitContainerDistance();
             panelOptionControls.SizeChanged += PanelOptionControls_SizeChanged;
@@ -371,7 +371,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             },
             OnUnhandledError = exc => WinFormsMessageTuple.WithOnly(
                 exc.Message, exc.Message),
-        }).ActWith(result => result.IsSuccess.ActIf(() => 
+        }).ActWith(result => result.IsSuccess.ActIf(() =>
         {
             controlBlinkTimersManagerAdapter.BlinkControl(
                 buttonMdTable, result);
@@ -531,6 +531,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     toolTipHintsOrchestrator.HintGroups.Add(
                         toolTipHintsGroup = GetToolTipHintsGroupOpts().HintsGroup());
 
+                    splitContainerTextAreas.ApplySplitContainerWidthRatioIfFound(
+                        uISettingsData, UserControlsH.SplitContainerWidthRatiosMapDefaultKey);
+
+                    splitContainerWidthsInitialized = true;
                     return ActionResultH.Create(0);
                 }
             });
@@ -637,6 +641,24 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 }
             }
         }
+
+        private void SplitContainerTextAreas_SplitterMoved(
+            object sender, SplitterEventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
+            {
+                ActionName = nameof(SplitContainerTextAreas_SplitterMoved),
+                Action = () =>
+                {
+                    if (splitContainerWidthsInitialized)
+                    {
+                        uISettingsRetriever.Update(mtbl =>
+                        mtbl.UpdateSplitContainerWidthRatio(
+                            splitContainerTextAreas,
+                            UserControlsH.SplitContainerWidthRatiosMapDefaultKey));
+                    }
+
+                    return ActionResultH.Create(0);
+                }
+            });
 
         #endregion UI Event Handlers
     }

@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             splitContainerTextAreas = new SplitContainer();
+            richTextBoxUCSrc = new RichTextBoxUC();
+            richTextBoxUCResult = new RichTextBoxUC();
             splitContainerMain = new SplitContainer();
             splitContainerTransformers = new SplitContainer();
             treeViewTransformers = new TreeView();
@@ -36,9 +38,7 @@
             richTextBoxCurrentTransformerDescription = new RichTextBox();
             panelCurrentTransformerName = new Panel();
             textBoxCurrentTransformerName = new TextBox();
-            iconLabelRunCurrentTransformer = new WinForms.Controls.IconLabel();
-            richTextBoxUCSrc = new RichTextBoxUC();
-            richTextBoxUCResult = new RichTextBoxUC();
+            iconLabelRunCurrentTransformer = new Turmerik.WinForms.Controls.IconLabel();
             ((System.ComponentModel.ISupportInitialize)splitContainerTextAreas).BeginInit();
             splitContainerTextAreas.Panel1.SuspendLayout();
             splitContainerTextAreas.Panel2.SuspendLayout();
@@ -72,6 +72,23 @@
             splitContainerTextAreas.SplitterDistance = 800;
             splitContainerTextAreas.TabIndex = 0;
             splitContainerTextAreas.TabStop = false;
+            splitContainerTextAreas.SplitterMoved += SplitContainerTextAreas_SplitterMoved;
+            // 
+            // richTextBoxUCSrc
+            // 
+            richTextBoxUCSrc.Dock = DockStyle.Fill;
+            richTextBoxUCSrc.Location = new Point(0, 0);
+            richTextBoxUCSrc.Name = "richTextBoxUCSrc";
+            richTextBoxUCSrc.Size = new Size(800, 396);
+            richTextBoxUCSrc.TabIndex = 0;
+            // 
+            // richTextBoxUCResult
+            // 
+            richTextBoxUCResult.Dock = DockStyle.Fill;
+            richTextBoxUCResult.Location = new Point(0, 0);
+            richTextBoxUCResult.Name = "richTextBoxUCResult";
+            richTextBoxUCResult.Size = new Size(796, 396);
+            richTextBoxUCResult.TabIndex = 1;
             // 
             // splitContainerMain
             // 
@@ -109,6 +126,7 @@
             splitContainerTransformers.Size = new Size(1600, 400);
             splitContainerTransformers.SplitterDistance = 533;
             splitContainerTransformers.TabIndex = 0;
+            splitContainerTransformers.SplitterMoved += SplitContainerTransformers_SplitterMoved;
             // 
             // treeViewTransformers
             // 
@@ -170,22 +188,6 @@
             iconLabelRunCurrentTransformer.TabIndex = 0;
             iconLabelRunCurrentTransformer.Text = "R";
             iconLabelRunCurrentTransformer.Click += IconLabelRunCurrentTransformer_Click;
-            // 
-            // richTextBoxUCSrc
-            // 
-            richTextBoxUCSrc.Dock = DockStyle.Fill;
-            richTextBoxUCSrc.Location = new Point(0, 0);
-            richTextBoxUCSrc.Name = "richTextBoxUCSrc";
-            richTextBoxUCSrc.Size = new Size(800, 396);
-            richTextBoxUCSrc.TabIndex = 0;
-            // 
-            // richTextBoxUCResult
-            // 
-            richTextBoxUCResult.Dock = DockStyle.Fill;
-            richTextBoxUCResult.Location = new Point(0, 0);
-            richTextBoxUCResult.Name = "richTextBoxUCResult";
-            richTextBoxUCResult.Size = new Size(796, 396);
-            richTextBoxUCResult.TabIndex = 1;
             // 
             // TextTransformUC
             // 

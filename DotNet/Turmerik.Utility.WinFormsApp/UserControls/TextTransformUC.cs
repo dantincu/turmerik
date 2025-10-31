@@ -17,8 +17,13 @@ using Turmerik.WinForms.MatUIIcons;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
-    public partial class TextTransformUC : UserControl
+    public partial class TextTransformUC : UserControl, IMainFormTabPageContentControl
     {
+        private static readonly string splitContainerTransformersWidthRatiosMapKey = string.Format(
+            "[{0}][{0}]",
+            typeof(TextTransformUC).FullName,
+            nameof(splitContainerTransformers));
+
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
         private readonly IJsonConversion jsonConversion;
@@ -49,6 +54,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private ITextTransformNode? currentTransformNode;
         private ITextTransformItem? currentTextTransformItem;
         private ITextTransformItem? currentRichTextTransformItem;
+
+        private bool splitContainerWidthsInitialized;
 
         public TextTransformUC()
         {
@@ -91,6 +98,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         }
 
         public void GoToSrcTextBox() => richTextBoxUCSrc.RichTextBox.Focus();
+
+        public void HandleKeyDown(KeyEventArgs e)
+        {
+        }
 
         private ToolTipHintsGroupOpts GetToolTipHintsGroupOpts()
         {
@@ -339,6 +350,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
                     {
                         uiTheme.ApplyBgColor([
+                            this.treeViewTransformers,
+                            this.textBoxCurrentTransformerName,
+                            this.richTextBoxCurrentTransformerDescription,
+                            this.richTextBoxUCSrc.RichTextBox,
+                            this.richTextBoxUCResult.RichTextBox,
                         ], uiTheme.InputBackColor);
                     });
 
@@ -368,6 +384,13 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     toolTipHintsOrchestrator.HintGroups.Add(
                         toolTipHintsGroup = GetToolTipHintsGroupOpts().HintsGroup());
 
+                    splitContainerTextAreas.ApplySplitContainerWidthRatioIfFound(
+                        uISettingsData, UserControlsH.SplitContainerWidthRatiosMapDefaultKey);
+
+                    splitContainerTransformers.ApplySplitContainerWidthRatioIfFound(
+                        uISettingsData, splitContainerTransformersWidthRatiosMapKey);
+
+                    this.splitContainerWidthsInitialized = true;
                     return ActionResultH.Create(0);
                 }
             });
@@ -408,6 +431,42 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 }
             }
         }
+
+        private void SplitContainerTransformers_SplitterMoved(
+            object sender, EventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
+            {
+                ActionName = nameof(SplitContainerTransformers_SplitterMoved),
+                Action = () =>
+                {
+                    if (splitContainerWidthsInitialized)
+                    {
+                        uISettingsRetriever.Update(mtbl =>
+                        mtbl.UpdateSplitContainerWidthRatio(
+                            splitContainerTransformers,
+                            splitContainerTransformersWidthRatiosMapKey));
+                    }
+
+                    return ActionResultH.Create(0);
+                }
+            });
+
+        private void SplitContainerTextAreas_SplitterMoved(
+            object sender, SplitterEventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
+        {
+            ActionName = nameof(SplitContainerTextAreas_SplitterMoved),
+            Action = () =>
+            {
+                if (splitContainerWidthsInitialized)
+                {
+                    uISettingsRetriever.Update(mtbl =>
+                    mtbl.UpdateSplitContainerWidthRatio(
+                        splitContainerTextAreas,
+                        UserControlsH.SplitContainerWidthRatiosMapDefaultKey));
+                }
+
+                return ActionResultH.Create(0);
+            }
+        });
 
         #endregion UI Event Handlers
     }

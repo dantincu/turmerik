@@ -25,11 +25,16 @@ namespace Turmerik.Utility.WinFormsApp
         private readonly IWinFormsActionComponentCreator actionComponentCreator;
         private readonly IWinFormsStatusLabelActionComponent actionComponent;
         private readonly ControlBlinkTimersManagerAdapterFactory controlBlinkTimersManagerAdapterFactory;
+        private readonly IContinuousEventHandlerFactory continuousEventHandlerFactory;
+
+        private readonly IMainFormTabPageContentControl[] tabPageContentControlsArr;
+        private readonly IContinuousEventHandler<EventArgs> formMoveEventHandler;
 
         private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
         private CustomCommandService customCommandService;
 
         private Action appRecoveryToolRequested;
+        private bool formShown;
 
         public MainForm()
         {
@@ -47,9 +52,36 @@ namespace Turmerik.Utility.WinFormsApp
                 actionComponent = actionComponentCreator.StatusLabel(GetType());
                 controlBlinkTimersManagerAdapterFactory = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterFactory>();
                 customCommandService = svcProv.GetRequiredService<CustomCommandService>();
+                continuousEventHandlerFactory = svcProv.GetRequiredService<IContinuousEventHandlerFactory>();
+
+                formMoveEventHandler = continuousEventHandlerFactory.Create<EventArgs>(new()
+                {
+                    TargetControl = this,
+                    Handler = args => actionComponent.Execute(new WinFormsActionOpts<int>
+                    {
+                        ActionName = string.Join(".",
+                            nameof(formMoveEventHandler),
+                            nameof(formMoveEventHandler.EventFired)),
+                        Action = () =>
+                        {
+                            uISettingsRetriever.Update(mtbl =>
+                            {
+                                mtbl.MainFormLocation = this.Location;
+                            });
+
+                            return ActionResultH.Create(0);
+                        }
+                    })
+                });
             }
 
             InitializeComponent();
+
+            tabPageContentControlsArr = [
+                textUtilsUC,
+                textTransformUC,
+                openMultipleLinksuc1,
+                fetchMultipleLinksuc1];
 
             if (svcProvContnr.IsRegistered)
             {
@@ -61,8 +93,18 @@ namespace Turmerik.Utility.WinFormsApp
                             this,
                             this.tabControlMain,
                             this.tabPageTextUtils,
-                            this.textUtilsUC
+                            this.textUtilsUC,
+                            this.tabPageTextTransform,
+                            this.textTransformUC,
+                            this.tabPageOpenMultipleLinks,
+                            this.openMultipleLinksuc1,
+                            this.tabPageFetchMultipleLinks,
+                            this.fetchMultipleLinksuc1
                         ]);
+
+                        uiTheme.ApplyBgColor([
+                            this.textBoxCustomCommand,
+                        ], uiTheme.InputBackColor);
 
                         textUtilsUC.AltRefUxControl.ForeColor = uiTheme.InfoIconColor;
 
@@ -119,6 +161,11 @@ namespace Turmerik.Utility.WinFormsApp
                 {
                     comboBox.Items.Add(
                         delay.Name);
+                }
+
+                if (uISettings.MainFormSize.HasValue)
+                {
+                    this.Size = uISettings.MainFormSize.Value;
                 }
             }
         }
@@ -248,36 +295,124 @@ namespace Turmerik.Utility.WinFormsApp
                     HideAllActionMenuStripItems();
                     menuStripMain.Items.Insert(0, textTransformActionsToolStripMenuItem);
                     break;
+                default:
+                    menuStripMain.Items.Remove(textUtilsActionsToolStripMenuItem);
+                    menuStripMain.Items.Remove(textTransformActionsToolStripMenuItem);
+                    break;
             }
+
+
         }
 
         private void TextBoxCustomCommand_KeyPress(object sender, KeyPressEventArgs e)
         {
-            actionComponent.Execute(new WinFormsActionOpts<int>
-            {
-                OnBeforeExecution = () => WinFormsMessageTuple.WithOnly("Executing custom command"),
-                OnAfterExecution = (result) => result.IsSuccess switch
-                {
-                    false => null!,
-                    true => WinFormsMessageTuple.WithOnly("Executed custom command")
-                },
-                Action = () =>
-                {
-                    customCommandService.Execute(
-                        textBoxCustomCommand.Text);
+        }
 
-                    return ActionResultH.Create(0);
-                }
-            });
+        private void TextBoxCustomCommand_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (!e.Control && !e.Shift && !e.Alt && e.KeyCode == Keys.Enter)
+            {
+                actionComponent.Execute(new WinFormsActionOpts<int>
+                {
+                    ActionName = string.Join(".",
+                        nameof(customCommandService),
+                        nameof(customCommandService.Execute)),
+                    OnBeforeExecution = () => WinFormsMessageTuple.WithOnly("Executing custom command"),
+                    OnAfterExecution = (result) => result.IsSuccess switch
+                    {
+                        false => null!,
+                        true => WinFormsMessageTuple.WithOnly("Executed custom command")
+                    },
+                    Action = () =>
+                    {
+                        customCommandService.Execute(
+                            textBoxCustomCommand.Text);
+
+                        return ActionResultH.Create(0);
+                    }
+                });
+            }
         }
 
         private void MainForm_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.F12 && e.Control)
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            bool handled = false;
+
+            if (e.Control && e.Shift && !e.Alt)
             {
-                textBoxCustomCommand.Focus();
+                switch (e.KeyCode)
+                {
+                    case Keys.D1:
+                        this.tabControlMain.SelectedIndex = 0;
+                        handled = true;
+                        break;
+                    case Keys.D2:
+                        this.tabControlMain.SelectedIndex = 1;
+                        handled = true;
+                        break;
+                    case Keys.D3:
+                        this.tabControlMain.SelectedIndex = 2;
+                        handled = true;
+                        break;
+                    case Keys.D4:
+                        this.tabControlMain.SelectedIndex = 3;
+                        handled = true;
+                        break;
+                    case Keys.F12:
+                        textBoxCustomCommand.Focus();
+                        handled = true;
+                        break;
+                }
+            }
+
+            if (!handled)
+            {
+                tabPageContentControlsArr[tabControlMain.SelectedIndex].HandleKeyDown(e);
             }
         }
+
+        private void MainForm_ResizeEnd(object sender, EventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
+        {
+            ActionName = nameof(MainForm_ResizeEnd),
+            Action = () =>
+            {
+                if (formShown)
+                {
+                    uISettingsRetriever.Update(mtbl =>
+                    {
+                        mtbl.MainFormSize = this.Size;
+                    });
+                }
+
+                return ActionResultH.Create(0);
+            }
+        });
+
+        private void MainForm_Move(object sender, EventArgs e)
+        {
+            formMoveEventHandler.EventFired(e);
+        }
+
+        private void MainForm_Shown(object sender, EventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
+        {
+            ActionName = nameof(MainForm_Shown),
+            Action = () =>
+            {
+                var uISettings = uISettingsRetriever.Data;
+
+                if (uISettings.MainFormLocation.HasValue)
+                {
+                    this.Location = uISettings.MainFormLocation.Value;
+                }
+
+                formShown = true;
+                return ActionResultH.Create(0);
+            }
+        });
 
         #endregion UI Event Handlers
     }

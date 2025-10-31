@@ -16,6 +16,7 @@ using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
 using Turmerik.Core.Actions;
+using Turmerik.WinForms.Controls;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -197,6 +198,13 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             Action = () =>
             {
+                uIThemeRetriever.Data.ActWith(uiTheme =>
+                {
+                    uiTheme.ApplyBgColor(
+                        [this.comboBoxConverter],
+                        uiTheme.InputBackColor);
+                });
+
                 int selectedIdx = OnConverterSelected();
                 return ActionResultH.Create(selectedIdx);
             }

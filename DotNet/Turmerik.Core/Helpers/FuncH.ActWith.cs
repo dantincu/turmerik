@@ -14,7 +14,7 @@ namespace Turmerik.Core.Helpers
             return val;
         }
 
-        public static Tuple<TVal1, TVal2> ActWith<TVal1, TVal2>(
+        public static Tuple<TVal1, TVal2> ActWith2<TVal1, TVal2>(
             this TVal1 val1,
             TVal2 val2,
             Action<TVal1, TVal2> callback)
@@ -23,7 +23,7 @@ namespace Turmerik.Core.Helpers
             return Tuple.Create(val1, val2);
         }
 
-        public static Tuple<TVal1, TVal2, TVal3> ActWith<TVal1, TVal2, TVal3>(
+        public static Tuple<TVal1, TVal2, TVal3> ActWith3<TVal1, TVal2, TVal3>(
             this TVal1 val1,
             TVal2 val2,
             TVal3 val3,
@@ -33,7 +33,7 @@ namespace Turmerik.Core.Helpers
             return Tuple.Create(val1, val2, val3);
         }
 
-        public static Tuple<TVal1, TVal2, TVal3, TVal4> ActWith<TVal1, TVal2, TVal3, TVal4>(
+        public static Tuple<TVal1, TVal2, TVal3, TVal4> ActWith4<TVal1, TVal2, TVal3, TVal4>(
             this TVal1 val1,
             TVal2 val2,
             TVal3 val3,
@@ -44,7 +44,7 @@ namespace Turmerik.Core.Helpers
             return Tuple.Create(val1, val2, val3, val4);
         }
 
-        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5>> ActWith<TVal1, TVal2, TVal3, TVal4, TVal5>(
+        /* public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5>> ActWith5<TVal1, TVal2, TVal3, TVal4, TVal5>(
             this TVal1 val1,
             TVal2 val2,
             TVal3 val3,
@@ -56,7 +56,7 @@ namespace Turmerik.Core.Helpers
             return Tuple.Create(val1, val2, val3, val4, Tuple.Create(val5));
         }
 
-        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6>> ActWith<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6>(
+        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6>> ActWith6<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6>(
             this TVal1 val1,
             TVal2 val2,
             TVal3 val3,
@@ -69,7 +69,7 @@ namespace Turmerik.Core.Helpers
             return Tuple.Create(val1, val2, val3, val4, Tuple.Create(val5, val6));
         }
 
-        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7>> ActWith<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7>(
+        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7>> ActWith7<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7>(
             this TVal1 val1,
             TVal2 val2,
             TVal3 val3,
@@ -83,7 +83,7 @@ namespace Turmerik.Core.Helpers
             return Tuple.Create(val1, val2, val3, val4, Tuple.Create(val5, val6, val7));
         }
 
-        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8>> ActWith<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8>(
+        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8>> ActWith8<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8>(
             this TVal1 val1,
             TVal2 val2,
             TVal3 val3,
@@ -98,7 +98,7 @@ namespace Turmerik.Core.Helpers
             return Tuple.Create(val1, val2, val3, val4, Tuple.Create(val5, val6, val7, val8));
         }
 
-        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9>> ActWith<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9>(
+        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9>> ActWith9<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9>(
             this TVal1 val1,
             TVal2 val2,
             TVal3 val3,
@@ -114,7 +114,7 @@ namespace Turmerik.Core.Helpers
             return Tuple.Create(val1, val2, val3, val4, Tuple.Create(val5, val6, val7, val8, val9));
         }
 
-        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9, TVal10>> ActWith<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9, TVal10>(
+        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9, TVal10>> ActWith10<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9, TVal10>(
             this TVal1 val1,
             TVal2 val2,
             TVal3 val3,
@@ -131,7 +131,7 @@ namespace Turmerik.Core.Helpers
             return Tuple.Create(val1, val2, val3, val4, Tuple.Create(val5, val6, val7, val8, val9, val10));
         }
 
-        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11>> ActWith<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11>(
+        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11>> ActWith11<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11>(
             this TVal1 val1,
             TVal2 val2,
             TVal3 val3,
@@ -149,7 +149,7 @@ namespace Turmerik.Core.Helpers
             return Tuple.Create(val1, val2, val3, val4, Tuple.Create(val5, val6, val7, val8, val9, val10, val11));
         }
 
-        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11>, Tuple<TVal12>> ActWith<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11, TVal12>(
+        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11>, Tuple<TVal12>> ActWith12<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11, TVal12>(
             this TVal1 val1,
             TVal2 val2,
             TVal3 val3,
@@ -168,7 +168,7 @@ namespace Turmerik.Core.Helpers
             return Tuple.Create(val1, val2, val3, val4, Tuple.Create(val5, val6, val7, val8, val9, val10, val11), Tuple.Create(val12));
         }
 
-        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11>, Tuple<TVal12, TVal13>> ActWith<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11, TVal12, TVal13>(
+        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11>, Tuple<TVal12, TVal13>> ActWith13<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11, TVal12, TVal13>(
             this TVal1 val1,
             TVal2 val2,
             TVal3 val3,
@@ -188,7 +188,7 @@ namespace Turmerik.Core.Helpers
             return Tuple.Create(val1, val2, val3, val4, Tuple.Create(val5, val6, val7, val8, val9, val10, val11), Tuple.Create(val12, val13));
         }
 
-        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11>, Tuple<TVal12, TVal13, TVal14>> ActWith<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11, TVal12, TVal13, TVal14>(
+        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11>, Tuple<TVal12, TVal13, TVal14>> ActWith14<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11, TVal12, TVal13, TVal14>(
             this TVal1 val1,
             TVal2 val2,
             TVal3 val3,
@@ -209,7 +209,7 @@ namespace Turmerik.Core.Helpers
             return Tuple.Create(val1, val2, val3, val4, Tuple.Create(val5, val6, val7, val8, val9, val10, val11), Tuple.Create(val12, val13, val14));
         }
 
-        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11>, Tuple<TVal12, TVal13, TVal14, TVal15>> ActWith<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11, TVal12, TVal13, TVal14, TVal15>(
+        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11>, Tuple<TVal12, TVal13, TVal14, TVal15>> ActWith15<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11, TVal12, TVal13, TVal14, TVal15>(
             this TVal1 val1,
             TVal2 val2,
             TVal3 val3,
@@ -231,7 +231,7 @@ namespace Turmerik.Core.Helpers
             return Tuple.Create(val1, val2, val3, val4, Tuple.Create(val5, val6, val7, val8, val9, val10, val11), Tuple.Create(val12, val13, val14, val15));
         }
 
-        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11>, Tuple<TVal12, TVal13, TVal14, TVal15, TVal16>> ActWith<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11, TVal12, TVal13, TVal14, TVal15, TVal16>(
+        public static Tuple<TVal1, TVal2, TVal3, TVal4, Tuple<TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11>, Tuple<TVal12, TVal13, TVal14, TVal15, TVal16>> ActWith16<TVal1, TVal2, TVal3, TVal4, TVal5, TVal6, TVal7, TVal8, TVal9, TVal10, TVal11, TVal12, TVal13, TVal14, TVal15, TVal16>(
             this TVal1 val1,
             TVal2 val2,
             TVal3 val3,
@@ -252,6 +252,6 @@ namespace Turmerik.Core.Helpers
         {
             callback?.Invoke(val1, val2, val3, val4, val5, val6, val7, val8, val9, val10, val11, val12, val13, val14, val15, val16);
             return Tuple.Create(val1, val2, val3, val4, Tuple.Create(val5, val6, val7, val8, val9, val10, val11), Tuple.Create(val12, val13, val14, val15, val16));
-        }
+        } */
     }
 }

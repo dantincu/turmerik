@@ -11,11 +11,10 @@ using System.Windows.Forms;
 using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
-using static Turmerik.WinForms.Controls.UISettingsDataCore;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
-    public partial class TextUtilsUC : UserControl
+    public partial class TextUtilsUC : UserControl, IMainFormTabPageContentControl
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
@@ -45,6 +44,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         public void GoToWebResourceUrlTool() => fetchWebResourceUC.GoToWebResourceUrlTool();
         public void GoToMarkdownSourceText() => textToMdUC.GoToMarkdownSourceText();
         public void GoToMarkdownResultText() => textToMdUC.GoToMarkdownResultText();
+
+        public void HandleKeyDown(KeyEventArgs e)
+        {
+        }
 
         #region UI Event Handlers
 

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Actions;
 using Turmerik.Core.Helpers;
 using Turmerik.WinForms.Actions;
+using Turmerik.WinForms.Controls;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Turmerik.WinForms.Helpers
@@ -137,5 +139,60 @@ namespace Turmerik.WinForms.Helpers
         public static KeyValuePair<int, TabPage?> GetTabPageHead(
             this TabControl tabControl,
             MouseEventArgs e) => tabControl.GetTabPageHead(e.Location);
+
+        public static decimal GetSplitContainerWidthRatio(
+            this SplitContainer splitContainer,
+            bool? useWidth = null) => splitContainer.Panel1.GetSplitContainerPanelSize(useWidth).With2(
+                splitContainer.Panel2.GetSplitContainerPanelSize(useWidth),
+                (panel1Size, panel2Size) => (decimal)panel1Size / (panel1Size + panel2Size));
+
+        public static int? ApplySplitContainerWidthRatioIfFound(
+            this SplitContainer splitContainer,
+            IUISettingsDataCore uISettings,
+            string key,
+            bool? useWidth = null) => uISettings.GetSplitContainerWidthRatiosMap()?.With(
+                widthsMap => splitContainer.ApplySplitContainerWidthRatio(
+                    widthsMap, key, useWidth));
+
+        public static int? ApplySplitContainerWidthRatio(
+            this SplitContainer splitContainer,
+            IReadOnlyDictionary<string, decimal> widthsMap,
+            string key,
+            bool? useWidth = null) => widthsMap.TryGetValue(key, out var ratio) switch
+            {
+                true => splitContainer.ApplySplitContainerWidthRatio(
+                    ratio, useWidth),
+                _ => null
+            };
+
+        public static int ApplySplitContainerWidthRatio(
+            this SplitContainer splitContainer,
+            decimal ratio,
+            bool? useWidth = null) => splitContainer.SplitterDistance = (int)Math.Round(
+                (splitContainer.Panel1.GetSplitContainerPanelSize(
+                    useWidth) + splitContainer.Panel2.GetSplitContainerPanelSize(
+                        useWidth)) * ratio);
+
+        public static decimal UpdateSplitContainerWidthRatio(
+            this UISettingsDataCoreMtbl uISettings,
+            SplitContainer splitContainer,
+            string key,
+            bool? useWidth = null) => (uISettings.SplitContainerWidthRatiosMap ??= new(
+                )).UpdateSplitContainerWidthRatio(splitContainer, key, useWidth);
+
+        public static decimal UpdateSplitContainerWidthRatio(
+            this Dictionary<string, decimal> map,
+            SplitContainer splitContainer,
+            string key,
+            bool? useWidth = null) => splitContainer.GetSplitContainerWidthRatio().With(
+                ratio => map.AddOrUpdate(key, (_) => ratio, (_, _) => ratio));
+
+        public static int GetSplitContainerPanelSize(
+            this SplitterPanel splitterPanel,
+            bool? useWidth = null) => useWidth switch
+            {
+                false => splitterPanel.Height,
+                _ => splitterPanel.Width
+            };
     }
 }
