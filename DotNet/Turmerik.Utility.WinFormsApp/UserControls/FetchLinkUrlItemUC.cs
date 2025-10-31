@@ -124,6 +124,19 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
+        public void UnsetItem()
+        {
+            this.item = null;
+            ClearTitle();
+
+            if (webView != null)
+            {
+                panelWebView.Controls.Remove(webView);
+                webView.Dispose();
+                webView = null!;
+            }
+        }
+
         public void FocusControl(Keys key)
         {
             int index = (key - Keys.D0);
@@ -134,16 +147,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             if (kvp.Key >= 0)
             {
                 urlScriptControls[kvp.Key].FocusTextBox();
-            }
-        }
-
-        public void ReleaseResources()
-        {
-            if (webView != null)
-            {
-                panelWebView.Controls.Remove(webView);
-                webView.Dispose();
-                webView = null!;
             }
         }
 

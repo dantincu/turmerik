@@ -11,6 +11,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
     {
         void SetItem(FetchLinkDataItemCoreMtbl item);
         void FocusControl(Keys key);
-        void ReleaseResources();
+        void UnsetItem();
     }
 }

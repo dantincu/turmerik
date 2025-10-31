@@ -113,7 +113,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
             foreach (var control in itemControlsList)
             {
-                control?.ReleaseResources();
+                control?.UnsetItem();
             }
 
             itemControlsList.Clear();
@@ -201,6 +201,13 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private void ShowItem(KeyValuePair<int, FetchLinkDataItemCoreMtbl> mtblKvp)
         {
+            var currentItemKvp = GetCurrentItemKvp();
+
+            if (currentItemKvp.Key >= 0)
+            {
+                itemControlsList[currentItemKvp.Key]?.UnsetItem();
+            }
+
             if (currentItemRow != null)
             {
                 currentItemRow.DefaultCellStyle.BackColor = Color.White;

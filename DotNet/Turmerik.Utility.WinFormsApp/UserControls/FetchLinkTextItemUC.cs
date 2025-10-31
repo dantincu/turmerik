@@ -93,7 +93,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             textBoxMain.SelectAll();
         }
 
-        public void ReleaseResources()
+        public void UnsetItem()
         {
         }
 
