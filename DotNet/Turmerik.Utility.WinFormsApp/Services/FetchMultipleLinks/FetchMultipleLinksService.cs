@@ -47,6 +47,10 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
             },
             new()
             {
+                Factory = (url, title) => url
+            },
+            new()
+            {
                 Factory = (url, title) => $":{url}:{title}"
             },
             new()
