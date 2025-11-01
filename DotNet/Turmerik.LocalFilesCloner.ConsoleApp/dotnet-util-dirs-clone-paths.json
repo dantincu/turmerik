@@ -1,0 +1,41 @@
+[
+  {
+    "CloneDirPath": "Bin\\Turmerik.DotNetTypesToTypescript.ConsoleApp\\Release\\net9.0"
+  },
+  {
+    "CloneDirPath": "Bin\\Turmerik.ExecuteCustomCommand.ConsoleApp\\Release\\net9.0"
+  },
+  {
+    "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.CmdApp\\Release\\net9.0"
+  },
+  {
+    "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\Release\\net9.0"
+  },
+  {
+    "CloneDirPath": "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\Release\\net9.0"
+  },
+  {
+    "CloneDirPath": "Bin\\Turmerik.MdToPdf.ConsoleApp\\Release\\net9.0"
+  },
+  {
+    "CloneDirPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net9.0"
+  },
+  {
+    "CloneDirPath": "Bin\\Turmerik.MkFsDirsPairCfg.ConsoleApp\\Release\\net9.0"
+  },
+  {
+    "CloneDirPath": "Bin\\Turmerik.MkScripts.ConsoleApp\\Release\\net9.0"
+  },
+  {
+    "CloneDirPath": "Bin\\Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net9.0"
+  },
+  {
+    "CloneDirPath": "Bin\\Turmerik.SyncLocalFiles.ConsoleApp\\Release\\net9.0"
+  },
+  {
+    "CloneDirPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net9.0"
+  },
+  {
+    "CloneDirPath": "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net9.0-windows"
+  }
+]
