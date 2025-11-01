@@ -89,7 +89,8 @@ namespace Turmerik.HtmlToPdf.WebApi.Services
 
                 if (refreshPage)
                 {
-                    page = null;
+                    page = null!;
+                    browser = null!;
                     await AssureIsInitialized();
                 }
 
