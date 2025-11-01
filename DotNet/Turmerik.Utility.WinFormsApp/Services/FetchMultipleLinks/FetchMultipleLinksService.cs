@@ -43,10 +43,12 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
         {
             new()
             {
+                IsTitle = true,
                 Factory = (url, title) => title
             },
             new()
             {
+                IsUrl = true,
                 Factory = (url, title) => url
             },
             new()

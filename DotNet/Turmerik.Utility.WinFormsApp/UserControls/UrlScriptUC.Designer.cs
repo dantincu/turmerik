@@ -51,6 +51,7 @@
             textBoxScript.Name = "textBoxScript";
             textBoxScript.Size = new Size(375, 100);
             textBoxScript.TabIndex = 1;
+            textBoxScript.KeyDown += TextBoxScript_KeyDown;
             // 
             // UrlScriptUC
             // 

@@ -154,6 +154,15 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             urlTitle = null!;
             panelScripts.Controls.Clear();
+
+            if (urlScriptControls != null)
+            {
+                foreach (var control in urlScriptControls)
+                {
+                    control.ReleaseResources();
+                }
+            }
+
             urlScripts = new();
             urlScriptControls = new();
         }
@@ -170,6 +179,15 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
             panelWebView.Controls.Add(control);
             return control;
+        }
+
+        private void SetUrl(string url)
+        {
+            SetItem(new FetchLinkDataUrlItemMtbl(item)
+            {
+                Text = url,
+                Url = url,
+            });
         }
 
         private void SetUrlTitle(string? title)
@@ -194,13 +212,37 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             {
                 var control = new UrlScriptUC();
                 control.Dock = DockStyle.Top;
-                control.SetScript(urlScript);
+                control.UpdateScript(urlScript);
+                control.TextBoxScriptKeyDown += UrlScriptControl_TextBoxScriptKeyDown;
                 return control;
             }).ToList();
 
             panelScripts.Controls.AddRange(
                 urlScriptControls.ToArray().Reverse().ToArray());
         }
+
+        private void UrlScriptControl_TextBoxScriptKeyDown(
+            UrlScriptUC sender, KeyEventArgs evt, string text) => actionComponent.Execute(
+                new WinFormsActionOpts<int>
+        {
+            ActionName = nameof(UrlScriptControl_TextBoxScriptKeyDown),
+            Action = () =>
+            {
+                if (evt.Control && evt.KeyCode == Keys.Enter && !evt.Alt && !evt.Shift)
+                {
+                    if (sender.UrlScript.IsUrl)
+                    {
+                        SetUrl(text);
+                    }
+                    else if (sender.UrlScript.IsTitle)
+                    {
+                        SetUrlTitle(text);
+                    }
+                }
+
+                return ActionResultH.Create(0);
+            }
+        });
 
         #region UI Event Handlers
 
