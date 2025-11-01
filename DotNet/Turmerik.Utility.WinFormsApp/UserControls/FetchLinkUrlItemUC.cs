@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Turmerik.Core.Actions;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Threading;
 using Turmerik.Core.Utility;
@@ -21,7 +22,6 @@ using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.Helpers;
 using Turmerik.WinForms.MatUIIcons;
-using Turmerik.Core.Helpers;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -176,6 +176,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
             control.SourceChanged += WebView_SourceChanged;
             control.ContentLoading += WebView_ContentLoading;
+            control.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
 
             panelWebView.Controls.Add(control);
             return control;
@@ -278,6 +279,64 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     }
                 });
 
+        private void WebView_CoreWebView2InitializationCompleted(
+            object? sender,
+            Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs e)
+        {
+            if (e.IsSuccess)
+            {
+                webView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(@"
+                    document.addEventListener('keydown', function(e) {
+                        const obj = [
+                            'keydown',
+                            {
+                                Key: e.key,
+                                CtrlKey: e.ctrlKey,
+                                AltKey: e.altKey,
+                                ShiftKey: e.shiftKey
+                            }
+                        ];
+
+                        window.chrome.webview.postMessage(obj);
+                    });
+                ");
+
+                webView.CoreWebView2.WebMessageReceived += WebView_WebMessageReceived;
+            }
+        }
+
+        private void WebView_WebMessageReceived(
+            object? sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
+        {
+            try
+            {
+                string message = e.WebMessageAsJson;
+                int idx = message.IndexOf(",");
+                string msgTypeStr = message.Substring(1, idx - 1);
+                string msgJsonStr = message.Substring(idx + 1, message.Length - idx - 2);
+
+                string msgType = jsonConversion.Adapter.Deserialize<string>(msgTypeStr);
+                string msgJson = msgJsonStr;
+
+                switch (msgType)
+                {
+                    case "keydown":
+                        var keyDownMsg = jsonConversion.Adapter.Deserialize<WebViewKeyDownMessage>(msgJson);
+
+                        if (keyDownMsg.CtrlKey && !keyDownMsg.AltKey && !keyDownMsg.MetaKey && keyDownMsg.Key == "Q")
+                        {
+                            textBoxWebViewAddress.Focus();
+                            textBoxWebViewAddress.SelectAll();
+                        }
+
+                        break;
+                }
+            }
+            catch
+            {
+            }
+        }
+
         private void SplitContainerMain_SplitterMoving(object sender, SplitterCancelEventArgs e)
         {
             splitContainerMainSplitterMoving = true;
@@ -303,5 +362,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         });
 
         #endregion UI Event Handlers
+
+        public class WebViewKeyDownMessage
+        {
+            public string Key { get; set; }
+            public bool CtrlKey { get; set; }
+            public bool AltKey { get; set; }
+            public bool ShiftKey { get; set; }
+            public bool MetaKey { get; set; }
+        }
     }
 }
