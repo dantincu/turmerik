@@ -29,40 +29,19 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             remove => textBoxScriptKeyDown -= value;
         }
 
-        public void SetScript(
-            UrlScript urlScript)
+        public void UpdateScript(
+            UrlScript urlScript,
+            UrlScriptArgs args)
         {
             this.urlScript = urlScript;
-        }
-
-        public void UpdateScript(
-            UrlScript urlScript)
-        {
-            SetScript(urlScript);
-            UpdateTextBoxScript(urlScript.Text!);
             this.labelIndex.Text = urlScript.Index.ToString();
-        }
-
-        public void Update(
-            string url,
-            string title)
-        {
-            UpdateScript(new UrlScript(urlScript)
-            {
-                Text = urlScript.Factory(
-                    url, title)
-            });
-        }
-
-        public void UpdateTextBoxScript(string text)
-        {
-            this.textBoxScript.Text = text;
+            UpdateTextBoxScriptText(args);
         }
 
         public void FocusTextBox()
         {
-            this.textBoxScript.Focus();
-            this.textBoxScript.SelectAll();
+            this.richTextBoxScript.Focus();
+            this.richTextBoxScript.SelectAll();
         }
 
         public void ReleaseResources()
@@ -70,11 +49,36 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             textBoxScriptKeyDown = null;
         }
 
+        public void UpdateTextBoxScriptText(
+            UrlScriptArgs args)
+        {
+            this.richTextBoxScript.Clear();
+            var output = urlScript.Factory(args);
+
+            foreach (var textPart in output.TextParts)
+            {
+                WriteTextPart(textPart);
+            }
+        }
+
+        private void WriteTextPart(
+            UrlScriptTextPart textPart)
+        {
+            richTextBoxScript.SelectionFont = new(
+                richTextBoxScript.Font,
+                textPart.FontStyle);
+
+            richTextBoxScript.SelectionColor = textPart.ForeColor ?? richTextBoxScript.ForeColor;
+            richTextBoxScript.SelectionBackColor = textPart.BackColor ?? richTextBoxScript.BackColor;
+
+            richTextBoxScript.AppendText(textPart.Text);
+        }
+
         #region UI Event Handlers
 
-        private void TextBoxScript_KeyDown(object sender, KeyEventArgs e)
+        private void RichTextBoxScript_KeyDown(object sender, KeyEventArgs e)
         {
-            textBoxScriptKeyDown?.Invoke(this, e, textBoxScript.Text);
+            textBoxScriptKeyDown?.Invoke(this, e, richTextBoxScript.Text);
         }
 
         #endregion UI Event Handlers

@@ -87,6 +87,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
 
             InitializeComponent();
+            tableLayoutPanelScripts.RowCount = 0;
 
             if (svcProvContnr.IsRegistered)
             {
@@ -153,7 +154,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private void ClearTitle()
         {
             urlTitle = null!;
-            panelScripts.Controls.Clear();
+            tableLayoutPanelScripts.Controls.Clear();
 
             if (urlScriptControls != null)
             {
@@ -204,22 +205,27 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 urlScripts = urlScripts.First().Arr().RdnlC();
             }
 
-            this.urlScripts = urlScripts.Select(urlScript => new UrlScript(urlScript)
-            {
-                Text = urlScript.Factory(item.Url, urlTitle)
-            }).ToList();
+            this.urlScripts = urlScripts.ToList();
 
             urlScriptControls = this.urlScripts.Select(urlScript =>
             {
                 var control = new UrlScriptUC();
                 control.Dock = DockStyle.Top;
-                control.UpdateScript(urlScript);
+
+                control.UpdateScript(
+                    urlScript, new (
+                        item.Url, urlTitle));
+
                 control.TextBoxScriptKeyDown += UrlScriptControl_TextBoxScriptKeyDown;
+                tableLayoutPanelScripts.Controls.Add(control);
                 return control;
             }).ToList();
 
-            panelScripts.Controls.AddRange(
-                urlScriptControls.ToArray().Reverse().ToArray());
+            for (int i = 0; i < urlScriptControls.Count; i++)
+            {
+                var control = urlScriptControls[i];
+                tableLayoutPanelScripts.Controls.SetChildIndex(control, i);
+            }
         }
 
         private void UrlScriptControl_TextBoxScriptKeyDown(

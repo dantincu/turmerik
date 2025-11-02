@@ -43,36 +43,53 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
         {
             new()
             {
+                Name = "{title}",
                 IsTitle = true,
-                Factory = (url, title) => title
+                Factory = (args) => new ([GetTitleTextPart(args)])
             },
             new()
             {
+                Name = "{url}",
                 IsUrl = true,
-                Factory = (url, title) => url
+                Factory = (args) => new ([GetUrlTextPart(args)])
             },
             new()
             {
-                Factory = (url, title) => $":{url}:{title}"
+                Name = ":{url}:{title}",
+                Factory = (args) => new ([
+                        GetSpecialTokensTextPart(":"),
+                        GetUrlTextPart(args),
+                        GetSpecialTokensTextPart(":"),
+                        GetTitleTextPart(args)
+                    ])
             },
             new()
             {
-                Factory = (url, title) => string.Join(" ",
-                    title.Split(['\n', '\r', '\t'], StringSplitOptions.RemoveEmptyEntries)).Replace(
+                Name = "[{title}]({url})",
+                Factory = (args) => new (string.Join(" ",
+                    args.Title.Split(['\n', '\r', '\t'], StringSplitOptions.RemoveEmptyEntries)).Replace(
                         "&", "&amp;").Replace(
                         "\\", "\\\\").Replace(
                         "[", "\\[").Replace(
                         "]", "\\]").With(
-                    title => $"[{title}]({url})")
+                    title => GetSpecialTokensTextPart("[").Arr(
+                        GetTitleTextPart(args),
+                        GetSpecialTokensTextPart("]("),
+                        GetUrlTextPart(args),
+                        GetSpecialTokensTextPart(")"))))
             },
             new()
             {
-                Factory = (url, title) => string.Join(" ",
-                    title.Split(['\n', '\r', '\t'], StringSplitOptions.RemoveEmptyEntries)).Replace(
-                        "&", "&&").Replace(
-                        "\"", "\"\"").Replace(
-                        ":", "::").With(
-                    title =>  $"\":url:{url}\" \":t:{title}\"")
+                Name = ":t:{title} :url:{url}",
+                Factory = (args) => new ([
+                    GetSpecialTokensTextPart(":t:"),
+                    GetTitleTextPart(string.Join(" ",
+                        args.Title.Split(['\n', '\r', '\t'], StringSplitOptions.RemoveEmptyEntries)).Replace(
+                            "&", "&&").Replace(
+                            "\"", "\"\"").Replace(
+                            ":", "::")),
+                    GetSpecialTokensTextPart(" :url:"),
+                    GetUrlTextPart(args)])
             }
         }.Select((item, i) => new UrlScript(item)
         {
@@ -126,6 +143,27 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                     string.Format(
                         FetchMultipleLinksH.ITEM_FILE_NAME_TPL,
                         item.ItemIdx)));
+
+        #region Private Static Methods
+
+        private static UrlScriptTextPart GetSpecialTokensTextPart(
+            string tokens) => tokens.ToTextPart(
+                FontStyle.Italic | FontStyle.Bold,
+                Color.White,
+                Color.Black);
+
+        private static UrlScriptTextPart GetTitleTextPart(
+            UrlScriptArgs args) => GetTitleTextPart(args.Title);
+
+        private static UrlScriptTextPart GetTitleTextPart(
+            string title) => title.ToTextPart(
+                FontStyle.Bold, Color.FromArgb(255, 128, 32, 0), Color.White);
+
+        private static UrlScriptTextPart GetUrlTextPart(
+            UrlScriptArgs args) => args.Url.ToTextPart(
+                FontStyle.Underline, Color.Blue, Color.White);
+
+        #endregion Private Static Methods
 
         private List<FetchLinkDataItemCoreMtbl> ParseInputText(string inputText)
         {

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             labelIndex = new Label();
-            textBoxScript = new TextBox();
+            richTextBoxScript = new RichTextBox();
             SuspendLayout();
             // 
             // labelIndex
@@ -43,21 +43,22 @@
             labelIndex.TabIndex = 0;
             labelIndex.Text = "00";
             // 
-            // textBoxScript
+            // richTextBoxScript
             // 
-            textBoxScript.Dock = DockStyle.Fill;
-            textBoxScript.Location = new Point(25, 0);
-            textBoxScript.Multiline = true;
-            textBoxScript.Name = "textBoxScript";
-            textBoxScript.Size = new Size(375, 100);
-            textBoxScript.TabIndex = 1;
-            textBoxScript.KeyDown += TextBoxScript_KeyDown;
+            richTextBoxScript.Dock = DockStyle.Fill;
+            richTextBoxScript.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            richTextBoxScript.Location = new Point(25, 0);
+            richTextBoxScript.Name = "richTextBoxScript";
+            richTextBoxScript.Size = new Size(375, 100);
+            richTextBoxScript.TabIndex = 1;
+            richTextBoxScript.Text = "";
+            richTextBoxScript.KeyDown += RichTextBoxScript_KeyDown;
             // 
             // UrlScriptUC
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(textBoxScript);
+            Controls.Add(richTextBoxScript);
             Controls.Add(labelIndex);
             Name = "UrlScriptUC";
             Size = new Size(400, 100);
@@ -68,6 +69,6 @@
         #endregion
 
         private Label labelIndex;
-        private TextBox textBoxScript;
+        private RichTextBox richTextBoxScript;
     }
 }
