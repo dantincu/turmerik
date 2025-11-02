@@ -49,7 +49,7 @@
             richTextBoxScript.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             richTextBoxScript.Location = new Point(25, 0);
             richTextBoxScript.Name = "richTextBoxScript";
-            richTextBoxScript.Size = new Size(375, 100);
+            richTextBoxScript.Size = new Size(375, 80);
             richTextBoxScript.TabIndex = 1;
             richTextBoxScript.Text = "";
             richTextBoxScript.KeyDown += RichTextBoxScript_KeyDown;
@@ -61,7 +61,7 @@
             Controls.Add(richTextBoxScript);
             Controls.Add(labelIndex);
             Name = "UrlScriptUC";
-            Size = new Size(400, 100);
+            Size = new Size(400, 80);
             ResumeLayout(false);
             PerformLayout();
         }

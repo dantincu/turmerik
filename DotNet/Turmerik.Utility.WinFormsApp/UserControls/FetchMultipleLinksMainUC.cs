@@ -147,28 +147,20 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         public void HandleKeyDown(KeyEventArgs e)
         {
-            if (e.Control && !e.Shift && !e.Alt)
-            {
-                if (e.KeyCode >= Keys.D0 && e.KeyCode <= (Keys)Math.Min(
-                    (int)Keys.D9,
-                    (int)Keys.D0 + fetchMultipleLinksService.UrlScripts.Count - 1))
+            actionComponent.Execute(
+                new WinFormsActionOpts<int>
                 {
-                    actionComponent.Execute(
-                        new WinFormsActionOpts<int>
-                        {
-                            ActionName = string.Join(".",
-                                nameof(IFetchLinkItemUC),
-                                nameof(IFetchLinkItemUC.FocusControl)),
-                            Action = () =>
-                            {
-                                var currentControl = itemControlsList[GetCurrentItemKvp().Key];
-                                currentControl!.FocusControl(e.KeyCode);
+                    ActionName = string.Join(".",
+                        nameof(IFetchLinkItemUC),
+                        nameof(IFetchLinkItemUC.HandleKeyDown)),
+                    Action = () =>
+                    {
+                        var currentControl = itemControlsList[GetCurrentItemKvp().Key];
+                        currentControl!.HandleKeyDown(e);
 
-                                return ActionResultH.Create(0);
-                            }
-                        });
-                }
-            }
+                        return ActionResultH.Create(0);
+                    }
+                });
         }
 
         private ToolTipHintsGroupOpts GetToolTipHintsGroupOpts()

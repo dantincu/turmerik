@@ -10,7 +10,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
     public interface IFetchLinkItemUC
     {
         void SetItem(FetchLinkDataItemCoreMtbl item);
-        void FocusControl(Keys key);
+        void HandleKeyDown(KeyEventArgs e);
         void UnsetItem();
     }
 }

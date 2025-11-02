@@ -62,6 +62,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private string? urlTitle;
         private List<UrlScript> urlScripts;
         private List<UrlScriptUC> urlScriptControls;
+        private UrlScriptUC focusedUrlScriptControl;
 
         public FetchLinkUrlItemUC()
         {
@@ -138,16 +139,40 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
-        public void FocusControl(Keys key)
+        public void HandleKeyDown(KeyEventArgs e)
         {
-            int index = (key - Keys.D0);
-
-            var kvp = urlScripts.FirstKvp(
-                (script, _) => script.Index == index);
-
-            if (kvp.Key >= 0)
+            if (e.Control && !e.Alt && e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
             {
-                urlScriptControls[kvp.Key].FocusTextBox();
+                int index = (e.KeyCode - Keys.D0);
+
+                var matchingControls = urlScriptControls.Where(
+                    control => control.UrlScript.Index % 10 == index).ToList();
+
+                UrlScriptUC? matchingUC = matchingControls.FirstOrDefault();
+                int matchingControlsCount = matchingControls.Count;
+
+                if (matchingControlsCount > 2)
+                {
+                    if (focusedUrlScriptControl?.UrlScript.Index % 10 == index)
+                    {
+                        int idx = matchingControls.IndexOf(focusedUrlScriptControl!);
+
+                        if (idx < matchingControlsCount - 2)
+                        {
+                            matchingUC = matchingControls[idx + 1];
+                        }
+                        else
+                        {
+                            matchingUC = matchingControls[0];
+                        }
+                    }
+                }
+
+                if (matchingUC != null)
+                {
+                    focusedUrlScriptControl = matchingUC;
+                    matchingUC.FocusTextBox();
+                }
             }
         }
 

@@ -44,11 +44,7 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
             new()
             {
                 IsTitle = true,
-                Factory = (args) =>
-                {
-                    var retObj = new UrlScriptOutput([GetTitleTextPart(args)]);
-                    return retObj;
-                }
+                Factory = (args) => new ([GetTitleTextPart(args)])
             },
             new()
             {
@@ -126,8 +122,12 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                     GetSpecialTokensTextPart(@""" "":url:"),
                     GetRedirectedUrlTextPart(args),
                     GetSpecialTokensTextPart(@"""")])
-            }
-        }.Select((item, i) => new UrlScript(item)
+            },
+        }.Concat(Enumerable.Range(0, 50).Select((_) =>
+            new UrlScript()
+            {
+                Factory = (args) => new ([GetTitleTextPart(args)])
+            })).Select((item, i) => new UrlScript(item)
         {
             Index = i
         }).RdnlC();

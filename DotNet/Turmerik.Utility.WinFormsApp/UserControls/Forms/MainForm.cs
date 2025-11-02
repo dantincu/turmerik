@@ -342,7 +342,7 @@ namespace Turmerik.Utility.WinFormsApp
         {
             bool handled = false;
 
-            if (e.Control && e.Shift && !e.Alt)
+            if (e.Control && e.Shift && !e.Alt && e.KeyCode != Keys.ShiftKey)
             {
                 switch (e.KeyCode)
                 {

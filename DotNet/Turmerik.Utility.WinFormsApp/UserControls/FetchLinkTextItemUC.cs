@@ -87,7 +87,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             textBoxMain.Text = item.Text;
         }
 
-        public void FocusControl(Keys key)
+        public void HandleKeyDown(KeyEventArgs e)
         {
             textBoxMain.Focus();
             textBoxMain.SelectAll();
