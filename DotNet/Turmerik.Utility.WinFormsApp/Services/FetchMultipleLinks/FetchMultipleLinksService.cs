@@ -148,16 +148,17 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
 
         private static UrlScriptTextPart GetSpecialTokensTextPart(
             string tokens) => tokens.ToTextPart(
-                FontStyle.Italic | FontStyle.Bold,
+                FontStyle.Bold,
                 Color.White,
                 Color.Black);
+                // Color.FromArgb(255, 128, 128, 0));
 
         private static UrlScriptTextPart GetTitleTextPart(
             UrlScriptArgs args) => GetTitleTextPart(args.Title);
 
         private static UrlScriptTextPart GetTitleTextPart(
             string title) => title.ToTextPart(
-                FontStyle.Bold, Color.FromArgb(255, 128, 32, 0), Color.White);
+                FontStyle.Bold, Color.FromArgb(255, 255, 0, 0), Color.White);
 
         private static UrlScriptTextPart GetUrlTextPart(
             UrlScriptArgs args) => args.Url.ToTextPart(
