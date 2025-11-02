@@ -15,14 +15,12 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
 
         public UrlScript(UrlScript src)
         {
-            Name = src.Name;
             IsTitle = src.IsTitle;
             IsUrl = src.IsUrl;
             Index = src.Index;
             Factory = src.Factory;
         }
 
-        public string Name { get; set; }
         public bool IsTitle { get; init; }
         public bool IsUrl { get; init; }
         public int Index { get; init; }
@@ -33,14 +31,18 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
     {
         public UrlScriptArgs(
             string url,
-            string title)
+            string title,
+            string? redirectedUrl)
         {
             Url = url;
             Title = title;
+            Url = url;
+            RedirectedUrl = redirectedUrl;
         }
 
         public string Url { get; init; }
         public string Title { get; init; }
+        public string? RedirectedUrl { get; init; }
     }
 
     public class UrlScriptOutput

@@ -214,7 +214,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
                 control.UpdateScript(
                     urlScript, new (
-                        item.Url, urlTitle));
+                        item.Url, urlTitle,
+                        textBoxWebViewAddress.Text));
 
                 control.TextBoxScriptKeyDown += UrlScriptControl_TextBoxScriptKeyDown;
                 tableLayoutPanelScripts.Controls.Add(control);

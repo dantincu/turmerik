@@ -43,7 +43,6 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
         {
             new()
             {
-                Name = "{title}",
                 IsTitle = true,
                 Factory = (args) =>
                 {
@@ -53,13 +52,15 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
             },
             new()
             {
-                Name = "{url}",
                 IsUrl = true,
                 Factory = (args) => new ([GetUrlTextPart(args)])
             },
             new()
             {
-                Name = ":{url}:{title}",
+                Factory = (args) => new ([GetRedirectedUrlTextPart(args)])
+            },
+            new()
+            {
                 Factory = (args) => new ([
                         GetSpecialTokensTextPart(":"),
                         GetUrlTextPart(args),
@@ -69,7 +70,15 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
             },
             new()
             {
-                Name = "[{title}]({url})",
+                Factory = (args) => new ([
+                        GetSpecialTokensTextPart(":"),
+                        GetRedirectedUrlTextPart(args),
+                        GetSpecialTokensTextPart(":"),
+                        GetTitleTextPart(args)
+                    ])
+            },
+            new()
+            {
                 Factory = (args) => new (NormalizeTitle(args).Replace(
                         "&", "&amp;").Replace(
                         "\\", "\\\\").Replace(
@@ -83,7 +92,19 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
             },
             new()
             {
-                Name = @""":t:{title}"" "":url:{url}""",
+                Factory = (args) => new (NormalizeTitle(args).Replace(
+                        "&", "&amp;").Replace(
+                        "\\", "\\\\").Replace(
+                        "[", "\\[").Replace(
+                        "]", "\\]").With(
+                    title => GetSpecialTokensTextPart("[").Arr(
+                        GetTitleTextPart(args),
+                        GetSpecialTokensTextPart("]("),
+                        GetRedirectedUrlTextPart(args),
+                        GetSpecialTokensTextPart(")"))))
+            },
+            new()
+            {
                 Factory = (args) => new ([
                     GetSpecialTokensTextPart(@""":t:"),
                     GetTitleTextPart(NormalizeTitle(args).Replace(
@@ -92,6 +113,18 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                         ":", "::")),
                     GetSpecialTokensTextPart(@""" "":url:"),
                     GetUrlTextPart(args),
+                    GetSpecialTokensTextPart(@"""")])
+            },
+            new()
+            {
+                Factory = (args) => new ([
+                    GetSpecialTokensTextPart(@""":t:"),
+                    GetTitleTextPart(NormalizeTitle(args).Replace(
+                        "&", "&&").Replace(
+                        "\"", "\"\"").Replace(
+                        ":", "::")),
+                    GetSpecialTokensTextPart(@""" "":url:"),
+                    GetRedirectedUrlTextPart(args),
                     GetSpecialTokensTextPart(@"""")])
             }
         }.Select((item, i) => new UrlScript(item)
@@ -164,8 +197,18 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                 FontStyle.Bold, Color.FromArgb(255, 255, 0, 0), Color.White);
 
         private static UrlScriptTextPart GetUrlTextPart(
-            UrlScriptArgs args) => args.Url.ToTextPart(
+            UrlScriptArgs args) => GetUrlTextPart(args.Url);
+
+        private static UrlScriptTextPart GetUrlTextPart(
+            string url) => url.ToTextPart(
                 FontStyle.Underline, Color.Blue, Color.White);
+
+        private static UrlScriptTextPart GetRedirectedUrlTextPart(
+            UrlScriptArgs args) => GetRedirectedUrlTextPart(args.RedirectedUrl ?? "");
+
+        private static UrlScriptTextPart GetRedirectedUrlTextPart(
+            string url) => url.ToTextPart(
+                FontStyle.Underline, Color.FromArgb(255, 0, 128, 128), Color.White);
 
         private static string NormalizeTitle(
             UrlScriptArgs args) => NormalizeTitle(

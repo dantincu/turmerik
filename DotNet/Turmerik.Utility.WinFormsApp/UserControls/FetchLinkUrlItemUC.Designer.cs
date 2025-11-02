@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             splitContainerMain = new SplitContainer();
+            panelScriptsContainer = new Panel();
             tableLayoutPanelScripts = new TableLayoutPanel();
             panelWebView = new Panel();
             panelWebViewTopControls = new Panel();
@@ -37,6 +38,7 @@
             splitContainerMain.Panel1.SuspendLayout();
             splitContainerMain.Panel2.SuspendLayout();
             splitContainerMain.SuspendLayout();
+            panelScriptsContainer.SuspendLayout();
             panelWebViewTopControls.SuspendLayout();
             SuspendLayout();
             // 
@@ -48,7 +50,7 @@
             // 
             // splitContainerMain.Panel1
             // 
-            splitContainerMain.Panel1.Controls.Add(tableLayoutPanelScripts);
+            splitContainerMain.Panel1.Controls.Add(panelScriptsContainer);
             // 
             // splitContainerMain.Panel2
             // 
@@ -60,18 +62,28 @@
             splitContainerMain.SplitterMoving += SplitContainerMain_SplitterMoving;
             splitContainerMain.SplitterMoved += SplitContainerMain_SplitterMoved;
             // 
+            // panelScriptsContainer
+            // 
+            panelScriptsContainer.AutoScroll = true;
+            panelScriptsContainer.Controls.Add(tableLayoutPanelScripts);
+            panelScriptsContainer.Dock = DockStyle.Fill;
+            panelScriptsContainer.Location = new Point(0, 0);
+            panelScriptsContainer.Name = "panelScriptsContainer";
+            panelScriptsContainer.Size = new Size(498, 800);
+            panelScriptsContainer.TabIndex = 1;
+            // 
             // tableLayoutPanelScripts
             // 
             tableLayoutPanelScripts.AutoSize = true;
             tableLayoutPanelScripts.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             tableLayoutPanelScripts.ColumnCount = 1;
             tableLayoutPanelScripts.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanelScripts.Dock = DockStyle.Fill;
+            tableLayoutPanelScripts.Dock = DockStyle.Top;
             tableLayoutPanelScripts.Location = new Point(0, 0);
             tableLayoutPanelScripts.Name = "tableLayoutPanelScripts";
             tableLayoutPanelScripts.RowCount = 1;
             tableLayoutPanelScripts.RowStyles.Add(new RowStyle());
-            tableLayoutPanelScripts.Size = new Size(498, 800);
+            tableLayoutPanelScripts.Size = new Size(498, 0);
             tableLayoutPanelScripts.TabIndex = 0;
             // 
             // panelWebView
@@ -109,10 +121,11 @@
             Size = new Size(1000, 800);
             Load += FetchLinkUrlItemUC_Load;
             splitContainerMain.Panel1.ResumeLayout(false);
-            splitContainerMain.Panel1.PerformLayout();
             splitContainerMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainerMain).EndInit();
             splitContainerMain.ResumeLayout(false);
+            panelScriptsContainer.ResumeLayout(false);
+            panelScriptsContainer.PerformLayout();
             panelWebViewTopControls.ResumeLayout(false);
             panelWebViewTopControls.PerformLayout();
             ResumeLayout(false);
@@ -125,5 +138,6 @@
         private TextBox textBoxWebViewAddress;
         private Panel panelWebView;
         private TableLayoutPanel tableLayoutPanelScripts;
+        private Panel panelScriptsContainer;
     }
 }
