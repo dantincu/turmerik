@@ -45,7 +45,11 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
             {
                 Name = "{title}",
                 IsTitle = true,
-                Factory = (args) => new ([GetTitleTextPart(args)])
+                Factory = (args) =>
+                {
+                    var retObj = new UrlScriptOutput([GetTitleTextPart(args)]);
+                    return retObj;
+                }
             },
             new()
             {
@@ -66,8 +70,7 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
             new()
             {
                 Name = "[{title}]({url})",
-                Factory = (args) => new (string.Join(" ",
-                    args.Title.Split(['\n', '\r', '\t'], StringSplitOptions.RemoveEmptyEntries)).Replace(
+                Factory = (args) => new (NormalizeTitle(args).Replace(
                         "&", "&amp;").Replace(
                         "\\", "\\\\").Replace(
                         "[", "\\[").Replace(
@@ -83,8 +86,7 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                 Name = ":t:{title} :url:{url}",
                 Factory = (args) => new ([
                     GetSpecialTokensTextPart(":t:"),
-                    GetTitleTextPart(string.Join(" ",
-                        args.Title.Split(['\n', '\r', '\t'], StringSplitOptions.RemoveEmptyEntries)).Replace(
+                    GetTitleTextPart(NormalizeTitle(args).Replace(
                             "&", "&&").Replace(
                             "\"", "\"\"").Replace(
                             ":", "::")),
@@ -154,7 +156,7 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                 // Color.FromArgb(255, 128, 128, 0));
 
         private static UrlScriptTextPart GetTitleTextPart(
-            UrlScriptArgs args) => GetTitleTextPart(args.Title);
+            UrlScriptArgs args) => GetTitleTextPart(NormalizeTitle(args.Title));
 
         private static UrlScriptTextPart GetTitleTextPart(
             string title) => title.ToTextPart(
@@ -163,6 +165,14 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
         private static UrlScriptTextPart GetUrlTextPart(
             UrlScriptArgs args) => args.Url.ToTextPart(
                 FontStyle.Underline, Color.Blue, Color.White);
+
+        private static string NormalizeTitle(
+            UrlScriptArgs args) => NormalizeTitle(
+                args.Title);
+
+        private static string NormalizeTitle(
+            string title) => string.Join(" ",
+                title.Split(['\n', '\r', '\t', ' '], StringSplitOptions.RemoveEmptyEntries));
 
         #endregion Private Static Methods
 
