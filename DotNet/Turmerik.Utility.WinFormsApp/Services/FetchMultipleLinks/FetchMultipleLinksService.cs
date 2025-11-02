@@ -87,9 +87,9 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                 Factory = (args) => new ([
                     GetSpecialTokensTextPart(@""":t:"),
                     GetTitleTextPart(NormalizeTitle(args).Replace(
-                            "&", "&&").Replace(
-                            "\"", "\"\"").Replace(
-                            ":", "::")),
+                        "&", "&&").Replace(
+                        "\"", "\"\"").Replace(
+                        ":", "::")),
                     GetSpecialTokensTextPart(@""" "":url:"),
                     GetUrlTextPart(args),
                     GetSpecialTokensTextPart(@"""")])
