@@ -83,15 +83,16 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
             },
             new()
             {
-                Name = ":t:{title} :url:{url}",
+                Name = @""":t:{title}"" "":url:{url}""",
                 Factory = (args) => new ([
-                    GetSpecialTokensTextPart(":t:"),
+                    GetSpecialTokensTextPart(@""":t:"),
                     GetTitleTextPart(NormalizeTitle(args).Replace(
                             "&", "&&").Replace(
                             "\"", "\"\"").Replace(
                             ":", "::")),
-                    GetSpecialTokensTextPart(" :url:"),
-                    GetUrlTextPart(args)])
+                    GetSpecialTokensTextPart(@""" "":url:"),
+                    GetUrlTextPart(args),
+                    GetSpecialTokensTextPart(@"""")])
             }
         }.Select((item, i) => new UrlScript(item)
         {
