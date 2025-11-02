@@ -176,8 +176,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             };
 
             control.SourceChanged += WebView_SourceChanged;
-            control.ContentLoading += WebView_ContentLoading;
             control.CoreWebView2InitializationCompleted += WebView_CoreWebView2InitializationCompleted;
+            control.NavigationCompleted += WebView_NavigationCompleted;
 
             panelWebView.Controls.Add(control);
             return control;
@@ -251,6 +251,15 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         });
 
+        private async Task<string> GetWebViewTitleAsync()
+        {
+            string title = await webView.ExecuteScriptAsync(
+                "document.getElementsByTagName('title')[0]?.innerText ?? document.title ?? \"\"");
+
+            title = jsonConversion.Adapter.Deserialize<string>(title);
+            return title;
+        }
+
         #region UI Event Handlers
 
         private void FetchLinkUrlItemUC_Load(object sender, EventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
@@ -270,16 +279,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             textBoxWebViewAddress.Text = webView.Source.ToString();
         }
 
-        private void WebView_ContentLoading(object? sender,
-            Microsoft.Web.WebView2.Core.CoreWebView2ContentLoadingEventArgs e) => actionComponent.ExecuteAsync(
+        private void WebView_NavigationCompleted(object? sender,
+            Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e) => actionComponent.ExecuteAsync(
                 new WinFormsAsyncActionOpts<int>
                 {
-                    ActionName = nameof(WebView_ContentLoading),
+                    ActionName = nameof(WebView_NavigationCompleted),
                     Action = async () =>
                     {
-                        string title = await webView.ExecuteScriptAsync("document.title");
-                        title = jsonConversion.Adapter.Deserialize<string>(title);
-
+                        string title = await GetWebViewTitleAsync();
                         SetUrlTitle(title);
                         return ActionResultH.Create(0);
                     }
