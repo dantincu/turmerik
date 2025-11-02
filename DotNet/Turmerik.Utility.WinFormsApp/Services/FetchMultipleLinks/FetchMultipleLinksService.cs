@@ -123,11 +123,11 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                     GetRedirectedUrlTextPart(args),
                     GetSpecialTokensTextPart(@"""")])
             },
-        }.Concat(Enumerable.Range(0, 50).Select((_) =>
+        }/*.Concat(Enumerable.Range(0, 50).Select((_) =>
             new UrlScript()
             {
                 Factory = (args) => new ([GetTitleTextPart(args)])
-            })).Select((item, i) => new UrlScript(item)
+            }))*/.Select((item, i) => new UrlScript(item)
         {
             Index = i
         }).RdnlC();
