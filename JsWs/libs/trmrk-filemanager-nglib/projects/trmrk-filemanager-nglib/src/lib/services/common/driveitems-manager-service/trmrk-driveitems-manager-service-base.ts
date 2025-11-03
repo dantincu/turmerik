@@ -10,7 +10,7 @@ import {
   TrmrkDriveItemsManagerWorkArgsCore,
 } from './trmrk-driveitems-manager-core';
 
-import { ContentFileCallback, FileContentFactory } from '../indexedDb/core';
+import { ContentFileCallback, FileContentFactory } from '../indexedDb/files';
 
 export interface TrmrkDriveItemsManagerServiceCore<
   TSetupArgs extends TrmrkDriveItemsManagerSetupArgsCore<TRootFolder>,

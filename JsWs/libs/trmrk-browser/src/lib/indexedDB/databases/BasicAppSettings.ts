@@ -18,7 +18,7 @@ export interface AppSettingsChoice<TValue = any> {
 }
 
 export interface AppSessionSettingsChoice<TValue = any> extends AppSettingsChoice<TValue> {
-  tabId: string;
+  sessionId: string;
 }
 
 export interface AppSessionTabSettingsChoice<TValue = any>
@@ -64,6 +64,7 @@ export class BasicAppSettingsDbStores {
   public readonly sessionChoices = new DbStoreAdapter(
     BasicAppSettingsDbAdapter.DB_STORES.SessionChoices.name
   );
+
   public readonly tabChoices = new DbStoreAdapter(
     BasicAppSettingsDbAdapter.DB_STORES.SessionTabChoices.name
   );
@@ -95,7 +96,7 @@ export class BasicAppSettingsDbAdapter extends DbAdapterBase {
           keyPath: Object.freeze(
             namesOf(
               () => cast<AppSessionSettingsChoice>(),
-              [(v) => v.catKey, (v) => v.key, (v) => v.tabId]
+              [(v) => v.catKey, (v) => v.key, (v) => v.sessionId]
             )
           ),
         },
@@ -147,7 +148,6 @@ export class BasicAppSettingsDbAdapter extends DbAdapterBase {
       appName,
       version,
       dbName: BasicAppSettingsDbAdapter.DB_NAME,
-      isSharedDb: true,
     });
   }
 
@@ -159,7 +159,11 @@ export class BasicAppSettingsDbAdapter extends DbAdapterBase {
     }));
 
     createDbStoreIfNotExists(db, dbStores.SessionChoices.name, () => ({
-      keyPath: [...dbStores.Choices.keyPath],
+      keyPath: [...dbStores.SessionChoices.keyPath],
+    }));
+
+    createDbStoreIfNotExists(db, dbStores.SessionTabChoices.name, () => ({
+      keyPath: [...dbStores.SessionTabChoices.keyPath],
     }));
 
     createDbStoreIfNotExists(db, dbStores.AppThemes.name, () => ({

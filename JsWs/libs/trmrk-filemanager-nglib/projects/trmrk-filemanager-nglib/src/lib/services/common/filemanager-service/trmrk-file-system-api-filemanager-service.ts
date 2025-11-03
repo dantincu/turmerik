@@ -31,7 +31,6 @@ import {
 } from '../../../../trmrk/DotNetTypes/Turmerik.Core.FileManager.DriveEntry';
 
 import { NgAppConfigCore } from '../../../../trmrk-angular/services/common/app-config';
-import { injectionTokens } from '../../../../trmrk-angular/services/dependency-injection/injection-tokens';
 
 import {
   TrmrkDriveItemsManagerSetupArgsCore,
@@ -135,7 +134,6 @@ interface GetItemDetailsOpts<TDbItem extends IntIdnfItemCore> extends GetItemDet
     | NullOrUndef;
 }
 
-@Injectable()
 export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServiceBase<
   TrmrkDriveItemsManagerSetupArgsCore<FileSystemDirectoryHandle>,
   TrmrkFileSystemApiFileManagerServiceWorkArgs,
@@ -147,7 +145,7 @@ export class TrmrkFileSystemApiFileManagerService extends TrmrkFileManagerServic
     private fileManagerIndexedDbDatabasesService: FileManagerIndexedDbDatabasesService,
     private appStateService: AppStateServiceBase,
     private timeStampGenerator: TimeStampGeneratorBase,
-    @Inject(injectionTokens.appConfig.token) private appConfig: NgAppConfigCore
+    private appConfig: NgAppConfigCore
   ) {
     super();
     this.clientFetchTmStmpMillis = appStateService.clientFetchTmStmpMillis.value;

@@ -4,6 +4,7 @@ import {
   BasicAppSettingsDbAdapter,
   AppSettingsChoice,
   AppSessionSettingsChoice,
+  AppSessionTabSettingsChoice,
 } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
 import { NullOrUndef } from '../../../trmrk/core';
@@ -14,7 +15,7 @@ import { AppStateServiceBase } from '../../../trmrk-angular/services/common/app-
 import { TrmrkObservable } from '../../../trmrk-angular/services/common/TrmrkObservable';
 
 import { IndexedDbDatabasesServiceCore } from '../../../trmrk-angular/services/common/indexedDb/indexed-db-databases-service-core';
-import { appSettingsChoiceKeys } from './indexedDb/core';
+import { appSettingsChoiceKeys } from './indexedDb/files';
 import { AppDriveStorageOption, StorageUserIdnf } from './driveStorageOption';
 
 export interface StorageOptionWrapperSrlzbl {
@@ -40,7 +41,6 @@ export class StorageOptionServiceCore implements OnDestroy {
     private appStateService: AppStateServiceBase,
     @Inject(injectionTokens.appName.token) private appName: string
   ) {
-    this.basicAppSettingsDbAdapter = indexedDbDatabasesService.sharedBasicAppSettings.value;
     this.basicAppSettingsDbAdapter = indexedDbDatabasesService.basicAppSettings.value;
     this.choiceCatKey = getAppObjectKey([appSettingsChoiceKeys.driveStorageOption]);
     this.choiceKey = getAppObjectKey([appSettingsChoiceKeys.current]);
@@ -131,7 +131,7 @@ export class StorageOptionServiceCore implements OnDestroy {
         option: this.currentStorageOption.value,
         userIdnf: this.currentUserIdnf.value,
       },
-    } as AppSessionSettingsChoice<StorageOptionWrapperSrlzbl>;
+    } as AppSessionTabSettingsChoice<StorageOptionWrapperSrlzbl>;
 
     return appSettingsChoice;
   }

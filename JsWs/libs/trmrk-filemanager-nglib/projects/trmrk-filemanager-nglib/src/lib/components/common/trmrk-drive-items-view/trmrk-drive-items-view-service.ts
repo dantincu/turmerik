@@ -17,6 +17,7 @@ export class TrmrkDriveItemsViewService {
 
   private driveItemsManagerService!: TrmrkDriveItemsManagerServiceBase<
     TrmrkDriveItemsManagerSetupArgsCore<any>,
+    any,
     any
   >;
 

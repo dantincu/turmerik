@@ -1,7 +1,10 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, Inject } from '@angular/core';
 
 import { DriveStorageType } from '../../../../trmrk/driveStorage/appConfig';
 import { AppStateServiceBase } from '../../../../trmrk-angular/services/common/app-state-service-base';
+import { NgAppConfigCore } from '../../../../trmrk-angular/services/common/app-config';
+import { injectionTokens } from '../../../../trmrk-angular/services/dependency-injection/injection-tokens';
+import { TimeStampGeneratorBase } from '../../../../trmrk-angular/services/common/timestamp-generator-base';
 
 import {
   TrmrkDriveItemsManagerSetupArgsCore,
@@ -33,7 +36,9 @@ export class TrmrkFileManagerServiceFactory
 {
   constructor(
     private fileManagerIndexedDbDatabasesService: FileManagerIndexedDbDatabasesService,
-    private appStateService: AppStateServiceBase
+    private appStateService: AppStateServiceBase,
+    private timeStampGenerator: TimeStampGeneratorBase,
+    @Inject(injectionTokens.appConfig.token) private appConfig: NgAppConfigCore
   ) {
     super();
   }
@@ -51,7 +56,9 @@ export class TrmrkFileManagerServiceFactory
       case DriveStorageType.FileSystemApi:
         service = new TrmrkFileSystemApiFileManagerService(
           this.fileManagerIndexedDbDatabasesService,
-          this.appStateService
+          this.appStateService,
+          this.timeStampGenerator,
+          this.appConfig
         ) as TrmrkFileManagerServiceBase<
           TrmrkDriveItemsManagerSetupArgsCore<FileSystemDirectoryHandle>,
           TrmrkDriveItemsManagerWorkArgsCore,

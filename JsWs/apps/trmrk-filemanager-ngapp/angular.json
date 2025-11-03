@@ -34,6 +34,10 @@
               "src/trmrk-angular/assets/styles.scss",
               "src/trmrk-angular/assets/form-fields.scss",
               "src/trmrk-angular/assets/themes.scss",
+              "src/trmrk-filemanager-nglib/assets/styles.scss",
+              "src/trmrk-filemanager-nglib/assets/themes.scss",
+              "src/trmrk-testing-nglib/assets/styles.scss",
+              "src/trmrk-testing-nglib/assets/themes.scss",
               "src/styles.scss",
               "src/themes.scss"
             ]

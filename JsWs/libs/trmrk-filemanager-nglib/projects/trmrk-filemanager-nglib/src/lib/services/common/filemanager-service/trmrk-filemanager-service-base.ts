@@ -20,7 +20,7 @@ import {
 } from '../driveitems-manager-service/trmrk-driveitems-manager-core';
 
 import { ContentItemCore } from '../driveitems-manager-service/drive-item';
-import { ContentFileCallback, FileContentFactory } from '../indexedDb/core';
+import { ContentFileCallback, FileContentFactory } from '../indexedDb/files';
 
 export interface TrmrkFileManagerServiceCore<
   TSetupArgs extends TrmrkDriveItemsManagerSetupArgsCore<TRootFolder>,

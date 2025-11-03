@@ -54,7 +54,7 @@ export class TrmrkAppThemesService implements OnDestroy {
     asyncRequestStateManagerFactory: AsyncRequestStateManagerFactory,
     private indexedDbDatabasesService: IndexedDbDatabasesServiceCore
   ) {
-    this.trmrkBasicAppSettings = indexedDbDatabasesService.sharedBasicAppSettings.value;
+    this.trmrkBasicAppSettings = indexedDbDatabasesService.basicAppSettings.value;
     this.reqStateManager = asyncRequestStateManagerFactory.create<DOMException | null>(
       null,
       (error) => ['Error opening IndexedDB', getIDbRequestOpenErrorMsg(error)]

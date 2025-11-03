@@ -43,7 +43,7 @@ export class KeyboardShortcutService implements OnDestroy {
     private keyboardShortcutMatcher: KeyboardShortcutMatcher,
     private indexedDbDatabasesService: IndexedDbDatabasesServiceCore
   ) {
-    this.sharedBasicAppSettings = indexedDbDatabasesService.sharedBasicAppSettings.value;
+    this.sharedBasicAppSettings = indexedDbDatabasesService.basicAppSettings.value;
     this.handleKeyDown = this.handleKeyDown.bind(this);
     window.addEventListener('keydown', this.handleKeyDown);
   }

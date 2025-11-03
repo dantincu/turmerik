@@ -154,7 +154,7 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
     private appService: AppServiceBase,
     private indexedDbDatabasesService: IndexedDbDatabasesServiceCore
   ) {
-    this.basicAppSettingsDbAdapter = indexedDbDatabasesService.sharedBasicAppSettings.value;
+    this.basicAppSettingsDbAdapter = indexedDbDatabasesService.basicAppSettings.value;
 
     this.appResetSubscription = this.appService.onAppReset.subscribe(() => {
       this.loadAppSettingsChoices();

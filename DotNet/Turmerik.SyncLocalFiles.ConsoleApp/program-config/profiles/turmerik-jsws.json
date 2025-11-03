@@ -49,6 +49,10 @@
       "DirPath": "libs\\trmrk-notes-nglib\\projects\\trmrk-notes-nglib\\src\\lib"
     },
     {
+      "Name": "trmrk-testing-nglib",
+      "DirPath": "libs\\trmrk-testing-nglib\\projects\\trmrk-testing-nglib\\src\\lib"
+    },
+    {
       "Name": "trmrk-text-transform-defaultbehavior",
       "DirPath": "libs\\trmrk-text-transform-defaultbehavior\\src\\lib"
     },
@@ -115,6 +119,9 @@
         },
         "trmrk-angular": {
           "DirPath": "trmrk-angular"
+        },
+        "trmrk-testing-nglib": {
+          "DirPath": "trmrk-testing-nglib"
         }
       }
     },
@@ -130,6 +137,9 @@
         },
         "trmrk-angular": {
           "DirPath": "trmrk-angular"
+        },
+        "trmrk-testing-nglib": {
+          "DirPath": "trmrk-testing-nglib"
         }
       }
     },
@@ -169,6 +179,24 @@
         },
         "trmrk-filemanager-nglib": {
           "DirPath": "trmrk-filemanager-nglib"
+        },
+        "trmrk-testing-nglib": {
+          "DirPath": "trmrk-testing-nglib"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-testing-nglib",
+      "DirPath": "libs\\trmrk-testing-nglib\\projects\\trmrk-testing-nglib\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        },
+        "trmrk-angular": {
+          "DirPath": "trmrk-angular"
         }
       }
     },
@@ -235,6 +263,9 @@
         },
         "trmrk-filemanager-nglib": {
           "DirPath": "trmrk-filemanager-nglib"
+        },
+        "trmrk-testing-nglib": {
+          "DirPath": "trmrk-testing-nglib"
         }
       }
     },
@@ -253,6 +284,9 @@
         },
         "trmrk-mailbox-nglib": {
           "DirPath": "trmrk-mailbox-nglib"
+        },
+        "trmrk-testing-nglib": {
+          "DirPath": "trmrk-testing-nglib"
         }
       }
     },
@@ -283,6 +317,9 @@
         },
         "trmrk-notes-nglib": {
           "DirPath": "trmrk-notes-nglib"
+        },
+        "trmrk-testing-nglib": {
+          "DirPath": "trmrk-testing-nglib"
         }
       }
     }

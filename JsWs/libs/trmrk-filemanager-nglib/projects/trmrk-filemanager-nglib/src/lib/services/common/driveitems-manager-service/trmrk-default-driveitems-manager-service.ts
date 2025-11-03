@@ -17,7 +17,7 @@ import {
   TrmrkDriveItemsManagerWorkArgsCore,
 } from './trmrk-driveitems-manager-core';
 
-import { ContentFileCallback, FileContentFactory } from '../indexedDb/core';
+import { ContentFileCallback, FileContentFactory } from '../indexedDb/files';
 
 import { TrmrkDriveItemsManagerServiceBase } from './trmrk-driveitems-manager-service-base';
 import { TrmrkFileManagerServiceBase } from '../filemanager-service/trmrk-filemanager-service-base';

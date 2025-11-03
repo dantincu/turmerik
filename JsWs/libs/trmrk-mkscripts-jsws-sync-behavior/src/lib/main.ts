@@ -25,6 +25,8 @@ const srcFoldersArr: { [key: string]: string } = {
     "libs\\trmrk-mkscripts-jsws-sync-behavior\\src\\lib",
   "trmrk-notes-nglib":
     "libs\\trmrk-notes-nglib\\projects\\trmrk-notes-nglib\\src\\lib",
+  "trmrk-testing-nglib":
+    "libs\\trmrk-testing-nglib\\projects\\trmrk-testing-nglib\\src\\lib",
   "trmrk-text-transform-behavior":
     "libs\\trmrk-text-transform-behavior\\src\\lib",
   "trmrk-text-transform-defaultbehavior":
@@ -55,11 +57,11 @@ const destnLocationsArr: {
   "trmrk-filemanager-nglib": {
     dirPath:
       "libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib\\src",
-    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-angular"],
+    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-angular", "trmrk-testing-nglib"],
   },
   "trmrk-mailbox-nglib": {
     dirPath: "libs\\trmrk-mailbox-nglib\\projects\\trmrk-mailbox-nglib\\src",
-    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-angular"],
+    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-angular", "trmrk-testing-nglib"],
   },
   "trmrk-text-transform-behavior": {
     dirPath: "libs\\trmrk-text-transform-behavior\\src",
@@ -87,7 +89,16 @@ const destnLocationsArr: {
       "trmrk",
       "trmrk-browser",
       "trmrk-angular",
+      "trmrk-testing-nglib",
       "trmrk-filemanager-nglib",
+    ],
+  },
+  "trmrk-testing-nglib": {
+    dirPath: "libs\\trmrk-testing-nglib\\projects\\trmrk-testing-nglib\\src",
+    syncedLibs: [
+      "trmrk",
+      "trmrk-browser",
+      "trmrk-angular",
     ],
   },
   "trmrk-mkscripts-jsws-sync-behavior": {
@@ -105,6 +116,7 @@ const destnLocationsArr: {
       "trmrk-browser",
       "trmrk-angular",
       "trmrk-filemanager-nglib",
+      "trmrk-testing-nglib",
     ],
   },
   "trmrk-http-proxy-nodejsapp": {
@@ -118,6 +130,7 @@ const destnLocationsArr: {
       "trmrk-browser",
       "trmrk-angular",
       "trmrk-mailbox-nglib",
+      "trmrk-testing-nglib",
     ],
   },
   "trmrk-notes-ngapp": {
@@ -128,6 +141,7 @@ const destnLocationsArr: {
       "trmrk-angular",
       "trmrk-filemanager-nglib",
       "trmrk-notes-nglib",
+      "trmrk-testing-nglib",
     ],
   },
 };
