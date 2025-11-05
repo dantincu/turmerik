@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 
 import { TrmrkUrl } from './types';
-import { urlQueryKeys } from './trmrk-session-service';
+import { sessionUrlQueryKeys } from './trmrk-session-service';
 import { NullOrUndef } from '../../../trmrk/core';
 
 @Injectable({
@@ -11,7 +11,7 @@ import { NullOrUndef } from '../../../trmrk/core';
 export class TrmrkAppLinkService {
   constructor() {
     this.getDefaultOpenInNewTabUrl = (trmrkUrl) =>
-      this.getDefaultTabUrlCore(trmrkUrl, [urlQueryKeys.tabId]);
+      this.getDefaultTabUrlCore(trmrkUrl, [sessionUrlQueryKeys.tabId]);
 
     this.getDefaultOpenInNewTabUrl = this.getDefaultOpenInNewTabUrl.bind(this);
 
@@ -20,7 +20,10 @@ export class TrmrkAppLinkService {
     this.getDefaultOpenInNewBrowserTabUrl = this.getDefaultOpenInNewBrowserTabUrl.bind(this);
 
     this.getDefaultShareableTabUrl = (trmrkUrl) =>
-      this.getDefaultTabUrlCore(trmrkUrl, [urlQueryKeys.tabId, urlQueryKeys.sessionId]);
+      this.getDefaultTabUrlCore(trmrkUrl, [
+        sessionUrlQueryKeys.tabId,
+        sessionUrlQueryKeys.sessionId,
+      ]);
 
     this.getDefaultShareableTabUrl = this.getDefaultShareableTabUrl.bind(this);
   }

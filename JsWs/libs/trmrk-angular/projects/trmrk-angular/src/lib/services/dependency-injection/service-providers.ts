@@ -10,7 +10,7 @@ import {
   inject,
 } from '@angular/core';
 
-import { provideRouter, Route } from '@angular/router';
+import { provideRouter, Route, Router, UrlSerializer } from '@angular/router';
 import { provideHttpClient, HttpClient } from '@angular/common/http';
 
 import { MatDialogModule } from '@angular/material/dialog';
@@ -31,9 +31,12 @@ import { NgAppConfigCore } from '../common/app-config';
 import { DarkModeService } from '../common/dark-mode-service';
 import { TrmrkObservable, runOnceWhenValueIs } from '../common/TrmrkObservable';
 import { TrmrkSessionService } from '../common/trmrk-session-service';
+import { TrmrkSessionTabsService } from '../common/trmrk-session-tabs-service';
 import { TrmrkBrowserTabIdServiceBase } from '../common/trmrk-browser-tab-id-service-base';
 import { TrmrkDefaultBrowserTabIdService } from '../common/trmrk-default-browser-tab-id-service';
 import { HomePageUrlService } from '../common/home-page-url-service';
+import { TrmrkUrlNormalizerBase } from '../common/trmrk-url-normalizer-base';
+import { DefaultTrmrkUrlNormalizer } from '../common/trmrk-default-url-normalizer';
 
 import { injectionTokens } from './injection-tokens';
 import { DefaultClientFetchTmStmpMillisService } from '../common/default-client-fetch-tm-stmp-millis-service';
@@ -52,6 +55,7 @@ export interface GetCommonServiceProviderOpts<
   zoneChangeDetection?: ServiceProviderOpts<NgZoneOptions>;
   httpClient?: boolean | NullOrUndef;
   matDialogModule?: boolean | NullOrUndef;
+  homePageFactory?: ((appConfig: NgAppConfigCore) => string) | NullOrUndef;
 
   appConfig?: LoadAppConfigOpts<TAppConfig> | NullOrUndef;
   appServiceType?: Type<any> | NullOrUndef;
@@ -59,6 +63,7 @@ export interface GetCommonServiceProviderOpts<
   defaultTimeStampGenerator?: boolean | NullOrUndef;
   defaultStrIdGenerator?: boolean | NullOrUndef;
   defaultBrowserTabIdService?: boolean | NullOrUndef;
+  defaultUrlNormalizer?: boolean | NullOrUndef;
   asyncRequestStateManagerFactory?: boolean | NullOrUndef;
   intIdServiceFactory?: boolean | NullOrUndef;
   darkModeAppInitializer?: boolean | NullOrUndef;
@@ -77,9 +82,7 @@ export interface GetCommonServiceProvidersArgs<
   appProviders: (Provider | EnvironmentProviders | null)[];
 }
 
-export interface GetSessionServiceAppInitializerArgs {
-  homePageFactory?: ((appConfig: NgAppConfigCore) => string) | NullOrUndef;
-}
+export interface GetSessionServiceAppInitializerArgs {}
 
 export const defaultConfigNormalizeFactory = async <
   TConfig extends NgAppConfigCore = NgAppConfigCore
@@ -137,22 +140,25 @@ export const getDarkModeAppInitializer = () =>
     darkModeService.init();
   });
 
-export const getSessionServiceAppInitializer = (
-  opts?: GetSessionServiceAppInitializerArgs | NullOrUndef
+export const getSessionServiceAppInitializer = <
+  TAppConfig extends NgAppConfigCore = NgAppConfigCore
+>(
+  opts: GetCommonServiceProviderOpts<TAppConfig>
 ) =>
   provideAppInitializer(async () => {
     opts ??= {};
     opts.homePageFactory ??= (appConfig) => appConfig.routeBasePath;
-    const service = inject(TrmrkSessionService);
+    const sessionService = inject(TrmrkSessionService);
+    const sessionTabsService = inject(TrmrkSessionTabsService);
     const appConfig = inject(injectionTokens.appConfig.token);
     const homePageUrlService = inject(HomePageUrlService);
 
     await runOnceWhenValueIs(appConfig, null!, null, (value) => (value ?? null) !== null);
-    let currentUrl = (await service.assureSessionIsSet()).url;
-    currentUrl = (await service.assureSessionTabIsSet(currentUrl)).url;
+    let currentUrl = (await sessionService!.assureSessionIsSet()).url;
+    currentUrl = (await sessionTabsService!.assureSessionTabIsSet(currentUrl)).url;
 
     let homePageUrl = opts.homePageFactory(appConfig.value);
-    homePageUrl = service.getUpdatedUrl(homePageUrl);
+    homePageUrl = sessionService.getUpdatedUrl(homePageUrl);
 
     homePageUrlService.svc.next({
       urlStr: homePageUrl,
@@ -261,6 +267,30 @@ export const getServiceProviders = <TAppConfig extends NgAppConfigCore = NgAppCo
         ]
       : []),
 
+    ...(opts.defaultUrlNormalizer ?? includeAllByDefault
+      ? [
+          withVal(
+            new RefLazyValue<TrmrkUrlNormalizerBase>(() => {
+              const sessionService = inject(TrmrkSessionService);
+              const router = inject(Router);
+              const urlSerializer = inject(UrlSerializer);
+
+              const urlNormalizer = new DefaultTrmrkUrlNormalizer(
+                sessionService,
+                router,
+                urlSerializer
+              );
+
+              return urlNormalizer;
+            }),
+            (lazy) => ({
+              provide: TrmrkUrlNormalizerBase,
+              useFactory: () => lazy.value,
+            })
+          ),
+        ]
+      : []),
+
     ...(opts.clientFetchTmStmpServiceAppInitializer ?? includeAllByDefault
       ? [
           withVal(
@@ -282,9 +312,7 @@ export const getServiceProviders = <TAppConfig extends NgAppConfigCore = NgAppCo
         ]
       : []),
 
-    opts.sessionServiceAppInitializer ?? includeAllByDefault
-      ? getSessionServiceAppInitializer()
-      : null,
+    opts.sessionServiceAppInitializer ?? false ? getSessionServiceAppInitializer(opts) : null,
 
     args.routes ? provideRouter(args.routes) : null,
     ...args.appProviders,

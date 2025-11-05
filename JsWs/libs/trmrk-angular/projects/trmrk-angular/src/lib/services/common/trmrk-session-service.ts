@@ -1,6 +1,7 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { mapPropNamesToThemselves, PropNameWordsConvention } from '../../../trmrk/propNames';
+
 import {
   dbRequestToPromise,
   openDbRequestToPromise,
@@ -17,7 +18,7 @@ import { TimeStampGeneratorBase } from './timestamp-generator-base';
 import { TrmrkStrIdGeneratorBase } from './trmrk-str-id-generator-base';
 import { NullOrUndef } from '../../../trmrk/core';
 
-export const urlQueryKeys = mapPropNamesToThemselves(
+export const sessionUrlQueryKeys = mapPropNamesToThemselves(
   {
     browserTabId: '',
     tabId: '',
@@ -33,6 +34,7 @@ export const urlQueryKeys = mapPropNamesToThemselves(
 export interface AssureIsSetResult<T extends ActiveDataItemCore> {
   value: T;
   url: string;
+  created: boolean;
 }
 
 interface AssureIsSetArgs<T extends ActiveDataItemCore> {
@@ -47,7 +49,7 @@ interface AssureIsSetArgs<T extends ActiveDataItemCore> {
 @Injectable({
   providedIn: 'root',
 })
-export class TrmrkSessionService implements OnDestroy {
+export class TrmrkSessionService {
   public currentSession = new TrmrkObservable<AppSession>(null!);
   public currentTab = new TrmrkObservable<AppSessionTab>(null!);
 
@@ -59,13 +61,11 @@ export class TrmrkSessionService implements OnDestroy {
     private timeStampGenerator: TimeStampGeneratorBase
   ) {}
 
-  ngOnDestroy(): void {}
-
   assureSessionIsSet(url?: string | NullOrUndef) {
     return this.assureIsSet<AppSession>({
       url,
       requestTab: false,
-      idParamsKey: urlQueryKeys.sessionId,
+      idParamsKey: sessionUrlQueryKeys.sessionId,
       obs: this.currentSession,
       dbStore: () => this.indexedDbDatabasesService.appSessions.value.stores.appSessions,
       valueBuilder: (value, id) => {
@@ -74,29 +74,15 @@ export class TrmrkSessionService implements OnDestroy {
     });
   }
 
-  assureSessionTabIsSet(url?: string | NullOrUndef) {
-    return this.assureIsSet<AppSessionTab>({
-      url,
-      requestTab: true,
-      idParamsKey: urlQueryKeys.tabId,
-      obs: this.currentTab,
-      dbStore: () => this.indexedDbDatabasesService.appSessions.value.stores.appSessionTabs,
-      valueBuilder: (value, id) => {
-        value.tabId = id;
-        value.sessionId = this.currentSession.value!.sessionId;
-      },
-    });
-  }
-
   getUpdatedUrl(url: string) {
     url = transformUrl(getRelUri(url), {
       queryParamsTransformer: (params) => {
         if (this.currentSession.value) {
-          params.set(urlQueryKeys.sessionId, this.currentSession.value.sessionId!);
+          params.set(sessionUrlQueryKeys.sessionId, this.currentSession.value.sessionId!);
         }
 
         if (this.currentTab.value) {
-          params.set(urlQueryKeys.tabId, this.currentTab.value.tabId!);
+          params.set(sessionUrlQueryKeys.tabId, this.currentTab.value.tabId!);
         }
 
         return params;
@@ -115,7 +101,7 @@ export class TrmrkSessionService implements OnDestroy {
     let id = params.get(args.idParamsKey);
     const urlQueryIdIsSet = (id ?? null) !== null;
 
-    const onSuccess = (value: T) => {
+    const onSuccess = (value: T, created: boolean) => {
       retVal = value;
       args.obs.next(retVal);
       this.queryingDb = false;
@@ -124,6 +110,7 @@ export class TrmrkSessionService implements OnDestroy {
       return {
         value: retVal!,
         url: url!,
+        created,
       } as AssureIsSetResult<T>;
     };
 
@@ -135,10 +122,10 @@ export class TrmrkSessionService implements OnDestroy {
       }
     } else {
       if (!args.requestTab) {
-        return onSuccess(this.currentSession.value as unknown as T);
+        return onSuccess(this.currentSession.value as unknown as T, false);
       } else {
         if (this.currentTab.value) {
-          return onSuccess(this.currentTab.value as unknown as T);
+          return onSuccess(this.currentTab.value as unknown as T, false);
         } else {
           this.onQueryingDb();
         }
@@ -155,18 +142,18 @@ export class TrmrkSessionService implements OnDestroy {
       let value = (await dbRequestToPromise(store.get(id!))).value as T;
 
       if (value) {
-        return onSuccess(value);
+        return onSuccess(value, false);
       } else {
         value = { createdAtMillis: this.timeStampGenerator.millis() } as T;
         args.valueBuilder(value, id!);
         await dbRequestToPromise(store.put(value));
-        return onSuccess(value);
+        return onSuccess(value, true);
       }
     } else {
       let value = { createdAtMillis: this.timeStampGenerator.millis() } as T;
       args.valueBuilder(value, (id = this.strIdGenerator.newId()));
       await dbRequestToPromise(store.put(value));
-      return onSuccess(value);
+      return onSuccess(value, true);
     }
   }
 

@@ -42,6 +42,7 @@ export const appConfig: ApplicationConfig = {
       },
       appServiceType: AppService,
       appStateServiceType: AppStateService,
+      sessionServiceAppInitializer: true,
     },
     routes,
     appProviders: [
