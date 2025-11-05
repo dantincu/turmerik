@@ -12,45 +12,26 @@ import {
 
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
-import {
-  RouterLink,
-  UrlTree,
-  Router,
-  UrlCreationOptions,
-  DefaultUrlSerializer,
-  UrlSerializer,
-} from '@angular/router';
-
+import { RouterLink, UrlTree, Router, UrlSerializer } from '@angular/router';
 import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 import { NullOrUndef, AnyOrUnknown } from '../../../../trmrk/core';
 import { UserMessageLevel } from '../../../../trmrk/core';
-
-import {
-  MouseButton,
-  TouchOrMouseCoords,
-  getSingleTouchOrClick,
-  isAnyContainedBy,
-} from '../../../../trmrk-browser/domUtils/touchAndMouseEvents';
-
+import { TouchOrMouseCoords } from '../../../../trmrk-browser/domUtils/touchAndMouseEvents';
 import { whenChanged } from '../../../services/common/simpleChanges';
 import { TrmrkUrl, TrmrkUrlType } from '../../../services/common/types';
 
 import {
-  trmrkUrlFromNgUrlTree,
   normalizeTrmrkUrl,
   trmrkUrlToNgUrlTree,
   serializeTrmrkUrl,
 } from '../../../services/common/url';
 
 import { TrmrkLongPressOrRightClick } from '../../../directives/trmrk-long-press-or-right-click';
-
 import { TrmrkUserMessage } from '../trmrk-user-message/trmrk-user-message';
 import { open_with } from '../../../assets/icons/material/open_with';
-
 import { TrmrkAppLinkService } from '../../../services/common/trmrk-app-link-service';
 
 @Component({
@@ -228,8 +209,8 @@ export class TrmrkAppLink implements OnChanges, AfterViewInit {
 
   updateRouterLink() {
     let routerLink = normalizeTrmrkUrl(this.trmrkRouterLink);
-    this.routerLink = routerLink;
-    this.ngRouterLink = trmrkUrlToNgUrlTree(routerLink, this.router);
+    this.routerLink = this.appLinkService.trmrkUrlNormalizer.normalizeTrmrkUrl(routerLink)!;
+    this.ngRouterLink = trmrkUrlToNgUrlTree(this.routerLink, this.router);
   }
 
   updateOpenInNewTabRouterLink() {

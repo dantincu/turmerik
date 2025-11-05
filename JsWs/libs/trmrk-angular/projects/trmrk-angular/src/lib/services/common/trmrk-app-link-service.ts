@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
 
+import { NullOrUndef } from '../../../trmrk/core';
+
 import { TrmrkUrl } from './types';
 import { sessionUrlQueryKeys } from './trmrk-session-service';
-import { NullOrUndef } from '../../../trmrk/core';
+import { TrmrkUrlNormalizerBase } from './trmrk-url-normalizer-base';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TrmrkAppLinkService {
-  constructor() {
+  constructor(public trmrkUrlNormalizer: TrmrkUrlNormalizerBase) {
     this.getDefaultOpenInNewTabUrl = (trmrkUrl) =>
       this.getDefaultTabUrlCore(trmrkUrl, [sessionUrlQueryKeys.tabId]);
 

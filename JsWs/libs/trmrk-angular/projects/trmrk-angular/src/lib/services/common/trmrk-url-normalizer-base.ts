@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Params, Router, UrlSerializer } from '@angular/router';
+import { Params, Router, UrlSerializer, UrlTree } from '@angular/router';
 
 import { NullOrUndef } from '../../../trmrk/core';
 
-import { TrmrkNormalizedUrlOptsCore, TrmrkNormalizedUrl, TrmrkNormalizedUrlOpts } from './types';
+import {
+  TrmrkNormalizedUrlOptsCore,
+  TrmrkNormalizedUrl,
+  TrmrkNormalizedUrlOpts,
+  TrmrkUrl,
+} from './types';
 import { normalizeUrlOpts } from './url';
 
 @Injectable()
@@ -12,7 +17,23 @@ export abstract class TrmrkUrlNormalizerBase {
 
   abstract normalizeUrlCore(opts: TrmrkNormalizedUrlOpts): TrmrkNormalizedUrlOpts;
 
-  normalizeUrl(opts: TrmrkNormalizedUrlOptsCore): TrmrkNormalizedUrl {
+  normalizeUrlStr(urlStr: string | NullOrUndef) {
+    return this.normalizeUrl({ urlStr })?.urlStr ?? null;
+  }
+
+  normalizeUrlTree(urlTree: UrlTree | NullOrUndef) {
+    return this.normalizeUrl({ urlTree })?.urlTree ?? null;
+  }
+
+  normalizeTrmrkUrl(url: TrmrkUrl | NullOrUndef) {
+    return this.normalizeUrl({ url })?.url ?? null;
+  }
+
+  normalizeUrl(opts: TrmrkNormalizedUrlOptsCore | NullOrUndef) {
+    if ((opts ?? null) === null) {
+      return null;
+    }
+
     let normObj = normalizeUrlOpts({
       ...opts,
       router: this.router,
