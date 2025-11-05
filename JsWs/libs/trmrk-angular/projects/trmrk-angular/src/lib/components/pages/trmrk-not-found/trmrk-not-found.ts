@@ -1,11 +1,11 @@
-import { Component, Inject } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { Subscription } from 'rxjs';
 
 import { TrmrkAppPage } from '../../common/trmrk-app-page/trmrk-app-page';
-import { injectionTokens } from '../../../services/dependency-injection/injection-tokens';
-import { NgAppConfigCore } from '../../../services/common/app-config';
-import { TrmrkObservable } from '../../../services/common/TrmrkObservable';
+import { HomePageUrlService } from '../../../services/common/home-page-url-service';
+import { TrmrkUrl } from '../../../services/common/types';
 
 @Component({
   selector: 'trmrk-not-found',
@@ -13,8 +13,20 @@ import { TrmrkObservable } from '../../../services/common/TrmrkObservable';
   templateUrl: './trmrk-not-found.html',
   styleUrl: './trmrk-not-found.scss',
 })
-export class NotFound {
-  constructor(
-    @Inject(injectionTokens.appConfig.token) public appConfig: TrmrkObservable<NgAppConfigCore>
-  ) {}
+export class NotFound implements OnDestroy {
+  homePageUrl: TrmrkUrl;
+
+  private homePageUrlSubscription: Subscription;
+
+  constructor(private homePageUrlService: HomePageUrlService) {
+    this.homePageUrl = homePageUrlService.svc.obs.value.url;
+
+    this.homePageUrlSubscription = homePageUrlService.svc.obs.subscribe((obj) => {
+      this.homePageUrl = obj.url;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.homePageUrlSubscription.unsubscribe();
+  }
 }

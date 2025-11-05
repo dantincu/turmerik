@@ -3,6 +3,12 @@
   [trmrkShowFooter]="true"
   [trmrkFooterTemplate]="footer"
   [trmrkAfterBodyTemplate]="scrollBar"
+  ><trmrk-horiz-strip
+    [trmrkCssClass]="['trmrk-has-border-x2 trmrk-top-horiz-strip']"
+    [trmrkUseContentInsteadOfTextRow]="true"
+    ><button class="trmrk-icon-btn" mat-icon-button (click)="editParamsClicked()">
+      <mat-icon class="trmrk-icon">edit</mat-icon>
+    </button></trmrk-horiz-strip
   >@for (item of items; track item.id) {
   <h1 [ngStyle]="{ backgroundColor: item.backColor }">{{ item.text }}</h1>
   }</trmrk-app-page

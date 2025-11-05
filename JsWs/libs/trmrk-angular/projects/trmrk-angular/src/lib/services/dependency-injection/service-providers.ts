@@ -29,10 +29,11 @@ import { TrmrkStrIdGeneratorBase } from '../common/trmrk-str-id-generator-base';
 import { TrmrkDefaultStrIdGenerator } from '../common/trmrk-default-str-id-generator';
 import { NgAppConfigCore } from '../common/app-config';
 import { DarkModeService } from '../common/dark-mode-service';
-import { TrmrkObservable } from '../common/TrmrkObservable';
+import { TrmrkObservable, runOnceWhenValueIs } from '../common/TrmrkObservable';
 import { TrmrkSessionService } from '../common/trmrk-session-service';
 import { TrmrkBrowserTabIdServiceBase } from '../common/trmrk-browser-tab-id-service-base';
 import { TrmrkDefaultBrowserTabIdService } from '../common/trmrk-default-browser-tab-id-service';
+import { HomePageUrlService } from '../common/home-page-url-service';
 
 import { injectionTokens } from './injection-tokens';
 import { DefaultClientFetchTmStmpMillisService } from '../common/default-client-fetch-tm-stmp-millis-service';
@@ -74,6 +75,10 @@ export interface GetCommonServiceProvidersArgs<
   provide: GetCommonServiceProviderOpts<TAppConfig>;
   routes?: Route[];
   appProviders: (Provider | EnvironmentProviders | null)[];
+}
+
+export interface GetSessionServiceAppInitializerArgs {
+  homePageFactory?: ((appConfig: NgAppConfigCore) => string) | NullOrUndef;
 }
 
 export const defaultConfigNormalizeFactory = async <
@@ -132,11 +137,28 @@ export const getDarkModeAppInitializer = () =>
     darkModeService.init();
   });
 
-export const getSessionServiceAppInitializer = () =>
+export const getSessionServiceAppInitializer = (
+  opts?: GetSessionServiceAppInitializerArgs | NullOrUndef
+) =>
   provideAppInitializer(async () => {
+    opts ??= {};
+    opts.homePageFactory ??= (appConfig) => appConfig.routeBasePath;
     const service = inject(TrmrkSessionService);
-    await service.assureSessionIsSet();
-    await service.assureSessionTabIsSet();
+    const appConfig = inject(injectionTokens.appConfig.token);
+    const homePageUrlService = inject(HomePageUrlService);
+
+    await runOnceWhenValueIs(appConfig, null!, null, (value) => (value ?? null) !== null);
+    let currentUrl = (await service.assureSessionIsSet()).url;
+    currentUrl = (await service.assureSessionTabIsSet(currentUrl)).url;
+
+    let homePageUrl = opts.homePageFactory(appConfig.value);
+    homePageUrl = service.getUpdatedUrl(homePageUrl);
+
+    homePageUrlService.svc.next({
+      urlStr: homePageUrl,
+    });
+
+    history.replaceState(null, '', currentUrl);
   });
 
 export const getBrowserTabIdAppInitializer = () =>

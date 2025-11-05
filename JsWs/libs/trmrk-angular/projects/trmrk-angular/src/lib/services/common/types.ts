@@ -1,4 +1,4 @@
-import { Params } from '@angular/router';
+import { Params, UrlTree, Router, UrlSerializer } from '@angular/router';
 
 import { NullOrUndef } from '../../../trmrk/core';
 
@@ -45,6 +45,24 @@ export interface TrmrkDragEventData extends TrmrkLongPressOrRightClickEventData 
 export interface TrmrkUrl {
   path: string | string[];
   queryParams?: Params | NullOrUndef;
+  fragment?: string | NullOrUndef;
 }
 
 export type TrmrkUrlType = string | string[] | TrmrkUrl;
+
+export interface TrmrkNormalizedUrlOptsCore {
+  urlStr?: string | NullOrUndef;
+  urlTree?: UrlTree | NullOrUndef;
+  url?: TrmrkUrl | NullOrUndef;
+}
+
+export interface TrmrkNormalizedUrlOpts extends TrmrkNormalizedUrlOptsCore {
+  router?: Router | NullOrUndef;
+  urlSerializer: UrlSerializer;
+}
+
+export interface TrmrkNormalizedUrl {
+  urlStr: string;
+  urlTree: UrlTree;
+  url: TrmrkUrl;
+}

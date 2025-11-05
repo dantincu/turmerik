@@ -160,8 +160,8 @@ export const transformUrl = (url: string, opts: TransformUrlOpts) => {
     path = opts.pathTransformer(path);
   }
 
-  if (opts.queryParamsTransformer && (query ?? null) !== null) {
-    query = opts.queryParamsTransformer(new URLSearchParams(query!)).toString();
+  if (opts.queryParamsTransformer) {
+    query = opts.queryParamsTransformer(new URLSearchParams(query ?? '')).toString();
   }
 
   if (opts.fragmentTransformer) {

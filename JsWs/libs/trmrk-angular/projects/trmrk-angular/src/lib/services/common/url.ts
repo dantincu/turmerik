@@ -4,7 +4,7 @@ import { serializeQueryParams } from '../../../trmrk/url';
 import { trimFullStr } from '../../../trmrk/str';
 import { mapPropNamesToThemselves } from '../../../trmrk/propNames';
 
-import { TrmrkUrl, TrmrkUrlType } from './types';
+import { TrmrkUrl, TrmrkUrlType, TrmrkNormalizedUrlOpts } from './types';
 
 export const commonQueryKeys = Object.freeze(
   mapPropNamesToThemselves({
@@ -43,11 +43,12 @@ export const trmrkUrlParamsFromNativeObj = (params: URLSearchParams) => {
 };
 
 export const trmrkUrlFromString = (url: string) => {
-  const parsed = new URL(url);
+  const parsed = new URL(url, location.origin);
 
   const retObj: TrmrkUrl = {
     path: parsed.pathname,
     queryParams: trmrkUrlParamsFromNativeObj(parsed.searchParams),
+    fragment: parsed.hash ? parsed.hash.substring(1) : undefined,
   };
 
   return retObj;
@@ -82,9 +83,25 @@ export const trmrkUrlToNgUrlTree = (trmrkUrl: TrmrkUrl, router: Router) => {
     navigationExtras = {
       queryParams: trmrkUrl.queryParams,
       queryParamsHandling: 'merge',
+      fragment: trmrkUrl.fragment ?? undefined,
     };
   }
 
   const ngUrlTree = router.createUrlTree(trmrkUrl.path as string[], navigationExtras);
   return ngUrlTree;
+};
+
+export const normalizeUrlOpts = (opts: TrmrkNormalizedUrlOpts) => {
+  if (opts.url) {
+    opts.urlTree ??= trmrkUrlToNgUrlTree(opts.url, opts.router!);
+    opts.urlStr ??= opts.urlSerializer!.serialize(opts.urlTree);
+  } else if (opts.urlTree) {
+    opts.url ??= trmrkUrlFromNgUrlTree(opts.urlTree, opts.urlSerializer!);
+    opts.urlStr ??= opts.urlSerializer!.serialize(opts.urlTree);
+  } else if (opts.urlStr) {
+    opts.url ??= trmrkUrlFromString(opts.urlStr);
+    opts.urlTree ??= opts.urlSerializer!.parse(opts.urlStr);
+  }
+
+  return opts;
 };
