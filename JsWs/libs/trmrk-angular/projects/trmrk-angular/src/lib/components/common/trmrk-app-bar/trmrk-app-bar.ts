@@ -27,6 +27,8 @@ import { injectionTokens } from '../../../services/dependency-injection/injectio
 import { NgAppConfigCore } from '../../../services/common/app-config';
 import { AppStateServiceBase } from '../../../services/common/app-state-service-base';
 import { TrmrkObservable } from '../../../services/common/TrmrkObservable';
+import { TrmrkAppLink } from '../trmrk-app-link/trmrk-app-link';
+import { TrmrkUrlType } from '../../../services/common/types';
 
 @Component({
   selector: 'trmrk-app-bar',
@@ -38,6 +40,7 @@ import { TrmrkObservable } from '../../../services/common/TrmrkObservable';
     MatIconButton,
     MatMenuModule,
     NgTemplateOutlet,
+    TrmrkAppLink,
   ],
   templateUrl: './trmrk-app-bar.html',
   styleUrl: './trmrk-app-bar.scss',
@@ -46,6 +49,7 @@ import { TrmrkObservable } from '../../../services/common/TrmrkObservable';
 })
 export class TrmrkAppBar implements AfterViewInit, OnChanges, OnDestroy {
   @Output() trmrkPageTitleElem = new EventEmitter<HTMLHeadingElement>();
+  @Input() trmrkHomePageRouterLink?: TrmrkUrlType | NullOrUndef;
   @Input() trmrkLeadingTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkBeforeTitleTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkTrailingTemplate?: TemplateRef<any> | NullOrUndef;

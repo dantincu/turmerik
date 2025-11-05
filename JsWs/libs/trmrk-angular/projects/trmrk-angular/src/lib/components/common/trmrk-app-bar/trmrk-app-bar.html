@@ -10,6 +10,12 @@
   >
     <mat-icon class="trmrk-icon">arrow_back</mat-icon>
   </button>
+  } @if (trmrkHomePageRouterLink) {
+  <trmrk-app-link [trmrkRouterLink]="trmrkHomePageRouterLink">
+    <button mat-icon-button class="trmrk-icon-btn">
+      <mat-icon class="trmrk-icon">home</mat-icon>
+    </button>
+  </trmrk-app-link>
   } @if (trmrkShowGoToParentBtn ?? appStateService.defaults.show.appBar.goToParentBtn) { @if
   ((trmrkGoToParentRouterLink ?? null) !== null) {
   <a

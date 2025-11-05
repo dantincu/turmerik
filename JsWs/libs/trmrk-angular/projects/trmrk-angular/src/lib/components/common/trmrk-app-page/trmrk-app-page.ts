@@ -25,6 +25,7 @@ import { TrmrkAppLink } from '../../../components/common/trmrk-app-link/trmrk-ap
 import { injectionTokens } from '../../../services/dependency-injection/injection-tokens';
 import { tab_duplicate, tab_group } from '../../../assets/icons/material';
 import { defaultCommonChildRouteKeys, defaultMainCommonChildRouteKeys } from '../../pages/routes';
+import { TrmrkUrlType } from '../../../services/common/types';
 
 @Component({
   selector: 'trmrk-app-page',
@@ -43,6 +44,8 @@ import { defaultCommonChildRouteKeys, defaultMainCommonChildRouteKeys } from '..
 })
 export class TrmrkAppPage implements OnDestroy {
   @Input() trmrkIsScrollableY: boolean | NullOrUndef = true;
+  @Input() trmrkCssClass: string | null = null;
+  @Input() trmrkAppBarHomePageRouterLink?: TrmrkUrlType | NullOrUndef;
   @Input() trmrkAppBarLeadingTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkAppBarBeforeTitleTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkAppBarTrailingTemplate?: TemplateRef<any> | NullOrUndef;
@@ -75,6 +78,13 @@ export class TrmrkAppPage implements OnDestroy {
   @Input() trmrkShowSettingsMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowHomeMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowHelpMenuBtn: boolean | NullOrUndef;
+
+  @Input() trmrkShowFooter: boolean | NullOrUndef;
+  @Input() trmrkFooterTemplate: TemplateRef<any> | NullOrUndef;
+  @Input() trmrkFooterCssClass: string | null = null;
+
+  @Input() trmrkBeforeBodyTemplate: TemplateRef<any> | NullOrUndef;
+  @Input() trmrkAfterBodyTemplate: TemplateRef<any> | NullOrUndef;
 
   defaultCommonChildRouteKeys = defaultCommonChildRouteKeys;
   defaultMainCommonChildRouteKeys = defaultMainCommonChildRouteKeys;

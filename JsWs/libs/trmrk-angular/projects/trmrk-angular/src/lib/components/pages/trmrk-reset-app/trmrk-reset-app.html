@@ -31,7 +31,10 @@
       mat-button
       class="trmrk-btn"
       [routerLink]="
-        trmrkResetAppService.router.createUrlTree([], { queryParams: { reset: 'true' } })
+        trmrkResetAppService.router.createUrlTree([], {
+          queryParams: { reset: 'true' },
+          queryParamsHandling: 'merge'
+        })
       "
       >Reset</a
     >

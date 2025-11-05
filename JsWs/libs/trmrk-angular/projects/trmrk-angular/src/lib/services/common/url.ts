@@ -81,6 +81,7 @@ export const trmrkUrlToNgUrlTree = (trmrkUrl: TrmrkUrl, router: Router) => {
   if (trmrkUrl.queryParams) {
     navigationExtras = {
       queryParams: trmrkUrl.queryParams,
+      queryParamsHandling: 'merge',
     };
   }
 

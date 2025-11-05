@@ -15,6 +15,7 @@ export const trmrkAppHasBeenSetupGuard = (): CanActivateFn => (route, state) => 
     if (document.location.pathname !== setupPathName) {
       const navOpts: NavigationExtras = {
         queryParams: { ...route.queryParams, [commonQueryKeys.returnTo]: state.url },
+        queryParamsHandling: 'merge',
       };
 
       if ((route.fragment ?? '') !== '') {

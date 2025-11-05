@@ -121,7 +121,7 @@ export const strMapToQueryParams = (params: StrMap<string>) => {
 export interface TransformUrlOpts {
   hostTranformer?: ((host: string | null) => string) | NullOrUndef;
   pathTransformer?: ((path: string) => string) | NullOrUndef;
-  queryParamsTransformer?: ((params: StrMap<string>) => StrMap<string>) | NullOrUndef;
+  queryParamsTransformer?: ((params: URLSearchParams) => URLSearchParams) | NullOrUndef;
   fragmentTransformer?: ((fragment: string | null) => string | null) | NullOrUndef;
 }
 
@@ -160,11 +160,8 @@ export const transformUrl = (url: string, opts: TransformUrlOpts) => {
     path = opts.pathTransformer(path);
   }
 
-  if (opts.queryParamsTransformer) {
-    let queryMap = (query ?? null) !== null ? queryParamsToStrMap(new URLSearchParams(query!)) : {};
-
-    queryMap = opts.queryParamsTransformer(queryMap);
-    query = Object.keys(queryMap).length ? serializeQueryParams(queryMap) : null;
+  if (opts.queryParamsTransformer && (query ?? null) !== null) {
+    query = opts.queryParamsTransformer(new URLSearchParams(query!)).toString();
   }
 
   if (opts.fragmentTransformer) {

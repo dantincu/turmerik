@@ -1,0 +1,17 @@
+<trmrk-app-page
+  [trmrkAppBarTitle]="'Ininite height panel'"
+  [trmrkShowFooter]="true"
+  [trmrkFooterTemplate]="footer"
+  [trmrkAfterBodyTemplate]="scrollBar"
+  >@for (item of items; track item.id) {
+  <h1 [ngStyle]="{ backgroundColor: item.backColor }">{{ item.text }}</h1>
+  }</trmrk-app-page
+>
+
+<ng-template #footer>
+  <trmrk-infinite-height-panel-scroll-control></trmrk-infinite-height-panel-scroll-control>
+</ng-template>
+
+<ng-template #scrollBar>
+  <trmrk-infinite-height-panel-scroll-bar></trmrk-infinite-height-panel-scroll-bar>
+</ng-template>

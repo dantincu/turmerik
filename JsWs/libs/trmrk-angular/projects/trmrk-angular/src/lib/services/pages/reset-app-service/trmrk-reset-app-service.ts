@@ -75,6 +75,7 @@ export class TrmrkResetAppService implements OnDestroy {
 
             this.router.navigate([url], {
               queryParams: { [commonQueryKeys.reset]: jsonBool.false },
+              queryParamsHandling: 'merge',
               replaceUrl: true,
             });
           } catch (err) {

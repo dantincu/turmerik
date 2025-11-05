@@ -1,0 +1,26 @@
+@if(isExpanded) {<button class="trmrk-icon-btn" mat-icon-button (click)="scrollUpClicked()">
+  <mat-icon class="trmrk-icon trmrk-rot-270-deg">fast_forward</mat-icon>
+</button>
+<button class="trmrk-icon-btn" mat-icon-button (click)="decreaseScrollSpeedClicked()">
+  <mat-icon class="trmrk-icon">remove</mat-icon>
+</button>
+<div
+  class="trmrk-icon-btn trmrk-fake-icon-btn trmrk-middle-btn"
+  (trmrkLongPressOrRightClick)="middleBtnLongPressed()"
+  (trmrkShortPressOrLeftClick)="middleBtnShortPressed()"
+>
+  x{{ speedFactor }}
+</div>
+<button class="trmrk-icon-btn" mat-icon-button (click)="increaseScrollSpeedClicked()">
+  <mat-icon class="trmrk-icon">add</mat-icon>
+</button>
+<button class="trmrk-icon-btn" mat-icon-button (click)="scrollDownClicked()">
+  <mat-icon class="trmrk-icon trmrk-rot-90-deg">fast_forward</mat-icon>
+</button>
+<button class="trmrk-icon-btn" mat-icon-button (click)="collapseBtnClicked()">
+  <mat-icon class="trmrk-icon">double_arrow</mat-icon></button
+>} @if (!isExpanded) {
+<button class="trmrk-icon-btn" mat-icon-button (click)="expandBtnClicked()">
+  <mat-icon class="trmrk-icon trmrk-rot-180-deg">double_arrow</mat-icon>
+</button>
+}

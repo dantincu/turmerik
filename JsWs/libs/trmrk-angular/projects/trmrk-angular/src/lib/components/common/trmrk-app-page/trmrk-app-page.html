@@ -2,6 +2,7 @@
   [trmrkLeadingTemplate]="trmrkAppBarLeadingTemplate"
   [trmrkTitle]="trmrkAppBarTitle"
   [trmrkCssClass]="trmrkAppBarCssClass"
+  [trmrkHomePageRouterLink]="trmrkAppBarHomePageRouterLink"
   [trmrkBeforeTitleTemplate]="trmrkAppBarBeforeTitleTemplate"
   [trmrkShowBackBtn]="trmrkAppBarShowBackBtn"
   [trmrkBackBtnClicked]="trmrkAppBarBackBtnClicked"
@@ -96,9 +97,13 @@
   }
 </ng-template>
 
+<ng-container *ngTemplateOutlet="trmrkBeforeBodyTemplate"></ng-container>
+
 <div
   [ngClass]="[
-    'trmrk-app-page-body trmrk-height-diff-x1',
+    'trmrk-app-page-body',
+    trmrkCssClass ?? '',
+    trmrkShowFooter ? 'trmrk-height-diff-x2' : 'trmrk-height-diff-x1',
     trmrkIsScrollableY
       ? 'trmrk-scrollable trmrk-scrollable-y'
       : trmrkIsScrollableY === false
@@ -108,3 +113,15 @@
 >
   <ng-content></ng-content>
 </div>
+<ng-container *ngTemplateOutlet="trmrkAfterBodyTemplate"></ng-container>
+
+@if (trmrkShowFooter) {
+<div
+  [ngClass]="[
+    'trmrk-horiz-strip trmrk-bottom-horiz-strip trmrk-has-border-x2',
+    trmrkFooterCssClass ?? ''
+  ]"
+>
+  <ng-container *ngTemplateOutlet="trmrkFooterTemplate"></ng-container>
+</div>
+}

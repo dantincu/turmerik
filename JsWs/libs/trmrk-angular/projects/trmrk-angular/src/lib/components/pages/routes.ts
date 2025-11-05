@@ -104,6 +104,7 @@ const getDefaultMainCommonChildRoutes = () =>
           [[appConfig.value.routeBasePath, defaultMainCommonChildRouteKeys.ResetApp].join('/')],
           {
             queryParams: { [commonQueryKeys.reset]: jsonBool.true },
+            queryParamsHandling: 'merge',
           }
         );
       };

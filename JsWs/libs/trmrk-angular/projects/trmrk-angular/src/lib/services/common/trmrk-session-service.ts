@@ -2,7 +2,12 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { mapPropNamesToThemselves, PropNameWordsConvention } from '../../../trmrk/propNames';
-import { dbRequestToPromise, openDbRequestToPromise } from '../../../trmrk-browser/indexedDB/core';
+import {
+  dbRequestToPromise,
+  openDbRequestToPromise,
+  ActiveDataItemCore,
+} from '../../../trmrk-browser/indexedDB/core';
+import { DbStoreAdapter } from '../../../trmrk-browser/indexedDB/DbAdapterBase';
 import { AppSession, AppSessionTab } from '../../../trmrk-browser/indexedDB/databases/AppSessions';
 import { transformUrl, getRelUri } from '../../../trmrk/url';
 
@@ -24,6 +29,14 @@ export const urlQueryKeys = mapPropNamesToThemselves(
   PropNameWordsConvention.CamelCase
 );
 
+interface AssureIsSetArgs<T extends ActiveDataItemCore> {
+  requestTab: boolean;
+  idParamsKey: string;
+  obs: TrmrkObservable<T>;
+  dbStore: () => DbStoreAdapter;
+  valueBuilder: (value: T, id: string) => void;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -43,162 +56,101 @@ export class TrmrkSessionService implements OnDestroy {
   ngOnDestroy(): void {}
 
   assureSessionIsSet() {
-    return new Promise<AppSession>((resolve, reject) => {
-      if (this.currentSession.value) {
-        resolve(this.currentSession.value);
-        return;
-      } else if (this.queryingDb) {
-        reject(new Error('Query params changed too quickly'));
-        return;
-      } else {
-        this.queryingDb = true;
-      }
-
-      let session: AppSession;
-      const params = new URLSearchParams(document.location.search);
-      let sessionId = params.get(urlQueryKeys.sessionId);
-      const urlQuerySessionIdIsSet = (sessionId ?? null) !== null;
-
-      const onSuccess = (value: AppSession) => {
-        session = value;
-        this.currentSession.next(session);
-        this.queryingDb = false;
-        resolve(session);
-      };
-
-      openDbRequestToPromise(this.indexedDbDatabasesService.appSessions.value.open()).then(
-        (response) => {
-          const store = this.indexedDbDatabasesService.appSessions.value.stores.appSessions.store(
-            response.value,
-            null,
-            'readwrite'
-          );
-
-          const request = urlQuerySessionIdIsSet
-            ? (store.get(sessionId!) as IDBRequest<IDBValidKey | AppSession>)
-            : (store.put(
-                (session = {
-                  sessionId: (sessionId = this.strIdGenerator.newId()),
-                  createdAtMillis: this.timeStampGenerator.millis(),
-                } as AppSession)
-              ) as IDBRequest<IDBValidKey | AppSession>);
-
-          dbRequestToPromise(request).then((response) => {
-            let value = response.value as AppSession;
-
-            if (urlQuerySessionIdIsSet) {
-              if (value) {
-                onSuccess(value);
-              } else {
-                dbRequestToPromise(
-                  store.put(
-                    (session = {
-                      sessionId,
-                      createdAtMillis: this.timeStampGenerator.millis(),
-                    } as AppSession)
-                  )
-                ).then((response) => {
-                  onSuccess(session);
-                }, reject);
-              }
-            } else {
-              const url = transformUrl(getRelUri(document.location.href), {
-                queryParamsTransformer: (map) => {
-                  map[urlQueryKeys.sessionId] = sessionId!;
-                  return map;
-                },
-              });
-
-              this.router.navigateByUrl(url);
-              onSuccess(value);
-            }
-          }, reject);
-        },
-        reject
-      );
+    return this.assureIsSet<AppSession>({
+      requestTab: false,
+      idParamsKey: urlQueryKeys.sessionId,
+      obs: this.currentSession,
+      dbStore: () => this.indexedDbDatabasesService.appSessions.value.stores.appSessions,
+      valueBuilder: (value, id) => {
+        value.sessionId = id;
+      },
     });
   }
 
   assureSessionTabIsSet() {
-    return new Promise<AppSessionTab>((resolve, reject) => {
-      if (!this.currentSession.value) {
-        reject(new Error('The session has to be set before setting the tab'));
-        return;
-      } else if (this.currentTab.value) {
-        resolve(this.currentTab.value);
-        return;
-      } else if (this.queryingDb) {
-        reject(new Error('Query params changed too quickly'));
-        return;
-      } else {
-        this.queryingDb = true;
-      }
-
-      let tab: AppSessionTab;
-      const params = new URLSearchParams(document.location.search);
-      let tabId = params.get(urlQueryKeys.tabId);
-      const urlQueryTabIdIsSet = (tabId ?? null) !== null;
-
-      const onSuccess = (value: AppSessionTab) => {
-        tab = value;
-        this.currentTab.next(tab);
-        this.queryingDb = false;
-        resolve(tab);
-      };
-
-      openDbRequestToPromise(this.indexedDbDatabasesService.appSessions.value.open()).then(
-        (response) => {
-          const store =
-            this.indexedDbDatabasesService.appSessions.value.stores.appSessionTabs.store(
-              response.value,
-              null,
-              'readwrite'
-            );
-
-          const request = urlQueryTabIdIsSet
-            ? (store.get(tabId!) as IDBRequest<IDBValidKey | AppSessionTab>)
-            : (store.put(
-                (tab = {
-                  tabId: (tabId = this.strIdGenerator.newId()),
-                  sessionId: this.currentSession.value!.sessionId,
-                  createdAtMillis: this.timeStampGenerator.millis(),
-                } as AppSessionTab)
-              ) as IDBRequest<IDBValidKey | AppSessionTab>);
-
-          dbRequestToPromise(request).then((response) => {
-            let value = response.value as AppSessionTab;
-
-            if (urlQueryTabIdIsSet) {
-              if (value) {
-                onSuccess(value);
-              } else {
-                dbRequestToPromise(
-                  store.put(
-                    (tab = {
-                      tabId,
-                      sessionId: this.currentSession.value!.sessionId,
-                      createdAtMillis: this.timeStampGenerator.millis(),
-                    } as AppSessionTab)
-                  )
-                ).then((response) => {
-                  onSuccess(tab);
-                }, reject);
-              }
-            } else {
-              const url = transformUrl(getRelUri(document.location.href), {
-                queryParamsTransformer: (map) => {
-                  map[urlQueryKeys.tabId] = tabId!;
-                  return map;
-                },
-              });
-
-              this.router.navigateByUrl(url);
-              onSuccess(value);
-            }
-          }, reject);
-        },
-        reject
-      );
+    return this.assureIsSet<AppSessionTab>({
+      requestTab: true,
+      idParamsKey: urlQueryKeys.tabId,
+      obs: this.currentTab,
+      dbStore: () => this.indexedDbDatabasesService.appSessions.value.stores.appSessionTabs,
+      valueBuilder: (value, id) => {
+        value.tabId = id;
+        value.sessionId = this.currentSession.value!.sessionId;
+      },
     });
+  }
+
+  async assureIsSet<T extends ActiveDataItemCore>(args: AssureIsSetArgs<T>) {
+    if (!this.currentSession.value) {
+      if (args.requestTab) {
+        throw new Error('The session has to be set before setting the tab');
+      } else {
+        this.onQueryingDb();
+      }
+    } else {
+      if (!args.requestTab) {
+        return this.currentSession.value as unknown as T;
+      } else {
+        if (this.currentTab.value) {
+          return this.currentTab.value as unknown as T;
+        } else {
+          this.onQueryingDb();
+        }
+      }
+    }
+
+    let retVal: T;
+    const params = new URLSearchParams(document.location.search);
+    let id = params.get(args.idParamsKey);
+    const urlQueryIdIsSet = (id ?? null) !== null;
+
+    const onSuccess = (value: T) => {
+      retVal = value;
+      args.obs.next(retVal);
+      this.queryingDb = false;
+    };
+
+    const response = await openDbRequestToPromise(
+      this.indexedDbDatabasesService.appSessions.value.open()
+    );
+
+    const store = args.dbStore().store(response.value, null, 'readwrite');
+
+    if (urlQueryIdIsSet) {
+      let value = (await dbRequestToPromise(store.get(id!))).value as T;
+
+      if (value) {
+        onSuccess(value);
+      } else {
+        value = { createdAtMillis: this.timeStampGenerator.millis() } as T;
+        args.valueBuilder(value, id!);
+        await dbRequestToPromise(store.put(value));
+        onSuccess(value);
+      }
+    } else {
+      let value = { createdAtMillis: this.timeStampGenerator.millis() } as T;
+      args.valueBuilder(value, (id = this.strIdGenerator.newId()));
+      await dbRequestToPromise(store.put(value));
+
+      const url = transformUrl(getRelUri(document.location.href), {
+        queryParamsTransformer: (params) => {
+          params.set(args.idParamsKey, id!);
+          return params;
+        },
+      });
+
+      this.router.navigateByUrl(url);
+      onSuccess(value);
+    }
+
+    return retVal!;
+  }
+
+  onQueryingDb() {
+    if (this.queryingDb) {
+      throw new Error('Query params changed too quickly');
+    } else {
+      this.queryingDb = true;
+    }
   }
 }
