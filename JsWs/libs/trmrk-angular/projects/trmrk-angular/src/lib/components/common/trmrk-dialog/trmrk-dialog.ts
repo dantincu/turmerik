@@ -20,10 +20,14 @@ import { whenChanged } from '../../../services/common/simpleChanges';
 import { TrmrkHorizStrip } from '../trmrk-horiz-strip/trmrk-horiz-strip';
 import { NullOrUndef } from '../../../../trmrk/core';
 import { tab_group } from '../../../assets/icons/material';
+
 import {
   TrmrkDialogData,
   TrmrkDialogComponentDataCore,
 } from '../../../services/common/trmrk-dialog';
+
+import { AppServiceBase } from '../../../services/common/app-service-base';
+import { ModalService } from '../../../services/common/modal-service';
 
 @Component({
   selector: 'trmrk-dialog',
@@ -41,6 +45,7 @@ import {
 export class TrmrkDialog<TData extends TrmrkDialogComponentDataCore = TrmrkDialogComponentDataCore>
   implements OnChanges, OnDestroy
 {
+  @Input() trmrkModalId!: number;
   @Input() trmrkData?: TrmrkDialogData<TData> | NullOrUndef;
   @Input() trmrkHeaderTemplate: TemplateRef<any> | NullOrUndef;
 
@@ -54,7 +59,8 @@ export class TrmrkDialog<TData extends TrmrkDialogComponentDataCore = TrmrkDialo
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: TrmrkDialogData<TData>,
     public dialogRef: MatDialogRef<any>,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private appService: AppServiceBase
   ) {
     this.tabGroupIcon = domSanitizer.bypassSecurityTrustHtml(tab_group);
 
@@ -77,7 +83,7 @@ export class TrmrkDialog<TData extends TrmrkDialogComponentDataCore = TrmrkDialo
   }
 
   closeModalClick(_: MouseEvent) {
-    this.data.dialogRef?.close();
+    this.appService.closeModal(this.trmrkModalId);
   }
 
   openOptionsMenuBtnClick(_: MouseEvent) {

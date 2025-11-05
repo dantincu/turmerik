@@ -1,4 +1,9 @@
 trmrk-infinite-height-panel-scroll-bar {
-  top: 90px;
-  height: calc(100% - 130px);
+  top: 40px;
+  height: calc(100% - 80px);
+}
+
+.trmrk-page-body {
+  width: calc(100% - 40px);
+  height: calc(100% - 80px);
 }

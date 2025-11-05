@@ -35,6 +35,7 @@ import { TrmrkLoading } from '../../../common/trmrk-loading/trmrk-loading';
 })
 export class TrmrkDeleteAppCacheDialog implements AfterViewInit, OnDestroy {
   mergeDialogData = mergeDialogData;
+  modalId: number;
 
   isDeleting: boolean | null = null;
   showSuccessMessage = 0;
@@ -62,6 +63,8 @@ export class TrmrkDeleteAppCacheDialog implements AfterViewInit, OnDestroy {
       data: this.data.data,
       dialogRef,
     });
+
+    this.modalId = this.modalService.modalId;
   }
 
   ngAfterViewInit() {

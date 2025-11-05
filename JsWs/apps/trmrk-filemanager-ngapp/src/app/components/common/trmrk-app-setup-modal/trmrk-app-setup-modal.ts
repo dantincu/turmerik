@@ -51,6 +51,7 @@ export class TrmrkAppSetupModal implements OnDestroy {
   mergeDialogData = mergeDialogData;
   fileSystemApiFolderPickerId: string;
   modalService: ModalService;
+  modalId: number;
 
   cloudStorageOptions: DriveStorageOption[];
   otherStorageOptions: DriveStorageOption[];
@@ -85,6 +86,8 @@ export class TrmrkAppSetupModal implements OnDestroy {
       data: this.data.data,
       dialogRef,
     });
+
+    this.modalId = this.modalService.modalId;
 
     const driveStorageOptions = appConfig.value.driveStorageOptions.filter(
       (option) => option.isEnabled ?? true

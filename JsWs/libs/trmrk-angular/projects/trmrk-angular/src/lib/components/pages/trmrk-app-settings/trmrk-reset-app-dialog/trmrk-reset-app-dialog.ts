@@ -34,6 +34,7 @@ import { TrmrkLoading } from '../../../common/trmrk-loading/trmrk-loading';
 })
 export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
   mergeDialogData = mergeDialogData;
+  modalId: number;
 
   isResetting: boolean | null = null;
   showSuccessMessage = 0;
@@ -61,6 +62,8 @@ export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
       data: this.data.data,
       dialogRef,
     });
+
+    this.modalId = this.modalService.modalId;
   }
 
   ngAfterViewInit() {

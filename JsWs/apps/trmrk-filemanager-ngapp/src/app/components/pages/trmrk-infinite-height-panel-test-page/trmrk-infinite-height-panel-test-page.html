@@ -1,23 +1,22 @@
-<trmrk-app-page
-  [trmrkAppBarTitle]="'Ininite height panel'"
-  [trmrkShowFooter]="true"
-  [trmrkFooterTemplate]="footer"
-  [trmrkAfterBodyTemplate]="scrollBar"
+<trmrk-app-page [trmrkAppBarTitle]="'Ininite height panel'"
   ><trmrk-horiz-strip
     [trmrkCssClass]="['trmrk-has-border-x2 trmrk-top-horiz-strip']"
     [trmrkUseContentInsteadOfTextRow]="true"
     ><button class="trmrk-icon-btn" mat-icon-button (click)="editParamsClicked()">
       <mat-icon class="trmrk-icon">edit</mat-icon>
     </button></trmrk-horiz-strip
-  >@for (item of items; track item.id) {
-  <h1 [ngStyle]="{ backgroundColor: item.backColor }">{{ item.text }}</h1>
-  }</trmrk-app-page
->
-
-<ng-template #footer>
-  <trmrk-infinite-height-panel-scroll-control></trmrk-infinite-height-panel-scroll-control>
-</ng-template>
-
-<ng-template #scrollBar>
-  <trmrk-infinite-height-panel-scroll-bar></trmrk-infinite-height-panel-scroll-bar>
-</ng-template>
+  >
+  <div class="trmrk-page-body trmrk-scrollable trmrk-scrollable-y">
+    @for (item of items; track item.idx) {
+    <h1>{{ item.text }}</h1>
+    }
+  </div>
+  <trmrk-infinite-height-panel-scroll-bar
+    (trmrkScrolled)="scrolled($event)"
+  ></trmrk-infinite-height-panel-scroll-bar
+  ><trmrk-horiz-strip
+    [trmrkCssClass]="['trmrk-has-border-x2 trmrk-bottom-horiz-strip']"
+    [trmrkUseContentInsteadOfTextRow]="true"
+  >
+    <trmrk-infinite-height-panel-scroll-control></trmrk-infinite-height-panel-scroll-control></trmrk-horiz-strip
+></trmrk-app-page>

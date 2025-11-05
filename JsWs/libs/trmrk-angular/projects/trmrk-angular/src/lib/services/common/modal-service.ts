@@ -3,7 +3,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 
 import { Subscription } from 'rxjs';
 
-import { NullOrUndef } from '../../../trmrk/core';
 import { ModalIdService } from './modal-id-service';
 import { AppServiceBase } from './app-service-base';
 import { updateModalVisibility, TrmrkDialogComponentDataCore } from './trmrk-dialog';

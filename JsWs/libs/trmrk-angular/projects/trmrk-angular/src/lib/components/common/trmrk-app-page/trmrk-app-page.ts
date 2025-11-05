@@ -79,13 +79,6 @@ export class TrmrkAppPage implements OnDestroy {
   @Input() trmrkShowHomeMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowHelpMenuBtn: boolean | NullOrUndef;
 
-  @Input() trmrkShowFooter: boolean | NullOrUndef;
-  @Input() trmrkFooterTemplate: TemplateRef<any> | NullOrUndef;
-  @Input() trmrkFooterCssClass: string | null = null;
-
-  @Input() trmrkBeforeBodyTemplate: TemplateRef<any> | NullOrUndef;
-  @Input() trmrkAfterBodyTemplate: TemplateRef<any> | NullOrUndef;
-
   defaultCommonChildRouteKeys = defaultCommonChildRouteKeys;
   defaultMainCommonChildRouteKeys = defaultMainCommonChildRouteKeys;
 

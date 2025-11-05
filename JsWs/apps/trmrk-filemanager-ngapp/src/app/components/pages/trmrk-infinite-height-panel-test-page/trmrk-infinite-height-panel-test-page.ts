@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,7 +8,12 @@ import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dial
 
 import { TrmrkAppPage } from '../../../../trmrk-angular/components/common/trmrk-app-page/trmrk-app-page';
 import { TrmrkInfiniteHeightPanelScrollControl } from '../../../../trmrk-angular/components/common/trmrk-infinite-height-panel-scroll-control/trmrk-infinite-height-panel-scroll-control';
-import { TrmrkInfiniteHeightPanelScrollBar } from '../../../../trmrk-angular/components/common/trmrk-infinite-height-panel-scroll-bar/trmrk-infinite-height-panel-scroll-bar';
+
+import {
+  TrmrkInfiniteHeightPanelScrollBar,
+  TrmrkInfiniteHeightPanelScroll,
+} from '../../../../trmrk-angular/components/common/trmrk-infinite-height-panel-scroll-bar/trmrk-infinite-height-panel-scroll-bar';
+
 import { TrmrkHorizStrip } from '../../../../trmrk-angular/components/common/trmrk-horiz-strip/trmrk-horiz-strip';
 
 import {
@@ -16,7 +21,10 @@ import {
   DialogPanelSize,
 } from '../../../../trmrk-angular/services/common/trmrk-dialog';
 
+import { AppServiceBase } from '../../../../trmrk-angular/services/common/app-service-base';
+
 import { companies } from '../../../services/common/companies';
+import { AppService } from '../../../services/common/app-service';
 
 import {
   TrmrkParamsSetupModal,
@@ -31,7 +39,7 @@ const queryParamKeys = {
 };
 
 interface Item {
-  id: number;
+  idx: number;
   text: string;
   backColor: string;
 }
@@ -59,6 +67,7 @@ export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
   private routeSub!: Subscription;
 
   constructor(
+    @Inject(AppServiceBase) private appService: AppService,
     private router: Router,
     private route: ActivatedRoute,
     private appSetupDialog: MatDialog
@@ -70,12 +79,14 @@ export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
 
       this.params = {
         startIdx: (startParam ?? null) !== null ? parseInt(startParam!, 10) : 1,
-        itemCount: (countParam ?? null) !== null ? parseInt(countParam!, 10) : 1000,
-        totalItemCount: (totalParam ?? null) !== null ? parseInt(totalParam!, 10) : 10000,
+        itemsCount: (countParam ?? null) !== null ? parseInt(countParam!, 10) : 50,
+        totalItemsCount: (totalParam ?? null) !== null ? parseInt(totalParam!, 10) : 100,
       };
 
       if (!startParam || !countParam || !totalParam) {
         this.navToParams();
+      } else {
+        this.refreshItems();
       }
     });
   }
@@ -88,8 +99,8 @@ export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
     this.router.navigate([], {
       queryParams: {
         [queryParamKeys.start]: this.params!.startIdx,
-        [queryParamKeys.count]: this.params!.itemCount,
-        [queryParamKeys.total]: this.params!.totalItemCount,
+        [queryParamKeys.count]: this.params!.itemsCount,
+        [queryParamKeys.total]: this.params!.totalItemsCount,
       },
       queryParamsHandling: 'merge',
     });
@@ -102,13 +113,48 @@ export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
       data: {
         data: {
           modalIdAvailable: (modalId) => (this.editParamsModalId = modalId),
+          params: this.params!,
           newParams: (params: TrmrkInfiniteHeightPanelTestPageParams) => {
             this.params = params;
             this.navToParams();
           },
         },
       },
-      dialogPanelSize: DialogPanelSize.Default,
     });
+  }
+
+  scrolled(event: TrmrkInfiniteHeightPanelScroll) {}
+
+  closeSetupModal() {
+    if (this.editParamsModalId) {
+      this.appService.closeModal(this.editParamsModalId);
+    }
+  }
+
+  refreshItems() {
+    this.items = Array.from({ length: this.params!.itemsCount }, (_, i) => {
+      const idx = i + 1;
+      return {
+        idx,
+        text: `${idx}: ${companies[i % companies.length]}`,
+        backColor: this.getBackColor(idx),
+      };
+    });
+  }
+
+  getBackColor(idx: number): string {
+    const colorIdx = idx % 1024;
+    const div = Math.floor(colorIdx / 256);
+    const mod = colorIdx % 256;
+    const revMod = 255 - mod;
+
+    switch (div) {
+      case 1:
+        return `rgb(0, ${revMod}, ${mod})`;
+      case 2:
+        return `rgb(${mod}, 0, ${revMod})`;
+      default:
+        return `rgb(${revMod}, ${mod}, 0)`;
+    }
   }
 }
