@@ -397,11 +397,11 @@ export const clearTimeouIfReqCore = (
 
 export const clearTimeoutIfReq = (
   timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | NullOrUndef
-) => clearTimeouIfReqCore(timeoutIdRef, clearTimeout);
+) => clearTimeouIfReqCore(timeoutIdRef, (id) => clearTimeout(id));
 
 export const clearIntervalIfReq = (
   timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | NullOrUndef
-) => clearTimeouIfReqCore(timeoutIdRef, clearInterval);
+) => clearTimeouIfReqCore(timeoutIdRef, (id) => clearInterval(id));
 
 export const clearTmOutIfReq = (timeoutId: NodeJS.Timeout | NullOrUndef) =>
   actWithIf(timeoutId, (id) => clearTimeout(id));

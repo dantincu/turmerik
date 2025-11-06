@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Output, ElementRef, Input } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  ElementRef,
+  Input,
+  ChangeDetectorRef,
+} from '@angular/core';
+
+import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -12,7 +21,13 @@ import { AppServiceBase } from '../../../services/common/app-service-base';
 
 @Component({
   selector: 'trmrk-infinite-height-panel-scroll-control',
-  imports: [MatIconModule, MatButtonModule, TrmrkTouchStartOrMouseDown, TrmrkMultiClick],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    MatButtonModule,
+    TrmrkTouchStartOrMouseDown,
+    TrmrkMultiClick,
+  ],
   templateUrl: './trmrk-infinite-height-panel-scroll-control.html',
   styleUrl: './trmrk-infinite-height-panel-scroll-control.scss',
 })
@@ -25,7 +40,8 @@ export class TrmrkInfiniteHeightPanelScrollControl {
   constructor(
     public service: TrmrkInfiniteHeightPanelScrollService,
     private hostElRef: ElementRef,
-    private appService: AppServiceBase
+    private appService: AppServiceBase,
+    private cdr: ChangeDetectorRef
   ) {
     setTimeout(() => {
       service.setupScrollControl({
@@ -36,6 +52,7 @@ export class TrmrkInfiniteHeightPanelScrollControl {
           () => null
         ),
         controlToggledEvent: () => this.trmrkExpandedToggled,
+        cdr: () => this.cdr,
       });
     });
   }

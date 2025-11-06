@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, ElementRef, EventEmitter } from '@angular/core';
+import { Injectable, OnDestroy, ElementRef, EventEmitter, ChangeDetectorRef } from '@angular/core';
 
 import { NullOrUndef } from '../../../trmrk/core';
 import { TouchOrMouseCoords } from '../../../trmrk-browser/domUtils/touchAndMouseEvents';
@@ -30,6 +30,7 @@ export interface TrmrkInfiniteHeightPanelServiceInitScrollControlSetupArgs {
   hostElRef: () => ElementRef;
   appSettingsChoicesCatKey: string | NullOrUndef;
   controlToggledEvent: () => EventEmitter<boolean>;
+  cdr: () => ChangeDetectorRef;
 }
 
 export interface TrmrkInfiniteHeightPanelServiceInitScrollBarSetupArgs {
@@ -70,7 +71,10 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
     this.basicAppSettingsDbAdapter = indexedDbDatabasesService.basicAppSettings.value;
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.scrollControlSetupArgs = null!;
+    this.scrollBarSetupArgs = null!;
+  }
 
   async scrollControlToggleClicked(expand: boolean) {
     this.scrollControlIsExpanded = expand;
@@ -94,13 +98,35 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
     }
   }
 
-  scrollControlScrollUpMouseDown(evt: TrmrkMultiClickStepEventData) {}
+  scrollControlScrollUpMouseDown(evt: TrmrkMultiClickStepEventData) {
+    if (evt.clicksCount > 0) {
+      this.scrollUpCount = evt.clicksCount + 1;
+      this.scrollControlSetupArgs.cdr().detectChanges();
+    }
+  }
 
-  scrollControlScrollDownMouseDown(evt: TrmrkMultiClickStepEventData) {}
+  scrollControlScrollDownMouseDown(evt: TrmrkMultiClickStepEventData) {
+    if (evt.clicksCount > 0) {
+      this.scrollDownCount = evt.clicksCount + 1;
+      this.scrollControlSetupArgs.cdr().detectChanges();
+    }
+  }
 
-  scrollControlScrollUpPressAndHold(evt: TrmrkMultiClickPressAndHoldEventData) {}
+  scrollControlScrollUpPressAndHold(evt: TrmrkMultiClickPressAndHoldEventData) {
+    this.scrollUpCount = evt.elapsedIntervalsCount + 1;
+    this.scrollControlSetupArgs.cdr().detectChanges();
+  }
 
-  scrollControlScrollDownPressAndHold(evt: TrmrkMultiClickPressAndHoldEventData) {}
+  scrollControlScrollDownPressAndHold(evt: TrmrkMultiClickPressAndHoldEventData) {
+    this.scrollDownCount = evt.elapsedIntervalsCount + 1;
+    this.scrollControlSetupArgs.cdr().detectChanges();
+  }
+
+  scrollControlScrollEnded() {
+    this.scrollUpCount = 0;
+    this.scrollDownCount = 0;
+    this.scrollControlSetupArgs.cdr().detectChanges();
+  }
 
   scrollControlIncreaseScrollSpeedMouseDown() {
     this.scrollControlSpeedFactor++;

@@ -41,13 +41,15 @@ export class TrmrkMultiClick implements OnDestroy {
 
   private pressAndHoldStartTimeout: MtblRefValue<NodeJS.Timeout | null> = { value: null };
   private pressAndHoldInterval: MtblRefValue<NodeJS.Timeout | null> = { value: null };
+  private mouseUpTimeout: MtblRefValue<NodeJS.Timeout | null> = { value: null };
 
   @Output() trmrkMultiClick = new EventEmitter<TouchOrMouseCoords>();
   @Output() trmrkMultiClickMouseUp = new EventEmitter<TrmrkMultiClickStepEventData>();
   @Output() trmrkMultiClickMouseDown = new EventEmitter<TrmrkMultiClickStepEventData>();
   @Output() trmrkMultiClickPressAndHold = new EventEmitter<TrmrkMultiClickPressAndHoldEventData>();
+  @Output() trmrkMultiClickEnded = new EventEmitter<void>();
   @Input() trmrkMultiClickMillis = defaultLongPressTimeoutMills;
-  @Input() trmrkPressAndHoldIntervalMillis = Math.round(defaultLongPressTimeoutMills / 2);
+  @Input() trmrkPressAndHoldIntervalMillis = Math.round(defaultLongPressTimeoutMills / 4);
   @Input() trmrkMultiClicksCount = 5;
 
   constructor(private el: ElementRef<HTMLElement>) {
@@ -75,14 +77,13 @@ export class TrmrkMultiClick implements OnDestroy {
     const data = this.getEventData(event);
 
     if (data.isValid) {
-      if (this.lastClickMillis > 0) {
-        const now = new Date();
-        const millis = now.getTime();
-        this.lastMouseDownMillis = millis;
+      clearTimeoutIfReq(this.mouseUpTimeout);
+      const now = new Date();
+      const millis = now.getTime();
+      this.lastMouseDownMillis = millis;
 
-        if (millis - this.lastClickMillis > this.trmrkMultiClickMillis) {
-          this.resetState();
-        }
+      if (this.lastClickMillis > 0 && millis - this.lastClickMillis > this.trmrkMultiClickMillis) {
+        this.resetState();
       }
 
       this.pressAndHoldStartTimeout.value = setTimeout(() => {
@@ -110,10 +111,7 @@ export class TrmrkMultiClick implements OnDestroy {
         capture: true,
       });
 
-      this.trmrkMultiClickMouseDown.emit({
-        touchOrMouseCoords: data.mouseOrTouchCoords!,
-        clicksCount: this.clicksCount,
-      });
+      this.fireMultiClickMouseDown(data, this.clicksCount);
     } else {
       this.resetState();
     }
@@ -140,17 +138,20 @@ export class TrmrkMultiClick implements OnDestroy {
       if (millis - this.lastMouseDownMillis > this.trmrkMultiClickMillis) {
         this.reset();
       } else {
-        this.trmrkMultiClickMouseUp.emit({
-          touchOrMouseCoords: data.mouseOrTouchCoords!,
-          clicksCount: this.clicksCount,
-        });
+        clearTimeoutIfReq(this.pressAndHoldStartTimeout);
+        clearIntervalIfReq(this.pressAndHoldInterval);
 
         if (this.clicksCount >= this.trmrkMultiClicksCount) {
-          this.resetState();
+          const clicksCount = this.clicksCount;
+          this.resetCore();
+          this.fireMultiClickMouseUp(data, clicksCount);
           this.trmrkMultiClick.emit(data.mouseOrTouchCoords!);
+          this.trmrkMultiClickEnded.emit();
+        } else {
+          this.mouseUpTimeout.value = setTimeout(() => {
+            this.reset();
+          }, this.trmrkMultiClickMillis);
         }
-
-        this.removeEventListeners();
       }
     } else {
       this.reset();
@@ -186,19 +187,43 @@ export class TrmrkMultiClick implements OnDestroy {
     return data;
   }
 
+  private fireMultiClickMouseDown(data: TrmrkLongPressOrRightClickEventData, clicksCount: number) {
+    this.trmrkMultiClickMouseDown.emit({
+      touchOrMouseCoords: data.mouseOrTouchCoords!,
+      clicksCount: clicksCount,
+    });
+  }
+
+  private fireMultiClickMouseUp(data: TrmrkLongPressOrRightClickEventData, clicksCount: number) {
+    this.trmrkMultiClickMouseUp.emit({
+      touchOrMouseCoords: data.mouseOrTouchCoords!,
+      clicksCount: clicksCount,
+    });
+  }
+
   private reset() {
-    this.resetState();
+    this.resetCore();
+    this.trmrkMultiClickEnded.emit();
+  }
+
+  private resetCore() {
+    this.resetStateCore();
     this.removeEventListeners();
   }
 
   private resetState() {
+    this.resetStateCore();
+    this.trmrkMultiClickEnded.emit();
+  }
+
+  private resetStateCore() {
+    clearTimeoutIfReq(this.pressAndHoldStartTimeout);
+    clearIntervalIfReq(this.pressAndHoldInterval);
+    clearTimeoutIfReq(this.mouseUpTimeout);
     this.lastClickMillis = 0;
     this.lastMouseDownMillis = 0;
     this.clicksCount = 0;
     this.elapsedIntervalsCount = 0;
-
-    clearTimeoutIfReq(this.pressAndHoldStartTimeout);
-    clearIntervalIfReq(this.pressAndHoldInterval);
   }
 
   private removeEventListeners() {

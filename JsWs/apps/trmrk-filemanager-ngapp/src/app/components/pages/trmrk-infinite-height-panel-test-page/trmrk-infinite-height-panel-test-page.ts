@@ -89,8 +89,8 @@ export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
 
       this.params = {
         startIdx: (startParam ?? null) !== null ? parseInt(startParam!, 10) : 1,
-        itemsCount: (countParam ?? null) !== null ? parseInt(countParam!, 10) : 50,
-        totalItemsCount: (totalParam ?? null) !== null ? parseInt(totalParam!, 10) : 100,
+        itemsCount: (countParam ?? null) !== null ? parseInt(countParam!, 10) : 1000,
+        totalItemsCount: (totalParam ?? null) !== null ? parseInt(totalParam!, 10) : 10000,
       };
 
       if (!startParam || !countParam || !totalParam) {
