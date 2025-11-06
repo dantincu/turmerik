@@ -128,6 +128,10 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
     this.scrollControlSetupArgs.cdr().detectChanges();
   }
 
+  scrollControlScrollComplete() {
+    console.log('scrollControlScrollComplete');
+  }
+
   scrollControlIncreaseScrollSpeedMouseDown() {
     this.scrollControlSpeedFactor++;
 

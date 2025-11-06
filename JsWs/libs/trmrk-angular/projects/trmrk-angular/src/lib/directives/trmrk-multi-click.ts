@@ -48,6 +48,7 @@ export class TrmrkMultiClick implements OnDestroy {
   @Output() trmrkMultiClickMouseDown = new EventEmitter<TrmrkMultiClickStepEventData>();
   @Output() trmrkMultiClickPressAndHold = new EventEmitter<TrmrkMultiClickPressAndHoldEventData>();
   @Output() trmrkMultiClickEnded = new EventEmitter<void>();
+  @Output() trmrkMultiClickComplete = new EventEmitter<void>();
   @Input() trmrkMultiClickMillis = defaultLongPressTimeoutMills;
   @Input() trmrkPressAndHoldIntervalMillis = Math.round(defaultLongPressTimeoutMills / 4);
   @Input() trmrkMultiClicksCount = 5;
@@ -137,6 +138,7 @@ export class TrmrkMultiClick implements OnDestroy {
 
       if (millis - this.lastMouseDownMillis > this.trmrkMultiClickMillis) {
         this.reset();
+        this.trmrkMultiClickComplete.emit();
       } else {
         clearTimeoutIfReq(this.pressAndHoldStartTimeout);
         clearIntervalIfReq(this.pressAndHoldInterval);
@@ -148,8 +150,10 @@ export class TrmrkMultiClick implements OnDestroy {
           this.trmrkMultiClick.emit(data.mouseOrTouchCoords!);
           this.trmrkMultiClickEnded.emit();
         } else {
+          this.removeEventListeners();
           this.fireMultiClickMouseUp(data, this.clicksCount);
           this.mouseUpTimeout.value = setTimeout(() => {
+            this.trmrkMultiClickComplete.emit();
             this.reset();
           }, this.trmrkMultiClickMillis);
         }
