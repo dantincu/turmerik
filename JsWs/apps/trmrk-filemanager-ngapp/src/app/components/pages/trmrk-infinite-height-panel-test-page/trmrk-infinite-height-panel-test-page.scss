@@ -4,6 +4,29 @@ trmrk-infinite-height-panel-scroll-bar {
 }
 
 .trmrk-page-body {
-  width: calc(100% - 40px);
   height: calc(100% - 80px);
+
+  &.trmrk-has-infinite-height-scroll-bar {
+    width: calc(100% - 40px);
+  }
+}
+
+h1 {
+  color: #FC8;
+  margin: 0;
+  padding: 10px;
+  line-height: 400px;
+  vertical-align: middle;
+  border: 1px solid #FC8;
+  border-left-width: 2px;
+  border-right-width: 2px;
+  border-radius: 4px;
+
+  &:first-child, &:last-child {
+    border-top-width: 2px;
+  }
+
+  &:last-child {
+    border-bottom-width: 2px;
+  }
 }

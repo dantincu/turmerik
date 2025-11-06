@@ -6,14 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
+import { getVarName } from '../../../../trmrk/Reflection/core';
 import { TrmrkAppPage } from '../../../../trmrk-angular/components/common/trmrk-app-page/trmrk-app-page';
 import { TrmrkInfiniteHeightPanelScrollControl } from '../../../../trmrk-angular/components/common/trmrk-infinite-height-panel-scroll-control/trmrk-infinite-height-panel-scroll-control';
-
-import {
-  TrmrkInfiniteHeightPanelScrollBar,
-  TrmrkInfiniteHeightPanelScroll,
-} from '../../../../trmrk-angular/components/common/trmrk-infinite-height-panel-scroll-bar/trmrk-infinite-height-panel-scroll-bar';
-
+import { TrmrkInfiniteHeightPanelScrollBar } from '../../../../trmrk-angular/components/common/trmrk-infinite-height-panel-scroll-bar/trmrk-infinite-height-panel-scroll-bar';
 import { TrmrkHorizStrip } from '../../../../trmrk-angular/components/common/trmrk-horiz-strip/trmrk-horiz-strip';
 
 import {
@@ -22,6 +18,13 @@ import {
 } from '../../../../trmrk-angular/services/common/trmrk-dialog';
 
 import { AppServiceBase } from '../../../../trmrk-angular/services/common/app-service-base';
+
+import {
+  TrmrkInfiniteHeightPanelScrollService,
+  TrmrkInfiniteHeightPanelScrollEvent,
+} from '../../../../trmrk-angular/services/common/trmrk-infinite-height-panel-scroll-service';
+
+import { commonAppSettingsChoiceCatKeys } from '../../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
 import { companies } from '../../../services/common/companies';
 import { AppService } from '../../../services/common/app-service';
@@ -57,8 +60,14 @@ interface Item {
   ],
   templateUrl: './trmrk-infinite-height-panel-test-page.html',
   styleUrl: './trmrk-infinite-height-panel-test-page.scss',
+  providers: [TrmrkInfiniteHeightPanelScrollService],
 })
 export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
+  appSettingsChoicesCatKey = [
+    commonAppSettingsChoiceCatKeys.infiniteHeightPanelScrollControl,
+    getVarName(() => TrmrkInfiniteHeightPanelTestPage),
+  ];
+
   items: Item[] = [];
   params: TrmrkInfiniteHeightPanelTestPageParams | null = null;
 
@@ -67,6 +76,7 @@ export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
   private routeSub!: Subscription;
 
   constructor(
+    public service: TrmrkInfiniteHeightPanelScrollService,
     @Inject(AppServiceBase) private appService: AppService,
     private router: Router,
     private route: ActivatedRoute,
@@ -123,7 +133,7 @@ export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
     });
   }
 
-  scrolled(event: TrmrkInfiniteHeightPanelScroll) {}
+  scrolled(event: TrmrkInfiniteHeightPanelScrollEvent) {}
 
   closeSetupModal() {
     if (this.editParamsModalId) {
@@ -148,13 +158,14 @@ export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
     const mod = colorIdx % 256;
     const revMod = 255 - mod;
 
+    const transform = (px: number) => Math.round(px);
+
     switch (div) {
-      case 1:
-        return `rgb(0, ${revMod}, ${mod})`;
+      case 0:
       case 2:
-        return `rgb(${mod}, 0, ${revMod})`;
+        return `rgb(${transform(revMod / 2)}, ${transform(revMod / 4)}, ${transform(mod / 2)})`;
       default:
-        return `rgb(${revMod}, ${mod}, 0)`;
+        return `rgb(${transform(mod / 2)}, ${transform(mod / 4)}, ${transform(revMod / 2)})`;
     }
   }
 }

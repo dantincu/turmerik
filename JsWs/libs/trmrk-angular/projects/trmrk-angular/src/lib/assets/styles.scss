@@ -544,7 +544,7 @@ trmrk-app-page {
 
 .trmrk-app-bar, .trmrk-horiz-strip, .trmrk-horiz-scrollable-strip {
   .trmrk-details {
-    font-size: 12px;
+    font-size: var(--trmrk-body-small-font-size);
 
     .trmrk-text-part.trmrk-italic {
       font-style: italic;
@@ -1098,5 +1098,17 @@ trmrk-infinite-height-panel-scroll-bar {
     cursor: pointer;
     width: 100%;
     height: 40px;
+  }
+}
+
+trmrk-infinite-height-panel-scroll-control {
+  .trmrk-scroll-count-span {
+    font-size: var(--trmrk-body-small-font-size);
+    font-weight: bold;
+    line-height: 40px;
+    margin-top: -3px;
+    display: inline-flex;
+    min-width: 40px;
+    justify-content: center;
   }
 }

@@ -15,8 +15,20 @@ import {
   isContainedBy,
 } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
+import { MtblRefValue } from '../../trmrk/core';
+
 import { TrmrkLongPressOrRightClickEventData } from '../services/common/types';
 import { defaultLongPressTimeoutMills } from '../../trmrk-browser/core';
+import { clearIntervalIfReq, clearTimeoutIfReq } from '../../trmrk-browser/domUtils/core';
+
+export interface TrmrkMultiClickStepEventData {
+  touchOrMouseCoords: TouchOrMouseCoords;
+  clicksCount: number;
+}
+
+export interface TrmrkMultiClickPressAndHoldEventData {
+  elapsedIntervalsCount: number;
+}
 
 @Directive({
   selector: '[trmrkMultiClick]',
@@ -24,9 +36,18 @@ import { defaultLongPressTimeoutMills } from '../../trmrk-browser/core';
 export class TrmrkMultiClick implements OnDestroy {
   private clicksCount = 0;
   private lastClickMillis = 0;
+  private lastMouseDownMillis = 0;
+  private elapsedIntervalsCount = 0;
+
+  private pressAndHoldStartTimeout: MtblRefValue<NodeJS.Timeout | null> = { value: null };
+  private pressAndHoldInterval: MtblRefValue<NodeJS.Timeout | null> = { value: null };
 
   @Output() trmrkMultiClick = new EventEmitter<TouchOrMouseCoords>();
+  @Output() trmrkMultiClickMouseUp = new EventEmitter<TrmrkMultiClickStepEventData>();
+  @Output() trmrkMultiClickMouseDown = new EventEmitter<TrmrkMultiClickStepEventData>();
+  @Output() trmrkMultiClickPressAndHold = new EventEmitter<TrmrkMultiClickPressAndHoldEventData>();
   @Input() trmrkMultiClickMillis = defaultLongPressTimeoutMills;
+  @Input() trmrkPressAndHoldIntervalMillis = Math.round(defaultLongPressTimeoutMills / 2);
   @Input() trmrkMultiClicksCount = 5;
 
   constructor(private el: ElementRef<HTMLElement>) {
@@ -57,11 +78,21 @@ export class TrmrkMultiClick implements OnDestroy {
       if (this.lastClickMillis > 0) {
         const now = new Date();
         const millis = now.getTime();
+        this.lastMouseDownMillis = millis;
 
         if (millis - this.lastClickMillis > this.trmrkMultiClickMillis) {
           this.resetState();
         }
       }
+
+      this.pressAndHoldStartTimeout.value = setTimeout(() => {
+        this.firePressAndHold();
+
+        this.pressAndHoldInterval.value = setInterval(() => {
+          this.elapsedIntervalsCount++;
+          this.firePressAndHold();
+        }, this.trmrkPressAndHoldIntervalMillis);
+      }, this.trmrkMultiClickMillis);
 
       document.addEventListener('mousemove', this.touchOrMouseMove, {
         capture: true,
@@ -77,6 +108,11 @@ export class TrmrkMultiClick implements OnDestroy {
 
       document.addEventListener('touchend', this.touchEndOrMouseUp, {
         capture: true,
+      });
+
+      this.trmrkMultiClickMouseDown.emit({
+        touchOrMouseCoords: data.mouseOrTouchCoords!,
+        clicksCount: this.clicksCount,
       });
     } else {
       this.resetState();
@@ -101,15 +137,30 @@ export class TrmrkMultiClick implements OnDestroy {
       this.clicksCount++;
       this.lastClickMillis = millis;
 
-      if (this.clicksCount >= this.trmrkMultiClicksCount) {
-        this.resetState();
-        this.trmrkMultiClick.emit(data.mouseOrTouchCoords!);
-      }
+      if (millis - this.lastMouseDownMillis > this.trmrkMultiClickMillis) {
+        this.reset();
+      } else {
+        this.trmrkMultiClickMouseUp.emit({
+          touchOrMouseCoords: data.mouseOrTouchCoords!,
+          clicksCount: this.clicksCount,
+        });
 
-      this.removeEventListeners();
+        if (this.clicksCount >= this.trmrkMultiClicksCount) {
+          this.resetState();
+          this.trmrkMultiClick.emit(data.mouseOrTouchCoords!);
+        }
+
+        this.removeEventListeners();
+      }
     } else {
       this.reset();
     }
+  }
+
+  private firePressAndHold() {
+    this.trmrkMultiClickPressAndHold.emit({
+      elapsedIntervalsCount: this.elapsedIntervalsCount,
+    });
   }
 
   private getEventData(event: TouchEvent | MouseEvent) {
@@ -142,7 +193,12 @@ export class TrmrkMultiClick implements OnDestroy {
 
   private resetState() {
     this.lastClickMillis = 0;
+    this.lastMouseDownMillis = 0;
     this.clicksCount = 0;
+    this.elapsedIntervalsCount = 0;
+
+    clearTimeoutIfReq(this.pressAndHoldStartTimeout);
+    clearIntervalIfReq(this.pressAndHoldInterval);
   }
 
   private removeEventListeners() {

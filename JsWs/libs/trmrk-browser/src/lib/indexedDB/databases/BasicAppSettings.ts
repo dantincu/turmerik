@@ -51,11 +51,13 @@ export interface KeyboardShortcut extends KeyboardShortcutCore {
 
 export const commonAppSettingsChoiceCatKeys = mapPropNamesToThemselves({
   appPanelsLayout: '',
+  infiniteHeightPanelScrollControl: '',
 });
 
 export const commonAppSettingsChoiceKeys = mapPropNamesToThemselves({
   panelWidthRatios: '',
   panelVisibilities: '',
+  isExpanded: '',
 });
 
 export class BasicAppSettingsDbStores {

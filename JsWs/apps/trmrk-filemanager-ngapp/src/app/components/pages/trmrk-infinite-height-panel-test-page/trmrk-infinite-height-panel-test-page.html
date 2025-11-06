@@ -6,17 +6,25 @@
       <mat-icon class="trmrk-icon">edit</mat-icon>
     </button></trmrk-horiz-strip
   >
-  <div class="trmrk-page-body trmrk-scrollable trmrk-scrollable-y">
+  <div
+    [ngClass]="[
+      'trmrk-page-body trmrk-scrollable trmrk-scrollable-y',
+      service.scrollControlIsExpanded ? 'trmrk-has-infinite-height-scroll-bar' : ''
+    ]"
+  >
     @for (item of items; track item.idx) {
-    <h1>{{ item.text }}</h1>
+    <h1 [ngStyle]="{ backgroundColor: item.backColor }">{{ item.text }}</h1>
     }
   </div>
+  @if (service.scrollControlIsExpanded) {
   <trmrk-infinite-height-panel-scroll-bar
     (trmrkScrolled)="scrolled($event)"
-  ></trmrk-infinite-height-panel-scroll-bar
-  ><trmrk-horiz-strip
+  ></trmrk-infinite-height-panel-scroll-bar>
+  }<trmrk-horiz-strip
     [trmrkCssClass]="['trmrk-has-border-x2 trmrk-bottom-horiz-strip']"
     [trmrkUseContentInsteadOfTextRow]="true"
   >
-    <trmrk-infinite-height-panel-scroll-control></trmrk-infinite-height-panel-scroll-control></trmrk-horiz-strip
+    <trmrk-infinite-height-panel-scroll-control
+      [trmrkAppSettingsChoicesCatKey]="appSettingsChoicesCatKey"
+    ></trmrk-infinite-height-panel-scroll-control></trmrk-horiz-strip
 ></trmrk-app-page>

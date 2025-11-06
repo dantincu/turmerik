@@ -20,9 +20,7 @@ import {
 
 import { dbRequestToPromise } from '../../../trmrk-browser/indexedDB/core';
 
-import { TrmrkDrag } from '../../directives/trmrk-drag';
 import { TrmrkDragEvent } from './types';
-import { TrmrkTouchStartOrMouseDown } from '../../directives/trmrk-touch-start-or-mouse-down';
 import { TrmrkDisaposable } from './types';
 
 export const MIN_PANEL_WIDTH_PX = 54;
@@ -566,6 +564,12 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
   setup(args: AppPanelLayoutServiceSetupArgs) {
     this.reset();
     this.setupArgs = args;
+
+    this.indexedDb.appSettings.choices.appPanelsLayout.catKey = this.appService.getAppObjectKey([
+      commonAppSettingsChoiceCatKeys.appPanelsLayout,
+      this.setupArgs!.layoutKey ?? commonLayoutKeys.main,
+    ]);
+
     this.updatePanelWidthRatiosCore(PanelPosition.None);
     this.updatePanelWidths();
     this.setupDone = true;
@@ -609,18 +613,15 @@ export class AppPanelsLayoutService implements TrmrkDisaposable {
 
   loadAppSettingsChoices() {
     return new Promise<void>((resolve, reject) => {
-      const appPanelsLayoutCatKey = (this.indexedDb.appSettings.choices.appPanelsLayout.catKey =
-        this.appService.getAppObjectKey([
-          commonAppSettingsChoiceCatKeys.appPanelsLayout,
-          this.setupArgs!.layoutKey ?? commonLayoutKeys.main,
-        ]));
-
       this.basicAppSettingsDbAdapter.open(
         (_, db) => {
           const keyPathsArr = [
             commonAppSettingsChoiceKeys.panelWidthRatios,
             commonAppSettingsChoiceKeys.panelVisibilities,
-          ].map((key) => [appPanelsLayoutCatKey, this.appService.getAppObjectKey([key])]);
+          ].map((key) => [
+            this.indexedDb.appSettings.choices.appPanelsLayout.catKey,
+            this.appService.getAppObjectKey([key]),
+          ]);
 
           Promise.all(
             keyPathsArr.map((keyPath) =>

@@ -1,3 +1,5 @@
+import { NullOrUndef } from '../../trmrk/core';
+
 export const toggleEventListener = <K extends keyof HTMLElementEventMap>(
   el: HTMLElement,
   add: boolean,
@@ -21,4 +23,44 @@ export const htmlCollectionToArr = <TNode extends Element = HTMLElement>(coll: H
   }
 
   return retArr;
+};
+
+export interface HighlightBlinkElemArgs {
+  elem: () => HTMLElement;
+  cssClass?: string | NullOrUndef;
+  timeoutMillis?: number | NullOrUndef;
+  removeCssClassFirst?: boolean | NullOrUndef;
+}
+
+const highlightBlinkElemCore = (args: HighlightBlinkElemArgs) => {
+  const elem = args.elem();
+
+  if (elem) {
+    elem.classList.add(args.cssClass!);
+
+    setTimeout(() => {
+      const elem = args.elem();
+
+      if (elem) {
+        elem.classList.remove(args.cssClass!);
+      }
+    }, args.timeoutMillis!);
+  }
+};
+
+export const highlightBlinkElem = (args: HighlightBlinkElemArgs) => {
+  args.cssClass ??= 'trmrk-highlight-blink';
+  args.timeoutMillis ??= 500;
+  args.removeCssClassFirst ??= false;
+
+  if (args.removeCssClassFirst) {
+    const elem = args.elem();
+
+    if (elem) {
+      elem.classList.remove(args.cssClass!);
+      setTimeout(() => highlightBlinkElemCore(args));
+    }
+  } else {
+    highlightBlinkElemCore(args);
+  }
 };

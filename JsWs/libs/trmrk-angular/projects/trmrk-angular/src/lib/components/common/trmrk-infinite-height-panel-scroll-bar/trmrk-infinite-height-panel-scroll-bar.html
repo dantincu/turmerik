@@ -1,7 +1,7 @@
 <div
   class="trmrk-scrollbar-thumb"
-  (trmrkDrag)="thumbDrag($event)"
-  (trmrkDragStart)="thumbDragStart($event)"
-  (trmrkDragEnd)="thumbDragEnd($event)"
-  [ngStyle]="ngStyle"
+  (trmrkDrag)="service.scrollBarThumbDrag($event)"
+  (trmrkDragStart)="service.scrollBarThumbDragStart($event)"
+  (trmrkDragEnd)="service.scrollBarThumbDragEnd($event)"
+  [ngStyle]="service.scrollBarThumbNgStyle"
 ></div>

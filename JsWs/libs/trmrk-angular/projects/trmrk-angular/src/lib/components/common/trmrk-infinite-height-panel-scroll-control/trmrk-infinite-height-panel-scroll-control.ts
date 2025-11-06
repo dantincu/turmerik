@@ -1,74 +1,44 @@
-import { Component, EventEmitter, Output, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Output, ElementRef, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
-import { TrmrkLongPressOrRightClick } from '../../../directives/trmrk-long-press-or-right-click';
+import { maxSafeInteger } from '../../../../trmrk/math';
+import { withValIf, NullOrUndef } from '../../../../trmrk/core';
+import { TrmrkTouchStartOrMouseDown } from '../../../directives/trmrk-touch-start-or-mouse-down';
+import { TrmrkMultiClick } from '../../../directives/trmrk-multi-click';
+import { TrmrkInfiniteHeightPanelScrollService } from '../../../services/common/trmrk-infinite-height-panel-scroll-service';
 
-export const MAX_SPEED_FACTOR = 13;
+import { AppServiceBase } from '../../../services/common/app-service-base';
 
 @Component({
   selector: 'trmrk-infinite-height-panel-scroll-control',
-  imports: [MatIconModule, MatButtonModule, TrmrkLongPressOrRightClick],
+  imports: [MatIconModule, MatButtonModule, TrmrkTouchStartOrMouseDown, TrmrkMultiClick],
   templateUrl: './trmrk-infinite-height-panel-scroll-control.html',
   styleUrl: './trmrk-infinite-height-panel-scroll-control.scss',
 })
 export class TrmrkInfiniteHeightPanelScrollControl {
   @Output() trmrkExpandedToggled = new EventEmitter<boolean>();
-  @Output() trmrkScrollUpClicked = new EventEmitter<void>();
-  @Output() trmrkScrollDownClicked = new EventEmitter<void>();
-  @Output() trmrkMiddleBtnLongPressed = new EventEmitter<void>();
+  @Input() trmrkAppSettingsChoicesCatKey: string[] | NullOrUndef;
 
-  isExpanded = false;
-  speedFactor = 1;
+  maxSafeInteger = maxSafeInteger;
 
-  constructor(private hostElRef: ElementRef) {}
-
-  expandBtnClicked() {
-    this.isExpanded = true;
-    this.trmrkExpandedToggled.emit(true);
+  constructor(
+    public service: TrmrkInfiniteHeightPanelScrollService,
+    private hostElRef: ElementRef,
+    private appService: AppServiceBase
+  ) {
+    setTimeout(() => {
+      service.setupScrollControl({
+        hostElRef: () => hostElRef,
+        appSettingsChoicesCatKey: withValIf(
+          this.trmrkAppSettingsChoicesCatKey,
+          (key) => this.appService.getAppObjectKey(key!),
+          () => null
+        ),
+        controlToggledEvent: () => this.trmrkExpandedToggled,
+      });
+    });
   }
 
-  collapseBtnClicked() {
-    this.isExpanded = false;
-    this.trmrkExpandedToggled.emit(false);
-  }
-
-  scrollUpClicked() {
-    this.trmrkScrollUpClicked.emit();
-  }
-
-  scrollDownClicked() {
-    this.trmrkScrollDownClicked.emit();
-  }
-
-  increaseScrollSpeedClicked() {
-    if (this.speedFactor < MAX_SPEED_FACTOR) {
-      this.speedFactor++;
-    }
-  }
-
-  decreaseScrollSpeedClicked() {
-    if (this.speedFactor > 1) {
-      this.speedFactor--;
-    }
-  }
-
-  middleBtnShortPressed() {
-    this.speedFactor = 1;
-  }
-
-  middleBtnLongPressed() {
-    this.speedFactor = MAX_SPEED_FACTOR;
-    const hostEl = this.hostElRef.nativeElement as HTMLElement;
-
-    if (hostEl) {
-      hostEl.classList.add('trmrk-highlight');
-
-      setTimeout(() => {
-        hostEl.classList.remove('trmrk-highlight');
-      }, 500);
-    }
-
-    this.trmrkMiddleBtnLongPressed.emit();
-  }
+  scrollButtonsMultiClick() {}
 }

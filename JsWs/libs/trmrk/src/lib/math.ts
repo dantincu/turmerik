@@ -1,5 +1,7 @@
 import { NullOrUndef } from './core';
 
+export const maxSafeInteger = Number.MAX_SAFE_INTEGER;
+
 export const getNextIdx = (dimSizes: number[], dimIdxes: number[]) => {
   dimSizes = [...dimSizes].reverse();
   let magn = 1;

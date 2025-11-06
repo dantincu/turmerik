@@ -1,26 +1,58 @@
-@if(isExpanded) {<button class="trmrk-icon-btn" mat-icon-button (click)="scrollUpClicked()">
+@if(service.scrollControlIsExpanded) { @if (service.scrollDownCount === 0) {<button
+  class="trmrk-icon-btn"
+  mat-icon-button
+  (trmrkMultiClick)="scrollButtonsMultiClick()"
+  [trmrkMultiClicksCount]="maxSafeInteger"
+  (trmrkMultiClickMouseDown)="service.scrollControlScrollUpMouseDown($event)"
+  (trmrkMultiClickPressAndHold)="service.scrollControlScrollUpPressAndHold($event)"
+>
   <mat-icon class="trmrk-icon trmrk-rot-270-deg">fast_forward</mat-icon>
 </button>
-<button class="trmrk-icon-btn" mat-icon-button (click)="decreaseScrollSpeedClicked()">
+} @if (service.scrollDownCount > 0) {
+<span class="trmrk-scroll-count-span trmrk-scroll-down-count-span">
+  {{ service.scrollDownCount }}
+</span>
+}
+<button
+  class="trmrk-icon-btn"
+  mat-icon-button
+  (trmrkTouchStartOrMouseDown)="service.scrollControlDecreaseScrollSpeedMouseDown()"
+>
   <mat-icon class="trmrk-icon">remove</mat-icon>
 </button>
 <div
   class="trmrk-icon-btn trmrk-fake-icon-btn trmrk-middle-btn"
-  (trmrkLongPressOrRightClick)="middleBtnLongPressed()"
-  (trmrkShortPressOrLeftClick)="middleBtnShortPressed()"
+  (click)="service.scrollControlMiddleBtnClicked()"
 >
-  x{{ speedFactor }}
+  x{{ service.scrollControlSpeedFactor }}
 </div>
-<button class="trmrk-icon-btn" mat-icon-button (click)="increaseScrollSpeedClicked()">
+<button
+  class="trmrk-icon-btn"
+  mat-icon-button
+  (trmrkTouchStartOrMouseDown)="service.scrollControlIncreaseScrollSpeedMouseDown()"
+>
   <mat-icon class="trmrk-icon">add</mat-icon>
 </button>
-<button class="trmrk-icon-btn" mat-icon-button (click)="scrollDownClicked()">
+@if (service.scrollUpCount === 0) {
+<button
+  class="trmrk-icon-btn"
+  mat-icon-button
+  (trmrkMultiClick)="scrollButtonsMultiClick()"
+  [trmrkMultiClicksCount]="maxSafeInteger"
+  (trmrkMultiClickMouseDown)="service.scrollControlScrollDownMouseDown($event)"
+  (trmrkMultiClickPressAndHold)="service.scrollControlScrollDownPressAndHold($event)"
+>
   <mat-icon class="trmrk-icon trmrk-rot-90-deg">fast_forward</mat-icon>
 </button>
-<button class="trmrk-icon-btn" mat-icon-button (click)="collapseBtnClicked()">
+} @if (service.scrollUpCount > 0) {
+<span class="trmrk-scroll-count-span trmrk-scroll-up-count-span">
+  {{ service.scrollUpCount }}
+</span>
+}
+<button class="trmrk-icon-btn" mat-icon-button (click)="service.scrollControlToggleClicked(false)">
   <mat-icon class="trmrk-icon">double_arrow</mat-icon></button
->} @if (!isExpanded) {
-<button class="trmrk-icon-btn" mat-icon-button (click)="expandBtnClicked()">
+>} @if (!service.scrollControlIsExpanded) {
+<button class="trmrk-icon-btn" mat-icon-button (click)="service.scrollControlToggleClicked(true)">
   <mat-icon class="trmrk-icon trmrk-rot-180-deg">double_arrow</mat-icon>
 </button>
 }

@@ -389,14 +389,11 @@ export const getAnchestor = (
 export const clearTimeouIfReqCore = (
   timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | NullOrUndef,
   clearFunc: (timeoutId: NodeJS.Timeout) => void
-) => {
-  const timeoutId = timeoutIdRef?.value;
-
-  if (timeoutId) {
+) =>
+  actWithIf(timeoutIdRef?.value, (timeoutId) => {
     clearFunc(timeoutId);
-    timeoutIdRef.value = null;
-  }
-};
+    timeoutIdRef!.value = null;
+  });
 
 export const clearTimeoutIfReq = (
   timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | NullOrUndef

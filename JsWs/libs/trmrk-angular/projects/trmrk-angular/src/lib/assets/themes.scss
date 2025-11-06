@@ -5,7 +5,7 @@
     background-color: #0000; /* bright yellow */
   }
   50% {
-    background-color: #ffffff; /* white or any alternate color */
+    background-color: #000; /* white or any alternate color */
   }
 }
 
@@ -14,7 +14,7 @@
     background-color: #0000; /* bright yellow */
   }
   50% {
-    background-color: #000; /* white or any alternate color */
+    background-color: #fff; /* white or any alternate color */
   }
 }
 
@@ -330,7 +330,7 @@
     }
   }
 
-  trmrk-infinite-height-panel-scroll-control.trmrk-highlight {
+  .trmrk-highlight-blink {
     animation: trmrk-infinite-height-panel-scroll-control-blink-light 0.5s forwards;
   }
 
@@ -338,7 +338,7 @@
     background-color: var(--trmrk-scrollable-track_color_light);
 
     .trmrk-scrollbar-thumb {
-    background-color: var(--trmrk-scrollable-thumb_color_light);
+      background-color: var(--trmrk-scrollable-thumb_color_light);
     }
   }
 }
@@ -570,7 +570,15 @@
     }
   }
 
-  trmrk-infinite-height-panel-scroll-control.trmrk-highlight {
+  .trmrk-highlight-blink {
     animation: trmrk-infinite-height-panel-scroll-control-blink-dark 0.5s forwards;
+  }
+
+  trmrk-infinite-height-panel-scroll-bar {
+    background-color: var(--trmrk-scrollable-track_color_dark);
+
+    .trmrk-scrollbar-thumb {
+      background-color: var(--trmrk-scrollable-thumb_color_dark);
+    }
   }
 }
