@@ -148,6 +148,7 @@ export class TrmrkMultiClick implements OnDestroy {
           this.trmrkMultiClick.emit(data.mouseOrTouchCoords!);
           this.trmrkMultiClickEnded.emit();
         } else {
+          this.fireMultiClickMouseUp(data, this.clicksCount);
           this.mouseUpTimeout.value = setTimeout(() => {
             this.reset();
           }, this.trmrkMultiClickMillis);
