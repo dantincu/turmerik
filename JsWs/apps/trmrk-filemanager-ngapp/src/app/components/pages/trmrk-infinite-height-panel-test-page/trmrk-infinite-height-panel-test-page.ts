@@ -104,8 +104,8 @@ export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
 
     setTimeout(() => {
       service.setupScrollPanel({
-        hostElRef: () => hostElRef,
-        totalHeight: () => (this.params?.totalItemsCount ?? 0) * 400,
+        hostEl: () => (hostElRef.nativeElement as HTMLElement).querySelector('.trmrk-page-body')!,
+        totalHeight: () => (this.params?.totalItemsCount ?? 0) * 424,
       });
     });
   }

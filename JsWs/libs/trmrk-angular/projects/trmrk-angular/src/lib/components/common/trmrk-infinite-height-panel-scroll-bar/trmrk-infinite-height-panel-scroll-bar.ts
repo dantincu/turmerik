@@ -27,7 +27,7 @@ export class TrmrkInfiniteHeightPanelScrollBar {
   ) {
     setTimeout(() => {
       service.setupScrollBar({
-        hostElRef: () => hostElRef,
+        hostEl: () => hostElRef.nativeElement,
         scrolledEvent: () => this.trmrkScrolled,
         newContentRequestedEvent: () => this.trmrkNewContentRequested,
       });

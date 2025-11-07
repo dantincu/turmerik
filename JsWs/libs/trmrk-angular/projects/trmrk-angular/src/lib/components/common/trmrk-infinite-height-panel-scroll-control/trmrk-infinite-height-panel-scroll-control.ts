@@ -37,7 +37,7 @@ export class TrmrkInfiniteHeightPanelScrollControl {
   ) {
     setTimeout(() => {
       service.setupScrollControl({
-        hostElRef: () => hostElRef,
+        hostEl: () => hostElRef.nativeElement,
         appSettingsChoicesCatKey: withValIf(
           this.trmrkAppSettingsChoicesCatKey,
           (key) => this.appService.getAppObjectKey(key!),

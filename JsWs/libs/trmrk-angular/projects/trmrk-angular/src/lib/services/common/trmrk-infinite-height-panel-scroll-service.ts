@@ -1,13 +1,11 @@
-import { Injectable, OnDestroy, ElementRef, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Injectable, OnDestroy, EventEmitter } from '@angular/core';
 
 import { NullOrUndef } from '../../../trmrk/core';
-import { getOrderOfMagnitude } from '../../../trmrk/math';
 import { TouchOrMouseCoords } from '../../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import {
   AppSessionTabSettingsChoice,
   BasicAppSettingsDbAdapter,
-  commonAppSettingsChoiceCatKeys,
   commonAppSettingsChoiceKeys,
 } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
@@ -29,18 +27,18 @@ export const SCROLL_CONTROL_SPEED_MULTIPLIER = 4;
 export const BASE_SCROLL_STEP_PX = 40;
 
 export interface TrmrkInfiniteHeightPanelServiceInitScrollPanelArgs {
-  hostElRef: () => ElementRef;
-  totalHeight?: ((el: ElementRef) => number) | NullOrUndef;
+  hostEl: () => HTMLElement;
+  totalHeight?: ((el: HTMLElement) => number) | NullOrUndef;
 }
 
 export interface TrmrkInfiniteHeightPanelServiceInitScrollControlSetupArgs {
-  hostElRef: () => ElementRef;
+  hostEl: () => HTMLElement;
   appSettingsChoicesCatKey: string | NullOrUndef;
   controlToggledEvent: () => EventEmitter<boolean>;
 }
 
 export interface TrmrkInfiniteHeightPanelServiceInitScrollBarSetupArgs {
-  hostElRef: () => ElementRef;
+  hostEl: () => HTMLElement;
   scrolledEvent: () => EventEmitter<TrmrkInfiniteHeightPanelScrollEvent>;
   newContentRequestedEvent: () => EventEmitter<TrmrkInfiniteHeightPanelNewContentRequestedEvent>;
 }
@@ -85,6 +83,11 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
     top: `0px`,
   };
 
+  panelOffsetHeight = 0;
+  panelScrollHeight = 0;
+  maxScrollTop = 0;
+
+  skippedHeightPx = 0;
   topPx = 0;
   topPxRatio = 0;
   scrollBarThumbTopPx = 0;
@@ -188,7 +191,10 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
       1;
   }
 
-  scrollBarThumbDragStart(event: TouchOrMouseCoords) {}
+  scrollBarThumbDragStart(event: TouchOrMouseCoords) {
+    this.updatePrevCoords();
+    this.updatePanelMaxScrollTop();
+  }
 
   scrollBarThumbDrag(event: TrmrkDragEvent) {
     const evt = this.scrollBarGetEvtArgs(event);
@@ -207,6 +213,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
   }
 
   contentChanged(evt: TrmrkInfiniteHeightPanelScrollContentChangedEvent) {
+    this.skippedHeightPx = evt.topPx;
     this.updateCoords({ ...evt, fireScrolledEvent: true });
   }
 
@@ -216,8 +223,9 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
     }
 
     this.scrollPanelSetupArgs = args;
-    args.totalHeight ??= (elRef) => (elRef.nativeElement as HTMLElement).scrollHeight;
-    (args.hostElRef().nativeElement as HTMLElement).addEventListener('scroll', this.panelScrolled);
+    args.totalHeight ??= (el) => el.scrollHeight;
+    this.updatePanelMaxScrollTop();
+    args.hostEl().addEventListener('scroll', this.panelScrolled);
     await this.ifIsSetUp();
   }
 
@@ -261,14 +269,16 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
   }
 
   updateCoords(args: TrmrkInfiniteHeightPanelScrollCoordArgs) {
-    this.updatePrevCoords();
     this.updateCoordsCore(args);
 
-    this.panelScrollTopPx =
-      args.panelScrollTopPx ?? this.panelScrollTopPx + this.topPx - this.prevTopPx;
+    if ((args.panelScrollTopPx ?? null) !== null) {
+      this.panelScrollTopPx = args.panelScrollTopPx!;
+    } else {
+      this.panelScrollTopPx = this.topPx - this.skippedHeightPx;
+    }
 
     const panelScrollTopPx = this.panelScrollTopPx;
-    this.panelScrollTopPx = Math.max(0, Math.min(panelScrollTopPx, this.getPanelMaxScrollTop()));
+    this.panelScrollTopPx = Math.max(0.01, Math.min(panelScrollTopPx, this.maxScrollTop));
     const panelScrollTopDiffPx = panelScrollTopPx - this.panelScrollTopPx;
 
     this.scrollBarUpdateThumbTopPx();
@@ -276,16 +286,16 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
     this.scrollControlProgressText = this.getScrollControlProgressMsg();
 
     if (args.scrollPanel) {
-      this.scrollPanel(this.panelScrollTopPx);
+      this.scrollPanelTo(this.panelScrollTopPx);
     }
 
     if (args.fireScrolledEvent) {
       this.fireScrolledEvent();
     }
 
-    if (panelScrollTopDiffPx !== 0) {
+    if (args.scrollPanel && panelScrollTopDiffPx !== 0) {
       this.scrollBarSetupArgs.newContentRequestedEvent().emit({
-        newTopPxRatio: this.topPx + panelScrollTopDiffPx,
+        newTopPxRatio: this.getTopPxRatio(this.topPx + panelScrollTopDiffPx),
       });
     }
   }
@@ -309,7 +319,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
         this.scrollBarThumbTopPx = args.scrollBarThumbTopPx ?? this.getScrollBarThumbTopPx();
       } else {
         this.scrollBarThumbTopPx = args.scrollBarThumbTopPx!;
-        this.topPxRatio = this.scrollBarThumbTopPx / this.scrollBarGetMaxTopPx();
+        this.topPxRatio = this.scrollBarGetMaxTopPx() / this.scrollBarThumbTopPx;
         this.topPx = args.topPx ?? this.getTopPx();
       }
     }
@@ -322,9 +332,9 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
     this.panelScrollTopPx = this.prevPanelScrollTopPx;
   }
 
-  scrollPanel(top: number) {
+  scrollPanelTo(top: number) {
     if (top) {
-      (this.scrollPanelSetupArgs.hostElRef().nativeElement as HTMLElement).scrollBy({
+      this.scrollPanelSetupArgs.hostEl().scrollTo({
         top: top,
         behavior: 'instant',
       });
@@ -333,7 +343,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
 
   scrollPanelBy(topDiff: number) {
     if (topDiff) {
-      (this.scrollPanelSetupArgs.hostElRef().nativeElement as HTMLElement).scrollBy({
+      this.scrollPanelSetupArgs.hostEl().scrollBy({
         top: topDiff,
         behavior: 'instant',
       });
@@ -365,7 +375,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
 
     const maxTopPx = this.scrollBarGetMaxTopPx();
     topPx = Math.max(0, Math.min(topPx, maxTopPx));
-    const topPxRatio = topPx / maxTopPx;
+    const topPxRatio = maxTopPx / topPx;
 
     return {
       scrollBarThumbTopPx: topPx,
@@ -375,51 +385,53 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
   }
 
   scrollBarGetMaxTopPx() {
-    return (this.scrollBarSetupArgs.hostElRef().nativeElement as HTMLElement).offsetHeight - 40;
+    return this.scrollBarSetupArgs.hostEl().offsetHeight - 40;
   }
 
   getTotalHeight() {
-    const totallHeight = this.scrollPanelSetupArgs.totalHeight!(
-      this.scrollPanelSetupArgs.hostElRef()
-    );
-
+    const totallHeight = this.scrollPanelSetupArgs.totalHeight!(this.scrollPanelSetupArgs.hostEl());
     return totallHeight;
   }
 
-  getPanelMaxScrollTop() {
-    const panelEl = this.scrollPanelSetupArgs.hostElRef().nativeElement as HTMLElement;
-    const maxScrollTop = panelEl.scrollHeight - panelEl.offsetHeight;
-    return maxScrollTop;
+  updatePanelMaxScrollTop() {
+    const panelEl = this.scrollPanelSetupArgs.hostEl();
+    this.panelScrollHeight = panelEl.scrollHeight;
+    this.panelOffsetHeight = panelEl.offsetHeight;
+    this.maxScrollTop = this.panelScrollHeight - this.panelOffsetHeight;
   }
 
   getTopPx() {
-    const totalScrollHeight = this.getTotalHeight();
-    const topPx = this.topPxRatio * totalScrollHeight;
+    const totalHeightForRatio = this.getTotalHeightForRatio();
+    const topPx = totalHeightForRatio / this.topPxRatio;
     return topPx;
   }
 
-  getTopPxRatio() {
-    const totalScrollHeight = this.getTotalHeight();
-    const topPxRatio = totalScrollHeight === 0 ? 1 : this.topPx / totalScrollHeight;
+  getTopPxRatio(topPx?: number | NullOrUndef) {
+    const totalHeightForRatio = this.getTotalHeightForRatio();
+    const topPxRatio = totalHeightForRatio === 0 ? 2 : totalHeightForRatio / (topPx ?? this.topPx);
     return topPxRatio;
+  }
+
+  getTotalHeightForRatio() {
+    const totalHeightForRatio = this.getTotalHeight() - this.panelOffsetHeight;
+    return totalHeightForRatio;
   }
 
   getScrollBarThumbTopPx() {
     const scrollBarThumbMaxTopPx = this.scrollBarGetMaxTopPx();
-    let scrollBarThumbTopPx = Math.round(this.topPxRatio * scrollBarThumbMaxTopPx);
+    let scrollBarThumbTopPx = Math.round(scrollBarThumbMaxTopPx * this.topPxRatio);
     scrollBarThumbTopPx = Math.max(0, Math.min(scrollBarThumbTopPx, scrollBarThumbMaxTopPx));
     return scrollBarThumbTopPx;
   }
 
   getRequiresActualScroll() {
-    return this.topPxRatio <= 1;
+    return this.maxScrollTop > 0;
   }
 
   getScrollControlProgressMsg(): string {
-    // const totalScrollHeight = this.getTotalHeight();
-    const orderOfMagnitude = 4; // getOrderOfMagnitude(totalScrollHeight);
+    const orderOfMagnitude = 4;
     const magnDiv = Math.pow(10, orderOfMagnitude + 1);
-    const percent = Math.round(this.topPxRatio * magnDiv) / (magnDiv / 100);
+    const percent = Math.round(magnDiv / this.topPxRatio) / (magnDiv / 100);
     const text = [percent, '%'].join('');
     return text;
   }
@@ -435,10 +447,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
     this.scrollControlSetupArgs = null!;
     this.scrollBarSetupArgs = null!;
 
-    (this.scrollPanelSetupArgs.hostElRef().nativeElement as HTMLElement).removeEventListener(
-      'scroll',
-      this.panelScrolled
-    );
+    this.scrollPanelSetupArgs.hostEl().removeEventListener('scroll', this.panelScrolled);
 
     this.setupComplete.next(false);
   }
