@@ -40,8 +40,7 @@ export class TrmrkInfiniteHeightPanelScrollControl {
   constructor(
     public service: TrmrkInfiniteHeightPanelScrollService,
     private hostElRef: ElementRef,
-    private appService: AppServiceBase,
-    private cdr: ChangeDetectorRef
+    private appService: AppServiceBase
   ) {
     setTimeout(() => {
       service.setupScrollControl({
@@ -52,7 +51,6 @@ export class TrmrkInfiniteHeightPanelScrollControl {
           () => null
         ),
         controlToggledEvent: () => this.trmrkExpandedToggled,
-        cdr: () => this.cdr,
       });
     });
   }

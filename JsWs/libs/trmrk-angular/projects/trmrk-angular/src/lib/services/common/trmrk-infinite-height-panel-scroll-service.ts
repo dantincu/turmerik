@@ -30,7 +30,6 @@ export interface TrmrkInfiniteHeightPanelServiceInitScrollControlSetupArgs {
   hostElRef: () => ElementRef;
   appSettingsChoicesCatKey: string | NullOrUndef;
   controlToggledEvent: () => EventEmitter<boolean>;
-  cdr: () => ChangeDetectorRef;
 }
 
 export interface TrmrkInfiniteHeightPanelServiceInitScrollBarSetupArgs {
@@ -101,36 +100,29 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
   scrollControlScrollUpMouseDown(evt: TrmrkMultiClickStepEventData) {
     if (evt.clicksCount > 0) {
       this.scrollUpCount = evt.clicksCount + 1;
-      this.scrollControlSetupArgs.cdr().detectChanges();
     }
   }
 
   scrollControlScrollDownMouseDown(evt: TrmrkMultiClickStepEventData) {
     if (evt.clicksCount > 0) {
       this.scrollDownCount = evt.clicksCount + 1;
-      this.scrollControlSetupArgs.cdr().detectChanges();
     }
   }
 
   scrollControlScrollUpPressAndHold(evt: TrmrkMultiClickPressAndHoldEventData) {
     this.scrollUpCount = evt.elapsedIntervalsCount + 1;
-    this.scrollControlSetupArgs.cdr().detectChanges();
   }
 
   scrollControlScrollDownPressAndHold(evt: TrmrkMultiClickPressAndHoldEventData) {
     this.scrollDownCount = evt.elapsedIntervalsCount + 1;
-    this.scrollControlSetupArgs.cdr().detectChanges();
   }
 
   scrollControlScrollEnded() {
     this.scrollUpCount = 0;
     this.scrollDownCount = 0;
-    this.scrollControlSetupArgs.cdr().detectChanges();
   }
 
-  scrollControlScrollComplete() {
-    console.log('scrollControlScrollComplete');
-  }
+  scrollControlScrollComplete() {}
 
   scrollControlIncreaseScrollSpeedMouseDown() {
     this.scrollControlSpeedFactor++;
