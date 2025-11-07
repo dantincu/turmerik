@@ -6,6 +6,7 @@ import { TrmrkDrag } from '../../../directives/trmrk-drag';
 import {
   TrmrkInfiniteHeightPanelScrollService,
   TrmrkInfiniteHeightPanelScrollEvent,
+  TrmrkInfiniteHeightPanelNewContentRequestedEvent,
 } from '../../../services/common/trmrk-infinite-height-panel-scroll-service';
 
 @Component({
@@ -17,6 +18,9 @@ import {
 export class TrmrkInfiniteHeightPanelScrollBar {
   @Output() trmrkScrolled = new EventEmitter<TrmrkInfiniteHeightPanelScrollEvent>();
 
+  @Output() trmrkNewContentRequested =
+    new EventEmitter<TrmrkInfiniteHeightPanelNewContentRequestedEvent>();
+
   constructor(
     public service: TrmrkInfiniteHeightPanelScrollService,
     private hostElRef: ElementRef<HTMLElement>
@@ -25,6 +29,7 @@ export class TrmrkInfiniteHeightPanelScrollBar {
       service.setupScrollBar({
         hostElRef: () => hostElRef,
         scrolledEvent: () => this.trmrkScrolled,
+        newContentRequestedEvent: () => this.trmrkNewContentRequested,
       });
     });
   }

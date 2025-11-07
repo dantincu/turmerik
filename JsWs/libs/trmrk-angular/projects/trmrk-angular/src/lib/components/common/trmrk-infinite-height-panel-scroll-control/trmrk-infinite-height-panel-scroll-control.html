@@ -1,4 +1,5 @@
 @if(service.scrollControlIsExpanded) {
+<span class="trmrk-scroll-progress-msg"> {{ service.scrollControlProgressText }} </span>
 <button
   [ngClass]="['trmrk-icon-btn', service.scrollDownCount === 0 ? '' : 'trmrk-hidden']"
   mat-icon-button

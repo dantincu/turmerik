@@ -1102,13 +1102,21 @@ trmrk-infinite-height-panel-scroll-bar {
 }
 
 trmrk-infinite-height-panel-scroll-control {
-  .trmrk-scroll-count-span {
+  display: flex;
+
+  .trmrk-scroll-count-span, .trmrk-scroll-progress-msg {
     font-size: var(--trmrk-body-small-font-size);
-    font-weight: bold;
-    line-height: 40px;
+    height: 40px;
     margin-top: -3px;
     display: inline-flex;
-    min-width: 40px;
     justify-content: center;
+    align-items: center;
+    @include mixins.trmrk-wrap-content();
+    overflow: hidden;
+  }
+
+  .trmrk-scroll-count-span {
+    font-weight: bold;
+    width: 40px;
   }
 }

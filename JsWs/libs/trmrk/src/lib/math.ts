@@ -32,3 +32,14 @@ export const numIsBetween = (num: number, min: number, max: number, strictCompar
 
   return result;
 };
+
+export const getOrderOfMagnitude = (num: number) => {
+  let magn = 0;
+
+  while (num > 0) {
+    magn++;
+    num = Math.floor(num / 10);
+  }
+
+  return magn;
+};

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Inject } from '@angular/core';
+import { Component, OnDestroy, Inject, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -18,6 +18,7 @@ import {
 } from '../../../../trmrk-angular/services/common/trmrk-dialog';
 
 import { AppServiceBase } from '../../../../trmrk-angular/services/common/app-service-base';
+import { runOnceWhenValueIs } from '../../../../trmrk-angular/services/common/TrmrkObservable';
 
 import {
   TrmrkInfiniteHeightPanelScrollService,
@@ -80,7 +81,8 @@ export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
     @Inject(AppServiceBase) private appService: AppService,
     private router: Router,
     private route: ActivatedRoute,
-    private appSetupDialog: MatDialog
+    private appSetupDialog: MatDialog,
+    private hostElRef: ElementRef
   ) {
     this.routeSub = this.route.queryParamMap.subscribe((params) => {
       const startParam = params.get(queryParamKeys.start);
@@ -98,6 +100,13 @@ export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
       } else {
         this.refreshItems();
       }
+    });
+
+    setTimeout(() => {
+      service.setupScrollPanel({
+        hostElRef: () => hostElRef,
+        totalHeight: () => (this.params?.totalItemsCount ?? 0) * 400,
+      });
     });
   }
 
@@ -150,6 +159,14 @@ export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
         backColor: this.getBackColor(idx),
       };
     });
+
+    setTimeout(() =>
+      runOnceWhenValueIs(this.service.setupComplete, true, () => {
+        this.service.contentChanged({
+          topPx: 0,
+        });
+      })
+    );
   }
 
   getBackColor(idx: number): string {
