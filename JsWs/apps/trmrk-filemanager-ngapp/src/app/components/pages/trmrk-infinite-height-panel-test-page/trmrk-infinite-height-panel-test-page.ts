@@ -105,7 +105,7 @@ export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
     setTimeout(() => {
       service.setupScrollPanel({
         hostEl: () => (hostElRef.nativeElement as HTMLElement).querySelector('.trmrk-page-body')!,
-        totalHeight: () => (this.params?.totalItemsCount ?? 0) * 424,
+        totalHeight: () => (this.params?.totalItemsCount ?? 0) * 422,
       });
     });
   }
@@ -160,13 +160,11 @@ export class TrmrkInfiniteHeightPanelTestPage implements OnDestroy {
       };
     });
 
-    setTimeout(() =>
-      runOnceWhenValueIs(this.service.setupComplete, true, () => {
-        this.service.contentChanged({
-          topPx: 0,
-        });
-      })
-    );
+    runOnceWhenValueIs(this.service.setupComplete, true, () => {
+      this.service.contentChanged({
+        topPx: 0,
+      });
+    });
   }
 
   getBackColor(idx: number): string {

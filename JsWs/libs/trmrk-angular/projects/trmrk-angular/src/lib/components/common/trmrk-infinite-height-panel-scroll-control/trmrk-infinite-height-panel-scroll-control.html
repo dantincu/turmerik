@@ -60,10 +60,10 @@
 >
   {{ service.scrollUpCount }}
 </span>
-<button class="trmrk-icon-btn" mat-icon-button (click)="service.scrollControlToggleClicked(false)">
+<button class="trmrk-icon-btn" mat-icon-button (click)="service.scrollControlToggled(false)">
   <mat-icon class="trmrk-icon">double_arrow</mat-icon></button
 >} @if (!service.scrollControlIsExpanded) {
-<button class="trmrk-icon-btn" mat-icon-button (click)="service.scrollControlToggleClicked(true)">
+<button class="trmrk-icon-btn" mat-icon-button (click)="service.scrollControlToggled(true)">
   <mat-icon class="trmrk-icon trmrk-rot-180-deg">double_arrow</mat-icon>
 </button>
 }

@@ -136,9 +136,10 @@ export class TrmrkMultiClick implements OnDestroy {
       this.clicksCount++;
       this.lastClickMillis = millis;
 
-      if (millis - this.lastMouseDownMillis > this.trmrkMultiClickMillis) {
-        this.reset();
+      if (millis - this.lastMouseDownMillis > this.trmrkMultiClickMillis / 2) {
+        this.resetCore();
         this.trmrkMultiClickComplete.emit();
+        this.trmrkMultiClickEnded.emit();
       } else {
         clearTimeoutIfReq(this.pressAndHoldStartTimeout);
         clearIntervalIfReq(this.pressAndHoldInterval);
@@ -148,14 +149,16 @@ export class TrmrkMultiClick implements OnDestroy {
           this.resetCore();
           this.fireMultiClickMouseUp(data, clicksCount);
           this.trmrkMultiClick.emit(data.mouseOrTouchCoords!);
+          this.trmrkMultiClickComplete.emit();
           this.trmrkMultiClickEnded.emit();
         } else {
           this.removeEventListeners();
           this.fireMultiClickMouseUp(data, this.clicksCount);
           this.mouseUpTimeout.value = setTimeout(() => {
+            this.resetCore();
             this.trmrkMultiClickComplete.emit();
-            this.reset();
-          }, this.trmrkMultiClickMillis);
+            this.trmrkMultiClickEnded.emit();
+          }, this.trmrkMultiClickMillis / 2);
         }
       }
     } else {

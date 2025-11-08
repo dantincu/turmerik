@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy, EventEmitter } from '@angular/core';
 
 import { NullOrUndef } from '../../../trmrk/core';
+import { awaitTimeout } from '../../../trmrk/timeout';
 import { TouchOrMouseCoords } from '../../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import {
@@ -25,6 +26,7 @@ import { TrmrkObservable } from './TrmrkObservable';
 export const SCROLL_CONTROL_MAX_SPEED_FACTOR = 13;
 export const SCROLL_CONTROL_SPEED_MULTIPLIER = 4;
 export const BASE_SCROLL_STEP_PX = 40;
+export const SCROLL_BAR_THUMB_HEIGHT_PX = 40;
 
 export interface TrmrkInfiniteHeightPanelServiceInitScrollPanelArgs {
   hostEl: () => HTMLElement;
@@ -66,6 +68,7 @@ interface TrmrkInfiniteHeightPanelScrollCoordArgs {
   panelScrollTopPx?: number | NullOrUndef;
   scrollPanel?: boolean | NullOrUndef;
   fireScrolledEvent?: boolean | NullOrUndef;
+  updatePrevCoords?: boolean | NullOrUndef;
 }
 
 @Injectable()
@@ -86,6 +89,8 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
   panelOffsetHeight = 0;
   panelScrollHeight = 0;
   maxScrollTop = 0;
+  scrollBarHeight = 0;
+  scrollBarThumbMaxTopPx = 0;
 
   skippedHeightPx = 0;
   topPx = 0;
@@ -110,43 +115,47 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
   ) {
     this.basicAppSettingsDbAdapter = indexedDbDatabasesService.basicAppSettings.value;
     this.panelScrolled = this.panelScrolled.bind(this);
+    this.windowResized = this.windowResized.bind(this);
   }
 
   ngOnDestroy(): void {
     this.reset();
   }
 
-  async scrollControlToggleClicked(expand: boolean) {
-    this.scrollControlIsExpanded = expand;
-    this.scrollControlSetupArgs.controlToggledEvent().emit(expand);
+  async scrollControlToggled(expanded: boolean) {
+    await this.scrollControlToggledCore(expanded);
+    this.writeScrollControlToggleStateToDbIfReq(expanded);
+    this.scrollControlSetupArgs.controlToggledEvent().emit(expanded);
+  }
 
-    if (
-      this.scrollControlSetupArgs.appSettingsChoicesCatKey &&
-      this.trmrkSessionService.currentTab.value
-    ) {
-      const db = (await openDbRequestToPromise(this.basicAppSettingsDbAdapter.open())).value;
-
-      await dbRequestToPromise(
-        this.basicAppSettingsDbAdapter.stores.tabChoices.store(db, null, 'readwrite').put({
-          catKey: this.scrollControlSetupArgs.appSettingsChoicesCatKey,
-          key: commonAppSettingsChoiceKeys.isExpanded,
-          sessionId: this.trmrkSessionService.currentSession.value.sessionId,
-          tabId: this.trmrkSessionService.currentTab.value.tabId,
-          value: expand,
-        } as AppSessionTabSettingsChoice<boolean>)
-      );
-    }
+  async scrollControlToggledCore(expanded: boolean) {
+    this.scrollControlIsExpanded = expanded;
+    await this.updatePanelMaxScrollTopIfReq();
   }
 
   scrollControlScrollUpMouseDown(evt: TrmrkMultiClickStepEventData) {
     if (evt.clicksCount > 0) {
-      this.scrollUpCount = evt.clicksCount + 1;
+      this.scrollUpCount = evt.clicksCount;
+    } else {
+      this.updateCoords({
+        topPx: this.topPx - BASE_SCROLL_STEP_PX,
+        fireScrolledEvent: true,
+        updatePrevCoords: true,
+        scrollPanel: true,
+      });
     }
   }
 
   scrollControlScrollDownMouseDown(evt: TrmrkMultiClickStepEventData) {
     if (evt.clicksCount > 0) {
-      this.scrollDownCount = evt.clicksCount + 1;
+      this.scrollDownCount = evt.clicksCount;
+    } else {
+      this.updateCoords({
+        topPx: this.topPx + BASE_SCROLL_STEP_PX,
+        fireScrolledEvent: true,
+        updatePrevCoords: true,
+        scrollPanel: true,
+      });
     }
   }
 
@@ -164,9 +173,22 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
     this.revertToPrevCoords(); // when complete this should have no effect
   }
 
-  scrollControlScrollComplete() {}
+  scrollControlScrollComplete() {
+    this.updateCoords({
+      topPx: this.topPx + BASE_SCROLL_STEP_PX * (this.scrollDownCount - this.scrollUpCount),
+      fireScrolledEvent: true,
+      updatePrevCoords: true,
+      scrollPanel: true,
+    });
+  }
 
-  panelScrolled() {}
+  panelScrolled() {
+    this.panelScrollTopPx = this.scrollPanelSetupArgs.hostEl().scrollTop;
+
+    this.updateCoords({
+      topPx: this.skippedHeightPx + this.panelScrollTopPx,
+    });
+  }
 
   scrollControlIncreaseScrollSpeedMouseDown() {
     this.scrollControlSpeedFactor++;
@@ -193,7 +215,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
 
   scrollBarThumbDragStart(event: TouchOrMouseCoords) {
     this.updatePrevCoords();
-    this.updatePanelMaxScrollTop();
+    this.updatePanelMaxScrollTopCore();
   }
 
   scrollBarThumbDrag(event: TrmrkDragEvent) {
@@ -209,12 +231,23 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
 
   scrollBarThumbDragEnd(event: TrmrkDragEvent) {
     const evt = this.scrollBarGetEvtArgs(event);
-    this.updateCoords({ ...evt, fireScrolledEvent: true, scrollPanel: true });
+
+    this.updateCoords({
+      ...evt,
+      fireScrolledEvent: true,
+      updatePrevCoords: true,
+      scrollPanel: true,
+    });
+  }
+
+  async windowResized(ev: UIEvent) {
+    await this.updatePanelMaxScrollTopIfReq();
   }
 
   contentChanged(evt: TrmrkInfiniteHeightPanelScrollContentChangedEvent) {
-    this.skippedHeightPx = evt.topPx;
-    this.updateCoords({ ...evt, fireScrolledEvent: true });
+    this.updatePanelMaxScrollTopCore();
+    this.skippedHeightPx = evt.topPx - this.panelScrollTopPx;
+    this.updateCoords({ ...evt, updatePrevCoords: true });
   }
 
   async setupScrollPanel(args: TrmrkInfiniteHeightPanelServiceInitScrollPanelArgs) {
@@ -224,7 +257,6 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
 
     this.scrollPanelSetupArgs = args;
     args.totalHeight ??= (el) => el.scrollHeight;
-    this.updatePanelMaxScrollTop();
     args.hostEl().addEventListener('scroll', this.panelScrolled);
     await this.ifIsSetUp();
   }
@@ -235,6 +267,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
     }
 
     this.scrollControlSetupArgs = args;
+    let expanded = false;
 
     if (args.appSettingsChoicesCatKey && this.trmrkSessionService.currentTab.value) {
       const db = (await openDbRequestToPromise(this.basicAppSettingsDbAdapter.open())).value;
@@ -251,11 +284,11 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
         )
       ).value;
 
-      if (choice?.value) {
-        this.scrollControlIsExpanded = true;
-      }
+      expanded = choice?.value ?? false;
     }
 
+    window.addEventListener('resize', this.windowResized);
+    await this.scrollControlToggledCore(expanded);
     await this.ifIsSetUp();
   }
 
@@ -266,6 +299,25 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
 
     this.scrollBarSetupArgs = args;
     await this.ifIsSetUp();
+  }
+
+  async writeScrollControlToggleStateToDbIfReq(expanded: boolean) {
+    if (
+      this.scrollControlSetupArgs.appSettingsChoicesCatKey &&
+      this.trmrkSessionService.currentTab.value
+    ) {
+      const db = (await openDbRequestToPromise(this.basicAppSettingsDbAdapter.open())).value;
+
+      await dbRequestToPromise(
+        this.basicAppSettingsDbAdapter.stores.tabChoices.store(db, null, 'readwrite').put({
+          catKey: this.scrollControlSetupArgs.appSettingsChoicesCatKey,
+          key: commonAppSettingsChoiceKeys.isExpanded,
+          sessionId: this.trmrkSessionService.currentSession.value.sessionId,
+          tabId: this.trmrkSessionService.currentTab.value.tabId,
+          value: expanded,
+        } as AppSessionTabSettingsChoice<boolean>)
+      );
+    }
   }
 
   updateCoords(args: TrmrkInfiniteHeightPanelScrollCoordArgs) {
@@ -289,6 +341,9 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
       this.scrollPanelTo(this.panelScrollTopPx);
     }
 
+    if (args.updatePrevCoords) {
+      this.updatePrevCoords();
+    }
     if (args.fireScrolledEvent) {
       this.fireScrolledEvent();
     }
@@ -314,12 +369,12 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
       this.topPx = args.topPx ?? this.getTopPx();
     } else {
       if ((args.topPx ?? null) !== null) {
-        this.topPx = args.topPx!;
+        this.topPx = Math.max(0, Math.min(args.topPx!, this.maxScrollTop));
         this.topPxRatio = this.getTopPxRatio();
         this.scrollBarThumbTopPx = args.scrollBarThumbTopPx ?? this.getScrollBarThumbTopPx();
       } else {
         this.scrollBarThumbTopPx = args.scrollBarThumbTopPx!;
-        this.topPxRatio = this.scrollBarGetMaxTopPx() / this.scrollBarThumbTopPx;
+        this.topPxRatio = this.scrollBarThumbMaxTopPx / this.scrollBarThumbTopPx;
         this.topPx = args.topPx ?? this.getTopPx();
       }
     }
@@ -353,7 +408,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
   fireScrolledEvent() {
     this.scrollBarSetupArgs.scrolledEvent().emit({
       panelScrollTopPx: this.panelScrollTopPx,
-      scrollBarThumbMaxTopPx: this.scrollBarGetMaxTopPx(),
+      scrollBarThumbMaxTopPx: this.scrollBarThumbMaxTopPx,
       scrollBarThumbTopPx: this.scrollBarThumbTopPx,
       topPx: this.topPx,
       topPxRatio: this.topPxRatio,
@@ -373,7 +428,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
       event.touchStartOrMouseDownCoords!.screenY +
       this.prevScrollBarThumbTopPx;
 
-    const maxTopPx = this.scrollBarGetMaxTopPx();
+    const maxTopPx = this.scrollBarThumbMaxTopPx;
     topPx = Math.max(0, Math.min(topPx, maxTopPx));
     const topPxRatio = maxTopPx / topPx;
 
@@ -384,8 +439,8 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
     } as TrmrkInfiniteHeightPanelScrollEvent;
   }
 
-  scrollBarGetMaxTopPx() {
-    return this.scrollBarSetupArgs.hostEl().offsetHeight - 40;
+  getScrollBarMaxTopPx() {
+    return this.scrollBarSetupArgs.hostEl().offsetHeight - SCROLL_BAR_THUMB_HEIGHT_PX;
   }
 
   getTotalHeight() {
@@ -393,34 +448,52 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
     return totallHeight;
   }
 
-  updatePanelMaxScrollTop() {
+  async updatePanelMaxScrollTopIfReq() {
+    if (this.scrollControlIsExpanded) {
+      this.updatePanelMaxScrollTopCore();
+      await awaitTimeout(() => {
+        this.updatePanelMaxScrollTopCore();
+      });
+    }
+  }
+
+  updatePanelMaxScrollTopCore() {
     const panelEl = this.scrollPanelSetupArgs.hostEl();
+    const scrollBarEl = this.scrollBarSetupArgs.hostEl();
+
     this.panelScrollHeight = panelEl.scrollHeight;
     this.panelOffsetHeight = panelEl.offsetHeight;
     this.maxScrollTop = this.panelScrollHeight - this.panelOffsetHeight;
+    this.scrollBarHeight = scrollBarEl.offsetHeight;
+    this.scrollBarThumbMaxTopPx = this.scrollBarHeight - SCROLL_BAR_THUMB_HEIGHT_PX;
+    this.requiresActualScroll = this.getRequiresActualScroll();
   }
 
   getTopPx() {
-    const totalHeightForRatio = this.getTotalHeightForRatio();
-    const topPx = totalHeightForRatio / this.topPxRatio;
+    const totalHeightForRatio = this.getMaxTopPx();
+    let topPx = Math.round(totalHeightForRatio / this.topPxRatio);
+    topPx = Math.max(0, Math.min(topPx));
     return topPx;
   }
 
   getTopPxRatio(topPx?: number | NullOrUndef) {
-    const totalHeightForRatio = this.getTotalHeightForRatio();
-    const topPxRatio = totalHeightForRatio === 0 ? 2 : totalHeightForRatio / (topPx ?? this.topPx);
+    const maxTopPx = this.getMaxTopPx();
+    topPx ??= this.topPx;
+    let topPxRatio = maxTopPx / topPx;
+
+    topPxRatio = Math.max(1, Math.min(topPxRatio, maxTopPx * this.scrollBarThumbMaxTopPx));
+
     return topPxRatio;
   }
 
-  getTotalHeightForRatio() {
+  getMaxTopPx() {
     const totalHeightForRatio = this.getTotalHeight() - this.panelOffsetHeight;
     return totalHeightForRatio;
   }
 
   getScrollBarThumbTopPx() {
-    const scrollBarThumbMaxTopPx = this.scrollBarGetMaxTopPx();
-    let scrollBarThumbTopPx = Math.round(scrollBarThumbMaxTopPx * this.topPxRatio);
-    scrollBarThumbTopPx = Math.max(0, Math.min(scrollBarThumbTopPx, scrollBarThumbMaxTopPx));
+    let scrollBarThumbTopPx = Math.round(this.scrollBarThumbMaxTopPx / this.topPxRatio);
+    scrollBarThumbTopPx = Math.max(0, Math.min(scrollBarThumbTopPx, this.scrollBarThumbMaxTopPx));
     return scrollBarThumbTopPx;
   }
 
@@ -443,11 +516,12 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
   }
 
   reset() {
+    this.scrollPanelSetupArgs.hostEl().removeEventListener('scroll', this.panelScrolled);
+    window.removeEventListener('resize', this.windowResized);
+
     this.scrollPanelSetupArgs = null!;
     this.scrollControlSetupArgs = null!;
     this.scrollBarSetupArgs = null!;
-
-    this.scrollPanelSetupArgs.hostEl().removeEventListener('scroll', this.panelScrolled);
 
     this.setupComplete.next(false);
   }
