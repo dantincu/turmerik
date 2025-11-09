@@ -107,6 +107,8 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
   scrollDownCount = 0;
   scrollControlProgressText = '';
 
+  isProgrammaticScroll = false;
+
   private basicAppSettingsDbAdapter: BasicAppSettingsDbAdapter;
 
   constructor(
@@ -174,20 +176,26 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
   }
 
   scrollControlScrollComplete() {
-    this.updateCoords({
-      topPx: this.topPx + BASE_SCROLL_STEP_PX * (this.scrollDownCount - this.scrollUpCount),
-      fireScrolledEvent: true,
-      updatePrevCoords: true,
-      scrollPanel: true,
-    });
+    const scrollCount = this.scrollDownCount - this.scrollUpCount;
+
+    if (scrollCount !== 0) {
+      this.updateCoords({
+        topPx: this.topPx + BASE_SCROLL_STEP_PX * scrollCount,
+        fireScrolledEvent: true,
+        updatePrevCoords: true,
+        scrollPanel: true,
+      });
+    }
   }
 
   panelScrolled() {
-    this.panelScrollTopPx = this.scrollPanelSetupArgs.hostEl().scrollTop;
+    if (!this.isProgrammaticScroll) {
+      this.panelScrollTopPx = this.scrollPanelSetupArgs.hostEl().scrollTop;
 
-    this.updateCoords({
-      topPx: this.skippedHeightPx + this.panelScrollTopPx,
-    });
+      this.updateCoords({
+        topPx: this.skippedHeightPx + this.panelScrollTopPx,
+      });
+    }
   }
 
   scrollControlIncreaseScrollSpeedMouseDown() {
@@ -331,7 +339,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
 
     const panelScrollTopPx = this.panelScrollTopPx;
     this.panelScrollTopPx = Math.max(0.01, Math.min(panelScrollTopPx, this.maxScrollTop));
-    const panelScrollTopDiffPx = panelScrollTopPx - this.panelScrollTopPx;
+    const panelScrollTopDiffPx = Math.round(panelScrollTopPx - this.panelScrollTopPx);
 
     this.scrollBarUpdateThumbTopPx();
     this.requiresActualScroll = this.getRequiresActualScroll();
@@ -389,10 +397,16 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
 
   scrollPanelTo(top: number) {
     if (top) {
+      this.isProgrammaticScroll = true;
+
       this.scrollPanelSetupArgs.hostEl().scrollTo({
         top: top,
         behavior: 'instant',
       });
+
+      setTimeout(() => {
+        this.isProgrammaticScroll = false;
+      }, 10);
     }
   }
 
@@ -451,6 +465,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
   async updatePanelMaxScrollTopIfReq() {
     if (this.scrollControlIsExpanded) {
       this.updatePanelMaxScrollTopCore();
+
       await awaitTimeout(() => {
         this.updatePanelMaxScrollTopCore();
       });
