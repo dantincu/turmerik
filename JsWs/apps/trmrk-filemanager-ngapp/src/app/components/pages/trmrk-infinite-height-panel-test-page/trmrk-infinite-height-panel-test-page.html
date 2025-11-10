@@ -9,9 +9,7 @@
   <div
     [ngClass]="[
       'trmrk-page-body trmrk-scrollable trmrk-scrollable-y',
-      service.scrollControlIsExpanded && service.requiresActualScroll
-        ? 'trmrk-has-infinite-height-scroll-bar'
-        : ''
+      service.scrollControlIsExpanded ? 'trmrk-has-infinite-height-scroll-bar' : ''
     ]"
   >
     @for (item of items; track item.idx) {
@@ -19,9 +17,7 @@
     }
   </div>
   <trmrk-infinite-height-panel-scroll-bar
-    [ngClass]="[
-      service.scrollControlIsExpanded && service.requiresActualScroll ? '' : 'trmrk-hidden'
-    ]"
+    [ngClass]="[service.scrollControlIsExpanded ? '' : 'trmrk-hidden']"
     (trmrkScrolled)="scrolled($event)"
   ></trmrk-infinite-height-panel-scroll-bar>
   <trmrk-horiz-strip

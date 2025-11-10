@@ -195,6 +195,8 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
       this.updateCoords({
         topPx: this.skippedHeightPx + this.panelScrollTopPx,
       });
+    } else {
+      this.isProgrammaticScroll = false;
     }
   }
 
@@ -403,10 +405,6 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
         top: top,
         behavior: 'instant',
       });
-
-      setTimeout(() => {
-        this.isProgrammaticScroll = false;
-      }, 10);
     }
   }
 
