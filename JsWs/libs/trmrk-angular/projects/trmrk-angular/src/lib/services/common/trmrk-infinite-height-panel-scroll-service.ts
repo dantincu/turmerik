@@ -81,6 +81,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
   requiresActualScroll = false;
   scrollControlIsExpanded = false;
   scrollControlSpeedFactor = 1;
+  scrollControlSpeed = BASE_SCROLL_STEP_PX;
 
   scrollBarThumbNgStyle = {
     top: `0px`,
@@ -140,7 +141,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
       this.scrollUpCount = evt.clicksCount;
     } else {
       this.updateCoords({
-        topPx: this.topPx - BASE_SCROLL_STEP_PX,
+        topPx: this.topPx - this.scrollControlSpeed,
         fireScrolledEvent: true,
         updatePrevCoords: true,
         scrollPanel: true,
@@ -153,7 +154,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
       this.scrollDownCount = evt.clicksCount;
     } else {
       this.updateCoords({
-        topPx: this.topPx + BASE_SCROLL_STEP_PX,
+        topPx: this.topPx + this.scrollControlSpeed,
         fireScrolledEvent: true,
         updatePrevCoords: true,
         scrollPanel: true,
@@ -180,7 +181,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
 
     if (scrollCount !== 0) {
       this.updateCoords({
-        topPx: this.topPx + BASE_SCROLL_STEP_PX * scrollCount,
+        topPx: this.topPx + this.scrollControlSpeed * scrollCount,
         fireScrolledEvent: true,
         updatePrevCoords: true,
         scrollPanel: true,
@@ -201,26 +202,25 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
   }
 
   scrollControlIncreaseScrollSpeedMouseDown() {
-    this.scrollControlSpeedFactor++;
+    this.updateScrollControlSpeedFactor(null, 1);
 
     if (this.scrollControlSpeedFactor > SCROLL_CONTROL_MAX_SPEED_FACTOR) {
-      this.scrollControlSpeedFactor = 1;
+      this.updateScrollControlSpeedFactor(1);
     }
   }
 
   scrollControlDecreaseScrollSpeedMouseDown() {
-    this.scrollControlSpeedFactor--;
+    this.updateScrollControlSpeedFactor(null, -1);
 
     if (this.scrollControlSpeedFactor < 1) {
-      this.scrollControlSpeedFactor = SCROLL_CONTROL_MAX_SPEED_FACTOR;
+      this.updateScrollControlSpeedFactor(SCROLL_CONTROL_MAX_SPEED_FACTOR);
     }
   }
 
   scrollControlMiddleBtnClicked() {
-    this.scrollControlSpeedFactor =
-      (Math.floor(this.scrollControlSpeedFactor - 1 + SCROLL_CONTROL_MAX_SPEED_FACTOR / 2) %
-        SCROLL_CONTROL_MAX_SPEED_FACTOR) +
-      1;
+    this.updateScrollControlSpeedFactor(
+      (Math.floor(this.scrollControlSpeedFactor + 3) % SCROLL_CONTROL_MAX_SPEED_FACTOR) + 1
+    );
   }
 
   scrollBarThumbDragStart(event: TouchOrMouseCoords) {
@@ -520,6 +520,17 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
     const percent = Math.round(magnDiv / this.topPxRatio) / (magnDiv / 100);
     const text = [percent, '%'].join('');
     return text;
+  }
+
+  updateScrollControlSpeedFactor(speedFactor?: number | NullOrUndef, increment?: number | NullOrUndef) {
+    speedFactor ??= this.scrollControlSpeedFactor;
+
+    if ((increment ?? null) != null) {
+      speedFactor += increment!;
+    }
+
+    this.scrollControlSpeedFactor = speedFactor;
+    this.scrollControlSpeed = Math.pow(4, speedFactor - 1) * BASE_SCROLL_STEP_PX;
   }
 
   async ifIsSetUp() {
