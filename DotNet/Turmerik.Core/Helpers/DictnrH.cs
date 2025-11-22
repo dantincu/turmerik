@@ -118,5 +118,8 @@ namespace Turmerik.Core.Helpers
                     outValFactory(kvp.Value))).ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value);
+
+        public static KeyValuePair<TKey, TValue> ToKvp<TKey, TValue>(
+            this TKey key, TValue value) => new(key, value);
     }
 }

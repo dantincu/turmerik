@@ -12,7 +12,7 @@ namespace Turmerik.Core.Utility
     public delegate void ParamsAction<T1>(T1 arg1, params object[] arguments);
 
     public delegate void RefAction<T>(ref T t);
-    public delegate void RefAction<T, T1>(ref T t, T1 arg1);
+    public delegate void RefAction<T, T1>(ref T t, ref T1 arg1);
 
     public delegate int IdxRetriever<T, TNmrbl>(TNmrbl nmrbl, int count) where TNmrbl : IEnumerable<T>;
 

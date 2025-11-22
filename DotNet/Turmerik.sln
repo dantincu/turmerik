@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.7.34031.279
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11217.181 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik", "Turmerik\Turmerik.csproj", "{0F67229C-CE9B-47A2-93A2-A079E2DA6FA0}"
 EndProject
@@ -113,6 +113,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.ExecuteCustomCommand", "Turmerik.ExecuteCustomCommand\Turmerik.ExecuteCustomCommand.csproj", "{1A9C8889-A7FC-4813-88D6-4F49CD4BF1BB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.NormalizeEmptyFolders.ConsoleApp", "Turmerik.NormalizeEmptyFolders.ConsoleApp\Turmerik.NormalizeEmptyFolders.ConsoleApp.csproj", "{51CF9371-90F6-785B-45E9-3197628CF94D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.GenClnblTypes.ConsoleApp", "Turmerik.GenClnblTypes.ConsoleApp\Turmerik.GenClnblTypes.ConsoleApp.csproj", "{63AF0D7F-B9A7-4AA9-9983-61D95FD7A66E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.Code.CSharp.UnitTests", "Turmerik.Code.CSharp.UnitTests\Turmerik.Code.CSharp.UnitTests.csproj", "{ABAE4427-F485-4273-A649-4BE893376F78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -300,6 +304,14 @@ Global
 		{51CF9371-90F6-785B-45E9-3197628CF94D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51CF9371-90F6-785B-45E9-3197628CF94D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51CF9371-90F6-785B-45E9-3197628CF94D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63AF0D7F-B9A7-4AA9-9983-61D95FD7A66E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63AF0D7F-B9A7-4AA9-9983-61D95FD7A66E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63AF0D7F-B9A7-4AA9-9983-61D95FD7A66E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63AF0D7F-B9A7-4AA9-9983-61D95FD7A66E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABAE4427-F485-4273-A649-4BE893376F78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABAE4427-F485-4273-A649-4BE893376F78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABAE4427-F485-4273-A649-4BE893376F78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABAE4427-F485-4273-A649-4BE893376F78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -354,6 +366,8 @@ Global
 		{1E4E45AA-EFA3-4962-93A1-03ECDACE070C} = {52B63410-2581-4146-9484-89D300FAE7B5}
 		{1A9C8889-A7FC-4813-88D6-4F49CD4BF1BB} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 		{51CF9371-90F6-785B-45E9-3197628CF94D} = {D9246AE3-53C4-4F02-B24F-6E02B5557AA9}
+		{63AF0D7F-B9A7-4AA9-9983-61D95FD7A66E} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
+		{ABAE4427-F485-4273-A649-4BE893376F78} = {2020DE95-DD87-4F1F-8BBB-CCCCF6ABB095}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

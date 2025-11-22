@@ -105,3 +105,31 @@ SetMouseSpeed(speed) {
         Send '^+{Left}'
     }
 }
+
+; --------------------
+; [Ctrl + Win + Alt + arrow keys] send 16 [arrow keys]
+; --------------------
+
+^#!Right:: {
+    Loop 16 {
+        Send '{Right}'
+    }
+}
+
+^#!Left:: {
+    Loop 16 {
+        Send '{Left}'
+    }
+}
+
+^#!Up:: {
+    Loop 16 {
+        Send '{Up}'
+    }
+}
+
+^#!Down:: {
+    Loop 16 {
+        Send '{Down}'
+    }
+}

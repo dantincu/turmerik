@@ -81,7 +81,8 @@ namespace Turmerik.Utility.WinFormsApp
                 textUtilsUC,
                 textTransformUC,
                 openMultipleLinksuc1,
-                fetchMultipleLinksuc1];
+                fetchMultipleLinksuc1,
+                generateClnblTypesUC];
 
             if (svcProvContnr.IsRegistered)
             {
@@ -91,15 +92,17 @@ namespace Turmerik.Utility.WinFormsApp
                     {
                         uiTheme.ApplyBgColor([
                             this,
-                            this.tabControlMain,
-                            this.tabPageTextUtils,
-                            this.textUtilsUC,
-                            this.tabPageTextTransform,
-                            this.textTransformUC,
-                            this.tabPageOpenMultipleLinks,
-                            this.openMultipleLinksuc1,
-                            this.tabPageFetchMultipleLinks,
-                            this.fetchMultipleLinksuc1
+                            tabControlMain,
+                            tabPageTextUtils,
+                            textUtilsUC,
+                            tabPageTextTransform,
+                            textTransformUC,
+                            tabPageOpenMultipleLinks,
+                            openMultipleLinksuc1,
+                            tabPageFetchMultipleLinks,
+                            fetchMultipleLinksuc1,
+                            tabPageGenerateClnblTypes,
+                            generateClnblTypesUC
                         ]);
 
                         uiTheme.ApplyBgColor([
@@ -360,6 +363,10 @@ namespace Turmerik.Utility.WinFormsApp
                         break;
                     case Keys.D4:
                         this.tabControlMain.SelectedIndex = 3;
+                        handled = true;
+                        break;
+                    case Keys.D5:
+                        this.tabControlMain.SelectedIndex = 4;
                         handled = true;
                         break;
                     case Keys.F12:

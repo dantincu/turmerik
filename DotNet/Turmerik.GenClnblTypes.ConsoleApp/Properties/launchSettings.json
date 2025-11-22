@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Turmerik.GenClnblTypes.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "../../../_dummy/DummyClass.cs"
+    }
+  }
+}

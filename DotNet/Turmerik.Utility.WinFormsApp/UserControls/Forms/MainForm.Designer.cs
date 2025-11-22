@@ -42,6 +42,8 @@ namespace Turmerik.Utility.WinFormsApp
             openMultipleLinksuc1 = new OpenMultipleLinksUC();
             tabPageFetchMultipleLinks = new TabPage();
             fetchMultipleLinksuc1 = new FetchMultipleLinksUC();
+            tabPageGenerateClnblTypes = new TabPage();
+            generateClnblTypesUC = new GenerateClnblTypesUC();
             menuStripMain = new MenuStrip();
             textUtilsActionsToolStripMenuItem = new ToolStripMenuItem();
             goToWebResourceUrlToolStripMenuItem = new ToolStripMenuItem();
@@ -62,6 +64,7 @@ namespace Turmerik.Utility.WinFormsApp
             tabPageTextTransform.SuspendLayout();
             tabPageOpenMultipleLinks.SuspendLayout();
             tabPageFetchMultipleLinks.SuspendLayout();
+            generateClnblTypesUC.SuspendLayout();
             menuStripMain.SuspendLayout();
             panelCustomCommand.SuspendLayout();
             SuspendLayout();
@@ -86,6 +89,7 @@ namespace Turmerik.Utility.WinFormsApp
             tabControlMain.Controls.Add(tabPageTextTransform);
             tabControlMain.Controls.Add(tabPageOpenMultipleLinks);
             tabControlMain.Controls.Add(tabPageFetchMultipleLinks);
+            tabControlMain.Controls.Add(tabPageGenerateClnblTypes);
             tabControlMain.Dock = DockStyle.Fill;
             tabControlMain.Font = new Font("Arial", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tabControlMain.Location = new Point(0, 47);
@@ -168,6 +172,18 @@ namespace Turmerik.Utility.WinFormsApp
             fetchMultipleLinksuc1.Name = "fetchMultipleLinksuc1";
             fetchMultipleLinksuc1.Size = new Size(192, 71);
             fetchMultipleLinksuc1.TabIndex = 0;
+            // 
+            // tabPageGenerateClnblTypes
+            // 
+            tabPageGenerateClnblTypes.Controls.Add(generateClnblTypesUC);
+            tabPageGenerateClnblTypes.Name = "tabPageGenerateClnblTypes";
+            tabPageGenerateClnblTypes.TabIndex = 4;
+            tabPageGenerateClnblTypes.Text = "Generate Clnbl Types";
+            // 
+            // generateClnblTypesUC
+            // 
+            generateClnblTypesUC.Dock = DockStyle.Fill;
+            generateClnblTypesUC.Name = "generateClnblTypesUC";
             // 
             // menuStripMain
             // 
@@ -306,6 +322,7 @@ namespace Turmerik.Utility.WinFormsApp
             tabPageTextTransform.ResumeLayout(false);
             tabPageOpenMultipleLinks.ResumeLayout(false);
             tabPageFetchMultipleLinks.ResumeLayout(false);
+            generateClnblTypesUC.ResumeLayout(false);
             menuStripMain.ResumeLayout(false);
             menuStripMain.PerformLayout();
             panelCustomCommand.ResumeLayout(false);
@@ -341,5 +358,7 @@ namespace Turmerik.Utility.WinFormsApp
         private TextBox textBoxCustomCommand;
         private TabPage tabPageFetchMultipleLinks;
         private UserControls.FetchMultipleLinksUC fetchMultipleLinksuc1;
+        private TabPage tabPageGenerateClnblTypes;
+        private UserControls.GenerateClnblTypesUC generateClnblTypesUC;
     }
 }

@@ -99,6 +99,19 @@ namespace Turmerik.Core.Helpers
             return retStr!;
         }
 
+        public static string GetTypeDisplayName(
+            this string typeName,
+            RefAction<string, string> namePartsTransformer,
+            char[]? stopDelimsArr = null)
+        {
+            var baseName = typeName.GetTypeDisplayName(stopDelimsArr);
+            var restOfName = typeName.Substring(typeName.Length);
+
+            namePartsTransformer(ref baseName, ref restOfName);
+            string retStr = string.Concat(baseName, restOfName);
+            return retStr;
+        }
+
         public static Type[]? GetGenericArgs(
             this Type type) => type.IsGenericType switch
             {
