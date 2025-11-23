@@ -11,6 +11,7 @@ using Turmerik.Core.Cloneables;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
 using Turmerik.Core.Utility;
+using Turmerik.Code.CSharp.Helpers;
 
 namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
 {
@@ -24,6 +25,15 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
         public const string GENERATED_CODE_CS_REGION_NAME = "GENERATED-CODE";
 
         public static readonly string ClnblIntfAttrName = AttrH.GetAttrName(nameof(ClnblIntfAttribute));
+
+        private readonly IClnblIntfCfgTypeCsCodeParser clnblIntfCfgTypeCsCodeParser;
+
+        public ClnblTypesCsCodeParser(
+            IClnblIntfCfgTypeCsCodeParser clnblIntfCfgTypeCsCodeParser)
+        {
+            this.clnblIntfCfgTypeCsCodeParser = clnblIntfCfgTypeCsCodeParser ?? throw new ArgumentNullException(
+                nameof(clnblIntfCfgTypeCsCodeParser));
+        }
 
         public void Parse(WorkArgs wka)
         {
@@ -209,29 +219,46 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
 
             dataTypes.ParentItem = dataTypes.CurrentItem;
             IDataTypeDeclarationT typeT;
+            BaseListSyntax? baseList;
+            SyntaxList<MemberDeclarationSyntax> membersList;
 
             switch (args.Kind)
             {
                 case SyntaxKind.ClassDeclaration:
-                    typeT = dataTypes.CurrentItem = new ClassDeclarationT(
-                        (ClassDeclarationSyntax)args.Node);
-
+                    var classNode = (ClassDeclarationSyntax)args.Node;
+                    typeT = dataTypes.CurrentItem = new ClassDeclarationT(classNode);
+                    baseList = classNode.BaseList;
+                    membersList = classNode.Members;
                     RunClassDeclaration(args.Wka);
                     break;
                 case SyntaxKind.InterfaceDeclaration:
-                    typeT = dataTypes.CurrentItem = new InterfaceDeclarationT(
-                        (InterfaceDeclarationSyntax)args.Node);
-
+                    var intfNode = (InterfaceDeclarationSyntax)args.Node;
+                    typeT = dataTypes.CurrentItem = new InterfaceDeclarationT(intfNode);
+                    baseList = intfNode.BaseList;
+                    membersList = intfNode.Members;
                     RunInterfaceDeclaration(args.Wka);
                     break;
                 case SyntaxKind.StructDeclaration:
-                    typeT = dataTypes.CurrentItem = new StructDeclarationT(
-                        (StructDeclarationSyntax)args.Node);
-
+                    var structNode = (StructDeclarationSyntax)args.Node;
+                    typeT = dataTypes.CurrentItem = new StructDeclarationT(structNode);
+                    baseList = structNode.BaseList;
+                    membersList = structNode.Members;
                     RunStructDeclaration(args.Wka);
                     break;
                 default:
                     throw new TrmrkException($"Kind {args.Kind} is not a data type declaration");
+            }
+
+            if (baseList != null)
+            {
+                typeT.BaseTypeNamesList.AddRange(
+                    baseList.Types.Select(type => type.Type.ToString()));
+
+                if (typeT.BaseTypeNamesList.Count == 1)
+                {
+                    typeT.IsClnblIntfCfgImpl = typeT.BaseTypeNamesList.Single() == nameof(IClnblIntfConfiguration);
+                    typeT.ClnblIntfCfgTypeItemTypeNames = clnblIntfCfgTypeCsCodeParser.Parse(membersList);
+                }
             }
 
             dataTypes.CurrentItem = dataTypes.ParentItem;
@@ -283,29 +310,15 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
 
                             if (expr is TypeOfExpressionSyntax typeOfExpr)
                             {
-                                var typeSyntax = typeOfExpr.Type;
-
-                                if (typeSyntax is IdentifierNameSyntax id)
-                                {
-                                    name = id.ToFullString();
-                                }
-                                else if (typeSyntax is QualifiedNameSyntax qn)
-                                {
-                                    name = qn.ToFullString();
-                                }
+                                name = typeOfExpr.GetTypeNameFromTypeofExpr();
                             }
 
                             return name;
-                        }).NotNull().ToArray();
+                        }).NotNull().ToArray()!;
 
                         if (typeNamesArr.Length > 0)
                         {
-                            current.ImmtblTypeName = typeNamesArr[0];
-
-                            if (typeNamesArr.Length > 1)
-                            {
-                                current.MtblTypeName = typeNamesArr[1];
-                            }
+                            current.ClnblIntfCfgTypeName = typeNamesArr.Single()!;
                         }
                     }
 
@@ -328,6 +341,7 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
             int idx = 0;
             var wka = args.Wka;
             var unit = wka.Unit;
+            bool wasGenerated = wka.CurrentTokenIsGenerated;
 
             foreach (var childNodeOrToken in wka.ParentNode.GetNode(
                 ).ChildNodesAndTokens())
@@ -368,9 +382,12 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
                     args.TokenHandler(wka, tokenT);
                 }
 
+                wka.CurrentToken.IsGenerated = wka.CurrentTokenIsGenerated;
                 wka.ParentNode.ChildNodesOrTokens.Add(wka.CurrentToken);
                 idx++;
             }
+
+            wka.CurrentTokenIsGenerated = wasGenerated;
         }
 
         private void AddTrivias(
@@ -399,6 +416,16 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
                 var triviaTCore = CreateTriviaT(trivia);
                 triviaTCore.Index = idx++;
                 list.Add(triviaTCore);
+
+                if (triviaTCore is StructuredTriviaT<StartRegionDirectiveT> structuredStartRegionT
+                    && structuredStartRegionT.Structure!.IsGeneratedCodeRegion)
+                {
+                    wka.CurrentTokenIsGenerated = true;
+                }
+                else if (triviaTCore is StructuredTriviaT<EndRegionDirectiveT> structuredEndRegionT)
+                {
+                    wka.CurrentTokenIsGenerated = false;
+                }
             }
         }
 
@@ -415,17 +442,27 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
                 switch (kind)
                 {
                     case SyntaxKind.RegionDirectiveTrivia:
+                        var startRegStructureT = new StartRegionDirectiveT(
+                            (RegionDirectiveTriviaSyntax)structure, structure.Kind());
+
+                        startRegStructureT.Name = startRegStructureT.Node.DirectiveNameToken.Text;
+                        startRegStructureT.IsGeneratedCodeRegion = startRegStructureT.Name == GENERATED_CODE_CS_REGION_NAME;
+
                         triviaTCore = new StructuredTriviaT<StartRegionDirectiveT>(trivia, kind)
                         {
-                            Structure = new StartRegionDirectiveT(
-                                (RegionDirectiveTriviaSyntax)structure, structure.Kind())
+                            Structure = startRegStructureT
                         };
+
                         break;
                     case SyntaxKind.EndRegionDirectiveTrivia:
+                        var endRegStructureT = new EndRegionDirectiveT(
+                                (EndRegionDirectiveTriviaSyntax)structure, structure.Kind());
+
+                        endRegStructureT.Name = endRegStructureT.Node.DirectiveNameToken.Text;
+
                         triviaTCore = new StructuredTriviaT<EndRegionDirectiveT>(trivia, kind)
                         {
-                            Structure = new EndRegionDirectiveT(
-                                (EndRegionDirectiveTriviaSyntax)structure, structure.Kind())
+                            Structure = endRegStructureT
                         };
                         break;
                     default:

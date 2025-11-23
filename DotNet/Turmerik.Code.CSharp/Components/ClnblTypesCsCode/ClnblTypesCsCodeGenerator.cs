@@ -67,7 +67,6 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
                         SyntaxFactory.List(rootNodes.OfType<MemberDeclarationSyntax>()))
                     .WithUsings(SyntaxFactory.List(rootNodes.OfType<UsingDirectiveSyntax>()))
                     .WithEndOfFileToken(((ITokenT)wka.Unit.ChildNodesOrTokens.Last()).GetNode())
-                // .WithEndOfFileToken(wka.RootNode.ChildNodesAndTokens().Last().AsToken())
             };
         }
     }

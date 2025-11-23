@@ -24,7 +24,15 @@ namespace Turmerik.Code.CSharp.UnitTests.TestCases.Data.Basic
 {
     public static class DummyClass
     {
-        [ClnblIntf(typeof(Immtbl), typeof(Mtbl))]
+        public class ClnblIntfCfg : IClnblIntfConfiguration
+        {
+            public ClnblIntfItemConfiguration[] Items => [new (
+                typeof(IClnbl),
+                typeof(Immtbl),
+                typeof(Mtbl))];
+        }
+
+        [ClnblIntf(typeof(ClnblIntfCfg))]
         public interface IClnbl
         {
             //asdf

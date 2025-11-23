@@ -21,16 +21,36 @@ namespace Turmerik.Core.Cloneables
                 nmrbl.Select(kvp => kvp.Key.ToKvp(kvp.Value.With(v => v != null ? immtblFactory(v) : default!))).Dictnr());
     }
 
-    public class ClnblIntfAttribute : Attribute
+    public interface IClnblIntfConfiguration
     {
-        public ClnblIntfAttribute(Type? immtblType = null, Type? mtblType = null)
+        ClnblIntfItemConfiguration[] Items { get; }
+    }
+
+    public class ClnblIntfItemConfiguration
+    {
+        public ClnblIntfItemConfiguration(
+            Type? intfType = null,
+            Type? immtblType = null,
+            Type? mtblType = null)
         {
+            IntfType = intfType;
             ImmtblType = immtblType;
             MtblType = mtblType;
         }
 
-        public Type? ImmtblType { get; set; }
-        public Type? MtblType { get; set; }
+        public Type? IntfType { get; }
+        public Type? ImmtblType { get; }
+        public Type? MtblType { get; }
+    }
+
+    public class ClnblIntfAttribute : Attribute
+    {
+        public ClnblIntfAttribute(Type? cfgType)
+        {
+            CfgType = cfgType;
+        }
+
+        public Type? CfgType { get; }
     }
 
     public class ClnblRdnlDictionary<TKey, TClnbl, TImmtbl> : ReadOnlyDictionary<TKey, TImmtbl>, IEnumerable<KeyValuePair<TKey, TClnbl>>

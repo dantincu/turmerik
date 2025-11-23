@@ -14,6 +14,7 @@ namespace Turmerik.Code.CSharp.Dependencies
         {
             services.AddSingleton<ISyntaxNodeTraversal, DefaultSyntaxNodeTraversal>();
             services.AddSingleton<IClnblTypesCsCodeParser, ClnblTypesCsCodeParser>();
+            services.AddSingleton<IClnblIntfCfgTypeCsCodeParser, ClnblIntfCfgTypeCsCodeParser>();
             services.AddSingleton<IClnblTypesCsCodeGenerator, ClnblTypesCsCodeGenerator>();
             return services;
         }

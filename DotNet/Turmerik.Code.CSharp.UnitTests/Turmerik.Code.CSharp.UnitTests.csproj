@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="TestCases\Data\Basic\Input.cs" />
     <Compile Remove="TestCases\Data\Basic\Output.actual.cs" />
     <Compile Remove="TestCases\Data\Basic\Output.expected.cs" />
   </ItemGroup>
@@ -16,7 +15,6 @@
   <ItemGroup>
     <None Include="TestCases\Data\Basic\Output.actual.cs" />
     <None Include="TestCases\Data\Basic\Output.expected.cs" />
-    <None Include="TestCases\Data\Basic\Input.cs" />
   </ItemGroup>
 
   <ItemGroup>

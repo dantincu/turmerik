@@ -43,6 +43,7 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
 
         bool IsNode { get; }
         bool IsToken { get; }
+        bool IsGenerated { get; set; }
     }
 
     public interface INodeOrTokenT<TNode> : INodeOrTokenTCore
@@ -64,15 +65,17 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
     {
         string Name { get; set; }
         bool IsStartRegion { get; }
-        int? GeneratedCodeRegionIdx { get; set; }
     }
 
     public interface IDataTypeDeclarationT : INodeT
     {
+        List<string> BaseTypeNamesList { get; }
         List<IDataTypeDeclarationT> NestedTypes { get; }
         string Name { get; set; }
         INamespaceTCore? Namespace { get; set; }
         IDataTypeDeclarationT? EnclosingType { get; set; }
+        bool IsClnblIntfCfgImpl { get; set; }
+        ClnblIntfCfgTypeItemTypeNames[]? ClnblIntfCfgTypeItemTypeNames { get; set; }
     }
 
     public interface INamespaceTCore : INodeOrTokenTCore
@@ -91,6 +94,7 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
 
         public INodeT ParentNode { get; set; }
         public INodeOrTokenTCore CurrentToken { get; set; }
+        public bool CurrentTokenIsGenerated { get; set; }
     }
 
     public abstract class TokenTBase<TNode> : INodeOrTokenT<TNode>
@@ -128,6 +132,7 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
 
         public abstract bool IsNode { get; }
         public abstract bool IsToken { get; }
+        public bool IsGenerated { get; set; }
 
         public abstract TNode GetNode();
     }
@@ -260,7 +265,6 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
 
         public string Name { get; set; }
         public abstract bool IsStartRegion { get; }
-        public int? GeneratedCodeRegionIdx { get; set; }
     }
 
     public class StartRegionDirectiveT : RegionDirectiveTBase<RegionDirectiveTriviaSyntax>
@@ -274,6 +278,7 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
         }
 
         public override bool IsStartRegion => true;
+        public bool IsGeneratedCodeRegion { get; set; }
     }
 
     public class EndRegionDirectiveT : RegionDirectiveTBase<EndRegionDirectiveTriviaSyntax>
@@ -361,6 +366,7 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
             SyntaxKind kind) : base(
                 node, kind)
         {
+            BaseTypeNamesList = new();
             NestedTypes = new ();
         }
 
@@ -369,13 +375,17 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
             INodeOrTokenTCore src) : base(
                 node, src)
         {
+            BaseTypeNamesList = new();
             NestedTypes = new();
         }
 
+        public List<string> BaseTypeNamesList { get; }
         public List<IDataTypeDeclarationT> NestedTypes { get; }
         public string Name { get; set; }
         public INamespaceTCore? Namespace { get; set; }
         public IDataTypeDeclarationT? EnclosingType { get; set; }
+        public bool IsClnblIntfCfgImpl { get; set; }
+        public ClnblIntfCfgTypeItemTypeNames[]? ClnblIntfCfgTypeItemTypeNames { get; set; }
     }
 
     public class ClassDeclarationT : DataTypeDeclarationTBase<ClassDeclarationSyntax>
@@ -408,8 +418,7 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
         }
 
         public bool HasClnblIntfAttr { get; set; }
-        public string? ImmtblTypeName { get; set; }
-        public string? MtblTypeName { get; set; }
+        public string ClnblIntfCfgTypeName { get; set; }
     }
 
     public class StructDeclarationT : DataTypeDeclarationTBase<StructDeclarationSyntax>
