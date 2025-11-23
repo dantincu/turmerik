@@ -7,6 +7,19 @@ using System.Threading.Tasks;
 using Turmerik.Core.Cloneables;
 using Turmerik.Core.Helpers;
 
+#region DummyRegion
+#region DummyRegion1
+#endregion DummyRegion1
+#endregion DummyRegion
+
+#region DummyRegion
+
+class X
+{
+}
+
+#endregion DummyRegion
+
 namespace Turmerik.Code.CSharp.UnitTests.TestCases.Data.Basic
 {
     public static class DummyClass
@@ -25,9 +38,6 @@ namespace Turmerik.Code.CSharp.UnitTests.TestCases.Data.Basic
             IEnumerable<IClnbl> GetClnblList();
             IReadOnlyDictionary<int, int> GetDictionary();
             IEnumerable<KeyValuePair<int, IClnbl>> GetClnblDictionary();
-
-            #region DummyRegion
-            #endregion DummyRegion
         }
 
         public class Immtbl : IClnbl
@@ -93,3 +103,6 @@ namespace Turmerik.Code.CSharp.UnitTests.TestCases.Data.Basic
         }
     }
 }
+
+#region DummyRegion99
+#endregion DummyRegion99
