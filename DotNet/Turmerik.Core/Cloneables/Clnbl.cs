@@ -23,12 +23,17 @@ namespace Turmerik.Core.Cloneables
 
     public interface IClnblIntfConfiguration
     {
-        ClnblIntfItemConfiguration[] Items { get; }
+        IClnblIntfConfigurationTypes[] Types { get; }
     }
 
-    public class ClnblIntfItemConfiguration
+    public interface IClnblIntfConfigurationTypes
     {
-        public ClnblIntfItemConfiguration(
+        ClnblIntfConfigurationTypesItem[] Items { get; }
+    }
+
+    public class ClnblIntfConfigurationTypesItem
+    {
+        public ClnblIntfConfigurationTypesItem(
             Type? intfType = null,
             Type? immtblType = null,
             Type? mtblType = null)

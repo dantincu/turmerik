@@ -9,10 +9,9 @@ namespace Turmerik.Code.CSharp.Helpers
     public static class CSharpH
     {
         public static string GetTypeNameFromTypeofExpr(
-            this TypeOfExpressionSyntax typeOfExpr)
+            this TypeSyntax typeSyntax)
         {
             string? name = null;
-            var typeSyntax = typeOfExpr.Type;
 
             if (typeSyntax is IdentifierNameSyntax id)
             {
@@ -25,5 +24,9 @@ namespace Turmerik.Code.CSharp.Helpers
 
             return name;
         }
+
+        public static string GetTypeNameFromTypeofExpr(
+            this TypeOfExpressionSyntax typeOfExpr) =>
+            typeOfExpr.Type.GetTypeNameFromTypeofExpr();
     }
 }

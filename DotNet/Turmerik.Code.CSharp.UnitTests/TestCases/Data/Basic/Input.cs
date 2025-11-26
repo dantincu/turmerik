@@ -14,8 +14,16 @@ using Turmerik.Core.Helpers;
 
 #region DummyRegion
 
+class Y<T>
+{
+    public class Z
+    {
+    }
+}
+
 class X
 {
+    private Y<int>.Z x;
 }
 
 #endregion DummyRegion
@@ -24,15 +32,26 @@ namespace Turmerik.Code.CSharp.UnitTests.TestCases.Data.Basic
 {
     public static class DummyClass
     {
-        public class ClnblIntfCfg : IClnblIntfConfiguration
+        public static class NestedDummy<T>
         {
-            public ClnblIntfItemConfiguration[] Items => [new (
-                typeof(IClnbl),
-                typeof(Immtbl),
-                typeof(Mtbl))];
+            public static class NestedDummy1<T1>
+            {
+                public class ClnblIntfCfgTypes : IClnblIntfConfigurationTypes
+                {
+                    public ClnblIntfConfigurationTypesItem[] Items => [new (
+                    typeof(IClnbl),
+                    typeof(Immtbl),
+                    typeof(Mtbl))];
+                }
+
+                public struct ClnblIntfCfg<TT> : IClnblIntfConfiguration
+                {
+                    public IClnblIntfConfigurationTypes[] Types => [new ClnblIntfCfgTypes()];
+                }
+            }
         }
 
-        [ClnblIntf(typeof(ClnblIntfCfg))]
+        [ClnblIntf(typeof(NestedDummy<int>.NestedDummy1<string>.ClnblIntfCfg<object>?))]
         public interface IClnbl
         {
             //asdf

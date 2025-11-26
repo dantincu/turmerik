@@ -13,7 +13,7 @@ namespace Turmerik.Core.Helpers
 
                 if (baseTypeName.EndsWith(baseAttrTypeName))
                 {
-                    baseTypeName = baseTypeName.Substring(0, baseTypeName.Length - baseAttrTypeName.Length - 1);
+                    baseTypeName = baseTypeName.Substring(0, baseTypeName.Length - baseAttrTypeName.Length);
                 }
 
                 restOfName = "";

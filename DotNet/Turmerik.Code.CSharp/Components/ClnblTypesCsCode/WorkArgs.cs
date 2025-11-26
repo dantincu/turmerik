@@ -67,6 +67,11 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
         bool IsStartRegion { get; }
     }
 
+    public interface INameOrTypeT : INodeT
+    {
+        string Name { get; set; }
+    }
+
     public interface IDataTypeDeclarationT : INodeT
     {
         List<string> BaseTypeNamesList { get; }
@@ -75,12 +80,16 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
         INamespaceTCore? Namespace { get; set; }
         IDataTypeDeclarationT? EnclosingType { get; set; }
         bool IsClnblIntfCfgImpl { get; set; }
-        ClnblIntfCfgTypeItemTypeNames[]? ClnblIntfCfgTypeItemTypeNames { get; set; }
+        bool IsClnblIntfCfgTypesImpl { get; set; }
+        ClnblIntfCfgData? ClnblIntfCfgData { get; set; }
+        ClnblIntfCfgTypesData? ClnblIntfCfgTypesData { get; set; }
+        List<string> GenericTypeParamNamesList { get; }
     }
 
     public interface INamespaceTCore : INodeOrTokenTCore
     {
-        string Name { get; set; }
+        INameOrTypeT Name { get; set; }
+        string NameStr { get; set; }
         abstract bool IsFileScoped { get; }
     }
 
@@ -294,6 +303,84 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
         public override bool IsStartRegion => true;
     }
 
+    public abstract class NameOrTypeTBase<TNode> : NodeTBase<TNode>, INameOrTypeT
+        where TNode : TypeSyntax
+    {
+        public NameOrTypeTBase(TNode node, SyntaxKind kind) : base(node, kind)
+        {
+        }
+
+        public NameOrTypeTBase(TNode node, INodeOrTokenTCore src) : base(node, src)
+        {
+        }
+
+        public string Name { get; set; }
+    }
+
+    public class IdentifierNameT : NameOrTypeTBase<IdentifierNameSyntax>
+    {
+        public IdentifierNameT(IdentifierNameSyntax node) : base(node, SyntaxKind.IdentifierName)
+        {
+        }
+
+        public IdentifierNameT(IdentifierNameSyntax node, INodeOrTokenTCore src) : base(node, src)
+        {
+        }
+    }
+
+    public class QualifiedNameT : NameOrTypeTBase<QualifiedNameSyntax>
+    {
+        public QualifiedNameT(QualifiedNameSyntax node) : base(node, SyntaxKind.QualifiedName)
+        {
+        }
+
+        public QualifiedNameT(QualifiedNameSyntax node, INodeOrTokenTCore src) : base(node, src)
+        {
+        }
+
+        public INameOrTypeT Left { get; set; }
+        public INameOrTypeT Right { get; set; }
+    }
+
+    public class GenericNameT : NameOrTypeTBase<GenericNameSyntax>
+    {
+        public GenericNameT(GenericNameSyntax node) : base(node, SyntaxKind.GenericName)
+        {
+            GenericArgsList = new();
+        }
+
+        public GenericNameT(GenericNameSyntax node, INodeOrTokenTCore src) : base(node, src)
+        {
+            GenericArgsList = new();
+        }
+
+        public List<INameOrTypeT> GenericArgsList { get; }
+    }
+
+    public class PredefinedTypeNameT : NameOrTypeTBase<PredefinedTypeSyntax>
+    {
+        public PredefinedTypeNameT(PredefinedTypeSyntax node) : base(node, SyntaxKind.PredefinedType)
+        {
+        }
+
+        public PredefinedTypeNameT(PredefinedTypeSyntax node, INodeOrTokenTCore src) : base(node, src)
+        {
+        }
+    }
+
+    public class NullableTypeNameT : NameOrTypeTBase<NullableTypeSyntax>
+    {
+        public NullableTypeNameT (NullableTypeSyntax node) : base(node, SyntaxKind.NullableType)
+        {
+        }
+
+        public NullableTypeNameT(NullableTypeSyntax node, INodeOrTokenTCore src) : base(node, src)
+        {
+        }
+
+        public INameOrTypeT ElementType { get; set; }
+    }
+
     public class CompilationUnitT : NodeTBase<CompilationUnitSyntax>
     {
         public CompilationUnitT(
@@ -328,7 +415,8 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
         {
         }
 
-        public string Name { get; set; }
+        public INameOrTypeT Name { get; set; }
+        public string NameStr { get; set; }
         public abstract bool IsFileScoped { get; }
     }
 
@@ -368,6 +456,7 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
         {
             BaseTypeNamesList = new();
             NestedTypes = new ();
+            GenericTypeParamNamesList = new();
         }
 
         protected DataTypeDeclarationTBase(
@@ -377,6 +466,7 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
         {
             BaseTypeNamesList = new();
             NestedTypes = new();
+            GenericTypeParamNamesList = new();
         }
 
         public List<string> BaseTypeNamesList { get; }
@@ -385,7 +475,10 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
         public INamespaceTCore? Namespace { get; set; }
         public IDataTypeDeclarationT? EnclosingType { get; set; }
         public bool IsClnblIntfCfgImpl { get; set; }
-        public ClnblIntfCfgTypeItemTypeNames[]? ClnblIntfCfgTypeItemTypeNames { get; set; }
+        public bool IsClnblIntfCfgTypesImpl { get; set; }
+        public ClnblIntfCfgData? ClnblIntfCfgData { get; set; }
+        public ClnblIntfCfgTypesData? ClnblIntfCfgTypesData { get; set; }
+        public List<string> GenericTypeParamNamesList { get; }
     }
 
     public class ClassDeclarationT : DataTypeDeclarationTBase<ClassDeclarationSyntax>
@@ -418,7 +511,7 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
         }
 
         public bool HasClnblIntfAttr { get; set; }
-        public string ClnblIntfCfgTypeName { get; set; }
+        public INameOrTypeT ClnblIntfCfgType { get; set; }
     }
 
     public class StructDeclarationT : DataTypeDeclarationTBase<StructDeclarationSyntax>

@@ -13,8 +13,12 @@ namespace Turmerik.Code.CSharp.Dependencies
             this IServiceCollection services)
         {
             services.AddSingleton<ISyntaxNodeTraversal, DefaultSyntaxNodeTraversal>();
+            services.AddSingleton<ITypeSyntaxParser, TypeSyntaxParser>();
+            services.AddSingleton<INamespaceSyntaxParser, NamespaceSyntaxParser>();
+            services.AddSingleton<TypeResolver>();
+            services.AddSingleton<IClnblIntfCfgCsCodeParser, ClnblIntfCfgCsCodeParser>();
+            services.AddSingleton<IClnblIntfCfgTypesCsCodeParser, ClnblIntfCfgTypesCsCodeParser>();
             services.AddSingleton<IClnblTypesCsCodeParser, ClnblTypesCsCodeParser>();
-            services.AddSingleton<IClnblIntfCfgTypeCsCodeParser, ClnblIntfCfgTypeCsCodeParser>();
             services.AddSingleton<IClnblTypesCsCodeGenerator, ClnblTypesCsCodeGenerator>();
             return services;
         }

@@ -5,45 +5,57 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using Turmerik.Code.CSharp.Helpers;
 
 namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
 {
-    public interface IClnblIntfCfgTypeCsCodeParser
+    public interface IClnblIntfCfgTypesCsCodeParser
     {
-        ClnblIntfCfgTypeItemTypeNames[] Parse(
+        ClnblIntfCfgTypesData Parse(
             SyntaxList<MemberDeclarationSyntax> membersList);
     }
 
-    public class ClnblIntfCfgTypeItemTypeNames
+    public class ClnblIntfCfgTypesData
     {
-        public string? IntfTypeName { get; set; }
-        public string? ImmtblTypeName { get; set; }
-        public string? MtblTypeName { get; set; }
+        public ClnblIntfCfgTypesItemData[] Items { get; set; }
     }
 
-    public class ClnblIntfCfgTypeCsCodeParser : IClnblIntfCfgTypeCsCodeParser
+    public class ClnblIntfCfgTypesItemData
     {
-        public ClnblIntfCfgTypeItemTypeNames[] Parse(
+        public INameOrTypeT? IntfType { get; set; }
+        public INameOrTypeT? ImmtblType { get; set; }
+        public INameOrTypeT? MtblType { get; set; }
+    }
+
+    public class ClnblIntfCfgTypesCsCodeParser : IClnblIntfCfgTypesCsCodeParser
+    {
+        private readonly ITypeSyntaxParser typeSyntaxParser;
+
+        public ClnblIntfCfgTypesCsCodeParser(
+            ITypeSyntaxParser typeSyntaxParser)
+        {
+            this.typeSyntaxParser = typeSyntaxParser ?? throw new ArgumentNullException(
+                nameof(typeSyntaxParser));
+        }
+
+        public ClnblIntfCfgTypesData Parse(
             SyntaxList<MemberDeclarationSyntax> membersList)
         {
-            var retList = new List<ClnblIntfCfgTypeItemTypeNames>();
             var itemsProp = (PropertyDeclarationSyntax)membersList.Single();
             var exprBody = itemsProp.ExpressionBody!;
             var arrExpr = (CollectionExpressionSyntax)exprBody.Expression;
 
             var retArr = arrExpr.Elements.Select(element =>
             {
-                var retObj = new ClnblIntfCfgTypeItemTypeNames();
+                var retObj = new ClnblIntfCfgTypesItemData();
                 var objCreation = (ImplicitObjectCreationExpressionSyntax)((ExpressionElementSyntax)element).Expression;
 
                 var typeNames = objCreation.ArgumentList!.Arguments.Select(arg =>
                 {
-                    string? name = null;
+                    INameOrTypeT? name = null;
 
                     if (arg.Expression is TypeOfExpressionSyntax typeOfExpr)
                     {
-                        name = typeOfExpr.GetTypeNameFromTypeofExpr();
+                        name = typeSyntaxParser.Parse(typeOfExpr);
                     }
 
                     return name;
@@ -51,15 +63,15 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
 
                 if (typeNames.Length > 0)
                 {
-                    retObj.IntfTypeName = typeNames[0];
+                    retObj.IntfType = typeNames[0];
 
                     if (typeNames.Length > 1)
                     {
-                        retObj.ImmtblTypeName = typeNames[1];
+                        retObj.ImmtblType = typeNames[1];
 
                         if (typeNames.Length > 2)
                         {
-                            retObj.MtblTypeName = typeNames[2];
+                            retObj.MtblType = typeNames[2];
                         }
                     }
                 }
@@ -67,7 +79,10 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
                 return retObj;
             }).ToArray();
 
-            return retArr;
+            return new ClnblIntfCfgTypesData
+            {
+                Items = retArr,
+            };
         }
     }
 }

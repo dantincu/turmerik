@@ -11,7 +11,6 @@ using Turmerik.Core.Cloneables;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
 using Turmerik.Core.Utility;
-using Turmerik.Code.CSharp.Helpers;
 
 namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
 {
@@ -24,15 +23,31 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
     {
         public const string GENERATED_CODE_CS_REGION_NAME = "GENERATED-CODE";
 
-        public static readonly string ClnblIntfAttrName = AttrH.GetAttrName(nameof(ClnblIntfAttribute));
+        public static readonly string[] ClnblIntfAttrNames = [
+            nameof(ClnblIntfAttribute), AttrH.GetAttrName(nameof(ClnblIntfAttribute))];
 
-        private readonly IClnblIntfCfgTypeCsCodeParser clnblIntfCfgTypeCsCodeParser;
+        private readonly ITypeSyntaxParser typeSyntaxParser;
+        private readonly INamespaceSyntaxParser namespaceSyntaxParser;
+        private readonly IClnblIntfCfgCsCodeParser clnblIntfCfgCsCodeParser;
+        private readonly IClnblIntfCfgTypesCsCodeParser clnblIntfCfgTypesCsCodeParser;
 
         public ClnblTypesCsCodeParser(
-            IClnblIntfCfgTypeCsCodeParser clnblIntfCfgTypeCsCodeParser)
+            ITypeSyntaxParser typeSyntaxParser,
+            INamespaceSyntaxParser namespaceSyntaxParser,
+            IClnblIntfCfgCsCodeParser clnblIntfCfgCsCodeParser,
+            IClnblIntfCfgTypesCsCodeParser clnblIntfCfgTypesCsCodeParser)
         {
-            this.clnblIntfCfgTypeCsCodeParser = clnblIntfCfgTypeCsCodeParser ?? throw new ArgumentNullException(
-                nameof(clnblIntfCfgTypeCsCodeParser));
+            this.typeSyntaxParser = typeSyntaxParser ?? throw new ArgumentNullException(
+                nameof(typeSyntaxParser));
+
+            this.namespaceSyntaxParser = namespaceSyntaxParser ?? throw new ArgumentNullException(
+                nameof(namespaceSyntaxParser));
+
+            this.clnblIntfCfgCsCodeParser = clnblIntfCfgCsCodeParser ?? throw new ArgumentNullException(
+                nameof(clnblIntfCfgCsCodeParser));
+
+            this.clnblIntfCfgTypesCsCodeParser = clnblIntfCfgTypesCsCodeParser ?? throw new ArgumentNullException(
+                nameof(clnblIntfCfgTypesCsCodeParser));
         }
 
         public void Parse(WorkArgs wka)
@@ -48,9 +63,6 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
                 throw new TrmrkException($"Root node kind not supported: {wka.RootNode.Kind()}");
             }
         }
-
-        private static bool IsClnblIntfAttr(
-            string attrTypeName) => attrTypeName == ClnblIntfAttrName || attrTypeName == nameof(ClnblIntfAttribute);
 
         private void RunCompilationUnit(WorkArgs wka)
         {
@@ -91,27 +103,8 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
                         {
                             case SyntaxKind.NamespaceDeclaration:
                             case SyntaxKind.FileScopedNamespaceDeclaration:
-                                INamespaceTCore @namespace;
-                                bool isFileScoped = kind == SyntaxKind.FileScopedNamespaceDeclaration;
-
-                                if (isFileScoped)
-                                {
-                                    var namespaceDeclr = (FileScopedNamespaceDeclarationSyntax)node;
-
-                                    @namespace = new FileScopedNamespaceT(namespaceDeclr)
-                                    {
-                                        Name = namespaceDeclr.Name.ToFullString().Trim()
-                                    };
-                                }
-                                else
-                                {
-                                    var namespaceDeclr = (NamespaceDeclarationSyntax)node;
-
-                                    @namespace = new NamespaceT(namespaceDeclr)
-                                    {
-                                        Name = namespaceDeclr.Name.ToFullString().Trim()
-                                    };
-                                }
+                                var @namespace = namespaceSyntaxParser.Parse(
+                                    (BaseNamespaceDeclarationSyntax)node, kind);
 
                                 foreach (var childNode in node.ChildNodes())
                                 {
@@ -193,6 +186,19 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
                         {
                             nestedTypeT!.EnclosingType = typeT;
                         }
+                        else
+                        {
+                            switch (childNode.Kind)
+                            {
+                                case SyntaxKind.TypeParameterList:
+                                    var typeParamsList = (TypeParameterListSyntax)childNode.Node;
+
+                                    typeT.GenericTypeParamNamesList.AddRange(
+                                        typeParamsList.Parameters.Select(
+                                            @param => param.Identifier.Text));
+                                    break;
+                            }
+                        }
                     },
                     TokenHandler = (_, node) =>
                     {
@@ -256,8 +262,16 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
 
                 if (typeT.BaseTypeNamesList.Count == 1)
                 {
-                    typeT.IsClnblIntfCfgImpl = typeT.BaseTypeNamesList.Single() == nameof(IClnblIntfConfiguration);
-                    typeT.ClnblIntfCfgTypeItemTypeNames = clnblIntfCfgTypeCsCodeParser.Parse(membersList);
+                    var baseTypeName = typeT.BaseTypeNamesList.Single();
+
+                    if (typeT.IsClnblIntfCfgImpl = baseTypeName == nameof(IClnblIntfConfiguration))
+                    {
+                        typeT.ClnblIntfCfgData = clnblIntfCfgCsCodeParser.Parse(membersList);
+                    }
+                    else if (typeT.IsClnblIntfCfgTypesImpl = baseTypeName == nameof(IClnblIntfConfigurationTypes))
+                    {
+                        typeT.ClnblIntfCfgTypesData = clnblIntfCfgTypesCsCodeParser.Parse(membersList);
+                    }
                 }
             }
 
@@ -296,7 +310,7 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
             {
                 var name = attr.Name.ToFullString();
 
-                if (IsClnblIntfAttr(name))
+                if (ClnblIntfAttrNames.Contains(name))
                 {
                     current.HasClnblIntfAttr = true;
                     var argsList = attr.ArgumentList;
@@ -306,11 +320,11 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
                         var typeNamesArr = argsList.Arguments.Select(arg =>
                         {
                             var expr = arg.Expression;
-                            string? name = null;
+                            INameOrTypeT? name = null;
 
                             if (expr is TypeOfExpressionSyntax typeOfExpr)
                             {
-                                name = typeOfExpr.GetTypeNameFromTypeofExpr();
+                                name = typeSyntaxParser.Parse(typeOfExpr);
                             }
 
                             return name;
@@ -318,7 +332,7 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
 
                         if (typeNamesArr.Length > 0)
                         {
-                            current.ClnblIntfCfgTypeName = typeNamesArr.Single()!;
+                            current.ClnblIntfCfgType = typeNamesArr.Single()!;
                         }
                     }
 
@@ -343,8 +357,10 @@ namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
             var unit = wka.Unit;
             bool wasGenerated = wka.CurrentTokenIsGenerated;
 
-            foreach (var childNodeOrToken in wka.ParentNode.GetNode(
-                ).ChildNodesAndTokens())
+            var childNodesOrTokensColl = wka.ParentNode.GetNode(
+                ).ChildNodesAndTokens();
+
+            foreach (var childNodeOrToken in childNodesOrTokensColl)
             {
                 NodeT? nodeT = null;
                 TokenT? tokenT = null;

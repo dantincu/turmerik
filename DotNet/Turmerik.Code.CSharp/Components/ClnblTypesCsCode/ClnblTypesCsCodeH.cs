@@ -1,14 +1,15 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Turmerik.Core.Helpers;
 
 namespace Turmerik.Code.CSharp.Components.ClnblTypesCsCode
 {
-    public static class GenClnblTypesH
+    public static class ClnblTypesCsCodeH
     {
         public static readonly ReadOnlyCollection<SyntaxKind> DataTypeDeclarationSyntaxKinds = new(
             [
