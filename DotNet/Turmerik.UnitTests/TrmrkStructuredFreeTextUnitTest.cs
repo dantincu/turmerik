@@ -113,8 +113,11 @@ namespace Turmerik.UnitTests
             var actualFreeText = trmrkStructuredFreeTextSerializer.Deserialize(new ()
             {
                 Text = freeText,
-                MetadataTypeFactory = (_, i) => (opts.FreeText.Items[i].Metadata as TrmrkStructuredFreeTextDataItemPartBase)?.GetData().GetType(),
-                PayloadTypeFactory = (_, i) => (opts.FreeText.Items[i].Payload as TrmrkStructuredFreeTextDataItemPartBase)!.GetData().GetType()
+                MetadataTypeFactory = (args) => (opts.FreeText.Items[args.ItemIdx].Metadata as TrmrkStructuredFreeTextDataItemPartBase)?.GetData(
+                    ).GetType(),
+
+                PayloadTypeFactory = (args) => (opts.FreeText.Items[args.ItemIdx].Payload as TrmrkStructuredFreeTextDataItemPartBase)!.GetData(
+                    ).GetType()
             });
 
             opts.AssertAction(

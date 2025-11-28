@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -19,8 +18,8 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
 
     public class TrmrkStructuredFreeTextItem
     {
-        public TrmrkStructuredFreeTextItemPart Payload { get; set; }
         public TrmrkStructuredFreeTextItemPart? Metadata { get; set; }
+        public TrmrkStructuredFreeTextItemPart? Payload { get; set; }
     }
 
     public class TrmrkStructuredFreeTextItemPart
@@ -44,232 +43,186 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
         public override void SetData(object obj) => Data = obj != null ? (TData)obj : default;
     }
 
-    public interface ITrmrkStructuredFreeTextSerializer
+    public class TrmrkStructuredFreeTextDeserializeOptsCore<TFactory>
     {
-        TrmrkStructuredFreeText Deserialize(
-            TrmrkStructuredFreeTextDeserializeOpts opts);
-
-        string Serialize(
-            TrmrkStructuredFreeText freeText,
-            Func<IJsonConversion, object, string> serializer = null);
-
-        string Serialize(
-            TrmrkStructuredFreeTextItem freeTextItem,
-            Func<IJsonConversion, object, string> serializer = null);
-
-        string Serialize(
-            TrmrkStructuredFreeTextItemPart freeTextItemPart,
-            Func<IJsonConversion, object, string> serializer = null);
+        public TFactory? MetadataTypeFactory { get; set; }
+        public TFactory? PayloadTypeFactory { get; set; }
     }
 
-    public class TrmrkStructuredFreeTextDeserializeOpts
+    public class TrmrkStructuredFreeTextDeserializeTypeFactoryArgs
+    {
+        public TrmrkStructuredFreeTextItem Item { get; set; }
+        public int ItemIdx { get; set; }
+        public string Text { get; set; }
+        public string[] TextLines { get; set; }
+        public int StartLineIdx { get; set; }
+        public int PartLinesCount { get; set; }
+    }
+
+    public class TrmrkStructuredFreeTextDeserializeOpts : TrmrkStructuredFreeTextDeserializeOptsCore<Func<TrmrkStructuredFreeTextDeserializeTypeFactoryArgs, Type?>>
     {
         public string Text { get; set; }
-        public Func<TrmrkStructuredFreeTextItem, int, Type?>? MetadataTypeFactory { get; set; }
-        public Func<TrmrkStructuredFreeTextItem, int, Type> PayloadTypeFactory { get; set; }
     }
 
-    public class TrmrkStructuredFreeTextSerializer : ITrmrkStructuredFreeTextSerializer
+    public class TrmrkWebRequestGlobalMetadataCore
     {
-        private static readonly Type DataItemPartGenericTypeDef = typeof(
-            TrmrkStructuredFreeTextDataItemPart<object>).GetGenericTypeDefinition();
+        public int ClientVersion { get; set; }
+        public string RequestName { get; set; }
+    }
 
-        private IJsonConversion jsonConversion;
+    public class TrmrkWebResponseGlobalMetadataCore
+    {
+        public int RequiredClientVersion { get; set; }
+    }
 
-        public TrmrkStructuredFreeTextSerializer(
-            IJsonConversion jsonConversion)
+    public static class TrmrkStructuredFreeTextWebRequestO
+    {
+        public class ItemOptsCore<TGlobalMetadata, TRequestMetadata, TRequestBody> : TrmrkStructuredFreeTextDeserializeOptsCore<
+            Func<TrmrkStructuredFreeTextWebRequest<TGlobalMetadata, TRequestMetadata, TRequestBody>,
+                TrmrkStructuredFreeTextDeserializeTypeFactoryArgs, Type?>>
+            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
         {
-            this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
-                nameof(jsonConversion));
         }
 
-        public TrmrkStructuredFreeText Deserialize(
-            TrmrkStructuredFreeTextDeserializeOpts opts)
+        public class ItemOptsAnyMetadata<TGlobalMetadata, TRequestBody> : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, TRequestBody>
         {
-            var rawTextLines = string.Join("",
-                opts.Text.Split(['\r'], StringSplitOptions.RemoveEmptyEntries)).Split('\n');
-
-            var result = new TrmrkStructuredFreeText
-            {
-                RawText = opts.Text,
-                RawTextLines = rawTextLines,
-                Items = new ()
-            };
-
-            int textLinesCount = rawTextLines.Length;
-            var state = ItemParseState.FirstLine;
-            var newState = ItemParseState.FirstLine;
-            var currentItem = new TrmrkStructuredFreeTextItem();
-            int metadataLinesCount = 0;
-            int payloadLinesCount = 0;
-            int textPartLineIdx = 0;
-            int textPartIdx = 0;
-            int[] linesCountArr = [];
-            int payloadLineIdx = 0;
-
-            for (int i = 0; i < textLinesCount; i++)
-            {
-                string line = rawTextLines[i];
-
-                switch (state)
-                {
-                    case ItemParseState.FirstLine:
-                        linesCountArr = jsonConversion.Adapter.Deserialize<int[]>(line);
-                        payloadLineIdx = linesCountArr.Length - 1;
-                        metadataLinesCount = payloadLineIdx > 0 ? linesCountArr[0] : 0;
-                        payloadLinesCount = linesCountArr[payloadLineIdx];
-
-                        if (metadataLinesCount > 0)
-                        {
-                            newState = ItemParseState.Metadata;
-                        }
-                        else if (payloadLinesCount > 0)
-                        {
-                            newState = ItemParseState.Payload;
-                        }
-                        
-                        break;
-                    case ItemParseState.Metadata:
-                        if (++textPartLineIdx == metadataLinesCount)
-                        {
-                            currentItem.Metadata = opts.MetadataTypeFactory?.Invoke(
-                                currentItem, textPartIdx)?.With(metadataType => GetItemPart(
-                                rawTextLines, i, metadataLinesCount, metadataType));
-
-                            newState = ItemParseState.Payload;
-                            textPartLineIdx = 0;
-                        }
-                        break;
-                    case ItemParseState.Payload:
-                        if (++textPartLineIdx == payloadLinesCount)
-                        {
-                            currentItem.Payload = GetItemPart(
-                                rawTextLines, i, payloadLinesCount, opts.PayloadTypeFactory(
-                                    currentItem, textPartIdx));
-
-                            newState = ItemParseState.FirstLine;
-                            textPartLineIdx = 0;
-
-                            result.Items.Add(currentItem);
-                            currentItem = new TrmrkStructuredFreeTextItem();
-                            textPartIdx++;
-                        }
-                        break;
-                    default:
-                        throw new TrmrkException($"ItemParseState value not supported: {state}");
-                }
-
-                state = newState;
-            }
-
-            return result;
         }
 
-        public string Serialize(
-            TrmrkStructuredFreeText freeText,
-            Func<IJsonConversion, object, string> serializer = null)
+        public class ItemOptsAnyBody<TGlobalMetadata, TRequestMetadata> : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, object>
         {
-            string[] itemsArr = freeText.Items.Select(
-                item => Serialize(item, serializer)).ToArray();
-
-            string output = string.Join(Environment.NewLine, itemsArr);
-            return output;
         }
 
-        public string Serialize(
-            TrmrkStructuredFreeTextItem freeTextItem,
-            Func<IJsonConversion, object, string> serializer = null)
+        public class ItemOptsAnyMetadataAnyBody<TGlobalMetadata> : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, object>
         {
-            string? metadataText = freeTextItem.Metadata?.With(metadata => Serialize(metadata, serializer));
-            string payloadText = Serialize(freeTextItem.Payload, serializer);
-
-            var itemsLenArr = new int?[]
-            {
-                metadataText?.Split('\n').Length,
-                payloadText.Split('\n').Length,
-            }.NotNull().ToArray();
-
-            string itemsLenArrJsonStr = jsonConversion.Adapter.Serialize(
-                itemsLenArr, false, true, Formatting.None);
-
-            string output = string.Join(
-                Environment.NewLine,
-                itemsLenArrJsonStr.Arr(
-                    metadataText,
-                    payloadText).NotNull());
-
-            return output;
         }
 
-        public string Serialize(
-            TrmrkStructuredFreeTextItemPart freeTextItemPart,
-            Func<IJsonConversion, object, string> serializer = null)
+        public class ItemOptsAnyGlobal<TRequestMetadata, TRequestBody> : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, TRequestBody>
         {
-            serializer ??= (conversion, obj) => conversion.Adapter.Serialize(
-                obj, false, true, Formatting.None);
-
-            string output;
-
-            if (freeTextItemPart is TrmrkStructuredFreeTextDataItemPartBase freeTextDataItemPart)
-            {
-                var data = freeTextDataItemPart.GetData();
-                output = serializer(jsonConversion, data);
-            }
-            else
-            {
-                output = freeTextItemPart.Text ?? freeTextItemPart.TextLines?.With(
-                    textLines => string.Join(Environment.NewLine, textLines)) ?? string.Empty;
-            }
-
-            return output;
         }
 
-        private TrmrkStructuredFreeTextItemPart GetItemPart(
-            string[] rawTextLines,
-            int i,
-            int partLinesCount,
-            Type? deserializationType)
+        public class ItemOptsAnyGlobalAnyMetadata<TRequestBody> : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, TRequestBody>
         {
-            TrmrkStructuredFreeTextItemPart itemPart;
-            var textLines = rawTextLines.Skip(i - partLinesCount + 1).Take(partLinesCount).ToArray();
-            string text = string.Join(Environment.NewLine, textLines);
-
-            if (deserializationType != null)
-            {
-                var data = jsonConversion.Adapter.Deserialize(
-                    text, false, true, deserializationType);
-
-                itemPart = CreateDataItemPart(
-                    deserializationType, data);
-            }
-            else
-            {
-                itemPart = new();
-            }
-
-            itemPart.Text = text;
-            itemPart.TextLines = textLines;
-
-            return itemPart;
         }
 
-        private TrmrkStructuredFreeTextDataItemPartBase CreateDataItemPart(
-            Type dataType, object data)
+        public class ItemOptsAnyGlobalAnyBody<TRequestMetadata> : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, object>
         {
-            var itemPartType = DataItemPartGenericTypeDef.MakeGenericType(dataType);
-
-            var itemPart = (TrmrkStructuredFreeTextDataItemPartBase)Activator.CreateInstance(
-                itemPartType);
-
-            itemPart.SetData(data);
-            return itemPart;
         }
 
-        private enum ItemParseState
+        public class ItemOptsAnyGlobalAnyMetadataAnyBody : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, object>
         {
-            FirstLine = 0,
-            Metadata,
-            Payload
         }
+
+        public class OptsCore<TItemOpts, TGlobalMetadata, TRequestMetadata, TRequestBody>
+            where TItemOpts : ItemOptsCore<TGlobalMetadata, TRequestMetadata, TRequestBody>
+            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
+        {
+            public string Text { get; set; }
+            public TItemOpts? GlobalMetadataOpts { get; set; }
+            public TItemOpts? RequestMetadataOpts { get; set; }
+            public TItemOpts? RequestBodyOpts { get; set; }
+        }
+
+        public class OptsAnyMetadata<TItemOpts, TGlobalMetadata, TRequestBody> : OptsCore<TItemOpts, TGlobalMetadata, object, TRequestBody>
+            where TItemOpts : ItemOptsCore<TGlobalMetadata, object, TRequestBody>
+            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
+        {
+        }
+
+        public class OptsAnyBody<TItemOpts, TGlobalMetadata, TRequestMetadata> : OptsCore<TItemOpts, TGlobalMetadata, TRequestMetadata, object>
+            where TItemOpts : ItemOptsCore<TGlobalMetadata, TRequestMetadata, object>
+            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
+        {
+        }
+
+        public class OptsAnyMetadataAnyBody<TItemOpts, TGlobalMetadata> : OptsCore<TItemOpts, TGlobalMetadata, object, object>
+            where TItemOpts : ItemOptsCore<TGlobalMetadata, object, object>
+            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
+        {
+        }
+
+        public class Opts<TGlobalMetadata, TRequestMetadata, TRequestBody> : OptsCore<
+            ItemOptsCore<TGlobalMetadata, TRequestMetadata, TRequestBody>, TGlobalMetadata, TRequestMetadata, TRequestBody>
+            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
+        {
+        }
+
+        public class OptsAnyMetadata<TGlobalMetadata, TRequestBody> : OptsCore<
+            ItemOptsCore<TGlobalMetadata, object, TRequestBody>, TGlobalMetadata, object, TRequestBody>
+            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
+        {
+        }
+
+        public class OptsAnyBody<TGlobalMetadata, TRequestMetadata> : OptsCore<
+            ItemOptsCore<TGlobalMetadata, TRequestMetadata, object>, TGlobalMetadata, TRequestMetadata, object>
+            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
+        {
+        }
+
+        public class OptsAnyMetadataAnyBody<TGlobalMetadata> : OptsCore<
+            ItemOptsCore<TGlobalMetadata, object, object>, TGlobalMetadata, object, object>
+            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
+        {
+        }
+
+        public class OptsAnyGlobal<TItemOpts, TRequestMetadata, TRequestBody> : OptsCore<TItemOpts, TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, TRequestBody>
+            where TItemOpts : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, TRequestBody>
+        {
+        }
+
+        public class OptsAnyGlobalAnyMetadata<TItemOpts, TRequestBody> : OptsCore<TItemOpts, TrmrkWebRequestGlobalMetadataCore, object, TRequestBody>
+            where TItemOpts : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, TRequestBody>
+        {
+        }
+
+        public class OptsAnyGlobalAnyBody<TItemOpts, TRequestMetadata> : OptsCore<TItemOpts, TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, object>
+            where TItemOpts : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, object>
+        {
+        }
+
+        public class OptsAnyGlobalAnyMetadataAnyBody<TItemOpts> : OptsCore<TItemOpts, TrmrkWebRequestGlobalMetadataCore, object, object>
+            where TItemOpts : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, object>
+        {
+        }
+
+        public class OptsAnyGlobal<TRequestMetadata, TRequestBody> : OptsCore<
+            ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, TRequestBody>, TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, TRequestBody>
+        {
+        }
+
+        public class OptsAnyGlobalAnyMetadata<TRequestBody> : OptsCore<
+            ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, TRequestBody>, TrmrkWebRequestGlobalMetadataCore, object, TRequestBody>
+        {
+        }
+
+        public class OptsAnyGlobalAnyBody<TRequestMetadata> : OptsCore<
+            ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, object>, TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, object>
+        {
+        }
+
+        public class OptsAnyGlobalAnyMetadataAnyBody : OptsAnyGlobal<
+            ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, object>, object, object>
+        {
+        }
+    }
+
+    public class TrmrkStructuredFreeTextWebRequest<TGlobalMetadata, TRequestMetadata, TRequestBody>
+    {
+        public string[] TextLines { get; set; }
+        public TrmrkStructuredFreeTextDataItemPart<TGlobalMetadata>? GlobalMetadata { get; set; }
+        public TrmrkStructuredFreeTextDataItemPart<TRequestMetadata>? RequestMetadata { get; set; }
+        public TrmrkStructuredFreeTextDataItemPart<TRequestBody>? RequestBody { get; set; }
+        public TrmrkStructuredFreeTextItem? GlobalMetadataItem { get; set; }
+        public TrmrkStructuredFreeTextItem? RequestMetadataItem { get; set; }
+        public TrmrkStructuredFreeTextItem? RequestBodyItem { get; set; }
+        public string? RequestBodyFreeText { get; set; }
+    }
+
+    public class TrmrkStructuredFreeTextWebResponseSerializeOpts
+    {
+        public TrmrkWebResponseGlobalMetadataCore? GlobalMetadata { get; set; }
+        public object? ResponseMetadata { get; set; }
+        public object? ResponseBody { get; set; }
+        public string? ResponseBodyFreeText { get; set; }
+        public Func<IJsonConversion, object, string>? JsonSerializer { get; set; }
     }
 }
