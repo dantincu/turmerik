@@ -2,21 +2,22 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.Core.Reflection;
 using Turmerik.Core.Actions;
 using Turmerik.Core.ConsoleApps;
-using Turmerik.Core.EqualityComparer;
-using Turmerik.Core.Text;
-using Turmerik.Core.TextSerialization;
-using Turmerik.Core.Utility;
-using Turmerik.Core.TextStream;
-using Turmerik.Core.Threading;
-using Turmerik.Core.FileSystem;
 using Turmerik.Core.ConsoleApps.TempDir;
-using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.DriveExplorer;
+using Turmerik.Core.EqualityComparer;
+using Turmerik.Core.FileSystem;
+using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.Core.Reflection;
+using Turmerik.Core.Text;
 using Turmerik.Core.TextParsing;
 using Turmerik.Core.TextParsing.IndexesFilter;
+using Turmerik.Core.TextParsing.StructuredFreeText;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.TextStream;
+using Turmerik.Core.Threading;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Core.Dependencies
 {
@@ -85,6 +86,10 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<IChecksumCalculator, ChecksumCalculator>();
             services.AddSingleton<IIdxesFilterParser, IdxesFilterParser>();
             services.AddSingleton<IFilteredIdxesRetriever, FilteredIdxesRetriever>();
+
+            services.AddSingleton<IAssemblyFinder, AssemblyFinder>();
+            services.AddSingleton<ITypeResolver, TypeResolver>();
+            services.AddSingleton<ITrmrkStructuredFreeTextSerializer, TrmrkStructuredFreeTextSerializer>();
 
             return services;
         }
