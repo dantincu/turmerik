@@ -23,77 +23,84 @@ namespace Turmerik.UnitTests
         [Fact]
         public void MainTest()
         {
-            foreach (var formatting in Formatting.None.Arr(Formatting.Indented))
+            foreach (var hasMetadata in true.Arr(false))
             {
-                PerformTest(new()
+                foreach (var formatting in Formatting.None.Arr(Formatting.Indented))
                 {
-                    FreeText = new()
+                    PerformTest(new()
                     {
-                        Items = [
-                            new ()
+                        FreeText = new()
                         {
-                            Metadata = new TrmrkStructuredFreeTextDataItemPart<Tuple<int, string>>
-                            {
-                                Data = new (123, "qwer"),
-                            },
-                            Payload = new TrmrkStructuredFreeTextDataItemPart<KeyValuePair<int, string>>
-                            {
-                                Data = new (456, "zxcv")
-                            }
+                            Items = [
+                                new ()
+                                {
+                                    Metadata = hasMetadata ? new TrmrkStructuredFreeTextDataItemPart<Tuple<int, string>>
+                                    {
+                                        Data = new (123, "qwer"),
+                                    } : null,
+                                    Payload = new TrmrkStructuredFreeTextDataItemPart<KeyValuePair<int, string>>
+                                    {
+                                        Data = new (456, "zxcv")
+                                    }
+                                },
+                                new ()
+                                {
+                                    Metadata = hasMetadata ? new TrmrkStructuredFreeTextDataItemPart<Tuple<string, DateTime>>
+                                    {
+                                        Data = new ("asdf", new DateTime(123)),
+                                    } : null,
+                                    Payload = new TrmrkStructuredFreeTextDataItemPart<KeyValuePair<string, DateTime>>
+                                    {
+                                        Data = new ("fgjh", new DateTime(456)),
+                                    }
+                                }
+                            ]
                         },
-                        new ()
+                        Serializer = (conversion, obj) => conversion.Adapter.Serialize(obj, false, true, formatting),
+                        AssertAction = (expected, actual) =>
                         {
-                            Metadata = new TrmrkStructuredFreeTextDataItemPart<Tuple<string, DateTime>>
+                            Assert.Equal(2, actual.Items.Count);
+
+                            var metadata0 = actual.Items[0].Metadata as TrmrkStructuredFreeTextDataItemPart<Tuple<int, string>>;
+                            var payload0 = actual.Items[0].Payload as TrmrkStructuredFreeTextDataItemPart<KeyValuePair<int, string>>;
+                            var metadata1 = actual.Items[1].Metadata as TrmrkStructuredFreeTextDataItemPart<Tuple<string, DateTime>>;
+                            var payload1 = actual.Items[1].Payload as TrmrkStructuredFreeTextDataItemPart<KeyValuePair<string, DateTime>>;
+
+                            if (hasMetadata)
                             {
-                                Data = new ("asdf", new DateTime(123)),
-                            },
-                            Payload = new TrmrkStructuredFreeTextDataItemPart<KeyValuePair<string, DateTime>>
-                            {
-                                Data = new ("fgjh", new DateTime(456)),
+                                Assert.NotNull(metadata0);
+                                Assert.NotNull(metadata1);
+
+                                Assert.Equal(123,
+                                    metadata0.Data.Item1);
+
+                                Assert.Equal("qwer",
+                                    metadata0.Data.Item2);
+
+                                Assert.Equal("asdf",
+                                    metadata1.Data.Item1);
+
+                                Assert.Equal(123,
+                                    metadata1.Data.Item2.Ticks);
                             }
+
+                            Assert.NotNull(payload0);
+                            Assert.NotNull(payload1);
+
+                            Assert.Equal(456,
+                                payload0.Data.Key);
+
+                            Assert.Equal("zxcv",
+                                payload0.Data.Value);
+
+                            Assert.Equal("fgjh",
+                                payload1.Data.Key);
+
+                            Assert.Equal(456,
+                                payload1.Data.Value.Ticks);
                         }
-                        ]
-                    },
-                    Serializer = (conversion, obj) => conversion.Adapter.Serialize(obj, false, true, formatting),
-                    AssertAction = (expected, actual) =>
-                    {
-                        Assert.Equal(2, actual.Items.Count);
-
-                        var metadata0 = actual.Items[0].Metadata as TrmrkStructuredFreeTextDataItemPart<Tuple<int, string>>;
-                        var payload0 = actual.Items[0].Payload as TrmrkStructuredFreeTextDataItemPart<KeyValuePair<int, string>>;
-                        var metadata1 = actual.Items[1].Metadata as TrmrkStructuredFreeTextDataItemPart<Tuple<string, DateTime>>;
-                        var payload1 = actual.Items[1].Payload as TrmrkStructuredFreeTextDataItemPart<KeyValuePair<string, DateTime>>;
-
-                        Assert.NotNull(metadata0);
-                        Assert.NotNull(payload0);
-                        Assert.NotNull(metadata1);
-                        Assert.NotNull(payload1);
-
-                        Assert.Equal(123,
-                            metadata0.Data.Item1);
-
-                        Assert.Equal("qwer",
-                            metadata0.Data.Item2);
-
-                        Assert.Equal(456,
-                            payload0.Data.Key);
-
-                        Assert.Equal("zxcv",
-                            payload0.Data.Value);
-
-                        Assert.Equal("asdf",
-                            metadata1.Data.Item1);
-
-                        Assert.Equal(123,
-                            metadata1.Data.Item2.Ticks);
-
-                        Assert.Equal("fgjh",
-                            payload1.Data.Key);
-
-                        Assert.Equal(456,
-                            payload1.Data.Value.Ticks);
-                    }
-                });
+                    });
+                }
             }
         }
 

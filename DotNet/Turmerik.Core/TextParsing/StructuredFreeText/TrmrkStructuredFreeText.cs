@@ -86,7 +86,8 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
         public TrmrkStructuredFreeText Deserialize(
             TrmrkStructuredFreeTextDeserializeOpts opts)
         {
-            var rawTextLines = opts.Text.Split('\n');
+            var rawTextLines = string.Join("",
+                opts.Text.Split(['\r'], StringSplitOptions.RemoveEmptyEntries)).Split('\n');
 
             var result = new TrmrkStructuredFreeText
             {
@@ -191,10 +192,11 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
             string itemsLenArrJsonStr = jsonConversion.Adapter.Serialize(
                 itemsLenArr, false, true, Formatting.None);
 
-            string output = string.Join(Environment.NewLine,
-                itemsLenArrJsonStr,
-                metadataText,
-                payloadText);
+            string output = string.Join(
+                Environment.NewLine,
+                itemsLenArrJsonStr.Arr(
+                    metadataText,
+                    payloadText).NotNull());
 
             return output;
         }
