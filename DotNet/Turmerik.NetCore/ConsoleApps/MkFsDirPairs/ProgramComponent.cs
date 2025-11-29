@@ -610,7 +610,7 @@ namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
             string workDir,
             ProgramArgs.Node nodeArgs)
         {
-            if (nodeArgs.OpenMdFileAndAddLinks)
+            if (nodeArgs.AddLinks)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Paste a url to add as md link");
@@ -756,7 +756,7 @@ namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
                 KeepFileContents = GetKeepFileContents(),
                 MdFileFirstContent = nodeArgs.MdFirstContent,
                 MdLinksToAddArr = nodeArgs.MdLinksToAddArr,
-                InsertLinksToAdd = nodeArgs.OpenMdFileAndInsertLinks,
+                InsertLinksToAdd = nodeArgs.InsertLinks,
                 TrmrkGuidInputName = config.TrmrkGuidInputName,
                 ThrowIfAnyItemAlreadyExists = config.ThrowIfAnyItemAlreadyExists ?? true,
                 CreateNote = nodeArgs.CreateNote,
@@ -1106,14 +1106,29 @@ namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
                                             data => data.Args.Current.DirNameTpl = config.DirNames.DirNamesTplMap[
                                                 data.ArgFlagValue!.Single()]),
                                         parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.AddLinks.Arr(),
+                                            data => data.Args.Current.AddLinks = true),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.InsertLinks.Arr(),
+                                            data =>
+                                            {
+                                                data.Args.Current.AddLinks = true;
+                                                data.Args.Current.InsertLinks = true;
+                                            }),
+                                        parser.ArgsFlagOpts(data,
                                             config.ArgOpts.OpenMdFileAndAddLinks.Arr(),
-                                            data => data.Args.Current.OpenMdFileAndAddLinks = true),
+                                            data =>
+                                            {
+                                                data.Args.Current.OpenMdFile = true;
+                                                data.Args.Current.AddLinks = true;
+                                            }),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.OpenMdFileAndInsertLinks.Arr(),
                                             data =>
                                             {
-                                                data.Args.Current.OpenMdFileAndAddLinks = true;
-                                                data.Args.Current.OpenMdFileAndInsertLinks = true;
+                                                data.Args.Current.OpenMdFile = true;
+                                                data.Args.Current.AddLinks = true;
+                                                data.Args.Current.InsertLinks = true;
                                             }),
                                     ]
                                 });

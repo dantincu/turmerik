@@ -28,8 +28,9 @@ namespace Turmerik.NetCore.ConsoleApps.RfDirsPairNames
         public string[]? RecursiveMatchingDirNamesArr { get; set; }
         public Regex[]? RecursiveMatchingDirNameRegexsArr { get; set; }
         public bool? OpenMdFileAndDeferUpdate { get; set; }
-        public bool? OpenMdFileAndAddLinks { get; set; }
-        public bool OpenMdFileAndInsertLinks { get; set; }
+        public bool? OpenMdFile { get; set; }
+        public bool? AddLinks { get; set; }
+        public bool InsertLinks { get; set; }
         public bool? UpdateTimeStamp { get; set; }
         public bool? UpdateTitleFromJson { get; set; }
 

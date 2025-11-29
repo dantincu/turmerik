@@ -27,6 +27,8 @@ namespace Turmerik.Core.DriveExplorer
             public string WorkDir { get; set; }
             public string InteractiveMode { get; set; }
             public string OpenMdFileAndDeferUpdate { get; set; }
+            public string AddLinks { get; set; }
+            public string InsertLinks { get; set; }
             public string OpenMdFileAndAddLinks { get; set; }
             public string OpenMdFileAndInsertLinks { get; set; }
             public string OpenMdFile { get; set; }

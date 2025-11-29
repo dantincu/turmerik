@@ -230,15 +230,18 @@ namespace Turmerik.NetCore.ConsoleApps.RfDirsPairNames
 
                             UpdateNoteJsonFile(args.ShortNameDirPath, mdTitle);
                         }
-                        else if (args.OpenMdFileAndAddLinks == true)
+                        else if (args.AddLinks == true)
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine(string.Join(" ", $"Opening md file {args.MdFilePath};",
                                 "paste a url to add as md link"));
                             Console.ResetColor();
 
-                            ProcessH.OpenWithDefaultProgramIfNotNull(
-                                args.MdFilePath);
+                            if (args.OpenMdFile == true)
+                            {
+                                ProcessH.OpenWithDefaultProgramIfNotNull(
+                                    args.MdFilePath);
+                            }
 
                             args.MdLinksToAddArr = await mkFsDirPairsProgramComponent.OpenMdFileAndAddLinks();
                             UpdateNoteJsonFile(args.ShortNameDirPath, args.MdTitle);
@@ -341,7 +344,7 @@ namespace Turmerik.NetCore.ConsoleApps.RfDirsPairNames
                     var mdLinesList = File.ReadAllLines(
                         newMdFilePath).ToList();
 
-                    var kvp = args.OpenMdFileAndInsertLinks switch
+                    var kvp = args.InsertLinks switch
                     {
                         true => mdLinesList.FirstKvp(line => line.Trim().StartsWith("# ")),
                         false => new KeyValuePair<int, string>(-1, string.Empty)
@@ -709,14 +712,29 @@ namespace Turmerik.NetCore.ConsoleApps.RfDirsPairNames
                                 config.ArgOpts.OpenMdFileAndDeferUpdate.Arr(),
                                 data => data.Args.OpenMdFileAndDeferUpdate = true),
                             consoleArgsParser.ArgsFlagOpts(data,
+                                config.ArgOpts.AddLinks.Arr(),
+                                data => data.Args.AddLinks = true),
+                            consoleArgsParser.ArgsFlagOpts(data,
+                                config.ArgOpts.InsertLinks.Arr(),
+                                data =>
+                                {
+                                    data.Args.AddLinks = true;
+                                    data.Args.InsertLinks = true;
+                                }),
+                            consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.OpenMdFileAndAddLinks.Arr(),
-                                data => data.Args.OpenMdFileAndAddLinks = true),
+                                data =>
+                                {
+                                    data.Args.OpenMdFile = true;
+                                    data.Args.AddLinks = true;
+                                }),
                             consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.OpenMdFileAndInsertLinks.Arr(),
                                 data =>
                                 {
-                                    data.Args.OpenMdFileAndAddLinks = true;
-                                    data.Args.OpenMdFileAndInsertLinks = true;
+                                    data.Args.OpenMdFile = true;
+                                    data.Args.AddLinks = true;
+                                    data.Args.InsertLinks = true;
                                 }),
                             consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.UpdateTimeStamp.Arr(),
