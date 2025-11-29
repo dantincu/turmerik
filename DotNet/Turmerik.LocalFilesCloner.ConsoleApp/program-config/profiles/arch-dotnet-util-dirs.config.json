@@ -39,8 +39,8 @@
               "^\\/Bin\\/Turmerik\\.MkFsDirsPair\\.ConsoleApp\\/Release\\/net[0-9\\.]+\\/Chrome",
               "^\\/Bin\\/Turmerik\\.MkFsDirsPair\\.ConsoleApp\\/Release\\/net[0-9\\.]+\\/ChromeHeadlessShell",
               "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/Release\\/net[0-9\\.]+\\/Chrome",
-              "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/Release\\/net[0-9\\.]+\\/ChromeHeadlessShell",
-              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.ProgramConfigRetriever\\/program\\-config\\.*",
+              "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/Release\\/net[0-9\\.]+\\/ChromeHeadlessShell"
+              /* "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.ProgramConfigRetriever\\/program\\-config\\.*",
               "^\\/Config\\/Turmerik\\.DirsPair\\.ConsoleApps\\.MkFsDirsPairCfg\\.ProgramConfig\\/.*",
               "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.MkScripts\\.ProgramConfigRetriever\\/program\\-config\\.*",
               "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.SyncLocalFiles\\.ProgramConfigRetriever\\/program\\-config\\.*",
@@ -51,7 +51,7 @@
               "^\\/Bin\\/.+\\/trmrk-dirpairs-config\\..+\\.json$",
               "^\\/Bin\\/.+\\/trmrk-notes-config\\.json$",
               "^\\/Bin\\/.+\\/trmrk-notes-config\\..+\\.json$",
-              "^\\/Bin\\/.+\\/trmrk-localdevice-paths\\.json$"
+              "^\\/Bin\\/.+\\/trmrk-localdevice-paths\\.json$" */
             ]
           }
         }
