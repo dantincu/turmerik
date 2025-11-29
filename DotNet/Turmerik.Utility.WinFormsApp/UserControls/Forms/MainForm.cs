@@ -343,37 +343,37 @@ namespace Turmerik.Utility.WinFormsApp
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            bool handled = false;
+            bool handled = e.Control && e.Shift && e.Alt && e.KeyCode != Keys.ShiftKey;
 
-            if (e.Control && e.Shift && !e.Alt && e.KeyCode != Keys.ShiftKey)
+            if (handled)
             {
-                switch (e.KeyCode)
+                int? tabControlMainPageIdx = e.KeyCode switch
                 {
-                    case Keys.D1:
-                        this.tabControlMain.SelectedIndex = 0;
-                        handled = true;
-                        break;
-                    case Keys.D2:
-                        this.tabControlMain.SelectedIndex = 1;
-                        handled = true;
-                        break;
-                    case Keys.D3:
-                        this.tabControlMain.SelectedIndex = 2;
-                        handled = true;
-                        break;
-                    case Keys.D4:
-                        this.tabControlMain.SelectedIndex = 3;
-                        handled = true;
-                        break;
-                    case Keys.D5:
-                        this.tabControlMain.SelectedIndex = 4;
-                        handled = true;
-                        break;
-                    case Keys.F12:
-                        textBoxCustomCommand.Focus();
-                        handled = true;
-                        break;
+                    Keys.D1 => 0,
+                    Keys.D2 => 1,
+                    Keys.D3 => 2,
+                    Keys.D4 => 3,
+                    Keys.D5 => 4,
+                    _ => null
+                };
+
+                if (tabControlMainPageIdx.HasValue)
+                {
+                    tabControlMain.SelectedIndex = tabControlMainPageIdx.Value;
                 }
+                else
+                {
+                    switch (e.KeyCode)
+                    {
+                        case Keys.F12:
+                            textBoxCustomCommand.Focus();
+                            break;
+                        default:
+                            handled = false;
+                            break;
+                    }
+                }
+
             }
 
             if (!handled)
