@@ -54,6 +54,7 @@
             // 
             // splitContainerMain.Panel2
             // 
+            splitContainerMain.Panel2.Padding = new Padding(5, 0, 0, 0);
             splitContainerMain.Panel2.Controls.Add(panelWebView);
             splitContainerMain.Panel2.Controls.Add(panelWebViewTopControls);
             splitContainerMain.Size = new Size(1000, 800);
