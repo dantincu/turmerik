@@ -129,7 +129,7 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                 Factory = (args) => new ([GetTitleTextPart(args)])
             }))*/.Select((item, i) => new UrlScript(item)
         {
-            Index = i
+            Index = i + 1
         }).RdnlC();
 
         public void DeleteSerializedLinks()

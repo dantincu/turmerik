@@ -141,7 +141,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         public void HandleKeyDown(KeyEventArgs e)
         {
-            if (e.Control && !e.Alt && e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+            if (e.Control && !e.Alt && e.KeyCode >= Keys.D1 && e.KeyCode <= Keys.D9)
             {
                 int index = (e.KeyCode - Keys.D0);
 
