@@ -89,8 +89,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         public void HandleKeyDown(KeyEventArgs e)
         {
-            textBoxMain.Focus();
-            textBoxMain.SelectAll();
+            if (e.Control && e.Shift && !e.Alt && e.KeyCode == Keys.D1)
+            {
+                textBoxMain.Focus();
+                textBoxMain.SelectAll();
+            }
         }
 
         public void UnsetItem()
