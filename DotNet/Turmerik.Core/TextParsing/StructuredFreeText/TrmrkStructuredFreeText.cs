@@ -80,151 +80,34 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
 
     public static class TrmrkStructuredFreeTextWebRequestO
     {
-        public class ItemOptsCore<TGlobalMetadata, TRequestMetadata, TRequestBody> : TrmrkStructuredFreeTextDeserializeOptsCore<
-            Func<TrmrkStructuredFreeTextWebRequest<TGlobalMetadata, TRequestMetadata, TRequestBody>,
-                TrmrkStructuredFreeTextDeserializeTypeFactoryArgs, Type?>>
-            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
+        public class ItemOpts : TrmrkStructuredFreeTextDeserializeOptsCore<
+            Func<TrmrkStructuredFreeTextWebRequest, TrmrkStructuredFreeTextDeserializeTypeFactoryArgs, Type?>>
         {
         }
 
-        public class ItemOptsAnyMetadata<TGlobalMetadata, TRequestBody> : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, TRequestBody>
-        {
-        }
-
-        public class ItemOptsAnyBody<TGlobalMetadata, TRequestMetadata> : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, object>
-        {
-        }
-
-        public class ItemOptsAnyMetadataAnyBody<TGlobalMetadata> : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, object>
-        {
-        }
-
-        public class ItemOptsAnyGlobal<TRequestMetadata, TRequestBody> : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, TRequestBody>
-        {
-        }
-
-        public class ItemOptsAnyGlobalAnyMetadata<TRequestBody> : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, TRequestBody>
-        {
-        }
-
-        public class ItemOptsAnyGlobalAnyBody<TRequestMetadata> : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, object>
-        {
-        }
-
-        public class ItemOptsAnyGlobalAnyMetadataAnyBody : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, object>
-        {
-        }
-
-        public class OptsCore<TItemOpts, TGlobalMetadata, TRequestMetadata, TRequestBody>
-            where TItemOpts : ItemOptsCore<TGlobalMetadata, TRequestMetadata, TRequestBody>
-            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
+        public class Opts
         {
             public string Text { get; set; }
-            public TItemOpts? GlobalMetadataOpts { get; set; }
-            public TItemOpts? RequestMetadataOpts { get; set; }
-            public TItemOpts? RequestBodyOpts { get; set; }
-        }
-
-        public class OptsAnyMetadata<TItemOpts, TGlobalMetadata, TRequestBody> : OptsCore<TItemOpts, TGlobalMetadata, object, TRequestBody>
-            where TItemOpts : ItemOptsCore<TGlobalMetadata, object, TRequestBody>
-            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
-        {
-        }
-
-        public class OptsAnyBody<TItemOpts, TGlobalMetadata, TRequestMetadata> : OptsCore<TItemOpts, TGlobalMetadata, TRequestMetadata, object>
-            where TItemOpts : ItemOptsCore<TGlobalMetadata, TRequestMetadata, object>
-            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
-        {
-        }
-
-        public class OptsAnyMetadataAnyBody<TItemOpts, TGlobalMetadata> : OptsCore<TItemOpts, TGlobalMetadata, object, object>
-            where TItemOpts : ItemOptsCore<TGlobalMetadata, object, object>
-            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
-        {
-        }
-
-        public class Opts<TGlobalMetadata, TRequestMetadata, TRequestBody> : OptsCore<
-            ItemOptsCore<TGlobalMetadata, TRequestMetadata, TRequestBody>, TGlobalMetadata, TRequestMetadata, TRequestBody>
-            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
-        {
-        }
-
-        public class OptsAnyMetadata<TGlobalMetadata, TRequestBody> : OptsCore<
-            ItemOptsCore<TGlobalMetadata, object, TRequestBody>, TGlobalMetadata, object, TRequestBody>
-            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
-        {
-        }
-
-        public class OptsAnyBody<TGlobalMetadata, TRequestMetadata> : OptsCore<
-            ItemOptsCore<TGlobalMetadata, TRequestMetadata, object>, TGlobalMetadata, TRequestMetadata, object>
-            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
-        {
-        }
-
-        public class OptsAnyMetadataAnyBody<TGlobalMetadata> : OptsCore<
-            ItemOptsCore<TGlobalMetadata, object, object>, TGlobalMetadata, object, object>
-            where TGlobalMetadata : TrmrkWebRequestGlobalMetadataCore
-        {
-        }
-
-        public class OptsAnyGlobal<TItemOpts, TRequestMetadata, TRequestBody> : OptsCore<TItemOpts, TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, TRequestBody>
-            where TItemOpts : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, TRequestBody>
-        {
-        }
-
-        public class OptsAnyGlobalAnyMetadata<TItemOpts, TRequestBody> : OptsCore<TItemOpts, TrmrkWebRequestGlobalMetadataCore, object, TRequestBody>
-            where TItemOpts : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, TRequestBody>
-        {
-        }
-
-        public class OptsAnyGlobalAnyBody<TItemOpts, TRequestMetadata> : OptsCore<TItemOpts, TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, object>
-            where TItemOpts : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, object>
-        {
-        }
-
-        public class OptsAnyGlobalAnyMetadataAnyBody<TItemOpts> : OptsCore<TItemOpts, TrmrkWebRequestGlobalMetadataCore, object, object>
-            where TItemOpts : ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, object>
-        {
-        }
-
-        public class OptsAnyGlobal<TRequestMetadata, TRequestBody> : OptsCore<
-            ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, TRequestBody>, TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, TRequestBody>
-        {
-        }
-
-        public class OptsAnyGlobalAnyMetadata<TRequestBody> : OptsCore<
-            ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, TRequestBody>, TrmrkWebRequestGlobalMetadataCore, object, TRequestBody>
-        {
-        }
-
-        public class OptsAnyGlobalAnyBody<TRequestMetadata> : OptsCore<
-            ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, object>, TrmrkWebRequestGlobalMetadataCore, TRequestMetadata, object>
-        {
-        }
-
-        public class OptsAnyGlobalAnyMetadataAnyBody : OptsAnyGlobal<
-            ItemOptsCore<TrmrkWebRequestGlobalMetadataCore, object, object>, object, object>
-        {
+            public ItemOpts? GlobalMetadataOpts { get; set; }
+            public ItemOpts? RequestMetadataOpts { get; set; }
+            public ItemOpts? RequestBodyOpts { get; set; }
         }
     }
 
-    public class TrmrkStructuredFreeTextWebRequest<TGlobalMetadata, TRequestMetadata, TRequestBody>
+    public class TrmrkStructuredFreeTextWebRequest
     {
         public string[] TextLines { get; set; }
-        public TrmrkStructuredFreeTextDataItemPart<TGlobalMetadata>? GlobalMetadata { get; set; }
-        public TrmrkStructuredFreeTextDataItemPart<TRequestMetadata>? RequestMetadata { get; set; }
-        public TrmrkStructuredFreeTextDataItemPart<TRequestBody>? RequestBody { get; set; }
-        public TrmrkStructuredFreeTextItem? GlobalMetadataItem { get; set; }
-        public TrmrkStructuredFreeTextItem? RequestMetadataItem { get; set; }
-        public TrmrkStructuredFreeTextItem? RequestBodyItem { get; set; }
+        public TrmrkStructuredFreeTextItem? GlobalMetadata { get; set; }
+        public TrmrkStructuredFreeTextItem? RequestMetadata { get; set; }
+        public TrmrkStructuredFreeTextItem? RequestBody { get; set; }
         public string? RequestBodyFreeText { get; set; }
     }
 
     public class TrmrkStructuredFreeTextWebResponseSerializeOpts
     {
-        public TrmrkWebResponseGlobalMetadataCore? GlobalMetadata { get; set; }
-        public object? ResponseMetadata { get; set; }
-        public object? ResponseBody { get; set; }
+        public TrmrkStructuredFreeTextItem? GlobalMetadata { get; set; }
+        public TrmrkStructuredFreeTextItem? ResponseMetadata { get; set; }
+        public TrmrkStructuredFreeTextItem? ResponseBody { get; set; }
         public string? ResponseBodyFreeText { get; set; }
         public Func<IJsonConversion, object, string>? JsonSerializer { get; set; }
     }

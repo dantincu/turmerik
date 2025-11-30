@@ -187,19 +187,20 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
             serializer ??= (conversion, obj) => conversion.Adapter.Serialize(
                 obj, false, true, Formatting.None);
 
-            string output;
+            string? output = null;
 
             if (freeTextItemPart is TrmrkStructuredFreeTextDataItemPartBase freeTextDataItemPart)
             {
-                var data = freeTextDataItemPart.GetData();
-                output = serializer(jsonConversion, data);
+                output = freeTextDataItemPart.GetData()?.With(
+                    data => serializer(jsonConversion, data));
             }
             else
             {
                 output = freeTextItemPart.Text ?? freeTextItemPart.TextLines?.With(
-                    textLines => string.Join(Environment.NewLine, textLines)) ?? string.Empty;
+                    textLines => string.Join(Environment.NewLine, textLines));
             }
 
+            output ??= string.Empty;
             return output;
         }
 
