@@ -14,6 +14,9 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
     {
         private static readonly Regex urlRegex = new Regex(@"^[a-zA-Z]+://[^/]");
 
+        private static readonly Regex timeStampStrRegex = new(
+            @"^[0-9]{4}\-[0-9]{2}\-[0-9]{2}_[0-9]{2}\-[0-9]{2}(\-[0-9]{2})?(_[0-9]{3})?$");
+
         private readonly IFetchMultipleLinksDataContainer fetchMultipleLinksDataContainer;
         private readonly IJsonConversion jsonConversion;
 
@@ -43,6 +46,16 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
         {
             new()
             {
+                IsTimeStampStr = true,
+                Factory = (args) => new ([GetTimeStampTextPart(args)])
+            },
+            new()
+            {
+                IsText = true,
+                Factory = (args) => new ([GetTextTextPart(args)])
+            },
+            new()
+            {
                 IsTitle = true,
                 Factory = (args) => new ([GetTitleTextPart(args)])
             },
@@ -59,6 +72,8 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
             {
                 Factory = (args) => new ([
                         GetSpecialTokensTextPart(":"),
+                        GetTimeStampTextPart(args),
+                        GetSpecialTokensTextPart(":"),
                         GetUrlTextPart(args),
                         GetSpecialTokensTextPart(":"),
                         GetTitleTextPart(args)
@@ -67,6 +82,8 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
             new()
             {
                 Factory = (args) => new ([
+                        GetSpecialTokensTextPart(":"),
+                        GetTimeStampTextPart(args),
                         GetSpecialTokensTextPart(":"),
                         GetRedirectedUrlTextPart(args),
                         GetSpecialTokensTextPart(":"),
@@ -80,7 +97,15 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                         "\\", "\\\\").Replace(
                         "[", "\\[").Replace(
                         "]", "\\]").With(
-                    title => GetSpecialTokensTextPart("[").Arr(
+                    title => GetSpecialTokensTextPart("<").Arr(
+                        GetKeyWordTextPart("u"),
+                        GetSpecialTokensTextPart(">"),
+                        GetTimeStampTextPart(args),
+                        GetSpecialTokensTextPart("</"),
+                        GetKeyWordTextPart("u"),
+                        GetSpecialTokensTextPart(">"),
+                        GetTextTextPart(": "),
+                        GetSpecialTokensTextPart("["),
                         GetTitleTextPart(args),
                         GetSpecialTokensTextPart("]("),
                         GetUrlTextPart(args),
@@ -93,7 +118,15 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                         "\\", "\\\\").Replace(
                         "[", "\\[").Replace(
                         "]", "\\]").With(
-                    title => GetSpecialTokensTextPart("[").Arr(
+                    title => GetSpecialTokensTextPart("<").Arr(
+                        GetKeyWordTextPart("u"),
+                        GetSpecialTokensTextPart(">"),
+                        GetTimeStampTextPart(args),
+                        GetSpecialTokensTextPart("</"),
+                        GetKeyWordTextPart("u"),
+                        GetSpecialTokensTextPart(">"),
+                        GetTextTextPart(": "),
+                        GetSpecialTokensTextPart("["),
                         GetTitleTextPart(args),
                         GetSpecialTokensTextPart("]("),
                         GetRedirectedUrlTextPart(args),
@@ -123,13 +156,9 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                     GetRedirectedUrlTextPart(args),
                     GetSpecialTokensTextPart(@"""")])
             },
-        }/*.Concat(Enumerable.Range(0, 50).Select((_) =>
-            new UrlScript()
-            {
-                Factory = (args) => new ([GetTitleTextPart(args)])
-            }))*/.Select((item, i) => new UrlScript(item)
+        }.Select((item, i) => new UrlScript(item)
         {
-            Index = i + 1
+            Index = i
         }).RdnlC();
 
         public void DeleteSerializedLinks()
@@ -187,7 +216,28 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                 FontStyle.Bold,
                 Color.White,
                 Color.Black);
-                // Color.FromArgb(255, 128, 128, 0));
+
+        private static UrlScriptTextPart GetKeyWordTextPart(
+            string keyWord) => keyWord.ToTextPart(
+                FontStyle.Bold,
+                Color.White,
+                Color.Blue);
+
+        private static UrlScriptTextPart GetTimeStampTextPart(
+            UrlScriptArgs args) => GetTimeStampTextPart(
+                args.TimeStampStr ?? string.Empty);
+
+        private static UrlScriptTextPart GetTimeStampTextPart(
+            string text) => text.ToTextPart(
+                FontStyle.Italic, Color.FromArgb(255, 0, 0, 0), Color.White);
+
+        private static UrlScriptTextPart GetTextTextPart(
+            UrlScriptArgs args) => GetTextTextPart(
+                args.Text ?? string.Empty);
+
+        private static UrlScriptTextPart GetTextTextPart(
+            string text) => text.ToTextPart(
+                FontStyle.Regular, Color.FromArgb(255, 0, 0, 0), Color.White);
 
         private static UrlScriptTextPart GetTitleTextPart(
             UrlScriptArgs args) => GetTitleTextPart(NormalizeTitle(args.Title));
@@ -244,23 +294,31 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                     if (partsList.Any())
                     {
                         partsList.RemoveAt(partsList.Count - 1);
+                    }
 
-                        itemsList.Add(new FetchLinkDataTextItemMtbl
+                    string? timeStampStr = null;
+
+                    if (partsList.Any())
+                    {
+                        var lastLine = partsList.Last();
+
+                        if (timeStampStrRegex.IsMatch(
+                            lastLine))
                         {
-                            IsUrl = false,
-                            ItemIdx = itemIdx++,
-                            Text = string.Concat(partsList),
-                        });
-
-                        partsList.Clear();
+                            timeStampStr = lastLine;
+                            partsList.RemoveAt(partsList.Count - 1);
+                        }
                     }
 
                     itemsList.Add(new FetchLinkDataUrlItemMtbl
                     {
                         ItemIdx = itemIdx++,
-                        Text = partStr,
                         Url = partStr,
+                        UrlText = partsList.Any() ? string.Concat(partsList) : null,
+                        TimeStampStr = timeStampStr
                     });
+
+                    partsList.Clear();
                 }
                 else
                 {
@@ -297,17 +355,7 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
             string filePath)
         {
             var json = File.ReadAllText(filePath);
-            var item = jsonConversion.Adapter.Deserialize<FetchLinkDataItemCoreMtbl>(json);
-
-            if (item.IsUrl == false)
-            {
-                item = jsonConversion.Adapter.Deserialize<FetchLinkDataTextItemMtbl>(json);
-            }
-            else
-            {
-                item = jsonConversion.Adapter.Deserialize<FetchLinkDataUrlItemMtbl>(json);
-            }
-
+            var item = jsonConversion.Adapter.Deserialize<FetchLinkDataUrlItemMtbl>(json);
             return item;
         }
     }

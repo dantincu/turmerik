@@ -15,15 +15,23 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
 
         public UrlScript(UrlScript src)
         {
+            Index = src.Index;
+            Title = src.Title;
+            Text = src.Text;
+            TimeStampStr = src.TimeStampStr;
             IsTitle = src.IsTitle;
             IsUrl = src.IsUrl;
-            Index = src.Index;
             Factory = src.Factory;
         }
 
+        public int Index { get; init; }
+        public string Title { get; set; }
+        public string? Text { get; init; }
+        public string? TimeStampStr { get; init; }
         public bool IsTitle { get; init; }
         public bool IsUrl { get; init; }
-        public int Index { get; init; }
+        public bool IsText { get; init; }
+        public bool IsTimeStampStr { get; init; }
         public Func<UrlScriptArgs, UrlScriptOutput> Factory { get; init; }
     }
 
@@ -32,17 +40,22 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
         public UrlScriptArgs(
             string url,
             string title,
-            string? redirectedUrl)
+            string? redirectedUrl,
+            string? text,
+            string? timeStampStr)
         {
             Url = url;
             Title = title;
-            Url = url;
             RedirectedUrl = redirectedUrl;
+            Text = text;
+            TimeStampStr = timeStampStr;
         }
 
         public string Url { get; init; }
         public string Title { get; init; }
         public string? RedirectedUrl { get; init; }
+        public string? Text { get; init; }
+        public string? TimeStampStr { get; init; }
     }
 
     public class UrlScriptOutput

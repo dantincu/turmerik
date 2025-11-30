@@ -125,15 +125,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             foreach (var item in itemsList)
             {
                 var cell = new DataGridViewTextBoxCell();
-                cell.Value = item.Text;
-
-                if (item.IsUrl == false)
-                {
-                    cell.Style.Font = new Font(
-                        dataGridViewItemsList.DefaultCellStyle.Font,
-                        FontStyle.Bold);
-                }
-
+                cell.Value = item.Url;
                 var row = new DataGridViewRow();
                 row.Cells.Add(cell);
                 dataGridViewItemsList.Rows.Add(row);
@@ -209,18 +201,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             currentItemRow = dataGridViewItemsList.Rows[mtblKvp.Key];
             currentItemRow.DefaultCellStyle.BackColor = Color.BurlyWood;
             currentItemRow.DefaultCellStyle.SelectionBackColor = Color.BurlyWood;
-            currentItemRow.Cells[0].Value = mtblKvp.Value.Text;
+            currentItemRow.Cells[0].Value = mtblKvp.Value.Url;
 
             splitContainerMain.Panel2.Controls.Clear();
             var control = itemControlsList[mtblKvp.Key];
 
             if (control == null)
             {
-                if (mtblKvp.Value is FetchLinkDataTextItemMtbl textItem)
-                {
-                    control = new FetchLinkTextItemUC();
-                }
-                else if (mtblKvp.Value is FetchLinkDataUrlItemMtbl urlItem)
+                if (mtblKvp.Value is FetchLinkDataUrlItemMtbl urlItem)
                 {
                     control = new FetchLinkUrlItemUC();
                 }

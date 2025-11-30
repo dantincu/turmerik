@@ -366,11 +366,11 @@ namespace Turmerik.DirsPair
 
                 if (opts.MdLinksToAddArr != null)
                 {
-                    var timeStamp = timeStampHelper.TmStmp(
+                    var dfTimeStamp = timeStampHelper.TmStmp(
                         true, TimeStamp.Seconds, true, false, false, null);
 
                     var mdLinksToAddStr = opts.MdLinksToAddArr.Select(
-                        link => $"<u>{timeStamp}</u>: [{link.Title}]({link.Url}){Environment.NewLine}").ToArray(
+                        link => $"<u>{link.TimeStampStr ?? dfTimeStamp}</u>: [{link.Title}]({link.Url}){Environment.NewLine}").ToArray(
                             ).JoinStr(Environment.NewLine) + Environment.NewLine;
 
                     if (opts.InsertLinksToAdd)

@@ -64,15 +64,18 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
         public string Text { get; set; }
     }
 
-    public class TrmrkWebRequestGlobalMetadataCore
+    public class TrmrkWebGlobalMetadataCore
     {
         public int ClientVersion { get; set; }
-        public string RequestName { get; set; }
+        public string DataTypeKey { get; set; }
     }
 
-    public class TrmrkWebResponseGlobalMetadataCore
+    public class TrmrkWebRequestGlobalMetadataCore : TrmrkWebGlobalMetadataCore
     {
-        public int RequiredClientVersion { get; set; }
+    }
+
+    public class TrmrkWebResponseGlobalMetadataCore : TrmrkWebGlobalMetadataCore
+    {
     }
 
     public static class TrmrkStructuredFreeTextWebRequestO

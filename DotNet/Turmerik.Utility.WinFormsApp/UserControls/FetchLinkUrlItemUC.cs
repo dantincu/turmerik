@@ -60,6 +60,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private FetchLinkDataUrlItemMtbl item;
         private string? urlTitle;
+        private string? urlText;
+        private string? urlTimeStampStr;
         private List<UrlScript> urlScripts;
         private List<UrlScriptUC> urlScriptControls;
         private UrlScriptUC focusedUrlScriptControl;
@@ -141,9 +143,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         public void HandleKeyDown(KeyEventArgs e)
         {
-            if (e.Control && !e.Alt && e.KeyCode >= Keys.D1 && e.KeyCode <= Keys.D9)
+            if (e.Control && !e.Alt && (e.KeyCode == Keys.O || (e.KeyCode >= Keys.D1 && e.KeyCode <= Keys.D9)))
             {
-                int index = (e.KeyCode - Keys.D0);
+                int index = e.KeyCode == Keys.O ? 0 : e.KeyCode - Keys.D0;
 
                 var matchingControls = urlScriptControls.Where(
                     control => control.UrlScript.Index % 10 == index).ToList();
@@ -151,13 +153,13 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 UrlScriptUC? matchingUC = matchingControls.FirstOrDefault();
                 int matchingControlsCount = matchingControls.Count;
 
-                if (matchingControlsCount > 2)
+                if (matchingControlsCount > 1)
                 {
                     if (focusedUrlScriptControl?.UrlScript.Index % 10 == index)
                     {
                         int idx = matchingControls.IndexOf(focusedUrlScriptControl!);
 
-                        if (idx < matchingControlsCount - 2)
+                        if (idx < matchingControlsCount - 1)
                         {
                             matchingUC = matchingControls[idx + 1];
                         }
@@ -178,7 +180,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private void ClearTitle()
         {
-            urlTitle = null!;
+            urlTitle = null;
             tableLayoutPanelScripts.Controls.Clear();
 
             if (urlScriptControls != null)
@@ -212,22 +214,25 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             SetItem(new FetchLinkDataUrlItemMtbl(item)
             {
-                Text = url,
                 Url = url,
             });
         }
 
-        private void SetUrlTitle(string? title)
+        private void SetUrlTitle(
+            string? title,
+            Action? afterClear = null)
         {
             ClearTitle();
             urlTitle = title;
+
+            afterClear?.Invoke();
 
             var urlScripts = fetchMultipleLinksService.UrlScripts;
 
             if (urlTitle == null)
             {
                 urlTitle = item.Url;
-                urlScripts = urlScripts.First().Arr().RdnlC();
+                urlScripts = urlScripts.Take(3).RdnlC();
             }
 
             this.urlScripts = urlScripts.ToList();
@@ -240,7 +245,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 control.UpdateScript(
                     urlScript, new (
                         item.Url, urlTitle,
-                        textBoxWebViewAddress.Text));
+                        textBoxWebViewAddress.Text,
+                        urlText ?? item.UrlText,
+                        urlTimeStampStr ?? item.TimeStampStr));
 
                 control.TextBoxScriptKeyDown += UrlScriptControl_TextBoxScriptKeyDown;
                 tableLayoutPanelScripts.Controls.Add(control);
@@ -254,29 +261,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
-        private void UrlScriptControl_TextBoxScriptKeyDown(
-            UrlScriptUC sender, KeyEventArgs evt, string text) => actionComponent.Execute(
-                new WinFormsActionOpts<int>
-        {
-            ActionName = nameof(UrlScriptControl_TextBoxScriptKeyDown),
-            Action = () =>
-            {
-                if (evt.Control && evt.KeyCode == Keys.Enter && !evt.Alt && !evt.Shift)
-                {
-                    if (sender.UrlScript.IsUrl)
-                    {
-                        SetUrl(text);
-                    }
-                    else if (sender.UrlScript.IsTitle)
-                    {
-                        SetUrlTitle(text);
-                    }
-                }
-
-                return ActionResultH.Create(0);
-            }
-        });
-
         private async Task<string> GetWebViewTitleAsync()
         {
             string title = await webView.ExecuteScriptAsync(
@@ -287,6 +271,41 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         }
 
         #region UI Event Handlers
+
+        private void UrlScriptControl_TextBoxScriptKeyDown(
+            UrlScriptUC sender, KeyEventArgs evt, string text) => actionComponent.Execute(
+                new WinFormsActionOpts<int>
+                {
+                    ActionName = nameof(UrlScriptControl_TextBoxScriptKeyDown),
+                    Action = () =>
+                    {
+                        if (evt.Control && evt.KeyCode == Keys.Enter && !evt.Alt && !evt.Shift)
+                        {
+                            if (sender.UrlScript.IsUrl)
+                            {
+                                SetUrl(text);
+                            }
+                            else
+                            {
+                                string title = sender.UrlScript.IsTitle ? text : urlTitle!;
+
+                                SetUrlTitle(title, () =>
+                                {
+                                    if (sender.UrlScript.IsText)
+                                    {
+                                        urlText = text;
+                                    }
+                                    else if (sender.UrlScript.IsTimeStampStr)
+                                    {
+                                        urlTimeStampStr = text;
+                                    }
+                                });
+                            }
+                        }
+
+                        return ActionResultH.Create(0);
+                    }
+                });
 
         private void FetchLinkUrlItemUC_Load(object sender, EventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
         {

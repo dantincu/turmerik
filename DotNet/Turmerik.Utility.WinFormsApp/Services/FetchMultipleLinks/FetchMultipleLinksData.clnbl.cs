@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using Turmerik.Core.Helpers;
+using Turmerik.DirsPair;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.WinForms.Controls;
-using Turmerik.Core.Helpers;
 
 namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
 {
@@ -20,8 +23,11 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
     public interface IFetchLinkDataItemCore
     {
         int ItemIdx { get; }
-        bool? IsUrl { get; }
-        string? Text { get; }
+        string Url { get; }
+        string? Title { get; }
+        string? MdLink { get; }
+        string? UrlText { get; }
+        string? TimeStampStr { get; }
     }
 
     public interface IFetchLinkDataTextItem : IFetchLinkDataItemCore
@@ -30,11 +36,8 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
 
     public interface IFetchLinkDataUrlItem : IFetchLinkDataItemCore
     {
-        string Url { get; }
         DateTime? LastLoadedAt { get; }
         DateTime? LastVisitedAt { get; }
-        string? Title { get; }
-        string? MdLink { get; }
 
         IEnumerable<string>? GetScripts();
     }
@@ -85,13 +88,19 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
         public FetchLinkDataItemCoreImmtbl(IFetchLinkDataItemCore src)
         {
             ItemIdx = src.ItemIdx;
-            IsUrl = src.IsUrl;
-            Text = src.Text;
+            Url = src.Url;
+            Title = src.Title;
+            MdLink = src.MdLink;
+            UrlText = src.UrlText;
+            TimeStampStr = src.TimeStampStr;
         }
 
         public int ItemIdx { get; init; }
-        public bool? IsUrl { get; init; }
-        public string? Text { get; init; }
+        public string Url { get; }
+        public string? Title { get; }
+        public string? MdLink { get; }
+        public string? UrlText { get; }
+        public string? TimeStampStr { get; }
     }
 
     public class FetchLinkDataItemCoreMtbl : IFetchLinkDataItemCore
@@ -103,13 +112,19 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
         public FetchLinkDataItemCoreMtbl(IFetchLinkDataItemCore src)
         {
             ItemIdx = src.ItemIdx;
-            IsUrl = src.IsUrl;
-            Text = src.Text;
+            Url = src.Url;
+            Title = src.Title;
+            MdLink = src.MdLink;
+            UrlText = src.UrlText;
+            TimeStampStr = src.TimeStampStr;
         }
 
         public int ItemIdx { get; set; }
-        public bool? IsUrl { get; set; }
-        public string? Text { get; set; }
+        public string Url { get; set; }
+        public string? Title { get; set; }
+        public string? MdLink { get; set; }
+        public string? UrlText { get; set; }
+        public string? TimeStampStr { get; set; }
     }
 
     public class FetchLinkDataTextItemImmtbl : FetchLinkDataItemCoreImmtbl, IFetchLinkDataTextItem
@@ -134,19 +149,13 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
     {
         public FetchLinkDataUrlItemImmtbl(IFetchLinkDataUrlItem src) : base(src)
         {
-            Url = src.Url;
             LastLoadedAt = src.LastLoadedAt;
             LastVisitedAt = src.LastVisitedAt;
-            Title = src.Title;
-            MdLink = src.MdLink;
             Scripts = src.GetScripts()?.RdnlC();
         }
 
-        public string Url { get; init; }
         public DateTime? LastLoadedAt { get; init; }
         public DateTime? LastVisitedAt { get; init; }
-        public string? Title { get; init; }
-        public string? MdLink { get; init; }
         public ReadOnlyCollection<string>? Scripts { get; init; }
 
         public IEnumerable<string>? GetScripts() => Scripts;
@@ -160,19 +169,13 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
 
         public FetchLinkDataUrlItemMtbl(IFetchLinkDataUrlItem src) : base(src)
         {
-            Url = src.Url;
             LastLoadedAt = src.LastLoadedAt;
             LastVisitedAt = src.LastVisitedAt;
-            Title = src.Title;
-            MdLink = src.MdLink;
             Scripts = src.GetScripts()?.ToList();
         }
 
-        public string Url { get; set; }
         public DateTime? LastLoadedAt { get; set; }
         public DateTime? LastVisitedAt { get; set; }
-        public string? Title { get; set; }
-        public string? MdLink { get; set; }
         public List<string>? Scripts { get; set; }
 
         public IEnumerable<string>? GetScripts() => Scripts;

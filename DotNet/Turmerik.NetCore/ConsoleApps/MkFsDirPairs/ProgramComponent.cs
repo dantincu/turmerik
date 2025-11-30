@@ -244,14 +244,16 @@ namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
 
             while (!isAllWhitespace)
             {
+                string timeStampStr = null;
                 string newLinkTitle = null;
                 string url = null;
 
                 if (!isNullOrEmpty && line.StartsWith(":"))
                 {
                     string[] restOfLineParts = line.Substring(1).Split(":");
-                    url = string.Join(":", restOfLineParts.Take(2));
-                    newLinkTitle = string.Join(":", restOfLineParts.Skip(2));
+                    timeStampStr = restOfLineParts.First();
+                    url = string.Join(":", restOfLineParts.Skip(1).Take(2));
+                    newLinkTitle = string.Join(":", restOfLineParts.Skip(3));
                 }
 
                 if (!isNullOrEmpty)
@@ -314,7 +316,8 @@ namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
                     {
                         Title = MdH.EncodeForMd(
                             newLinkTitle),
-                        Url = url
+                        Url = url,
+                        TimeStampStr = timeStampStr?.Nullify(true)
                     });
                 }
 

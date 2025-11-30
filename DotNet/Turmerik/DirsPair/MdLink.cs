@@ -6,6 +6,7 @@ namespace Turmerik.DirsPair
 {
     public class MdLink
     {
+        public string? TimeStampStr { get; init; }
         public string Title { get; init; }
         public string Url { get; init; }
     }
