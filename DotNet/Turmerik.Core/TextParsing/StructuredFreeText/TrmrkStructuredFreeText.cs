@@ -71,14 +71,6 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
         public string DataTypeKey { get; set; }
     }
 
-    public class TrmrkWebRequestGlobalMetadataCore : TrmrkWebGlobalMetadataCore
-    {
-    }
-
-    public class TrmrkWebResponseGlobalMetadataCore : TrmrkWebGlobalMetadataCore
-    {
-    }
-
     public static class TrmrkStructuredFreeTextWebRequestO
     {
         public class ItemOpts : TrmrkStructuredFreeTextDeserializeOptsCore<

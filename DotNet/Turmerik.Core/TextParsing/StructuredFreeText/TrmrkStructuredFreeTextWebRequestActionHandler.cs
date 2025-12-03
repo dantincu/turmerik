@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Helpers;
-using O = Turmerik.Core.TextParsing.StructuredFreeText.TrmrkStructuredFreeTextWebRequestO;
 
 namespace Turmerik.Core.TextParsing.StructuredFreeText
 {
@@ -11,14 +10,6 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
     {
         public abstract Task<TrmrkStructuredFreeTextWebResponse> ExecuteAsync(
             TrmrkStructuredFreeTextWebRequest request);
-
-        public abstract Type? GetGlobalMetadataMetadataType(
-            TrmrkStructuredFreeTextWebRequest request,
-            TrmrkStructuredFreeTextDeserializeTypeFactoryArgs factoryArgs);
-
-        public abstract Type? GetGlobalMetadataPayloadType(
-            TrmrkStructuredFreeTextWebRequest request,
-            TrmrkStructuredFreeTextDeserializeTypeFactoryArgs factoryArgs);
 
         public abstract Type? GetRequestMetadataMetadataType(
             TrmrkStructuredFreeTextWebRequest request,
@@ -39,15 +30,6 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
 
     public abstract class TrmrkStructuredFreeTextWebRequestActionHandlerBase<TGlobalMetadata, TRequestMetadata, TRequestBody> : TrmrkStructuredFreeTextWebRequestActionHandlerBase
     {
-        protected readonly ITrmrkStructuredFreeTextWebSerializer TrmrkStructuredFreeTextWebSerializer;
-
-        protected TrmrkStructuredFreeTextWebRequestActionHandlerBase(
-            ITrmrkStructuredFreeTextWebSerializer trmrkStructuredFreeTextWebSerializer)
-        {
-            TrmrkStructuredFreeTextWebSerializer = trmrkStructuredFreeTextWebSerializer ?? throw new ArgumentNullException(
-                nameof(trmrkStructuredFreeTextWebSerializer));
-        }
-
         public override async Task<TrmrkStructuredFreeTextWebResponse> ExecuteAsync(
             TrmrkStructuredFreeTextWebRequest request)
         {
@@ -68,12 +50,6 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
 
             return response;
         }
-
-        public override Type? GetGlobalMetadataMetadataType(
-            TrmrkStructuredFreeTextWebRequest request, TrmrkStructuredFreeTextDeserializeTypeFactoryArgs factoryArgs) => null;
-
-        public override Type? GetGlobalMetadataPayloadType(
-            TrmrkStructuredFreeTextWebRequest request, TrmrkStructuredFreeTextDeserializeTypeFactoryArgs factoryArgs) => typeof(TGlobalMetadata);
 
         public override Type? GetRequestBodyMetadataType(
             TrmrkStructuredFreeTextWebRequest request, TrmrkStructuredFreeTextDeserializeTypeFactoryArgs factoryArgs) => null;

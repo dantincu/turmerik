@@ -91,6 +91,8 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<ITypeResolver, TypeResolver>();
             services.AddSingleton<ITrmrkStructuredFreeTextSerializer, TrmrkStructuredFreeTextSerializer>();
             services.AddSingleton<ITrmrkStructuredFreeTextWebSerializer, TrmrkStructuredFreeTextWebSerializer>();
+            services.AddSingleton<ITrmrkStructuredFreeTextWebRequestHandler, TrmrkStructuredFreeTextWebRequestHandler>();
+            services.AddSingleton<ITrmrkStructuredFreeTextWebRequestHandlerFactory, TrmrkStructuredFreeTextWebRequestHandlerFactory>();
 
             return services;
         }
