@@ -97,6 +97,7 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
                         {
                             currentItem.Metadata = GetItemPart(new ()
                             {
+                                Result = result,
                                 Item = currentItem,
                                 RawText = opts.Text,
                                 RawTextLines = rawTextLines,
@@ -115,6 +116,7 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
                         {
                             currentItem.Payload = GetItemPart(new()
                             {
+                                Result = result,
                                 Item = currentItem,
                                 RawText = opts.Text,
                                 RawTextLines = rawTextLines,
@@ -187,37 +189,30 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
             serializer ??= (conversion, obj) => conversion.Adapter.Serialize(
                 obj, false, true, Formatting.None);
 
-            string? output = null;
+            string? output = freeTextItemPart.Text ?? freeTextItemPart.TextLines?.With(
+                    textLines => string.Join(Environment.NewLine, textLines)) ?? ((
+                    freeTextItemPart is TrmrkStructuredFreeTextDataItemPartBase freeTextDataItemPart) ? freeTextDataItemPart.GetData()?.With(
+                    data => serializer(jsonConversion, data)) : null);
 
-            if (freeTextItemPart is TrmrkStructuredFreeTextDataItemPartBase freeTextDataItemPart)
-            {
-                output = freeTextDataItemPart.GetData()?.With(
-                    data => serializer(jsonConversion, data));
-            }
-            else
-            {
-                output = freeTextItemPart.Text ?? freeTextItemPart.TextLines?.With(
-                    textLines => string.Join(Environment.NewLine, textLines));
-            }
-
-            output ??= string.Empty;
             return output;
         }
 
-        private TrmrkStructuredFreeTextItemPart? GetItemPart(
-            GetItemPartArgs args) => args.DeserializationTypeFactory?.With(
-                factory => GetItemPart(
-                    args.RawTextLines, args.StartLineIdx,
+        private TrmrkStructuredFreeTextItemPart GetItemPart(
+            GetItemPartArgs args) => FuncH.With(args.DeserializationTypeFactory?.Invoke(new()
+                {
+                    Result = args.Result,
+                    Item = args.Item,
+                    Text = args.RawText,
+                    TextLines = args.RawTextLines,
+                    StartLineIdx = args.StartLineIdx,
+                    PartLinesCount = args.PartLinesCount,
+                    ItemIdx = args.ItemIdx,
+                }),
+                dataType => GetItemPart(
+                    args.RawTextLines,
+                    args.StartLineIdx,
                     args.PartLinesCount,
-                    factory(new()
-                    {
-                        Item = args.Item,
-                        Text = args.RawText,
-                        TextLines = args.RawTextLines,
-                        StartLineIdx = args.StartLineIdx,
-                        PartLinesCount = args.PartLinesCount,
-                        ItemIdx = args.ItemIdx,
-                    })));
+                    dataType));
 
         private TrmrkStructuredFreeTextItemPart GetItemPart(
             string[] rawTextLines,
@@ -269,6 +264,7 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
 
         private class GetItemPartArgs
         {
+            public TrmrkStructuredFreeText Result { get; set; }
             public TrmrkStructuredFreeTextItem Item { get; set; }
             public string RawText { get; set; }
             public string[] RawTextLines { get; set; }

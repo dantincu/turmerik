@@ -72,10 +72,10 @@ namespace Turmerik.Logging
 
         public static IEnumerable<KeyValuePair<TKey, IClnbl>> ToClnblDictnr<TKey>(
             this Dictionary<TKey, Mtbl> src) => src.ToDictionary(
-                kvp => kvp.Key, kvp => kvp.Value.SafeCast<IClnbl>());
+                kvp => kvp.Key, kvp => kvp.Value.CastOrDefault<IClnbl>());
 
         public static IEnumerable<KeyValuePair<TKey, IClnbl>> ToClnblDictnr<TKey>(
             this ReadOnlyDictionary<TKey, Immtbl> src) => src.ToDictionary(
-                kvp => kvp.Key, kvp => kvp.Value.SafeCast<IClnbl>());
+                kvp => kvp.Key, kvp => kvp.Value.CastOrDefault<IClnbl>());
     }
 }

@@ -61,9 +61,9 @@ namespace Turmerik.Core.Utility
 
         public IEnumerable<TValue> Values => GetValueCore(
             dictnr => dictnr.Values.Select(
-                value => value.SafeCast<TValue>()),
+                value => value.CastOrDefault<TValue>()),
             dictnr => dictnr.Values.Select(
-                value => value.SafeCast<TValue>()));
+                value => value.CastOrDefault<TValue>()));
 
         public int Count => GetValueCore(
             dictnr => dictnr.Count,
@@ -76,8 +76,8 @@ namespace Turmerik.Core.Utility
             dictnr => dictnr.ContainsKey(key));
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => GetValueCore(
-            dictnr => dictnr.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.SafeCast<TValue>()),
-            dictnr => dictnr.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.SafeCast<TValue>())).GetEnumerator();
+            dictnr => dictnr.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.CastOrDefault<TValue>()),
+            dictnr => dictnr.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.CastOrDefault<TValue>())).GetEnumerator();
 
         public bool TryGetValue(TKey key, out TValue value)
         {
@@ -94,7 +94,7 @@ namespace Turmerik.Core.Utility
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public Dictionary<TKey, TMtbl> ToMtblDictnr() => GetValueCore(
-            dictnr => dictnr.ToDictionary(kvp => kvp.Key, kvp => kvp.SafeCast<TMtbl>()),
+            dictnr => dictnr.ToDictionary(kvp => kvp.Key, kvp => kvp.CastOrDefault<TMtbl>()),
             dictnr => dictnr.ToDictionary(kvp => kvp.Key, kvp => kvp.Value));
 
         public Dictionary<TKey, TMtbl> AsMtblDictnr(
@@ -104,7 +104,7 @@ namespace Turmerik.Core.Utility
 
         public ReadOnlyDictionary<TKey, TImmtbl> ToImmtblDictnr() => GetValueCore(
             dictnr => dictnr.ToDictionary(kvp => kvp.Key, kvp => kvp.Value).RdnlD(),
-            dictnr => dictnr.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.SafeCast<TImmtbl>()).RdnlD());
+            dictnr => dictnr.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.CastOrDefault<TImmtbl>()).RdnlD());
 
         public ReadOnlyDictionary<TKey, TImmtbl> AsImmtblDictnr(
             bool createNewInstance = true) => GetValueCore(

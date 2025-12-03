@@ -115,10 +115,10 @@ namespace Turmerik.Core.Logging
 
         public static IEnumerable<KeyValuePair<TKey, IClnblCore<TLogLevel, TTimeStamp>>> ToClnblDictnr<TKey, TLogLevel, TTimeStamp>(
             this Dictionary<TKey, MtblCore<TLogLevel, TTimeStamp>> src) => src.ToDictionary(
-                kvp => kvp.Key, kvp => kvp.Value.SafeCast<IClnblCore<TLogLevel, TTimeStamp>>());
+                kvp => kvp.Key, kvp => kvp.Value.CastOrDefault<IClnblCore<TLogLevel, TTimeStamp>>());
 
         public static IEnumerable<KeyValuePair<TKey, IClnblCore<TLogLevel, TTimeStamp>>> ToClnblDictnr<TKey, TLogLevel, TTimeStamp>(
             this ReadOnlyDictionary<TKey, ImmtblCore<TLogLevel, TTimeStamp>> src) => src.ToDictionary(
-                kvp => kvp.Key, kvp => kvp.Value.SafeCast<IClnblCore<TLogLevel, TTimeStamp>>());
+                kvp => kvp.Key, kvp => kvp.Value.CastOrDefault<IClnblCore<TLogLevel, TTimeStamp>>());
     }
 }

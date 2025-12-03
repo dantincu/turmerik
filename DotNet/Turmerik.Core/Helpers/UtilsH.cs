@@ -8,9 +8,9 @@ namespace Turmerik.Core.Helpers
 {
     public static class UtilsH
     {
-        public static T SafeCast<T>(
+        public static T CastOrDefault<T>(
             this object obj,
-            Func<T> defaultValueFactory = null)
+            Func<T>? defaultValueFactory = null)
         {
             T retVal;
 
@@ -25,6 +25,20 @@ namespace Turmerik.Core.Helpers
             else
             {
                 retVal = default;
+            }
+
+            return retVal;
+        }
+
+        public static T? CastOrNull<T>(
+            this object obj)
+            where T : class
+        {
+            T? retVal = null;
+
+            if (obj is T value)
+            {
+                retVal = value;
             }
 
             return retVal;

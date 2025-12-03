@@ -51,6 +51,7 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
 
     public class TrmrkStructuredFreeTextDeserializeTypeFactoryArgs
     {
+        public TrmrkStructuredFreeText Result { get; set; }
         public TrmrkStructuredFreeTextItem Item { get; set; }
         public int ItemIdx { get; set; }
         public string Text { get; set; }
@@ -103,12 +104,17 @@ namespace Turmerik.Core.TextParsing.StructuredFreeText
         public string? RequestBodyFreeText { get; set; }
     }
 
-    public class TrmrkStructuredFreeTextWebResponseSerializeOpts
+    public class TrmrkStructuredFreeTextWebResponse
     {
+        public string[] TextLines { get; set; }
         public TrmrkStructuredFreeTextItem? GlobalMetadata { get; set; }
         public TrmrkStructuredFreeTextItem? ResponseMetadata { get; set; }
         public TrmrkStructuredFreeTextItem? ResponseBody { get; set; }
         public string? ResponseBodyFreeText { get; set; }
+    }
+
+    public class TrmrkStructuredFreeTextWebResponseSerializeOpts : TrmrkStructuredFreeTextWebResponse
+    {
         public Func<IJsonConversion, object, string>? JsonSerializer { get; set; }
     }
 }
