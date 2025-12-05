@@ -22,7 +22,7 @@ namespace Turmerik.Core.TextParsing.IndexesFilter
     public class IdxesFilterParser : IIdxesFilterParser
     {
         private const char ITEMS_LIST_SEP_CHR = ',';
-        private const string ITEMS_SPREAD_STR = "..";
+        private const string ITEMS_SPREAD_STR = "-";
 
         public IdxesFilter ParseIdxesFilter(
             string rawArg)

@@ -19,8 +19,8 @@
       },
       "Folders": [
         {
-          "InputDirPath": "Turmerik.LocalFilesCloner.ConsoleApp\\bin\\Release\\net9.0",
-          "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.CmdApp\\Release\\net9.0"
+          "InputDirPath": "Turmerik.LocalFilesCloner.ConsoleApp\\bin\\Release\\net10.0",
+          "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.CmdApp\\Release\\net10.0"
         }
       ]
     }
