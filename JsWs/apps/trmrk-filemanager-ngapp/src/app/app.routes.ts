@@ -9,6 +9,8 @@ import { TrmrkAppSetup } from './components/pages/trmrk-app-setup-page/trmrk-app
 import { trmrkAppHasBeenSetupGuard } from '../trmrk-angular/guards/trmrk-app-has-been-setup-guard';
 import { TrmrkLogConsoleTestPage } from './components/pages/trmrk-log-console-test-page/trmrk-log-console-test-page';
 import { TrmrkInfiniteHeightPanelTestPage } from './components/pages/trmrk-infinite-height-panel-test-page/trmrk-infinite-height-panel-test-page';
+import { TrmrkPaginatedListTestPage } from './components/pages/trmrk-paginated-list-test-page/trmrk-paginated-list-test-page';
+import { TrmrkNumberEditorsTestPage } from './components/pages/trmrk-number-editors-test-page/trmrk-number-editors-test-page';
 
 export const routes: Routes = getAppRoutes([
   {
@@ -22,6 +24,14 @@ export const routes: Routes = getAppRoutes([
   {
     path: 'infinite-height-panel-test',
     component: TrmrkInfiniteHeightPanelTestPage,
+  },
+  {
+    path: 'paginated-list-test',
+    component: TrmrkPaginatedListTestPage,
+  },
+  {
+    path: 'number-editors-test',
+    component: TrmrkNumberEditorsTestPage,
   },
   {
     path: '',

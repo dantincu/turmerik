@@ -19,6 +19,7 @@
   <trmrk-infinite-height-panel-scroll-bar
     [ngClass]="[service.scrollControlIsExpanded ? '' : 'trmrk-hidden']"
     (trmrkScrolled)="scrolled($event)"
+    (trmrkNewContentRequested)="newContentRequested($event)"
   ></trmrk-infinite-height-panel-scroll-bar>
   <trmrk-horiz-strip
     [trmrkCssClass]="['trmrk-has-border-x2 trmrk-bottom-horiz-strip']"

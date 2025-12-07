@@ -1,0 +1,18 @@
+<trmrk-app-page [trmrkAppBarTitle]="'Paginated list test'"
+  ><trmrk-horiz-strip
+    [trmrkCssClass]="['trmrk-has-border-x2 trmrk-top-horiz-strip']"
+    [trmrkUseContentInsteadOfTextRow]="true"
+    ><button class="trmrk-icon-btn" mat-icon-button (click)="editParamsClicked()">
+      <mat-icon class="trmrk-icon">edit</mat-icon></button
+    ><trmrk-list-slice-selector></trmrk-list-slice-selector
+  ></trmrk-horiz-strip>
+  <div [ngClass]="['trmrk-page-body trmrk-scrollable trmrk-scrollable-y']">
+    @for (item of items; track item.idx) {
+    <h1 [ngStyle]="{ backgroundColor: item.backColor }">{{ item.text }}</h1>
+    }
+  </div>
+  <trmrk-horiz-strip
+    [trmrkCssClass]="['trmrk-has-border-x2 trmrk-bottom-horiz-strip']"
+    [trmrkUseContentInsteadOfTextRow]="true"
+  ></trmrk-horiz-strip
+></trmrk-app-page>
