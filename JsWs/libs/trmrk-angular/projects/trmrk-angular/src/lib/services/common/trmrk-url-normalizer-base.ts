@@ -44,7 +44,7 @@ export abstract class TrmrkUrlNormalizerBase {
     return this.getRetObj(normObj);
   }
 
-  addParamsKeyIfNotReq(params: Params, key: string, value: string | NullOrUndef) {
+  addParamsKeyIfReq(params: Params, key: string, value: string | NullOrUndef) {
     if ((value ?? null) !== null && !(key in params)) {
       params[key] = value;
     }

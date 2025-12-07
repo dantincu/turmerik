@@ -20,13 +20,13 @@ export class DefaultTrmrkUrlNormalizer extends TrmrkUrlNormalizerBase {
   normalizeUrlCore(normObj: TrmrkNormalizedUrlOpts) {
     const params = (normObj.url!.queryParams ??= {});
 
-    this.addParamsKeyIfNotReq(
+    this.addParamsKeyIfReq(
       params,
       sessionUrlQueryKeys.sessionId,
       this.sessionService.currentSession.value?.sessionId
     );
 
-    this.addParamsKeyIfNotReq(
+    this.addParamsKeyIfReq(
       params,
       sessionUrlQueryKeys.tabId,
       this.sessionService.currentTab.value?.tabId

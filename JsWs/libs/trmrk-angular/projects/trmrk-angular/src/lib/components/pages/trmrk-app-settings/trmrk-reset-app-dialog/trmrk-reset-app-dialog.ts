@@ -93,6 +93,6 @@ export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
   }
 
   okClick() {
-    this.modalService.closeModal();
+    this.appService.closeModal(this.modalId);
   }
 }

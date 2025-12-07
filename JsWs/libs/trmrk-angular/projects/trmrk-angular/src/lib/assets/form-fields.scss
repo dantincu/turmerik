@@ -16,11 +16,11 @@
   white-space-collapse: collapse;
   line-break: anywhere;
   width: 100%;
+  flex: 1 0 100%;
 }
 
 .trmrk-form-node {
   display: flex;
-  padding-right: 10px;
 
   mat-form-field {
     width: 100%;
@@ -44,6 +44,10 @@
 
   .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
     height: 30px;
+  }
+
+  > .trmrk-icon-btn {
+    margin: 3px;
   }
 }
 

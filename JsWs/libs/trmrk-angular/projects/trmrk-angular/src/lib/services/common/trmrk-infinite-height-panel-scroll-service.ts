@@ -522,7 +522,10 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
     return text;
   }
 
-  updateScrollControlSpeedFactor(speedFactor?: number | NullOrUndef, increment?: number | NullOrUndef) {
+  updateScrollControlSpeedFactor(
+    speedFactor?: number | NullOrUndef,
+    increment?: number | NullOrUndef
+  ) {
     speedFactor ??= this.scrollControlSpeedFactor;
 
     if ((increment ?? null) != null) {

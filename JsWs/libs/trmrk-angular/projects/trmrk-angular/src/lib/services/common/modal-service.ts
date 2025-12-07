@@ -72,10 +72,6 @@ export class ModalService implements OnDestroy {
     }
   }
 
-  closeModal() {
-    this.dialogRef?.close();
-  }
-
   dispose() {
     this.currentModalIdChangedSubscription.unsubscribe();
     this.closeModalSubscription.unsubscribe();
@@ -84,5 +80,9 @@ export class ModalService implements OnDestroy {
     this.modalClosedSubscription = null;
     this.hostEl = null!;
     this.dialogRef = null!;
+  }
+
+  private closeModal() {
+    this.dialogRef?.close();
   }
 }

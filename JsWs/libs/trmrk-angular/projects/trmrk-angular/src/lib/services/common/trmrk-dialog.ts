@@ -40,6 +40,7 @@ export interface OpenDialogArgs<TData extends TrmrkDialogComponentDataCore> {
   data: TrmrkDialogData<TData>;
   clickEvent?: Event | NullOrUndef;
   dialogPanelSize?: DialogPanelSize | NullOrUndef;
+  dialogPanelStretchHeight?: boolean | NullOrUndef;
 }
 
 export const mergeDialogData = <TData extends TrmrkDialogComponentDataCore>(
@@ -75,7 +76,11 @@ export const openDialog = <TData extends TrmrkDialogComponentDataCore>(
   }
 
   const dialogRef = args.matDialog.open(args.dialogComponent, {
-    panelClass: ['trmrk-mat-dialog-panel', getDialogPanelSizeCssClass(args.dialogPanelSize)],
+    panelClass: [
+      'trmrk-mat-dialog-panel',
+      getDialogPanelSizeCssClass(args.dialogPanelSize),
+      args.dialogPanelStretchHeight ? 'trmrk-height-stretch' : '',
+    ],
     disableClose: true,
     data: args.data,
   });

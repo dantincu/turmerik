@@ -1,0 +1,17 @@
+<trmrk-dialog
+  [trmrkModalId]="modalId"
+  [trmrkData]="
+    mergeDialogData(data, {
+      contentTemplate: content,
+      actionsTemplate: actions,
+    })
+  "
+></trmrk-dialog>
+<ng-template #content></ng-template>
+<ng-template #actions>
+  <button mat-button class="trmrk-btn trmrk-btn-filled-reject" (click)="cancelClick()">
+    Cancel</button
+  >@if (!hasError) {
+  <button mat-button class="trmrk-btn trmrk-btn-filled-primary" (click)="okClick()">OK</button>
+  }</ng-template
+>
