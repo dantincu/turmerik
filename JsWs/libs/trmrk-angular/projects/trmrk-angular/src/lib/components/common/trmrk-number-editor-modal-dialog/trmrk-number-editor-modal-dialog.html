@@ -8,7 +8,9 @@
   "
 ></trmrk-dialog>
 <ng-template #content>
-  <input type="number" class="trmrk-fake-input" #fakeNumberInput />
+  <div class="trmrk-fake-input-wrapper">
+    <input type="number" class="trmrk-fake-input" #fakeNumberInput />
+  </div>
   <trmrk-horiz-strip
     [trmrkCssClass]="['trmrk-has-border-x2 trmrk-top-horiz-strip']"
     [trmrkUseContentInsteadOfTextRow]="true"

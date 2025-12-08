@@ -283,7 +283,6 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
 
   updateNumber(newValue: number | null = null, updateDigits = false) {
     newValue ??= this.getNumberValue();
-    console.log('newValue', newValue);
 
     this.value.number = newValue;
     this.value.isNegative = newValue < 0;
@@ -297,13 +296,13 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
   }
 
   getNumberValue() {
-    let numStr = this.value.isNegative
-      ? '-'
-      : '' +
-        this.digits!.map(
-          (digit, i) => (i === this.decimalPointIndex ? '.' : '') + digit.value.toString()
-        ).join('');
+    let numStr =
+      (this.value.isNegative ? '-' : '') +
+      this.digits!.map(
+        (digit, i) => (i === this.decimalPointIndex ? '.' : '') + digit.value.toString()
+      ).join('');
 
+    console.log('numStr', numStr, this.digits, this.value.digits);
     const num = Number(numStr);
     return num;
   }
@@ -356,10 +355,10 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
       this.errorMessage = 'Value is required';
     } else if (this.value.number! < this.normData.min!) {
       this.hasError = true;
-      this.errorMessage = `Max allowed value is ${this.normData.min}`;
+      this.errorMessage = `Min allowed value is ${this.normData.min}`;
     } else if (this.value.number! > this.normData.max!) {
       this.hasError = true;
-      this.errorMessage = `Min allowed value is ${this.normData.max}`;
+      this.errorMessage = `Max allowed value is ${this.normData.max}`;
     } else if (
       this.decimalPointIndex > 0 &&
       this.digits.length - this.decimalPointIndex > this.maxAllowedDecimals

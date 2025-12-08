@@ -1185,10 +1185,18 @@ trmrk-list-slice-selector {
 }
 
 trmrk-number-editor-modal-dialog {
-  .trmrk-fake-input {
+  .trmrk-fake-input-wrapper {
     position: absolute;
-    top: 80px;
+    bottom: 0;
+    left: 40px;
     z-index: -1;
+
+    .trmrk-fake-input {
+      width: 1px;
+      height: 1px;
+      font-size: 1px;
+      line-height: 1px;
+    }
   }
 
   .trmrk-horiz-strip {
