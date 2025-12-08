@@ -20,6 +20,11 @@ h3 {
   font-size: 14px;
 }
 
+[disabled][disabled][disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 app-root {
   display: block;
   @include mixins.rel-stretch-to-parent-size();
@@ -727,9 +732,14 @@ trmrk-app-page {
 }
 
 .trmrk-horiz-strip {
-  h2 {
-    margin-top: 7px;
-    margin-left: 5px;
+  .trmrk-text-row {
+    padding: 0;
+    margin: 0;
+
+    h2 {
+      margin: 10px;
+      line-height: 15px;
+    }
   }
 }
 
@@ -1003,6 +1013,7 @@ trmrk-list-app-panel, .trmrk-app-panel, trmrk-panel-list, .trmrk-panel-list {
   &.trmrk-error-message-horiz-strip {
     .trmrk-text-row {
       justify-content: center;
+      align-items: center;
     }
   }
 }
@@ -1170,5 +1181,57 @@ trmrk-list-slice-selector {
     font-weight: bold;
     justify-content: center;
     line-height: 40px;
+  }
+}
+
+trmrk-number-editor-modal-dialog {
+  .trmrk-fake-input {
+    position: absolute;
+    top: 80px;
+    z-index: -1;
+  }
+
+  .trmrk-horiz-strip {
+    position: relative;
+
+    .trmrk-apply-changes-btn {
+      position: absolute;
+      right: 0;
+    }
+  }
+
+  .trmrk-symbols-container {
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 3px;
+
+    .trmrk-symbol-wrapper {
+      display: flex;
+      width: 40px;
+      height: 40px;
+      margin: 3px;
+      border: 1px solid;
+      border-radius: 3px;
+      font-weight: bold;
+      font-size: 20px;
+      justify-content: center;
+      align-items: center;
+
+      &.trmrk-minus-sign, &.trmrk-plus-sign {
+        font-size: 40px;
+        line-height: 40px;
+      }
+
+      &.trmrk-decimal-point {
+        font-size: 40px;
+        line-height: 20px;
+
+        .trmrk-symbol-btn {
+          position: relative;
+          top: -5px;
+        }
+      }
+    }
   }
 }

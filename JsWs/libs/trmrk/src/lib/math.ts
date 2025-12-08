@@ -43,3 +43,35 @@ export const getOrderOfMagnitude = (num: number) => {
 
   return magn;
 };
+
+export interface NumberDigits {
+  intPartDigits: number[];
+  decimals: number[];
+  isNegative: boolean;
+}
+
+export const getNumberDigits = (num: number) => {
+  const isNegative = num < 0;
+  let numStr = num.toString();
+
+  if (isNegative) {
+    numStr = numStr.substring(1);
+  }
+
+  let intPartStr = numStr;
+  let decimalsStr = '';
+  const decPtIdx = numStr.indexOf('.');
+
+  if (decPtIdx >= 0) {
+    intPartStr = numStr.substring(0, decPtIdx);
+    decimalsStr = numStr.substring(decPtIdx + 1);
+  }
+
+  const retObj: NumberDigits = {
+    isNegative,
+    intPartDigits: [...intPartStr].map((char) => parseInt(char)),
+    decimals: [...decimalsStr].map((char) => parseInt(char)),
+  };
+
+  return retObj;
+};

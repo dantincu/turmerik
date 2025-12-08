@@ -6,11 +6,19 @@
   </trmrk-horiz-strip>
   <div [ngClass]="['trmrk-page-body trmrk-scrollable trmrk-scrollable-y']">
     <trmrk-mat-number-input
-      [trmrkLabel]="'0-100 with step 0.1 (required)'"
+      [trmrkLabel]="'-1000000-1000000 with step 000.1 (required)'"
       [trmrkValue]="matNumberInput1Value"
-      [trmrkMin]="0"
-      [trmrkMax]="100"
-      [trmrkStep]="0.1"
+      [trmrkMin]="-1000000"
+      [trmrkMax]="1000000"
+      [trmrkStep]="0.001"
+      [trmrkRequired]="true"
+    ></trmrk-mat-number-input>
+    <trmrk-mat-number-input
+      [trmrkLabel]="'-1000000-1000000 with step 000.1 (required)'"
+      [trmrkValue]="matNumberInput2Value"
+      [trmrkMin]="-1000000"
+      [trmrkMax]="1000000"
+      [trmrkStep]="0.001"
       [trmrkRequired]="true"
     ></trmrk-mat-number-input>
   </div>
