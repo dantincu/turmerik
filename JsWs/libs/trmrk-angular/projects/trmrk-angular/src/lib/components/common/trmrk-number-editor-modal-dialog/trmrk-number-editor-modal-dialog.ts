@@ -130,9 +130,7 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
 
   decimalPointIndex = -1;
   digits: TrmrkNumberEditorDigit[] = [];
-  focusedSymbolIndex = -1;
-  focusedSymbolId: number | null = null;
-  focusedSymbol: TrmrkNumberEditorDigit | null = null;
+  focusedDigitIndex = -1;
   isPlacingDecimalPoint = false;
   value: TrmrkNumberInputValue;
   normData: TrmrkNumberEditorModalDialogData;
@@ -155,6 +153,7 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
     private hostEl: ElementRef
   ) {
     this.fakeNumberInputKeyPressed = this.fakeNumberInputKeyPressed.bind(this);
+    this.fakeNumberInputKeyDown = this.fakeNumberInputKeyDown.bind(this);
 
     this.modalOpenedSubscription = dialogRef.afterOpened().subscribe(() => {
       setTimeout(() => {
@@ -182,13 +181,14 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
 
     this.maxAllowedDecimals = getNumberDigits(this.normData.step!).decimals.length;
     this.decimalPointIndex = this.value.decPtIdxLtlNdn ?? -1;
-    this.focusedSymbolId = 0;
 
     setTimeout(() => {
       this.fakeNumberInput.nativeElement.addEventListener(
         'keypress',
         this.fakeNumberInputKeyPressed
       );
+
+      this.fakeNumberInput.nativeElement.addEventListener('keydown', this.fakeNumberInputKeyDown);
     });
   }
 
@@ -197,6 +197,8 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
       'keypress',
       this.fakeNumberInputKeyPressed
     );
+
+    this.fakeNumberInput.nativeElement.removeEventListener('keydown', this.fakeNumberInputKeyDown);
 
     this.modalOpenedSubscription.unsubscribe();
     this.modalService.dispose();
@@ -243,8 +245,8 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
     const char = event.key;
 
     if (char >= '0' && char <= '9') {
-      if (this.focusedSymbolIndex >= 0) {
-        this.digits[this.focusedSymbolIndex].value = Number(char);
+      if (this.focusedDigitIndex >= 0) {
+        this.digits[this.focusedDigitIndex].value = Number(char);
         this.updateNumber();
       }
 
@@ -264,16 +266,77 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
         case '.':
           if (this.decimalPointIndex > 0) {
             let newDecPointIdx = Math.max(
-              this.focusedSymbolIndex,
+              this.focusedDigitIndex + 1,
               this.digits.length - this.maxAllowedDecimals
             );
 
             this.decimalPointIndex = newDecPointIdx;
             this.updateNumber();
+            this.focusNextDigit(1);
           }
 
           break;
       }
+    }
+
+    this.isPlacingDecimalPoint = false;
+    this.fakeNumberInput.nativeElement.value = '';
+  }
+
+  fakeNumberInputKeyDown(event: KeyboardEvent) {
+    switch (event.code) {
+      case 'ArrowLeft':
+        this.focusNextDigit(-1);
+        break;
+      case 'ArrowRight':
+        this.focusNextDigit(1);
+        break;
+      case 'Home':
+        this.focusDigit(0);
+        break;
+      case 'End':
+        this.focusDigit(this.digits.length - 1);
+        break;
+      case 'Delete':
+        this.tryDeleteDigits(event.ctrlKey ? Number.MAX_SAFE_INTEGER : 1);
+        break;
+      case 'Backspace':
+        if (this.focusedDigitIndex > 0) {
+          this.tryDeleteDigits(event.ctrlKey ? Number.MIN_SAFE_INTEGER : -1);
+        }
+        break;
+    }
+  }
+
+  tryDeleteDigits(digitsCount = 1) {
+    if (this.digits.length) {
+      let index = Math.max(0, this.focusedDigitIndex);
+
+      if (digitsCount === Number.MAX_SAFE_INTEGER) {
+        digitsCount = this.digits.length - index;
+      } else if (digitsCount === Number.MIN_SAFE_INTEGER) {
+        digitsCount = -index;
+      }
+
+      if (digitsCount < 0) {
+        index += digitsCount;
+        digitsCount *= -1;
+      }
+
+      this.digits.splice(index, digitsCount);
+
+      if (this.decimalPointIndex > 0) {
+        if (--this.decimalPointIndex === 0) {
+          if (this.digits.length) {
+            this.decimalPointIndex = 1;
+          } else {
+            this.decimalPointIndex = -1;
+          }
+        }
+      }
+
+      this.updateNumber();
+      this.focusDigit(index);
     }
   }
 
@@ -289,9 +352,9 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
 
     if (updateDigits) {
       this.digits = this.getDigitsFromNumberInputValue();
-      this.value.digits = this.digits.map((digit) => digit.value);
     }
 
+    this.value.digits = this.digits.map((digit) => digit.value);
     this.refreshValidation();
   }
 
@@ -302,7 +365,6 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
         (digit, i) => (i === this.decimalPointIndex ? '.' : '') + digit.value.toString()
       ).join('');
 
-    console.log('numStr', numStr, this.digits, this.value.digits);
     const num = Number(numStr);
     return num;
   }
@@ -317,7 +379,7 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
   }
 
   focusNextDigit(inc: number) {
-    let nextIndex = Math.max(-1, this.focusedSymbolIndex + inc);
+    let nextIndex = Math.max(-1, this.focusedDigitIndex + inc);
     nextIndex = ((nextIndex + 1) % (this.digits.length + 1)) - 1;
     this.focusDigit(nextIndex);
   }
@@ -331,9 +393,7 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
       digitIndex = -1;
     }
 
-    this.focusedSymbolIndex = digitIndex;
-    this.focusedSymbolId = digit?.id ?? null;
-    this.focusedSymbol = digit;
+    this.focusedDigitIndex = digitIndex;
   }
 
   insertDigit(value = -1, index = -1) {

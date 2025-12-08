@@ -54,7 +54,7 @@
     <div
       [ngClass]="[
         'trmrk-symbol-wrapper',
-        digit.id === focusedSymbolId ? 'trmrk-focused-symbol' : ''
+        $index === focusedDigitIndex ? 'trmrk-focused-symbol' : ''
       ]"
       (click)="digitClicked($index)"
     >
