@@ -5,22 +5,46 @@
   >
   </trmrk-horiz-strip>
   <div [ngClass]="['trmrk-page-body trmrk-scrollable trmrk-scrollable-y']">
-    <trmrk-mat-number-input
-      [trmrkLabel]="'-1000000-1000000 with step 000.1 (required)'"
-      [trmrkValue]="matNumberInput1Value"
-      [trmrkMin]="-1000000"
-      [trmrkMax]="1000000"
-      [trmrkStep]="0.001"
-      [trmrkRequired]="true"
-    ></trmrk-mat-number-input>
-    <trmrk-mat-number-input
-      [trmrkLabel]="'-1000000-1000000 with step 000.1 (required)'"
-      [trmrkValue]="matNumberInput2Value"
-      [trmrkMin]="-1000000"
-      [trmrkMax]="1000000"
-      [trmrkStep]="0.001"
-      [trmrkRequired]="true"
-    ></trmrk-mat-number-input>
+    <div
+      [ngStyle]="{
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'column',
+        paddingTop: '10px'
+      }"
+    >
+      <trmrk-mat-number-input
+        [trmrkLabel]="'-1000000-1000000 with step 000.1 (required)'"
+        [trmrkValue]="matNumberInput1Value"
+        [trmrkMin]="-1000000"
+        [trmrkMax]="1000000"
+        [trmrkStep]="0.001"
+        [trmrkRequired]="true"
+      ></trmrk-mat-number-input>
+      <trmrk-mat-number-input
+        [trmrkLabel]="'-1000000-1000000 with step 000.1 (required)'"
+        [trmrkValue]="matNumberInput2Value"
+        [trmrkMin]="-1000000"
+        [trmrkMax]="1000000"
+        [trmrkStep]="0.001"
+        [trmrkRequired]="true"
+      ></trmrk-mat-number-input>
+    </div>
+    <div [ngStyle]="{}">
+      <trmrk-short-string-editor [trmrkString]="'short '"></trmrk-short-string-editor>
+      <trmrk-short-string-editor [trmrkString]="''"></trmrk-short-string-editor>
+      <trmrk-short-string-editor [trmrkString]="' string'"></trmrk-short-string-editor>
+      <trmrk-short-string-editor
+        [trmrkString]="'asdfasdfafs'"
+        [trmrkHasError]="true"
+        [trmrkErrorMessage]="'asdf asdfasdfsadfsadfsadfasd asdfsadfasdfasdfasdfsadfsadfasdf'"
+      ></trmrk-short-string-editor
+      ><trmrk-short-string-editor
+        [trmrkString]="'asdfasdfafs'"
+        [trmrkHasError]="true"
+        [trmrkErrorMessage]="'asdf asdfas asdf'"
+      ></trmrk-short-string-editor>
+    </div>
   </div>
   <trmrk-horiz-strip
     [trmrkCssClass]="['trmrk-has-border-x2 trmrk-bottom-horiz-strip']"

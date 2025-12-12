@@ -8,9 +8,6 @@
   "
 ></trmrk-dialog>
 <ng-template #content>
-  <div class="trmrk-fake-input-wrapper">
-    <input type="number" class="trmrk-fake-input" #fakeNumberInput />
-  </div>
   <trmrk-horiz-strip
     [trmrkCssClass]="['trmrk-has-border-x2 trmrk-top-horiz-strip']"
     [trmrkUseContentInsteadOfTextRow]="true"
@@ -24,44 +21,11 @@
       <mat-icon class="trmrk-icon">done</mat-icon>
     </button>
   </trmrk-horiz-strip>
-  @if (hasError) {
-  <trmrk-horiz-strip
-    [trmrkCssClass]="['trmrk-has-border-x2 trmrk-top-horiz-strip trmrk-error-message-horiz-strip']"
-    [trmrkUseContentInsteadOfTextRow]="true"
-    ><div class="trmrk-text-row">{{ errorMessage }}</div></trmrk-horiz-strip
-  >
-  }
-  <div class="trmrk-symbols-container">
-    @if (value.isNegative) {
-    <div class="trmrk-symbol-wrapper trmrk-minus-sign" (click)="minusSignClicked()">
-      <span class="trmrk-symbol-btn">-</span>
-    </div>
-    } @if (!value.isNegative && normData.min < 0) {
-    <div class="trmrk-symbol-wrapper trmrk-plus-sign" (click)="plusSignClicked()">
-      <span class="trmrk-symbol-btn">+</span>
-    </div>
-    } @for (digit of digits; track digit.id) { @if (decimalPointIndex === $index) {
-    <div
-      [ngClass]="[
-        'trmrk-symbol-wrapper trmrk-decimal-point',
-        isPlacingDecimalPoint ? 'trmrk-focused-decimal-point' : ''
-      ]"
-      (click)="decimalPointClicked()"
-    >
-      <span class="trmrk-symbol-btn">.</span>
-    </div>
-    }
-    <div
-      [ngClass]="[
-        'trmrk-symbol-wrapper',
-        $index === focusedDigitIndex ? 'trmrk-focused-symbol' : ''
-      ]"
-      (click)="digitClicked($index)"
-    >
-      <span class="trmrk-symbol-btn">
-        {{ digit.value >= 0 ? digit.value : '' }}
-      </span>
-    </div>
-    }
-  </div>
+  <trmrk-number-editor
+    [trmrkValue]="dialogData.value"
+    [trmrkMin]="dialogData.min"
+    [trmrkMax]="dialogData.max"
+    [trmrkStep]="dialogData.step"
+    [trmrkRequired]="dialogData.required"
+  ></trmrk-number-editor>
 </ng-template>

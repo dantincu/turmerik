@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,9 +17,9 @@ import { openDialog, DialogPanelSize } from '../../../services/common/trmrk-dial
 import {
   TrmrkNumberEditorModalDialog,
   TrmrkNumberEditorModalDialogData,
-  TrmrkNumberInputValue,
-  normalizeTrmrkNumberInputValue,
 } from '../trmrk-number-editor-modal-dialog/trmrk-number-editor-modal-dialog';
+
+import { TrmrkNumberInputValue, defaultValues } from '../trmrk-number-editor/trmrk-number-editor';
 
 @Component({
   selector: 'trmrk-mat-number-input',
@@ -38,7 +38,7 @@ import {
   templateUrl: './trmrk-mat-number-input.html',
   styleUrl: './trmrk-mat-number-input.scss',
 })
-export class TrmrkMatNumberInput implements OnChanges {
+export class TrmrkMatNumberInput {
   @Input() trmrkLabel?: string | NullOrUndef;
   @Input() trmrkValue?: TrmrkNumberInputValue | NullOrUndef;
   @Input() trmrkMin?: number | NullOrUndef;
@@ -46,76 +46,10 @@ export class TrmrkMatNumberInput implements OnChanges {
   @Input() trmrkStep?: number | NullOrUndef;
   @Input() trmrkRequired?: boolean | NullOrUndef;
 
-  dfLabel = '';
-  dfMinValue = Number.MIN_SAFE_INTEGER;
-  dfMaxValue = Number.MAX_SAFE_INTEGER;
-  dfStep = 1;
-  dfRequired = false;
+  defaultValues = defaultValues;
+  value: TrmrkNumberInputValue | NullOrUndef;
 
-  value: TrmrkNumberInputValue;
-  label = this.dfLabel;
-  minValue = this.dfMinValue;
-  maxValue = this.dfMaxValue;
-  step = this.dfStep;
-  required = this.dfRequired;
-
-  constructor(private editDialog: MatDialog) {
-    this.value = this.getDefaultValue();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    whenChanged(
-      changes,
-      () => this.trmrkValue,
-      () => {
-        if ((this.trmrkValue ?? null) !== null) {
-          this.value = normalizeTrmrkNumberInputValue(this.trmrkValue!);
-        } else {
-          this.value = this.getDefaultValue();
-        }
-      }
-    );
-
-    whenChanged(
-      changes,
-      () => this.trmrkLabel,
-      () => {
-        this.label = this.trmrkLabel ?? this.dfLabel;
-      }
-    );
-
-    whenChanged(
-      changes,
-      () => this.trmrkMin,
-      () => {
-        this.minValue = this.trmrkMin ?? this.dfMinValue;
-      }
-    );
-
-    whenChanged(
-      changes,
-      () => this.trmrkMax,
-      () => {
-        this.maxValue = this.trmrkMax ?? this.dfMaxValue;
-      }
-    );
-
-    whenChanged(
-      changes,
-      () => this.trmrkStep,
-      () => {
-        this.step = this.trmrkStep ?? this.dfStep;
-      }
-    );
-
-    whenChanged(
-      changes,
-      () => this.trmrkRequired,
-      () => {
-        this.required = this.trmrkRequired ?? this.dfRequired;
-      }
-    );
-  }
+  constructor(private editDialog: MatDialog) {}
 
   editClicked() {
     openDialog<TrmrkNumberEditorModalDialogData>({
@@ -123,11 +57,11 @@ export class TrmrkMatNumberInput implements OnChanges {
       dialogComponent: TrmrkNumberEditorModalDialog,
       data: {
         data: {
-          value: { ...this.value },
-          min: this.minValue,
-          max: this.maxValue,
-          step: this.step,
-          required: this.required,
+          value: this.trmrkValue,
+          min: this.trmrkMin,
+          max: this.trmrkMax,
+          step: this.trmrkStep,
+          required: this.trmrkRequired,
           valueSubmitted: (value: TrmrkNumberInputValue) => {
             this.value = value;
           },
@@ -135,9 +69,5 @@ export class TrmrkMatNumberInput implements OnChanges {
         title: this.trmrkLabel,
       },
     });
-  }
-
-  getDefaultValue(): TrmrkNumberInputValue {
-    return { digits: [] };
   }
 }

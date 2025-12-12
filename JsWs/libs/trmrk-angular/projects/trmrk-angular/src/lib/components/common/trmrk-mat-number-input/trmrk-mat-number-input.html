@@ -1,16 +1,16 @@
 <div class="trmrk-form-node">
   <mat-form-field appearance="outline">
-    <mat-label>{{ trmrkLabel }} </mat-label>
+    <mat-label>{{ trmrkLabel ?? '' }} </mat-label>
     <input
       matInput
       type="number"
       [placeholder]="trmrkLabel ?? ''"
-      [min]="minValue"
-      [max]="maxValue"
-      [step]="step"
-      [value]="value.number"
+      [min]="trmrkMin ?? defaultValues.min"
+      [max]="trmrkMax ?? defaultValues.max"
+      [step]="trmrkStep ?? defaultValues.step"
+      [value]="trmrkValue ?? defaultValues.value"
     />
-    @if (required) { <sup class="trmrk-required-text">*</sup> }
+    @if ((trmrkRequired ?? defaultValues.required)) { <sup class="trmrk-required-text">*</sup> }
   </mat-form-field>
   <button mat-icon-button class="trmrk-icon-btn" (click)="editClicked()">
     <mat-icon>edit</mat-icon>

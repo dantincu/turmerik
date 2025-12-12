@@ -5,6 +5,7 @@ export type VoidOrAny = void | AnyOrUnknown;
 export type ValueOrAny<TValue> = TValue | AnyOrUnknown;
 export type ValueOrAnyOrVoid<TValue> = ValueOrAny<TValue> | void;
 
+export const wsRegex = () => /\s/g;
 export const allWsRegex = () => /^\s+$/g;
 export const digitRegex = () => /\d/g;
 export const numberRegex = () => /^(\-\d|\d)?\.?\d+$/g;

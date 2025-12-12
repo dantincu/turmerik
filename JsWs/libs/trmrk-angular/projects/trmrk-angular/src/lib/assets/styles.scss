@@ -1243,3 +1243,87 @@ trmrk-number-editor-modal-dialog {
     }
   }
 }
+
+trmrk-short-string-editor {
+  display: contents;
+  flex-wrap: wrap;
+}
+
+.trmrk-short-string-editor {
+  cursor: pointer;
+  display: contents;
+
+  .trmrk-fake-input-wrapper {
+    display: inline-flex;
+    flex-grow: 0;
+    flex-shrink: 1;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    position: relative;
+
+    .trmrk-fake-input {
+      width: 1px;
+      height: 1px;
+      font-size: 1px;
+      line-height: 1px;
+      position: absolute;
+      bottom: -13px;
+      right: 3px;
+    }
+  }
+
+  .trmrk-char-wrapper, .trmrk-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .trmrk-char-wrapper {
+    display: inline-flex;
+    margin: 3px;
+    border: 1px solid;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 20px;
+
+    &.trmrk-minus-sign, &.trmrk-plus-sign {
+      font-size: 40px;
+      line-height: 40px;
+    }
+
+    &.trmrk-decimal-point {
+      font-size: 40px;
+      line-height: 20px;
+
+      .trmrk-char-btn {
+        position: relative;
+        top: -5px;
+      }
+    }
+  }
+
+  .trmrk-icon-wrapper {
+    display: inline-flex;
+    position: relative;
+    padding: 1px;
+    box-sizing: border-box;
+    margin: 0 4px;
+
+    .trmrk-icon-btn {
+      top: 5px;
+    }
+  }
+
+  .trmrk-error-wrapper {
+    display: inline-flex;
+    flex-wrap: wrap;
+    margin: 0 3px 0 3px;
+
+    .trmrk-text-level-error {
+      display: inline-flex;
+      flex-wrap: wrap;
+    }
+  }
+}

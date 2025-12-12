@@ -1,0 +1,77 @@
+<div [ngClass]="['trmrk-short-string-editor', trmrkCssClass ?? '']">
+  @if (trmrkHasError) {
+  <div class="trmrk-error-wrapper">
+    <span class="trmrk-text-level-error"> {{ trmrkErrorMessage ?? 'Invalid input' }} </span>
+  </div>
+  } @if (!chars.length) {
+  <div class="trmrk-icon-wrapper">
+    <button mat-icon-button class="trmrk-icon-btn" (click)="insertFirstCharClick()">
+      <mat-icon class="trmrk-icon">space_bar</mat-icon>
+    </button>
+  </div>
+  } @for (char of chars; track char.id) {
+  <ng-container
+    *ngTemplateOutlet="trmrkBeforeCharWrapperTemplate; context: { char, idx: $index }"
+  ></ng-container>
+  @if (trmrkAllowDeleteFocusedChar) {
+  <div class="trmrk-icon-wrapper">
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (trmrkLongPressOrRightClick)="charDeleteBtnLongPressOrRightClick($event, $index)"
+      (trmrkShortPressOrLeftClick)="charDeleteBtnShortPressOrLeftClick($event, $index)"
+    >
+      <mat-icon class="trmrk-icon">trash</mat-icon>
+    </button>
+  </div>
+  } @if (trmrkAllowInsertCharBeforeFocused) {
+  <div class="trmrk-icon-wrapper">
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (trmrkLongPressOrRightClick)="charInsertBtnLongPressOrRightClick($event, $index, false)"
+      (trmrkShortPressOrLeftClick)="charInsertBtnShortPressOrLeftClick($event, $index, false)"
+    >
+      <mat-icon class="trmrk-icon">space_bar</mat-icon>
+    </button>
+  </div>
+  }
+  <div
+    [ngClass]="[
+      'trmrk-char-wrapper',
+      trmrkFocusedCharIdx === $index ? 'trmrk-focused-char' : '',
+      trmrkCharCssClassFactory ? trmrkCharCssClassFactory(char.value, $index) : ''
+    ]"
+    (trmrkLongPressOrRightClick)="charLongPressOrRightClick($event, $index)"
+    (trmrkShortPressOrLeftClick)="charShortPressOrLeftClick($event, $index)"
+  >
+    @if (!trmrkUseCharTemplate) {
+    <span class="trmrk-char-btn">
+      @if (char.isWhitespace) { &nbsp; } @if (!char.isWhitespace) { {{ char.value }} }
+    </span>
+    } @if (trmrkUseCharTemplate) {
+    <ng-container
+      *ngTemplateOutlet="trmrkCharTemplate; context: { char: char.value, idx: $index }"
+    ></ng-container>
+    }
+  </div>
+  @if (trmrkAllowInsertCharAfterFocused) {
+  <div class="trmrk-icon-wrapper">
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (trmrkLongPressOrRightClick)="charInsertBtnLongPressOrRightClick($event, $index, true)"
+      (trmrkShortPressOrLeftClick)="charInsertBtnShortPressOrLeftClick($event, $index, true)"
+    >
+      <mat-icon class="trmrk-icon">space_bar</mat-icon>
+    </button>
+  </div>
+  }
+  <ng-container
+    *ngTemplateOutlet="trmrkAfterCharWrapperTemplate; context: { char, idx: $index }"
+  ></ng-container>
+  }
+  <div class="trmrk-fake-input-wrapper">
+    <input [type]="trmrkDigitsOnly ? 'number' : 'text'" class="trmrk-fake-input" #fakeNumberInput />
+  </div>
+</div>

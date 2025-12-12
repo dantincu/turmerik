@@ -8,7 +8,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "src/trmrk-angular/components/common/trmrk-number-editor-modal-dialog/trmrk-number-editor-modal-dialog-$obs.ts"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]

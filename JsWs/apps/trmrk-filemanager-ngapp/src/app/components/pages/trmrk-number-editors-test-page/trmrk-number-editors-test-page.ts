@@ -5,8 +5,9 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { TrmrkAppPage } from '../../../../trmrk-angular/components/common/trmrk-app-page/trmrk-app-page';
 import { TrmrkHorizStrip } from '../../../../trmrk-angular/components/common/trmrk-horiz-strip/trmrk-horiz-strip';
-import { TrmrkNumberInputValue } from '../../../../trmrk-angular/components/common/trmrk-number-editor-modal-dialog/trmrk-number-editor-modal-dialog';
+import { TrmrkNumberInputValue } from '../../../../trmrk-angular/components/common/trmrk-number-editor/trmrk-number-editor';
 import { TrmrkMatNumberInput } from '../../../../trmrk-angular/components/common/trmrk-mat-number-input/trmrk-mat-number-input';
+import { TrmrkShortStringEditor } from '../../../../trmrk-angular/components/common/trmrk-short-string-editor/trmrk-short-string-editor';
 
 @Component({
   selector: 'trmrk-number-editors-test-page',
@@ -17,6 +18,7 @@ import { TrmrkMatNumberInput } from '../../../../trmrk-angular/components/common
     TrmrkAppPage,
     TrmrkHorizStrip,
     TrmrkMatNumberInput,
+    TrmrkShortStringEditor,
   ],
   templateUrl: './trmrk-number-editors-test-page.html',
   styleUrl: './trmrk-number-editors-test-page.scss',
