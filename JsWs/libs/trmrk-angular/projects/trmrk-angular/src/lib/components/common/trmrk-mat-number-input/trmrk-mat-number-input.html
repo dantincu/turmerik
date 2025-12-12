@@ -2,6 +2,7 @@
   <mat-form-field appearance="outline">
     <mat-label>{{ trmrkLabel ?? '' }} </mat-label>
     <input
+      #inputEl
       matInput
       type="number"
       [placeholder]="trmrkLabel ?? ''"

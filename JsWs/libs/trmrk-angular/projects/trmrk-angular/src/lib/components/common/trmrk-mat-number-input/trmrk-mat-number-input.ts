@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -46,8 +46,9 @@ export class TrmrkMatNumberInput {
   @Input() trmrkStep?: number | NullOrUndef;
   @Input() trmrkRequired?: boolean | NullOrUndef;
 
+  @ViewChild('inputEl') inputEl!: ElementRef<HTMLInputElement>;
+
   defaultValues = defaultValues;
-  value: TrmrkNumberInputValue | NullOrUndef;
 
   constructor(private editDialog: MatDialog) {}
 
@@ -63,7 +64,7 @@ export class TrmrkMatNumberInput {
           step: this.trmrkStep,
           required: this.trmrkRequired,
           valueSubmitted: (value: TrmrkNumberInputValue) => {
-            this.value = value;
+            this.inputEl.nativeElement.value = value.text ?? '';
           },
         },
         title: this.trmrkLabel,

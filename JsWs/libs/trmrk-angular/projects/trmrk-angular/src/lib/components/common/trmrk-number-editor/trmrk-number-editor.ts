@@ -3,6 +3,7 @@ import { Component, Input, SimpleChanges } from '@angular/core';
 import { NullOrUndef } from '../../../../trmrk/core';
 
 import { whenChanged } from '../../../services/common/simpleChanges';
+import { TrmrkShortStringEditor } from '../trmrk-short-string-editor/trmrk-short-string-editor';
 
 export interface TrmrkNumberEditorOpts {
   value?: TrmrkNumberInputValue | NullOrUndef;
@@ -14,7 +15,7 @@ export interface TrmrkNumberEditorOpts {
 
 export const defaultValues = Object.freeze<TrmrkNumberEditorOpts>({
   value: Object.freeze<TrmrkNumberInputValue>({
-    digits: Object.freeze([] as number[]) as number[],
+    text: '',
   }) as TrmrkNumberInputValue,
   min: Number.MIN_SAFE_INTEGER,
   max: Number.MAX_SAFE_INTEGER,
@@ -25,18 +26,13 @@ export const defaultValues = Object.freeze<TrmrkNumberEditorOpts>({
 export interface TrmrkNumberInputValue {
   text?: string | NullOrUndef;
   number?: number | NullOrUndef;
-  digits?: number[] | NullOrUndef;
-  decPtIdxLtlNdn?: number | NullOrUndef;
-  isNegative?: boolean | NullOrUndef;
 }
 
 export const normalizeTrmrkNumberInputValue = (value: TrmrkNumberInputValue) => {
   if ((value.number ?? value.text) !== null) {
     value = numOrTextToTrmrkNumberInputValue(value.number, value.text);
-  } else if ((value.digits ?? null) !== null) {
-    value = digitsToTrmrkNumberInputValue(value.digits!, value.decPtIdxLtlNdn, value.isNegative);
   } else {
-    value = { digits: [] };
+    value = { text: '' };
   }
 
   return value;
@@ -53,44 +49,6 @@ export const numOrTextToTrmrkNumberInputValue = (
     number: number,
   };
 
-  value.isNegative = value.text!.startsWith('-');
-
-  if (value.isNegative) {
-    value.text = value.text!.substring(1);
-  }
-
-  value.digits = [...value.text!.replace('.', '')].map((ch) => Number(ch));
-  value.decPtIdxLtlNdn = value.text!.indexOf('.') - (value.isNegative ? 1 : 0);
-  value.decPtIdxLtlNdn = value.decPtIdxLtlNdn >= 0 ? value.decPtIdxLtlNdn : null;
-  return value;
-};
-
-export const digitsToTrmrkNumberInputValue = (
-  digits: number[],
-  decPtIdxLtlNdn?: number | NullOrUndef,
-  isNegative?: boolean | NullOrUndef
-) => {
-  const value: TrmrkNumberInputValue = { digits, decPtIdxLtlNdn };
-  let digitsStr = value.digits!.map((d) => d.toString()).join('');
-  const decPtIdx = value.decPtIdxLtlNdn!;
-
-  if ((decPtIdx ?? null) !== null && decPtIdx >= 0) {
-    digitsStr = digitsStr.slice(0, decPtIdx) + '.' + digitsStr.slice(decPtIdx, digitsStr.length);
-
-    if (digitsStr.endsWith('.')) {
-      digitsStr = digitsStr + '0';
-    }
-
-    if (digitsStr.startsWith('.')) {
-      digitsStr = '0' + digitsStr;
-    }
-  }
-
-  if (isNegative) {
-    digitsStr = '-' + digitsStr;
-  }
-
-  value.number = Number(digitsStr);
   return value;
 };
 
@@ -102,7 +60,7 @@ interface TrmrkNumberEditorDigit {
 @Component({
   selector: 'trmrk-number-editor',
   standalone: true,
-  imports: [],
+  imports: [TrmrkShortStringEditor],
   templateUrl: './trmrk-number-editor.html',
   styleUrls: ['./trmrk-number-editor.scss'],
 })
@@ -113,10 +71,10 @@ export class TrmrkNumberEditor {
   @Input() trmrkStep?: number | NullOrUndef;
   @Input() trmrkRequired?: boolean | NullOrUndef;
 
-  minValue = defaultValues.min;
-  maxValue = defaultValues.max;
-  step = defaultValues.step;
-  required = defaultValues.required;
+  minValue = defaultValues.min!;
+  maxValue = defaultValues.max!;
+  step = defaultValues.step!;
+  required = defaultValues.required!;
 
   hasError = false;
   errorMessage = '';
@@ -149,7 +107,7 @@ export class TrmrkNumberEditor {
       changes,
       () => this.trmrkMin,
       () => {
-        this.minValue = this.trmrkMin ?? defaultValues.min;
+        this.minValue = this.trmrkMin ?? defaultValues.min!;
         this.updateValueStr();
       }
     );
@@ -158,7 +116,7 @@ export class TrmrkNumberEditor {
       changes,
       () => this.trmrkMax,
       () => {
-        this.maxValue = this.trmrkMax ?? defaultValues.max;
+        this.maxValue = this.trmrkMax ?? defaultValues.max!;
         this.updateValueStr();
       }
     );
@@ -167,7 +125,7 @@ export class TrmrkNumberEditor {
       changes,
       () => this.trmrkStep,
       () => {
-        this.step = this.trmrkStep ?? defaultValues.step;
+        this.step = this.trmrkStep ?? defaultValues.step!;
         this.updateValueStr();
       }
     );
@@ -176,7 +134,7 @@ export class TrmrkNumberEditor {
       changes,
       () => this.trmrkRequired,
       () => {
-        this.required = this.trmrkRequired ?? defaultValues.required;
+        this.required = this.trmrkRequired ?? defaultValues.required!;
         this.updateValueStr();
       }
     );
@@ -184,9 +142,17 @@ export class TrmrkNumberEditor {
 
   updateValue() {}
 
-  updateValueStr() {}
+  updateValueStr() {
+    this.valueStr = this.value.text ?? '';
+
+    if (this.minValue < 0) {
+      if (this.value.number! >= 0) {
+        this.valueStr = '+' + this.valueStr;
+      }
+    }
+  }
 
   getDefaultValue(): TrmrkNumberInputValue {
-    return { digits: [] };
+    return { ...defaultValues.value! };
   }
 }

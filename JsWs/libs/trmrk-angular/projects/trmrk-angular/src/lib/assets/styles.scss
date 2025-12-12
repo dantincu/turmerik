@@ -1046,10 +1046,6 @@ trmrk-app-themes-list-view {
     border-radius: 10px;
   }
 
-  /* .trmrk-dialog-content.trmrk-dialog-content, .trmrk-dialog-actions.trmrk-dialog-actions {
-    padding: 10px;
-  } */
-
   .trmrk-horiz-strip {
     height: unset;
     min-height: 40px;
@@ -1068,6 +1064,7 @@ trmrk-app-themes-list-view {
     display: flex;
     flex-direction: column;
     height: 100%;
+    flex: 1 1 auto;
   }
 
   .trmrk-dialog-content {
@@ -1184,66 +1181,6 @@ trmrk-list-slice-selector {
   }
 }
 
-trmrk-number-editor-modal-dialog {
-  .trmrk-fake-input-wrapper {
-    position: absolute;
-    bottom: 0;
-    left: 40px;
-    z-index: -1;
-
-    .trmrk-fake-input {
-      width: 1px;
-      height: 1px;
-      font-size: 1px;
-      line-height: 1px;
-    }
-  }
-
-  .trmrk-horiz-strip {
-    position: relative;
-
-    .trmrk-apply-changes-btn {
-      position: absolute;
-      right: 0;
-    }
-  }
-
-  .trmrk-symbols-container {
-    cursor: pointer;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 3px;
-
-    .trmrk-symbol-wrapper {
-      display: flex;
-      width: 40px;
-      height: 40px;
-      margin: 3px;
-      border: 1px solid;
-      border-radius: 3px;
-      font-weight: bold;
-      font-size: 20px;
-      justify-content: center;
-      align-items: center;
-
-      &.trmrk-minus-sign, &.trmrk-plus-sign {
-        font-size: 40px;
-        line-height: 40px;
-      }
-
-      &.trmrk-decimal-point {
-        font-size: 40px;
-        line-height: 20px;
-
-        .trmrk-symbol-btn {
-          position: relative;
-          top: -5px;
-        }
-      }
-    }
-  }
-}
-
 trmrk-short-string-editor {
   display: contents;
   flex-wrap: wrap;
@@ -1324,6 +1261,21 @@ trmrk-short-string-editor {
     .trmrk-text-level-error {
       display: inline-flex;
       flex-wrap: wrap;
+    }
+  }
+}
+
+trmrk-number-editor-modal-dialog {
+  trmrk-number-editor {
+    padding: 3px;
+  }
+
+  .trmrk-horiz-strip {
+    position: relative;
+
+    .trmrk-apply-changes-btn {
+      position: absolute;
+      right: 0;
     }
   }
 }
