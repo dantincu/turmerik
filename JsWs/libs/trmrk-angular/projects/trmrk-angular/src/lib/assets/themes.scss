@@ -298,8 +298,18 @@
     }
   }
 
-  .trmrk-mat-dialog-panel .mat-mdc-dialog-container .mat-mdc-dialog-content {
-    color: #000;
+  .trmrk-mat-dialog-panel {
+    .mat-mdc-dialog-surface {
+      border: 1px solid #888;
+    }
+
+    .mat-mdc-dialog-container .mat-mdc-dialog-content {
+      color: #000;
+    }
+  }
+
+  .cdk-overlay-dark-backdrop {
+    background-color: #0008;
   }
 
   .trmrk-3-panels-layout {
@@ -342,31 +352,12 @@
     }
   }
 
-  trmrk-number-editor-modal-dialog {
-    .trmrk-symbols-container {
-      .trmrk-symbol-wrapper {
-        border-color: #888;
-
-        &.trmrk-focused-symbol {
-          background-color: #000;
-          color: #FFF;
-        }
-
-        &.trmrk-focused-decimal-point {
-          background-color: #00F;
-          color: #FFF;
-        }
-      }
-    }
-  }
-
   .trmrk-short-string-editor {
     .trmrk-char-wrapper {
       border-color: #888;
 
       &.trmrk-focused-char {
-        background-color: #000;
-        color: #FFF;
+        background-color: #ddd;
       }
     }
   }
@@ -569,8 +560,19 @@
     }
   }
 
-  .trmrk-mat-dialog-panel .mat-mdc-dialog-container .mat-mdc-dialog-content {
-    color: #FFF;
+  .trmrk-mat-dialog-panel {
+    .mat-mdc-dialog-surface {
+      background-color: #000;
+      border: 1px solid #888;
+    }
+
+    .mat-mdc-dialog-container .mat-mdc-dialog-content {
+      color: #FFF;
+    }
+  }
+
+  .cdk-overlay-dark-backdrop {
+    background-color: #000D;
   }
 
   .trmrk-3-panels-layout {
@@ -611,31 +613,12 @@
     }
   }
 
-  trmrk-number-editor-modal-dialog {
-    .trmrk-symbols-container {
-      .trmrk-symbol-wrapper {
-        border-color: #888;
-
-        &.trmrk-focused-symbol {
-          background-color: #FFF;
-          color: #000;
-        }
-
-        &.trmrk-focused-decimal-point {
-          background-color: #00F;
-          color: #FFF;
-        }
-      }
-    }
-  }
-
   .trmrk-short-string-editor {
     .trmrk-char-wrapper {
       border-color: #888;
 
       &.trmrk-focused-char {
-        background-color: #FFF;
-        color: #000;
+        background-color: #222;
       }
     }
   }

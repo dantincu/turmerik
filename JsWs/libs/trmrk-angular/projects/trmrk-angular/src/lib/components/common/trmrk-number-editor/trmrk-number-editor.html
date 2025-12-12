@@ -1,1 +1,20 @@
-<trmrk-short-string-editor [trmrkString]="valueStr"></trmrk-short-string-editor>
+<trmrk-short-string-editor
+  [trmrkDigitsOnly]="true"
+  [trmrkCharCssClassFactory]="getCharCssClass"
+  [trmrkString]="valueStr"
+  [trmrkFocusedCharIdx]="focusedDigitIndex"
+  [trmrkFocusInput]="focusInput"
+  [trmrkBlurInput]="blurInput"
+  [trmrkAllowInsertCharBeforeFocused]="true"
+  [trmrkAllowInsertCharAfterFocused]="true"
+  [trmrkAllowDeleteFocusedChar]="true"
+  [trmrkHasError]="hasError"
+  [trmrkErrorMessage]="errorMessage"
+  (trmrkCharShortPressOrLeftClick)="charShortPressOrLeftClick($event)"
+  (trmrkInputKeyPressed)="inputKeyPressed($event)"
+  (trmrkCharDeleteBtnLongPressOrRightClick)="charDeleteBtnLongPressOrRightClick($event)"
+  (trmrkCharDeleteBtnShortPressOrLeftClick)="charDeleteBtnShortPressOrLeftClick($event)"
+  (trmrkCharInsertBtnLongPressOrRightClick)="charInsertBtnLongPressOrRightClick($event)"
+  (trmrkCharInsertBtnShortPressOrLeftClick)="charInsertBtnShortPressOrLeftClick($event)"
+  (trmrkInsertFirstCharClick)="insertFirstCharClick()"
+></trmrk-short-string-editor>

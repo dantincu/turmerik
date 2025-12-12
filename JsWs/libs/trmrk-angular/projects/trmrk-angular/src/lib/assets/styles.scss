@@ -1189,6 +1189,7 @@ trmrk-short-string-editor {
 .trmrk-short-string-editor {
   cursor: pointer;
   display: contents;
+  position: relative;
 
   .trmrk-fake-input-wrapper {
     display: inline-flex;
@@ -1224,16 +1225,17 @@ trmrk-short-string-editor {
     border-radius: 3px;
     font-weight: bold;
     font-size: 20px;
+    box-sizing: border-box;
 
-    &.trmrk-minus-sign, &.trmrk-plus-sign {
+    &.trmrk-minus-sign, &.trmrk-plus-sign, &.trmrk-decimal-point {
       font-size: 40px;
-      line-height: 40px;
+      line-height: 20px;
+      position: relative;
+      top: 7px;
+      margin: -3px 3px;
     }
 
     &.trmrk-decimal-point {
-      font-size: 40px;
-      line-height: 20px;
-
       .trmrk-char-btn {
         position: relative;
         top: -5px;
@@ -1244,9 +1246,8 @@ trmrk-short-string-editor {
   .trmrk-icon-wrapper {
     display: inline-flex;
     position: relative;
-    padding: 1px;
     box-sizing: border-box;
-    margin: 0 4px;
+    margin: -3px 3px;
 
     .trmrk-icon-btn {
       top: 5px;

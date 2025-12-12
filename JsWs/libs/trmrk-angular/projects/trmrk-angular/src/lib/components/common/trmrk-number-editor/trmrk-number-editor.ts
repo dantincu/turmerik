@@ -1,9 +1,17 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 
 import { NullOrUndef } from '../../../../trmrk/core';
+import { TouchOrMouseCoords } from '../../../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { whenChanged } from '../../../services/common/simpleChanges';
-import { TrmrkShortStringEditor } from '../trmrk-short-string-editor/trmrk-short-string-editor';
+import {
+  TrmrkShortStringEditor,
+  CharShortPressOrLeftClickEvent,
+  FocusedCharDeleteBtnShortPressOrLeftClickEvent,
+  FocusedCharKeyPressEvent,
+  FocusedCharInsertBtnLongPressOrRightClickEvent,
+  FocusedCharInsertBtnShortPressOrLeftClickEvent,
+} from '../trmrk-short-string-editor/trmrk-short-string-editor';
 
 export interface TrmrkNumberEditorOpts {
   value?: TrmrkNumberInputValue | NullOrUndef;
@@ -85,6 +93,8 @@ export class TrmrkNumberEditor {
   isPlacingDecimalPoint = false;
   value: TrmrkNumberInputValue;
   valueStr = '';
+  focusInput = 0;
+  blurInput = 0;
 
   private maxAllowedDecimals = 0;
 
@@ -138,6 +148,42 @@ export class TrmrkNumberEditor {
         this.updateValueStr();
       }
     );
+  }
+
+  charDeleteBtnShortPressOrLeftClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {}
+
+  charDeleteBtnLongPressOrRightClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {}
+
+  charInsertBtnShortPressOrLeftClick(event: FocusedCharInsertBtnShortPressOrLeftClickEvent) {}
+
+  charInsertBtnLongPressOrRightClick(event: FocusedCharInsertBtnLongPressOrRightClickEvent) {}
+
+  insertFirstCharClick() {}
+
+  charShortPressOrLeftClick(event: CharShortPressOrLeftClickEvent) {
+    console.log('event.nextFocusedCharIdx', event.nextFocusedCharIdx);
+    this.focusedDigitIndex = event.nextFocusedCharIdx;
+    this.focusInput++;
+  }
+
+  inputKeyPressed(event: FocusedCharKeyPressEvent) {}
+
+  getCharCssClass(chr: string, idx: number) {
+    let cssClass = '';
+
+    switch (chr) {
+      case '.':
+        cssClass = 'trmrk-decimal-point';
+        break;
+      case '+':
+        cssClass = 'trmrk-plus-sign';
+        break;
+      case '-':
+        cssClass = 'trmrk-minus-sign';
+        break;
+    }
+
+    return cssClass;
   }
 
   updateValue() {}

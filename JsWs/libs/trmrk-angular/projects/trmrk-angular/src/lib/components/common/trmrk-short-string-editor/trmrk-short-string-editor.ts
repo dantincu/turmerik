@@ -102,12 +102,14 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
   @Output() trmrkCharInsertBtnLongPressOrRightClick =
     new EventEmitter<FocusedCharInsertBtnLongPressOrRightClickEvent>();
 
-  @Output() trmrkKeyPressed = new EventEmitter<FocusedCharKeyPressEvent>();
+  @Output() trmrkInputKeyPressed = new EventEmitter<FocusedCharKeyPressEvent>();
 
   @Input() trmrkCssClass: string | NullOrUndef;
   @Input() trmrkDigitsOnly: boolean | NullOrUndef;
   @Input() trmrkString = '';
   @Input() trmrkFocusedCharIdx = -1;
+  @Input() trmrkFocusInput = 0;
+  @Input() trmrkBlurInput = 0;
 
   @Input() trmrkCharCssClassFactory:
     | ((chr: string, idx: number) => string | NullOrUndef)
@@ -158,10 +160,26 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
         }));
       }
     );
-  }
 
-  insertFirstCharClick() {
-    this.trmrkInsertFirstCharClick.emit();
+    whenChanged(
+      changes,
+      () => this.trmrkFocusInput,
+      () => {
+        if (this.trmrkFocusInput) {
+          this.fakeNumberInput.nativeElement.focus();
+        }
+      }
+    );
+
+    whenChanged(
+      changes,
+      () => this.trmrkBlurInput,
+      () => {
+        if (this.trmrkBlurInput) {
+          this.fakeNumberInput.nativeElement.blur();
+        }
+      }
+    );
   }
 
   charDeleteBtnShortPressOrLeftClick(srcEvt: TouchOrMouseCoords, focusedCharIdx: number) {
@@ -223,6 +241,10 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
     this.trmrkCharInsertBtnLongPressOrRightClick.emit(event);
   }
 
+  insertFirstCharClick() {
+    this.trmrkInsertFirstCharClick.emit();
+  }
+
   charLongPressOrRightClick(srcEvt: TouchOrMouseCoords, charIdx: number) {
     const event: CharLongPressOrRightClickEvent = {
       srcEvt,
@@ -271,6 +293,6 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
       ).join('');
     }
 
-    this.trmrkKeyPressed.emit(event);
+    this.trmrkInputKeyPressed.emit(event);
   }
 }

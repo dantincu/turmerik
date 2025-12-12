@@ -13,7 +13,7 @@
   <ng-container
     *ngTemplateOutlet="trmrkBeforeCharWrapperTemplate; context: { char, idx: $index }"
   ></ng-container>
-  @if (trmrkAllowDeleteFocusedChar) {
+  @if (trmrkAllowDeleteFocusedChar && trmrkFocusedCharIdx === $index) {
   <div class="trmrk-icon-wrapper">
     <button
       mat-icon-button
@@ -21,10 +21,10 @@
       (trmrkLongPressOrRightClick)="charDeleteBtnLongPressOrRightClick($event, $index)"
       (trmrkShortPressOrLeftClick)="charDeleteBtnShortPressOrLeftClick($event, $index)"
     >
-      <mat-icon class="trmrk-icon">trash</mat-icon>
+      <mat-icon class="trmrk-icon">delete</mat-icon>
     </button>
   </div>
-  } @if (trmrkAllowInsertCharBeforeFocused) {
+  } @if (trmrkAllowInsertCharBeforeFocused && trmrkFocusedCharIdx === $index) {
   <div class="trmrk-icon-wrapper">
     <button
       mat-icon-button
@@ -55,7 +55,7 @@
     ></ng-container>
     }
   </div>
-  @if (trmrkAllowInsertCharAfterFocused) {
+  @if (trmrkAllowInsertCharAfterFocused && trmrkFocusedCharIdx === $index) {
   <div class="trmrk-icon-wrapper">
     <button
       mat-icon-button
