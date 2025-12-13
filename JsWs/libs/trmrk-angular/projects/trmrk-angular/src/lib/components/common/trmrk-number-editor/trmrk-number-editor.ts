@@ -1,7 +1,7 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 
-import { NullOrUndef } from '../../../../trmrk/core';
-import { TouchOrMouseCoords } from '../../../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { NullOrUndef, withVal } from '../../../../trmrk/core';
+import { getNumberDigits } from '../../../../trmrk/math';
 
 import { whenChanged } from '../../../services/common/simpleChanges';
 import {
@@ -60,11 +60,6 @@ export const numOrTextToTrmrkNumberInputValue = (
   return value;
 };
 
-interface TrmrkNumberEditorDigit {
-  id: number;
-  value: number;
-}
-
 @Component({
   selector: 'trmrk-number-editor',
   standalone: true,
@@ -83,24 +78,20 @@ export class TrmrkNumberEditor {
   maxValue = defaultValues.max!;
   step = defaultValues.step!;
   required = defaultValues.required!;
+  maxAllowedIntDigits = 0;
+  maxAllowedDecimals = 0;
 
   hasError = false;
   errorMessage = '';
 
-  decimalPointIndex = -1;
-  digits: TrmrkNumberEditorDigit[] = [];
-  focusedDigitIndex = -1;
+  focusedDigitIndex = 0;
   isPlacingDecimalPoint = false;
   value: TrmrkNumberInputValue;
-  valueStr = '';
   focusInput = 0;
   blurInput = 0;
 
-  private maxAllowedDecimals = 0;
-
   constructor() {
     this.value = this.getDefaultValue();
-    this.updateValueStr();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -109,7 +100,8 @@ export class TrmrkNumberEditor {
       () => this.trmrkValue,
       () => {
         this.value = normalizeTrmrkNumberInputValue(this.trmrkValue ?? this.getDefaultValue());
-        this.updateValueStr();
+        this.updateValidation();
+        this.focusNextDigit(0);
       }
     );
 
@@ -118,7 +110,8 @@ export class TrmrkNumberEditor {
       () => this.trmrkMin,
       () => {
         this.minValue = this.trmrkMin ?? defaultValues.min!;
-        this.updateValueStr();
+        this.updateMaxAllowedDigitsCount();
+        this.updateValidation();
       }
     );
 
@@ -127,7 +120,8 @@ export class TrmrkNumberEditor {
       () => this.trmrkMax,
       () => {
         this.maxValue = this.trmrkMax ?? defaultValues.max!;
-        this.updateValueStr();
+        this.updateMaxAllowedDigitsCount();
+        this.updateValidation();
       }
     );
 
@@ -136,7 +130,8 @@ export class TrmrkNumberEditor {
       () => this.trmrkStep,
       () => {
         this.step = this.trmrkStep ?? defaultValues.step!;
-        this.updateValueStr();
+        this.updateMaxAllowedDecimalsCount();
+        this.updateValidation();
       }
     );
 
@@ -145,7 +140,7 @@ export class TrmrkNumberEditor {
       () => this.trmrkRequired,
       () => {
         this.required = this.trmrkRequired ?? defaultValues.required!;
-        this.updateValueStr();
+        this.updateValidation();
       }
     );
   }
@@ -161,12 +156,45 @@ export class TrmrkNumberEditor {
   insertFirstCharClick() {}
 
   charShortPressOrLeftClick(event: CharShortPressOrLeftClickEvent) {
-    console.log('event.nextFocusedCharIdx', event.nextFocusedCharIdx);
-    this.focusedDigitIndex = event.nextFocusedCharIdx;
-    this.focusInput++;
+    if (event.nextFocusedChar === ' ' || /\d/g.test(event.nextFocusedChar)) {
+      this.focusNextDigit(event.nextFocusedCharIdx);
+    }
   }
 
-  inputKeyPressed(event: FocusedCharKeyPressEvent) {}
+  inputKeyPressed(event: FocusedCharKeyPressEvent) {
+    if (/\d/g.test(event.newChar)) {
+      this.value.text = event.newString;
+      this.updateValue();
+      this.focusNextDigit(event.nextFocusedCharIdx);
+    } else {
+      switch (event.newChar) {
+        case '.':
+          if (this.maxAllowedDecimals > 0) {
+            const firstDigitIndex = this.value.text!.startsWith('-') ? 1 : 0;
+
+            if (event.focusedCharIdx > firstDigitIndex) {
+              this.value.text = [...this.value.text!.replace('.', '')]
+                .map((char, idx) => (idx === event.focusedCharIdx ? '.' + char : char))
+                .join('');
+
+              if (this.value.text.indexOf('.') < 0) {
+                this.value.text += '. ';
+              }
+
+              this.updateValue();
+              this.focusNextDigit(event.nextFocusedCharIdx);
+            }
+          }
+          break;
+        case '-':
+          if (this.minValue < 0) {
+            this.value.number! *= -1;
+            this.value.text = this.value.number!.toString();
+          }
+          break;
+      }
+    }
+  }
 
   getCharCssClass(chr: string, idx: number) {
     let cssClass = '';
@@ -186,16 +214,90 @@ export class TrmrkNumberEditor {
     return cssClass;
   }
 
-  updateValue() {}
+  updateValidation() {
+    if (this.required && this.value.text!.length === 0) {
+      this.hasError = true;
+      this.errorMessage = 'Value is required';
+    } else if (isNaN(this.value.number!)) {
+      this.hasError = true;
+      this.errorMessage = 'Invalid number';
+    } else if (this.value.number! < this.minValue) {
+      this.hasError = true;
+      this.errorMessage = `Min allowed value is ${this.minValue}`;
+    } else if (this.value.number! > this.maxValue) {
+      this.hasError = true;
+      this.errorMessage = `Max allowed value is ${this.maxValue}`;
+    } else if (this.getDecimalsCount() > this.maxAllowedDecimals) {
+      this.hasError = true;
+      this.errorMessage =
+        this.maxAllowedDecimals > 0
+          ? `Max allowed decimal places is ${this.maxAllowedDecimals}`
+          : 'No decimal places allowed';
+    } else {
+      this.hasError = false;
+      this.errorMessage = '';
+    }
+  }
 
-  updateValueStr() {
-    this.valueStr = this.value.text ?? '';
+  updateValue() {
+    this.value.number = Number(this.value.text!.replaceAll(' ', ''));
+    this.updateValidation();
+  }
 
-    if (this.minValue < 0) {
-      if (this.value.number! >= 0) {
-        this.valueStr = '+' + this.valueStr;
+  updateMaxAllowedDigitsCount() {
+    this.maxAllowedIntDigits = getNumberDigits(
+      Math.floor(Math.max(Math.abs(this.minValue), Math.abs(this.maxValue)))
+    ).intPartDigits.length;
+  }
+
+  updateMaxAllowedDecimalsCount() {
+    this.maxAllowedDecimals = getNumberDigits(this.step).decimals.length;
+  }
+
+  focusNextDigit(nextCharIdx: number) {
+    let nextChar: string = this.value.text![nextCharIdx] ?? '';
+
+    while (!this.isFocusableChar(nextChar) && nextChar.length) {
+      nextChar = this.value.text![++nextCharIdx] ?? '';
+    }
+
+    if (!nextChar.length) {
+      let canAddDigit = false;
+
+      if (this.value.text!.indexOf('.') >= 0) {
+        canAddDigit = this.getDecimalsCount() < this.maxAllowedDecimals;
+      } else {
+        canAddDigit = this.getIntDigitsCount() < this.maxAllowedIntDigits;
+      }
+
+      if (canAddDigit) {
+        this.value.text += nextChar = ' ';
+        nextCharIdx++;
       }
     }
+
+    this.focusedDigitIndex = nextCharIdx;
+
+    if (nextChar.length) {
+      this.focusInput++;
+    } else {
+      this.blurInput++;
+    }
+  }
+
+  isFocusableChar(char: string) {
+    const isFocusable = char === ' ' || /\d/g.test(char);
+    return isFocusable;
+  }
+
+  getIntDigitsCount() {
+    const decimalsCount = getNumberDigits(this.value.number!).intPartDigits.length;
+    return decimalsCount;
+  }
+
+  getDecimalsCount() {
+    const decimalsCount = getNumberDigits(this.value.number!).decimals.length;
+    return decimalsCount;
   }
 
   getDefaultValue(): TrmrkNumberInputValue {

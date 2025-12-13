@@ -25,10 +25,10 @@ import { TrmrkShortStringEditor } from '../../../../trmrk-angular/components/com
 })
 export class TrmrkNumberEditorsTestPage {
   matNumberInput1Value: TrmrkNumberInputValue = {
-    number: 123456.789,
+    number: 1234560.789,
   };
 
   matNumberInput2Value: TrmrkNumberInputValue = {
-    number: -123456.789,
+    number: -1234560.789,
   };
 }

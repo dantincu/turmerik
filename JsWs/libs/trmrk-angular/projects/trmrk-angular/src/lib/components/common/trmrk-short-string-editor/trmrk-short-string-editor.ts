@@ -133,6 +133,8 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
   private _nextCharId = 1;
 
   constructor(public hostEl: ElementRef<HTMLElement>) {
+    this.fakeNumberInputKeyPressed = this.fakeNumberInputKeyPressed.bind(this);
+
     setTimeout(() => {
       this.fakeNumberInput.nativeElement.addEventListener(
         'keypress',
@@ -166,7 +168,9 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
       () => this.trmrkFocusInput,
       () => {
         if (this.trmrkFocusInput) {
-          this.fakeNumberInput.nativeElement.focus();
+          setTimeout(() => {
+            this.fakeNumberInput.nativeElement.focus();
+          });
         }
       }
     );
@@ -176,7 +180,9 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
       () => this.trmrkBlurInput,
       () => {
         if (this.trmrkBlurInput) {
-          this.fakeNumberInput.nativeElement.blur();
+          setTimeout(() => {
+            this.fakeNumberInput.nativeElement.blur();
+          });
         }
       }
     );
@@ -294,5 +300,6 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
     }
 
     this.trmrkInputKeyPressed.emit(event);
+    this.fakeNumberInput.nativeElement.value = '';
   }
 }
