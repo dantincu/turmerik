@@ -278,7 +278,7 @@ export class TrmrkNumberEditor {
   }
 
   updateValidation() {
-    if (this.required && this.value.text!.length === 0) {
+    if (this.required && this.value.text!.replaceAll(' ', '').length === 0) {
       this.hasError = true;
       this.errorMessage = 'Value is required';
     } else if (isNaN(this.value.number!)) {
