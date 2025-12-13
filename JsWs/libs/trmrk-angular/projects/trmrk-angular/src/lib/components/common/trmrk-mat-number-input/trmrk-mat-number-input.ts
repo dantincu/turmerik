@@ -1,4 +1,12 @@
-import { Component, Input, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  ViewChild,
+  ElementRef,
+  Output,
+  EventEmitter,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -38,7 +46,9 @@ import { TrmrkNumberInputValue, defaultValues } from '../trmrk-number-editor/trm
   templateUrl: './trmrk-mat-number-input.html',
   styleUrl: './trmrk-mat-number-input.scss',
 })
-export class TrmrkMatNumberInput {
+export class TrmrkMatNumberInput implements OnDestroy {
+  @Output() trmrkValueChanged = new EventEmitter<TrmrkNumberInputValue>();
+
   @Input() trmrkLabel?: string | NullOrUndef;
   @Input() trmrkValue?: TrmrkNumberInputValue | NullOrUndef;
   @Input() trmrkMin?: number | NullOrUndef;
@@ -50,7 +60,30 @@ export class TrmrkMatNumberInput {
 
   defaultValues = defaultValues;
 
-  constructor(private editDialog: MatDialog) {}
+  constructor(private editDialog: MatDialog) {
+    this.inputChanged = this.inputChanged.bind(this);
+
+    setTimeout(() => {
+      this.inputEl.nativeElement.addEventListener('change', this.inputChanged);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.inputEl.nativeElement.removeEventListener('change', this.inputChanged);
+  }
+
+  inputChanged(event: Event) {
+    const value: TrmrkNumberInputValue = {
+      text: this.inputEl.nativeElement.value,
+      number: null,
+    };
+
+    if (value.text!.length) {
+      value.number = Number(value.text);
+    }
+
+    this.trmrkValueChanged.emit(value);
+  }
 
   editClicked() {
     openDialog<TrmrkNumberEditorModalDialogData>({
@@ -64,7 +97,7 @@ export class TrmrkMatNumberInput {
           step: this.trmrkStep,
           required: this.trmrkRequired,
           valueSubmitted: (value: TrmrkNumberInputValue) => {
-            this.inputEl.nativeElement.value = value.text ?? '';
+            this.trmrkValueChanged.emit(value);
           },
         },
         title: this.trmrkLabel,

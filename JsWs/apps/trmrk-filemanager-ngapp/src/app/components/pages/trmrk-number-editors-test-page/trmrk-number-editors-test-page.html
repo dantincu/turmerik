@@ -20,7 +20,9 @@
         [trmrkMax]="1000000"
         [trmrkStep]="0.001"
         [trmrkRequired]="true"
+        (trmrkValueChanged)="matNumberInput1ValueChanged($event)"
       ></trmrk-mat-number-input>
+      <p>{{ matNumberInput1Value.number }}</p>
       <trmrk-mat-number-input
         [trmrkLabel]="'-1000000-1000000 with step 000.1 (required)'"
         [trmrkValue]="matNumberInput2Value"
@@ -28,7 +30,9 @@
         [trmrkMax]="1000000"
         [trmrkStep]="0.001"
         [trmrkRequired]="true"
+        (trmrkValueChanged)="matNumberInput2ValueChanged($event)"
       ></trmrk-mat-number-input>
+      <p>{{ matNumberInput2Value.number }}</p>
     </div>
     <div [ngStyle]="{}">
       <trmrk-short-string-editor [trmrkString]="'short '"></trmrk-short-string-editor>

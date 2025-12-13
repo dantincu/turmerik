@@ -173,6 +173,10 @@ export class TrmrkNumberEditor {
       this.value.text = this.value.text.substring(0, this.value.text.length - 1);
     }
 
+    if (this.value.text[event.focusedCharIdx] === '.') {
+      this.focusNextDigit(event.focusedCharIdx);
+    }
+
     this.updateValue();
   }
 

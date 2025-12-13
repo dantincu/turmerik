@@ -31,4 +31,12 @@ export class TrmrkNumberEditorsTestPage {
   matNumberInput2Value: TrmrkNumberInputValue = {
     number: -1234560.789,
   };
+
+  matNumberInput1ValueChanged(value: TrmrkNumberInputValue) {
+    this.matNumberInput1Value = value;
+  }
+
+  matNumberInput2ValueChanged(value: TrmrkNumberInputValue) {
+    this.matNumberInput2Value = value;
+  }
 }

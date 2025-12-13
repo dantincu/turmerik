@@ -9,7 +9,7 @@
       [min]="trmrkMin ?? defaultValues.min"
       [max]="trmrkMax ?? defaultValues.max"
       [step]="trmrkStep ?? defaultValues.step"
-      [value]="trmrkValue ?? defaultValues.value"
+      [value]="trmrkValue?.number ?? defaultValues.value"
     />
     @if ((trmrkRequired ?? defaultValues.required)) { <sup class="trmrk-required-text">*</sup> }
   </mat-form-field>
