@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Subscription } from 'rxjs';
 
-import { NullOrUndef, VoidOrAny } from '../../../../trmrk/core';
+import { NullOrUndef, VoidOrAny, ValidationResult } from '../../../../trmrk/core';
 import { getVarName } from '../../../../trmrk/Reflection/core';
 import { getNumberDigits } from '../../../../trmrk/math';
 
@@ -53,11 +53,14 @@ export interface TrmrkNumberEditorModalDialogData
 export class TrmrkNumberEditorModalDialog implements OnDestroy {
   mergeDialogData = mergeDialogData;
   modalId: number;
-  hasError = false;
   dialogData: TrmrkNumberEditorModalDialogData;
 
+  validationResult: ValidationResult = {};
+
+  @ViewChild('numberEditor', { read: TrmrkNumberEditor }) numberEditor!: TrmrkNumberEditor;
+
   private modalService: ModalService;
-  private modalOpenedSubscription;
+  private modalOpenedSubscription: Subscription;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -71,7 +74,9 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
     this.dialogData = data.data;
 
     this.modalOpenedSubscription = dialogRef.afterOpened().subscribe(() => {
-      setTimeout(() => {});
+      setTimeout(() => {
+        this.numberEditor.focusInput++;
+      });
     });
 
     this.modalService = modalServiceFactory.create();
@@ -92,9 +97,21 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
   }
 
   doneClick() {
-    if (!this.hasError) {
-      this.data.data.valueSubmitted(this.data.data.value!);
+    this.numberEditor.updateValidation();
+
+    if (!this.validationResult.hasError) {
+      this.data.data.valueSubmitted({
+        text: this.numberEditor.value.text!.replace(' ', ''),
+        number: this.numberEditor.value.number,
+      });
+
       this.appService.closeModal(this.modalId);
     }
+  }
+
+  validationResultChanged(result: ValidationResult) {
+    setTimeout(() => {
+      this.validationResult = result;
+    });
   }
 }

@@ -1,6 +1,6 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, Input, SimpleChanges, EventEmitter, Output } from '@angular/core';
 
-import { NullOrUndef, withVal } from '../../../../trmrk/core';
+import { NullOrUndef, ValidationResult } from '../../../../trmrk/core';
 import { getNumberDigits } from '../../../../trmrk/math';
 
 import { whenChanged } from '../../../services/common/simpleChanges';
@@ -68,11 +68,15 @@ export const numOrTextToTrmrkNumberInputValue = (
   styleUrls: ['./trmrk-number-editor.scss'],
 })
 export class TrmrkNumberEditor {
+  @Output() trmrkValidationErrorChanged = new EventEmitter<ValidationResult>();
+
   @Input() trmrkValue?: TrmrkNumberInputValue | NullOrUndef;
   @Input() trmrkMin?: number | NullOrUndef;
   @Input() trmrkMax?: number | NullOrUndef;
   @Input() trmrkStep?: number | NullOrUndef;
   @Input() trmrkRequired?: boolean | NullOrUndef;
+  @Input() trmrkFocusInput = 0;
+  @Input() trmrkBlurInput = 0;
 
   minValue = defaultValues.min!;
   maxValue = defaultValues.max!;
@@ -95,6 +99,22 @@ export class TrmrkNumberEditor {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    whenChanged(
+      changes,
+      () => this.trmrkFocusInput,
+      () => {
+        this.focusInput = this.trmrkFocusInput ? ++this.focusInput : 0;
+      }
+    );
+
+    whenChanged(
+      changes,
+      () => this.trmrkBlurInput,
+      () => {
+        this.blurInput = this.trmrkBlurInput ? ++this.blurInput : 0;
+      }
+    );
+
     whenChanged(
       changes,
       () => this.trmrkValue,
@@ -145,15 +165,48 @@ export class TrmrkNumberEditor {
     );
   }
 
-  charDeleteBtnShortPressOrLeftClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {}
+  charDeleteBtnShortPressOrLeftClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {
+    this.value.text = event.newString;
+    this.updateValue();
+  }
 
-  charDeleteBtnLongPressOrRightClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {}
+  charDeleteBtnLongPressOrRightClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {
+    this.value.text = '';
+    this.updateValue();
+    this.blurInput++;
+    this.focusedDigitIndex = -1;
+  }
 
-  charInsertBtnShortPressOrLeftClick(event: FocusedCharInsertBtnShortPressOrLeftClickEvent) {}
+  charInsertBtnShortPressOrLeftClick(event: FocusedCharInsertBtnShortPressOrLeftClickEvent) {
+    this.value.text = event.newString;
+    this.updateValue();
 
-  charInsertBtnLongPressOrRightClick(event: FocusedCharInsertBtnLongPressOrRightClickEvent) {}
+    if (event.focusedChar !== ' ') {
+      if (event.insertAfter) {
+        this.focusNextDigit(event.focusedCharIdx + 1);
+      } else {
+        this.focusNextDigit(event.focusedCharIdx);
+      }
+    }
+  }
 
-  insertFirstCharClick() {}
+  charInsertBtnLongPressOrRightClick(event: FocusedCharInsertBtnLongPressOrRightClickEvent) {
+    if (event.insertAfter) {
+      this.value.number = this.maxValue;
+    } else {
+      this.value.number = this.minValue;
+    }
+
+    this.updateValidation();
+    this.value.text = this.value.number!.toString();
+    this.focusNextDigit(0);
+  }
+
+  insertFirstCharClick() {
+    this.value.text = ' ';
+    this.updateValue();
+    this.focusNextDigit(0);
+  }
 
   charShortPressOrLeftClick(event: CharShortPressOrLeftClickEvent) {
     if (event.nextFocusedChar === ' ' || /\d/g.test(event.nextFocusedChar)) {
@@ -237,21 +290,33 @@ export class TrmrkNumberEditor {
       this.hasError = false;
       this.errorMessage = '';
     }
+
+    this.trmrkValidationErrorChanged.emit({
+      hasError: this.hasError,
+      errorMessage: this.errorMessage,
+    });
   }
 
   updateValue() {
-    this.value.number = Number(this.value.text!.replaceAll(' ', ''));
+    const text = this.value.text!.replaceAll(' ', '');
+
+    if (text.length) {
+      this.value.number = Number(text);
+    } else {
+      this.value.number = null;
+    }
+
     this.updateValidation();
   }
 
   updateMaxAllowedDigitsCount() {
     this.maxAllowedIntDigits = getNumberDigits(
       Math.floor(Math.max(Math.abs(this.minValue), Math.abs(this.maxValue)))
-    ).intPartDigits.length;
+    )!.intPartDigits.length;
   }
 
   updateMaxAllowedDecimalsCount() {
-    this.maxAllowedDecimals = getNumberDigits(this.step).decimals.length;
+    this.maxAllowedDecimals = getNumberDigits(this.step)!.decimals.length;
   }
 
   focusNextDigit(nextCharIdx: number) {
@@ -272,7 +337,6 @@ export class TrmrkNumberEditor {
 
       if (canAddDigit) {
         this.value.text += nextChar = ' ';
-        nextCharIdx++;
       }
     }
 
@@ -291,12 +355,12 @@ export class TrmrkNumberEditor {
   }
 
   getIntDigitsCount() {
-    const decimalsCount = getNumberDigits(this.value.number!).intPartDigits.length;
+    const decimalsCount = getNumberDigits(this.value.number)?.intPartDigits.length ?? 0;
     return decimalsCount;
   }
 
   getDecimalsCount() {
-    const decimalsCount = getNumberDigits(this.value.number!).decimals.length;
+    const decimalsCount = getNumberDigits(this.value.number)?.decimals.length ?? 0;
     return decimalsCount;
   }
 

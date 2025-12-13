@@ -16,16 +16,18 @@
       mat-icon-button
       class="trmrk-icon-btn trmrk-icon-btn-filled-accept trmrk-apply-changes-btn"
       (click)="doneClick()"
-      [disabled]="hasError"
+      [disabled]="validationResult.hasError"
     >
       <mat-icon class="trmrk-icon">done</mat-icon>
     </button>
   </trmrk-horiz-strip>
   <trmrk-number-editor
+    #numberEditor
     [trmrkValue]="dialogData.value"
     [trmrkMin]="dialogData.min"
     [trmrkMax]="dialogData.max"
     [trmrkStep]="dialogData.step"
     [trmrkRequired]="dialogData.required"
+    (trmrkValidationErrorChanged)="validationResultChanged($event)"
   ></trmrk-number-editor>
 </ng-template>

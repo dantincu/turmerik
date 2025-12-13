@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Subscription } from 'rxjs';
 
-import { NullOrUndef, VoidOrAny } from '../../../../trmrk/core';
+import { NullOrUndef, VoidOrAny, ValidationResult } from '../../../../trmrk/core';
 import { getVarName } from '../../../../trmrk/Reflection/core';
 import { getNumberDigits } from '../../../../trmrk/math';
 
@@ -127,6 +127,8 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
   mergeDialogData = mergeDialogData;
   modalId: number;
 
+  validationResult: ValidationResult = {};
+
   hasError = false;
   errorMessage = '';
 
@@ -181,7 +183,7 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
       this.insertDigit(0);
     }
 
-    this.maxAllowedDecimals = getNumberDigits(this.dialogData.step!).decimals.length;
+    this.maxAllowedDecimals = getNumberDigits(this.dialogData.step!)!.decimals.length;
     this.decimalPointIndex = this.value.decPtIdxLtlNdn ?? -1;
 
     setTimeout(() => {
@@ -448,4 +450,6 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
       this.errorMessage = '';
     }
   }
+
+  validationResultChanged(result: ValidationResult) {}
 }

@@ -73,6 +73,11 @@ export interface ValueOrError<TValue, TError = Error | any> {
   error?: TError | undefined;
 }
 
+export interface ValidationResult {
+  hasError?: boolean | NullOrUndef;
+  errorMessage?: string | NullOrUndef;
+}
+
 export const jsonBool = Object.freeze({
   false: JSON.stringify(false),
   true: JSON.stringify(true),
