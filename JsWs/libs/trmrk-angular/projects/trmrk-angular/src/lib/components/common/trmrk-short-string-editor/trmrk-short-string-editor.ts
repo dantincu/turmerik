@@ -119,6 +119,8 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
   @Input() trmrkAllowInsertCharBeforeFocused: boolean | NullOrUndef;
   @Input() trmrkAllowInsertCharAfterFocused: boolean | NullOrUndef;
 
+  @Input() trmrkLeadingTemplate: TemplateRef<any> | NullOrUndef;
+  @Input() trmrkTrailingTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkBeforeCharWrapperTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkAfterCharWrapperTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkCharTemplate: TemplateRef<any> | NullOrUndef;

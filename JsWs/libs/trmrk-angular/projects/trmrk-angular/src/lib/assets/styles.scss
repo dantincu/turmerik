@@ -1263,14 +1263,17 @@ trmrk-short-string-editor {
     }
   }
 
-  .trmrk-error-wrapper {
+  .trmrk-error-wrapper, .trmrk-output-wrapper {
     display: inline-flex;
     flex-wrap: wrap;
     margin: 0 3px 0 3px;
 
-    .trmrk-text-level-error {
+    .trmrk-text-level-error, .trmrk-text {
       display: inline-flex;
-      flex-wrap: wrap;
+    }
+
+    .trmrk-text {
+      font-size: 14px;
     }
   }
 }

@@ -9,7 +9,8 @@
   [trmrkAllowInsertCharAfterFocused]="true"
   [trmrkAllowDeleteFocusedChar]="true"
   [trmrkHasError]="hasError"
-  [trmrkErrorMessage]="errorMessage"
+  [trmrkErrorMessage]="''"
+  [trmrkTrailingTemplate]="trailingTpl"
   (trmrkCharShortPressOrLeftClick)="charShortPressOrLeftClick($event)"
   (trmrkInputKeyPressed)="inputKeyPressed($event)"
   (trmrkCharDeleteBtnLongPressOrRightClick)="charDeleteBtnLongPressOrRightClick($event)"
@@ -18,3 +19,13 @@
   (trmrkCharInsertBtnShortPressOrLeftClick)="charInsertBtnShortPressOrLeftClick($event)"
   (trmrkInsertFirstCharClick)="insertFirstCharClick()"
 ></trmrk-short-string-editor>
+<ng-template #trailingTpl>
+  <div class="trmrk-output-wrapper">
+    <span class="trmrk-text">{{ value.number ?? '' }}</span>
+  </div>
+  @if (hasError) {
+  <div class="trmrk-error-wrapper">
+    <span class="trmrk-text-level-error"> {{ errorMessage }} </span>
+  </div>
+  }
+</ng-template>

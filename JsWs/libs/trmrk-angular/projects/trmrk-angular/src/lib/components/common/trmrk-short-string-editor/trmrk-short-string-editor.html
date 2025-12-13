@@ -1,9 +1,6 @@
 <div [ngClass]="['trmrk-short-string-editor', trmrkCssClass ?? '']">
-  @if (trmrkHasError) {
-  <div class="trmrk-error-wrapper">
-    <span class="trmrk-text-level-error"> {{ trmrkErrorMessage ?? 'Invalid input' }} </span>
-  </div>
-  } @if (!chars.length) {
+  <ng-container *ngTemplateOutlet="trmrkLeadingTemplate"></ng-container>
+  @if (!chars.length) {
   <div class="trmrk-icon-wrapper">
     <button mat-icon-button class="trmrk-icon-btn" (click)="insertFirstCharClick()">
       <mat-icon class="trmrk-icon">space_bar</mat-icon>
@@ -70,8 +67,13 @@
   <ng-container
     *ngTemplateOutlet="trmrkAfterCharWrapperTemplate; context: { char, idx: $index }"
   ></ng-container>
+  } @if (trmrkHasError) {
+  <div class="trmrk-error-wrapper">
+    <span class="trmrk-text-level-error"> {{ trmrkErrorMessage ?? 'Invalid input' }} </span>
+  </div>
   }
   <div class="trmrk-fake-input-wrapper">
     <input [type]="trmrkDigitsOnly ? 'number' : 'text'" class="trmrk-fake-input" #fakeNumberInput />
   </div>
+  <ng-container *ngTemplateOutlet="trmrkTrailingTemplate"></ng-container>
 </div>

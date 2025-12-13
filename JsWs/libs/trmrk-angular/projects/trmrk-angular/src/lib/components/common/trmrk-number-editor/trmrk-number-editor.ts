@@ -70,13 +70,14 @@ export const numOrTextToTrmrkNumberInputValue = (
 export class TrmrkNumberEditor {
   @Output() trmrkValidationErrorChanged = new EventEmitter<ValidationResult>();
 
-  @Input() trmrkValue?: TrmrkNumberInputValue | NullOrUndef;
-  @Input() trmrkMin?: number | NullOrUndef;
-  @Input() trmrkMax?: number | NullOrUndef;
-  @Input() trmrkStep?: number | NullOrUndef;
-  @Input() trmrkRequired?: boolean | NullOrUndef;
+  @Input() trmrkValue: TrmrkNumberInputValue | NullOrUndef;
+  @Input() trmrkMin: number | NullOrUndef;
+  @Input() trmrkMax: number | NullOrUndef;
+  @Input() trmrkStep: number | NullOrUndef;
+  @Input() trmrkRequired: boolean | NullOrUndef;
   @Input() trmrkFocusInput = 0;
   @Input() trmrkBlurInput = 0;
+  @Input() trmrkShowOutput: boolean | NullOrUndef;
 
   minValue = defaultValues.min!;
   maxValue = defaultValues.max!;
@@ -167,6 +168,11 @@ export class TrmrkNumberEditor {
 
   charDeleteBtnShortPressOrLeftClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {
     this.value.text = event.newString;
+
+    if (this.value.text.endsWith('.')) {
+      this.value.text = this.value.text.substring(0, this.value.text.length - 1);
+    }
+
     this.updateValue();
   }
 
