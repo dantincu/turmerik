@@ -1,15 +1,18 @@
 <trmrk-short-string-editor
   [trmrkDigitsOnly]="true"
+  [trmrkInputAttrs]="{
+    min: minValue.toString(),
+    max: maxValue.toString(),
+    step: step.toString(),
+  }"
   [trmrkCharCssClassFactory]="getCharCssClass"
   [trmrkString]="value.text!"
-  [trmrkFocusedCharIdx]="focusedDigitIndex"
+  [trmrkFocusedCharIdx]="focusedCharIdx"
   [trmrkFocusInput]="focusInput"
   [trmrkBlurInput]="blurInput"
-  [trmrkAllowInsertCharBeforeFocused]="true"
-  [trmrkAllowInsertCharAfterFocused]="true"
-  [trmrkAllowDeleteFocusedChar]="true"
-  [trmrkHasError]="hasError"
-  [trmrkErrorMessage]="''"
+  [trmrkAllowInsertChar]="true"
+  [trmrkAllowInsertChar]="true"
+  [trmrkAllowDeleteChar]="true"
   [trmrkTrailingTemplate]="trailingTpl"
   (trmrkCharShortPressOrLeftClick)="charShortPressOrLeftClick($event)"
   (trmrkInputKeyPressed)="inputKeyPressed($event)"
@@ -17,11 +20,23 @@
   (trmrkCharDeleteBtnShortPressOrLeftClick)="charDeleteBtnShortPressOrLeftClick($event)"
   (trmrkCharInsertBtnLongPressOrRightClick)="charInsertBtnLongPressOrRightClick($event)"
   (trmrkCharInsertBtnShortPressOrLeftClick)="charInsertBtnShortPressOrLeftClick($event)"
-  (trmrkInsertFirstCharClick)="insertFirstCharClick()"
+  (trmrkDoneBtnTouchStartOrMouseDown)="doneBtnTouchStartOrMouseDown($event)"
 ></trmrk-short-string-editor>
 <ng-template #trailingTpl>
+  @if (maxAllowedDecimals > 0) {
+  <div class="trmrk-icon-wrapper trmrk-decimal-point" (click)="moveDecimalPlaceClicked()">
+    <div class="trmrk-char-btn">.</div>
+  </div>
+  } @if (minValue < 0) {
+  <div class="trmrk-icon-wrapper trmrk-plus-minus-sign" (click)="toggleSignClicked()">
+    <div class="trmrk-plus-minus-sign-wrapper">
+      <div class="trmrk-char-btn">+</div>
+      <div class="trmrk-char-btn">-</div>
+    </div>
+  </div>
+  }
   <div class="trmrk-output-wrapper">
-    <span class="trmrk-text">{{ value.number ?? '' }}</span>
+    <span class="trmrk-text">{{ isNaN(value.number ?? NaN) ? '' : value.number }}</span>
   </div>
   @if (hasError) {
   <div class="trmrk-error-wrapper">

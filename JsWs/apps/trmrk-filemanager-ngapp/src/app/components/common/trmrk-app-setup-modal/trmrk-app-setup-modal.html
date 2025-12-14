@@ -10,6 +10,8 @@
 <ng-template #content>
   @if ((data.data.errorMessage ?? null) !== null) {
   <p class="trmrk-text-level-error">{{ data.data.errorMessage }}</p>
+  } @if ((errorMessage ?? null) !== null) {
+  <p class="trmrk-text-level-error">{{ errorMessage }}</p>
   } @if (data.data.isUpdate) {
   <p>You need to update your storage option.</p>
   } @if (!selectedStorageOption) {

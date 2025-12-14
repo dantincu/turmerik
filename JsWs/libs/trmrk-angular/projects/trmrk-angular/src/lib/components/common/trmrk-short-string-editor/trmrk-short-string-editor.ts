@@ -21,6 +21,8 @@ import { TouchOrMouseCoords } from '../../../../trmrk-browser/domUtils/touchAndM
 
 import { whenChanged } from '../../../services/common/simpleChanges';
 import { TrmrkLongPressOrRightClick } from '../../../directives/trmrk-long-press-or-right-click';
+import { TrmrkTouchStartOrMouseDown } from '../../../directives/trmrk-touch-start-or-mouse-down';
+import { TrmrkDynamicAttributesDirective } from '../../../directives/trmrk-dynamic-attributes';
 
 export interface FocusedCharKeyPressEvent {
   evt: KeyboardEvent;
@@ -64,7 +66,7 @@ export interface FocusedCharDeleteBtnLongPressOrRightClickEvent
   extends FocusedCharBtnLongPressEventCore {}
 
 export interface FocusedCharInsertBtnLongPressEventCore extends FocusedCharBtnLongPressEventCore {
-  insertAfter: boolean;
+  insertAtTheEnd: boolean;
 }
 
 export interface FocusedCharInsertBtnShortPressOrLeftClickEvent
@@ -81,12 +83,18 @@ interface TrmrkCharWrapper {
 
 @Component({
   selector: 'trmrk-short-string-editor',
-  imports: [CommonModule, MatButtonModule, MatIconModule, TrmrkLongPressOrRightClick],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    TrmrkLongPressOrRightClick,
+    TrmrkTouchStartOrMouseDown,
+    TrmrkDynamicAttributesDirective,
+  ],
   templateUrl: './trmrk-short-string-editor.html',
   styleUrl: './trmrk-short-string-editor.scss',
 })
 export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
-  @Output() trmrkInsertFirstCharClick = new EventEmitter<void>();
   @Output() trmrkCharShortPressOrLeftClick = new EventEmitter<CharShortPressOrLeftClickEvent>();
   @Output() trmrkCharLongPressOrRightClick = new EventEmitter<CharLongPressOrRightClickEvent>();
 
@@ -103,7 +111,9 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
     new EventEmitter<FocusedCharInsertBtnLongPressOrRightClickEvent>();
 
   @Output() trmrkInputKeyPressed = new EventEmitter<FocusedCharKeyPressEvent>();
+  @Output() trmrkDoneBtnTouchStartOrMouseDown = new EventEmitter<TouchEvent | MouseEvent>();
 
+  @Input() trmrkInputAttrs: { [key: string]: string } | NullOrUndef;
   @Input() trmrkCssClass: string | NullOrUndef;
   @Input() trmrkDigitsOnly: boolean | NullOrUndef;
   @Input() trmrkString = '';
@@ -115,9 +125,8 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
     | ((chr: string, idx: number) => string | NullOrUndef)
     | NullOrUndef;
 
-  @Input() trmrkAllowDeleteFocusedChar: boolean | NullOrUndef;
-  @Input() trmrkAllowInsertCharBeforeFocused: boolean | NullOrUndef;
-  @Input() trmrkAllowInsertCharAfterFocused: boolean | NullOrUndef;
+  @Input() trmrkAllowDeleteChar: boolean | NullOrUndef;
+  @Input() trmrkAllowInsertChar: boolean | NullOrUndef;
 
   @Input() trmrkLeadingTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkTrailingTemplate: TemplateRef<any> | NullOrUndef;
@@ -125,8 +134,6 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
   @Input() trmrkAfterCharWrapperTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkCharTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkUseCharTemplate: boolean | NullOrUndef;
-  @Input() trmrkHasError: boolean | NullOrUndef;
-  @Input() trmrkErrorMessage: string | NullOrUndef;
 
   @ViewChild('fakeNumberInput') fakeNumberInput!: ElementRef<HTMLInputElement>;
 
@@ -190,25 +197,37 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
     );
   }
 
-  charDeleteBtnShortPressOrLeftClick(srcEvt: TouchOrMouseCoords, focusedCharIdx: number) {
+  containerTouchStartOrMouseDown(event: MouseEvent | TouchEvent) {
+    event.preventDefault();
+  }
+
+  doneBtnTouchStartOrMouseDown(event: MouseEvent | TouchEvent) {
+    event.stopPropagation();
+    this.trmrkDoneBtnTouchStartOrMouseDown.emit(event);
+  }
+
+  charDeleteBtnShortPressOrLeftClick(srcEvt: TouchOrMouseCoords) {
     const event = {
       srcEvt,
-      focusedCharIdx,
-      focusedChar: this.trmrkString[focusedCharIdx],
+      focusedCharIdx: this.trmrkFocusedCharIdx,
+      focusedChar: this.trmrkString[this.trmrkFocusedCharIdx],
       currentString: this.trmrkString,
-      newString: actWithVal([...this.trmrkString], (charsArr) =>
-        charsArr.splice(focusedCharIdx, 1)
-      ).join(''),
+      newString:
+        this.trmrkFocusedCharIdx >= 0
+          ? actWithVal([...this.trmrkString], (charsArr) =>
+              charsArr.splice(this.trmrkFocusedCharIdx, 1)
+            ).join('')
+          : this.trmrkString,
     } as FocusedCharDeleteBtnShortPressOrLeftClickEvent;
 
     this.trmrkCharDeleteBtnShortPressOrLeftClick.emit(event);
   }
 
-  charDeleteBtnLongPressOrRightClick(srcEvt: TouchOrMouseCoords, focusedCharIdx: number) {
+  charDeleteBtnLongPressOrRightClick(srcEvt: TouchOrMouseCoords) {
     const event = {
       srcEvt,
-      focusedCharIdx,
-      focusedChar: this.trmrkString[focusedCharIdx],
+      focusedCharIdx: this.trmrkFocusedCharIdx,
+      focusedChar: this.trmrkString[this.trmrkFocusedCharIdx],
       currentString: this.trmrkString,
       newString: '',
     } as FocusedCharDeleteBtnShortPressOrLeftClickEvent;
@@ -216,41 +235,31 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
     this.trmrkCharDeleteBtnLongPressOrRightClick.emit(event);
   }
 
-  charInsertBtnShortPressOrLeftClick(
-    srcEvt: TouchOrMouseCoords,
-    focusedCharIdx: number,
-    insertAfter: boolean
-  ) {
+  charInsertBtnShortPressOrLeftClick(srcEvt: TouchOrMouseCoords, insertAtTheEnd: boolean) {
     const event = {
       srcEvt,
-      focusedCharIdx,
-      insertAfter,
-      focusedChar: this.trmrkString[focusedCharIdx],
+      focusedCharIdx: this.trmrkFocusedCharIdx,
+      insertAtTheEnd: insertAtTheEnd,
+      focusedChar: this.trmrkString[this.trmrkFocusedCharIdx],
       currentString: this.trmrkString,
-      newString: actWithVal([...this.trmrkString], (charsArr) =>
-        charsArr.splice(focusedCharIdx + (insertAfter ? 1 : 0), 0, ' ')
-      ).join(''),
+      newString: insertAtTheEnd
+        ? this.trmrkString + ' '
+        : actWithVal([...this.trmrkString], (charsArr) =>
+            charsArr.splice(this.trmrkFocusedCharIdx, 0, ' ')
+          ).join(''),
     } as FocusedCharInsertBtnShortPressOrLeftClickEvent;
 
     this.trmrkCharInsertBtnShortPressOrLeftClick.emit(event);
   }
 
-  charInsertBtnLongPressOrRightClick(
-    srcEvt: TouchOrMouseCoords,
-    focusedCharIdx: number,
-    insertAfter: boolean
-  ) {
+  charInsertBtnLongPressOrRightClick(srcEvt: TouchOrMouseCoords, insertAtTheEnd: boolean) {
     const event = {
       srcEvt,
-      focusedCharIdx,
-      insertAfter,
+      focusedCharIdx: this.trmrkFocusedCharIdx,
+      insertAtTheEnd: insertAtTheEnd,
     } as FocusedCharInsertBtnShortPressOrLeftClickEvent;
 
     this.trmrkCharInsertBtnLongPressOrRightClick.emit(event);
-  }
-
-  insertFirstCharClick() {
-    this.trmrkInsertFirstCharClick.emit();
   }
 
   charLongPressOrRightClick(srcEvt: TouchOrMouseCoords, charIdx: number) {

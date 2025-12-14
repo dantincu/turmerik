@@ -60,6 +60,8 @@ export class TrmrkAppSetupModal implements OnDestroy {
   selectedStorageOption: DriveStorageOption | null = null;
   fileSystemApiDirHandle: FileSystemDirectoryHandle | null = null;
 
+  errorMessage: string | null = null;
+
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: TrmrkDialogData<TrmrkAppSetupDialogComponentData>,
@@ -116,14 +118,18 @@ export class TrmrkAppSetupModal implements OnDestroy {
   }
 
   async chooseFileSystemApiRootFolder() {
-    this.fileSystemApiDirHandle = (await (window as any).showDirectoryPicker({
-      id: this.fileSystemApiFolderPickerId,
-    })) as FileSystemDirectoryHandle;
+    try {
+      this.fileSystemApiDirHandle = (await (window as any).showDirectoryPicker({
+        id: this.fileSystemApiFolderPickerId,
+      })) as FileSystemDirectoryHandle;
 
-    this.data.data.optionChosen({
-      ...this.selectedStorageOption!,
-      rootFolder: this.fileSystemApiDirHandle,
-      tmStmpMillis: this.timeStampGenerator.millis(),
-    });
+      this.data.data.optionChosen({
+        ...this.selectedStorageOption!,
+        rootFolder: this.fileSystemApiDirHandle,
+        tmStmpMillis: this.timeStampGenerator.millis(),
+      });
+    } catch (err) {
+      this.errorMessage = (err as Error).message ?? 'An error has occurred';
+    }
   }
 }

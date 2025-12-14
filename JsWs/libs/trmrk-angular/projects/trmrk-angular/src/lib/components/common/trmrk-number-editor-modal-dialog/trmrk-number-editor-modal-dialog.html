@@ -21,13 +21,15 @@
       <mat-icon class="trmrk-icon">done</mat-icon>
     </button>
   </trmrk-horiz-strip>
-  <trmrk-number-editor
-    #numberEditor
-    [trmrkValue]="dialogData.value"
-    [trmrkMin]="dialogData.min"
-    [trmrkMax]="dialogData.max"
-    [trmrkStep]="dialogData.step"
-    [trmrkRequired]="dialogData.required"
-    (trmrkValidationErrorChanged)="validationResultChanged($event)"
-  ></trmrk-number-editor>
+  <div class="trmrk-scrollable trmrk-scrollable-y trmrk-modal-body">
+    <trmrk-number-editor
+      #numberEditor
+      [trmrkValue]="dialogData.value"
+      [trmrkMin]="dialogData.min"
+      [trmrkMax]="dialogData.max"
+      [trmrkStep]="dialogData.step"
+      [trmrkRequired]="dialogData.required"
+      (trmrkValidationErrorChanged)="validationResultChanged($event)"
+    ></trmrk-number-editor>
+  </div>
 </ng-template>

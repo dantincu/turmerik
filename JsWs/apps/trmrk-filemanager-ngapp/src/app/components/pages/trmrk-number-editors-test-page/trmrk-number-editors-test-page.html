@@ -10,7 +10,8 @@
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
-        paddingTop: '10px'
+        paddingTop: '10px',
+        paddingRight: '3px'
       }"
     >
       <trmrk-mat-number-input
@@ -35,18 +36,25 @@
       <p>{{ matNumberInput2Value.number }}</p>
     </div>
     <div [ngStyle]="{}">
-      <trmrk-short-string-editor [trmrkString]="'short '"></trmrk-short-string-editor>
-      <trmrk-short-string-editor [trmrkString]="''"></trmrk-short-string-editor>
-      <trmrk-short-string-editor [trmrkString]="' string'"></trmrk-short-string-editor>
+      <trmrk-short-string-editor
+        [trmrkString]="'short '"
+        [trmrkFocusedCharIdx]="0"
+      ></trmrk-short-string-editor>
+      <trmrk-short-string-editor
+        [trmrkString]="''"
+        [trmrkFocusedCharIdx]="0"
+      ></trmrk-short-string-editor>
+      <trmrk-short-string-editor
+        [trmrkString]="' string'"
+        [trmrkFocusedCharIdx]="0"
+      ></trmrk-short-string-editor>
       <trmrk-short-string-editor
         [trmrkString]="'asdfasdfafs'"
-        [trmrkHasError]="true"
-        [trmrkErrorMessage]="'asdf asdfasdfsadfsadfsadfasd asdfsadfasdfasdfasdfsadfsadfasdf'"
+        [trmrkFocusedCharIdx]="0"
       ></trmrk-short-string-editor
       ><trmrk-short-string-editor
         [trmrkString]="'asdfasdfafs'"
-        [trmrkHasError]="true"
-        [trmrkErrorMessage]="'asdf asdfas asdf'"
+        [trmrkFocusedCharIdx]="0"
       ></trmrk-short-string-editor>
     </div>
   </div>

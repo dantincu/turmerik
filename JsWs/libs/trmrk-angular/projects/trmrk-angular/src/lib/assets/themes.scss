@@ -354,17 +354,12 @@
 
   .trmrk-short-string-editor {
     .trmrk-char-wrapper {
+      background-color: #888;
+      color: #FFF;
       border-color: #ddd;
-      color: #383838;
 
       &.trmrk-focused-char {
-        background-color: #e0e0e0;
-        color: #000;
-
-        &.trmrk-decimal-point {
-          background-color: #383838;
-          color: #FFF;
-        }
+        background-color: #444;
       }
     }
 
@@ -628,17 +623,12 @@
 
   .trmrk-short-string-editor {
     .trmrk-char-wrapper {
+      background-color: #888;
+      color: #000;
       border-color: #333;
-      color: #e0e0e0;
 
       &.trmrk-focused-char {
-        background-color: #333;
-        color: #FFF;
-
-        &.trmrk-decimal-point {
-          background-color: #e0e0e0;
-          color: #000;
-        }
+        background-color: #ccc;
       }
     }
 

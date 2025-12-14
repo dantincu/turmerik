@@ -29,7 +29,7 @@ export class TrmrkNumberEditorsTestPage {
   };
 
   matNumberInput2Value: TrmrkNumberInputValue = {
-    number: -1234560.789,
+    // number: -1234560.789,
   };
 
   matNumberInput1ValueChanged(value: TrmrkNumberInputValue) {

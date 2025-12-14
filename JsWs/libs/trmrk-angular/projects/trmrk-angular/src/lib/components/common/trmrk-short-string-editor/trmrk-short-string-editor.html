@@ -1,8 +1,27 @@
-<div [ngClass]="['trmrk-short-string-editor', trmrkCssClass ?? '']">
+<div
+  [ngClass]="['trmrk-short-string-editor', trmrkCssClass ?? '']"
+  (trmrkTouchStartOrMouseDown)="containerTouchStartOrMouseDown($event)"
+>
   <ng-container *ngTemplateOutlet="trmrkLeadingTemplate"></ng-container>
-  @if (!chars.length) {
+  @if (trmrkAllowDeleteChar) {
   <div class="trmrk-icon-wrapper">
-    <button mat-icon-button class="trmrk-icon-btn" (click)="insertFirstCharClick()">
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (trmrkLongPressOrRightClick)="charDeleteBtnLongPressOrRightClick($event)"
+      (trmrkShortPressOrLeftClick)="charDeleteBtnShortPressOrLeftClick($event)"
+    >
+      <mat-icon class="trmrk-icon">delete</mat-icon>
+    </button>
+  </div>
+  } @if (trmrkAllowInsertChar) {
+  <div class="trmrk-icon-wrapper">
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (trmrkLongPressOrRightClick)="charInsertBtnLongPressOrRightClick($event, false)"
+      (trmrkShortPressOrLeftClick)="charInsertBtnShortPressOrLeftClick($event, false)"
+    >
       <mat-icon class="trmrk-icon">space_bar</mat-icon>
     </button>
   </div>
@@ -10,29 +29,7 @@
   <ng-container
     *ngTemplateOutlet="trmrkBeforeCharWrapperTemplate; context: { char, idx: $index }"
   ></ng-container>
-  @if (trmrkAllowDeleteFocusedChar && trmrkFocusedCharIdx === $index) {
-  <div class="trmrk-icon-wrapper">
-    <button
-      mat-icon-button
-      class="trmrk-icon-btn"
-      (trmrkLongPressOrRightClick)="charDeleteBtnLongPressOrRightClick($event, $index)"
-      (trmrkShortPressOrLeftClick)="charDeleteBtnShortPressOrLeftClick($event, $index)"
-    >
-      <mat-icon class="trmrk-icon">delete</mat-icon>
-    </button>
-  </div>
-  } @if (trmrkAllowInsertCharBeforeFocused && trmrkFocusedCharIdx === $index) {
-  <div class="trmrk-icon-wrapper">
-    <button
-      mat-icon-button
-      class="trmrk-icon-btn"
-      (trmrkLongPressOrRightClick)="charInsertBtnLongPressOrRightClick($event, $index, false)"
-      (trmrkShortPressOrLeftClick)="charInsertBtnShortPressOrLeftClick($event, $index, false)"
-    >
-      <mat-icon class="trmrk-icon">space_bar</mat-icon>
-    </button>
-  </div>
-  }
+
   <div
     [ngClass]="[
       'trmrk-char-wrapper',
@@ -52,28 +49,38 @@
     ></ng-container>
     }
   </div>
-  @if (trmrkAllowInsertCharAfterFocused && trmrkFocusedCharIdx === $index) {
+
+  <ng-container
+    *ngTemplateOutlet="trmrkAfterCharWrapperTemplate; context: { char, idx: $index }"
+  ></ng-container>
+  } @if (trmrkAllowInsertChar) {
   <div class="trmrk-icon-wrapper">
     <button
       mat-icon-button
       class="trmrk-icon-btn"
-      (trmrkLongPressOrRightClick)="charInsertBtnLongPressOrRightClick($event, $index, true)"
-      (trmrkShortPressOrLeftClick)="charInsertBtnShortPressOrLeftClick($event, $index, true)"
+      (trmrkLongPressOrRightClick)="charInsertBtnLongPressOrRightClick($event, true)"
+      (trmrkShortPressOrLeftClick)="charInsertBtnShortPressOrLeftClick($event, true)"
     >
       <mat-icon class="trmrk-icon">space_bar</mat-icon>
     </button>
   </div>
   }
-  <ng-container
-    *ngTemplateOutlet="trmrkAfterCharWrapperTemplate; context: { char, idx: $index }"
-  ></ng-container>
-  } @if (trmrkHasError) {
-  <div class="trmrk-error-wrapper">
-    <span class="trmrk-text-level-error"> {{ trmrkErrorMessage ?? 'Invalid input' }} </span>
-  </div>
-  }
-  <div class="trmrk-fake-input-wrapper">
-    <input [type]="trmrkDigitsOnly ? 'number' : 'text'" class="trmrk-fake-input" #fakeNumberInput />
+  <div class="trmrk-icon-wrapper">
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (trmrkTouchStartOrMouseDown)="doneBtnTouchStartOrMouseDown($event)"
+    >
+      <mat-icon class="trmrk-icon">done</mat-icon>
+    </button>
+    <div class="trmrk-fake-input-wrapper">
+      <input
+        class="trmrk-fake-input"
+        [type]="trmrkDigitsOnly ? 'number' : 'text'"
+        #fakeNumberInput
+        [trmrkDynamicAttributes]="trmrkInputAttrs ?? {}"
+      />
+    </div>
   </div>
   <ng-container *ngTemplateOutlet="trmrkTrailingTemplate"></ng-container>
 </div>

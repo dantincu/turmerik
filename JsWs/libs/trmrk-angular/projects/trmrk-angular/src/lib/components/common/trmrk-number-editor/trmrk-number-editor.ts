@@ -37,10 +37,10 @@ export interface TrmrkNumberInputValue {
 }
 
 export const normalizeTrmrkNumberInputValue = (value: TrmrkNumberInputValue) => {
-  if ((value.number ?? value.text) !== null) {
+  if ((value.number ?? value.text ?? null) !== null) {
     value = numOrTextToTrmrkNumberInputValue(value.number, value.text);
   } else {
-    value = { text: '' };
+    value = { text: ' ' };
   }
 
   return value;
@@ -53,7 +53,7 @@ export const numOrTextToTrmrkNumberInputValue = (
   number ??= Number(text);
 
   const value: TrmrkNumberInputValue = {
-    text: String(number),
+    text: isNaN(number) ? '' : String(number),
     number: number,
   };
 
@@ -79,6 +79,9 @@ export class TrmrkNumberEditor {
   @Input() trmrkBlurInput = 0;
   @Input() trmrkShowOutput: boolean | NullOrUndef;
 
+  NaN = NaN;
+  isNaN = isNaN;
+
   minValue = defaultValues.min!;
   maxValue = defaultValues.max!;
   step = defaultValues.step!;
@@ -89,7 +92,7 @@ export class TrmrkNumberEditor {
   hasError = false;
   errorMessage = '';
 
-  focusedDigitIndex = 0;
+  focusedCharIdx = 0;
   isPlacingDecimalPoint = false;
   value: TrmrkNumberInputValue;
   focusInput = 0;
@@ -173,7 +176,9 @@ export class TrmrkNumberEditor {
       this.value.text = this.value.text.substring(0, this.value.text.length - 1);
     }
 
-    if (this.value.text[event.focusedCharIdx] === '.') {
+    if (event.focusedCharIdx >= this.value.text.length) {
+      this.focusNextDigit(this.value.text.length - 1);
+    } else if (this.value.text[event.focusedCharIdx] === '.') {
       this.focusNextDigit(event.focusedCharIdx);
     }
 
@@ -181,40 +186,34 @@ export class TrmrkNumberEditor {
   }
 
   charDeleteBtnLongPressOrRightClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {
-    this.value.text = '';
-    this.updateValue();
-    this.blurInput++;
-    this.focusedDigitIndex = -1;
+    setTimeout(() => {
+      this.value.text = '';
+      this.updateValue();
+      this.blurInput++;
+      this.focusedCharIdx = -1;
+    });
   }
 
   charInsertBtnShortPressOrLeftClick(event: FocusedCharInsertBtnShortPressOrLeftClickEvent) {
     this.value.text = event.newString;
     this.updateValue();
 
-    if (event.focusedChar !== ' ') {
-      if (event.insertAfter) {
-        this.focusNextDigit(event.focusedCharIdx + 1);
-      } else {
-        this.focusNextDigit(event.focusedCharIdx);
-      }
+    if (event.focusedChar !== ' ' && event.insertAtTheEnd) {
+      this.focusNextDigit(this.value.text!.length - 1);
+    } else {
+      this.focusNextDigit(event.focusedCharIdx);
     }
   }
 
   charInsertBtnLongPressOrRightClick(event: FocusedCharInsertBtnLongPressOrRightClickEvent) {
-    if (event.insertAfter) {
+    if (event.insertAtTheEnd) {
       this.value.number = this.maxValue;
     } else {
       this.value.number = this.minValue;
     }
 
+    this.updateTextFromValue();
     this.updateValidation();
-    this.value.text = this.value.number!.toString();
-    this.focusNextDigit(0);
-  }
-
-  insertFirstCharClick() {
-    this.value.text = ' ';
-    this.updateValue();
     this.focusNextDigit(0);
   }
 
@@ -232,31 +231,25 @@ export class TrmrkNumberEditor {
     } else {
       switch (event.newChar) {
         case '.':
-          if (this.maxAllowedDecimals > 0) {
-            const firstDigitIndex = this.value.text!.startsWith('-') ? 1 : 0;
-
-            if (event.focusedCharIdx > firstDigitIndex) {
-              this.value.text = [...this.value.text!.replace('.', '')]
-                .map((char, idx) => (idx === event.focusedCharIdx ? '.' + char : char))
-                .join('');
-
-              if (this.value.text.indexOf('.') < 0) {
-                this.value.text += '. ';
-              }
-
-              this.updateValue();
-              this.focusNextDigit(event.nextFocusedCharIdx);
-            }
-          }
+          this.tryMoveDecimalPlace();
           break;
         case '-':
-          if (this.minValue < 0) {
-            this.value.number! *= -1;
-            this.value.text = this.value.number!.toString();
-          }
+          this.tryToggleSign();
           break;
       }
     }
+  }
+
+  doneBtnTouchStartOrMouseDown(event: MouseEvent | TouchEvent) {
+    this.focusedCharIdx = -1;
+  }
+
+  moveDecimalPlaceClicked() {
+    this.tryMoveDecimalPlace();
+  }
+
+  toggleSignClicked() {
+    this.tryToggleSign();
   }
 
   getCharCssClass(chr: string, idx: number) {
@@ -319,6 +312,10 @@ export class TrmrkNumberEditor {
     this.updateValidation();
   }
 
+  updateTextFromValue() {
+    this.value.text = isNaN(this.value.number ?? NaN) ? '' : this.value.number!.toString();
+  }
+
   updateMaxAllowedDigitsCount() {
     this.maxAllowedIntDigits = getNumberDigits(
       Math.floor(Math.max(Math.abs(this.minValue), Math.abs(this.maxValue)))
@@ -336,7 +333,7 @@ export class TrmrkNumberEditor {
       nextChar = this.value.text![++nextCharIdx] ?? '';
     }
 
-    if (!nextChar.length) {
+    if (!nextChar.length && !this.value.text!.endsWith(' ')) {
       let canAddDigit = false;
 
       if (this.value.text!.indexOf('.') >= 0) {
@@ -350,7 +347,7 @@ export class TrmrkNumberEditor {
       }
     }
 
-    this.focusedDigitIndex = nextCharIdx;
+    this.focusedCharIdx = nextCharIdx;
 
     if (nextChar.length) {
       this.focusInput++;
@@ -376,5 +373,46 @@ export class TrmrkNumberEditor {
 
   getDefaultValue(): TrmrkNumberInputValue {
     return { ...defaultValues.value! };
+  }
+
+  tryMoveDecimalPlace() {
+    if (this.maxAllowedDecimals > 0) {
+      const firstDigitIndex = this.value.text!.startsWith('-') ? 1 : 0;
+
+      if (this.focusedCharIdx > firstDigitIndex) {
+        const decPlaceIdx = this.value.text!.indexOf('.');
+
+        const focusedCharIdxOffset = decPlaceIdx >= 0 && this.focusedCharIdx > decPlaceIdx ? 0 : 1;
+
+        this.value.text = [...this.value.text!.replace('.', '')]
+          .map((char, idx) =>
+            idx === this.focusedCharIdx + focusedCharIdxOffset ? '.' + char : char
+          )
+          .join('');
+
+        if (this.value.text!.indexOf('.') < 0) {
+          this.value.text += '. ';
+          this.focusNextDigit(this.value.text!.length);
+        } else {
+          this.focusNextDigit(this.focusedCharIdx);
+        }
+
+        this.updateValue();
+      }
+    }
+  }
+
+  tryToggleSign() {
+    if (this.minValue < 0) {
+      this.value.number! *= -1;
+      this.updateTextFromValue();
+      this.updateValidation();
+
+      if (this.value.number! > 0) {
+        this.focusNextDigit(this.focusedCharIdx - 2);
+      } else {
+        this.focusNextDigit(this.focusedCharIdx);
+      }
+    }
   }
 }
