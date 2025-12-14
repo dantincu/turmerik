@@ -104,6 +104,12 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
   @Output() trmrkCharDeleteBtnLongPressOrRightClick =
     new EventEmitter<FocusedCharDeleteBtnLongPressOrRightClickEvent>();
 
+  @Output() trmrkCharBackspaceBtnShortPressOrLeftClick =
+    new EventEmitter<FocusedCharDeleteBtnShortPressOrLeftClickEvent>();
+
+  @Output() trmrkCharBackspaceBtnLongPressOrRightClick =
+    new EventEmitter<FocusedCharDeleteBtnLongPressOrRightClickEvent>();
+
   @Output() trmrkCharInsertBtnShortPressOrLeftClick =
     new EventEmitter<FocusedCharInsertBtnShortPressOrLeftClickEvent>();
 
@@ -130,6 +136,7 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
 
   @Input() trmrkLeadingTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkTrailingTemplate: TemplateRef<any> | NullOrUndef;
+  @Input() trmrkBeforeDoneBtnTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkBeforeCharWrapperTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkAfterCharWrapperTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkCharTemplate: TemplateRef<any> | NullOrUndef;
@@ -229,10 +236,42 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
       focusedCharIdx: this.trmrkFocusedCharIdx,
       focusedChar: this.trmrkString[this.trmrkFocusedCharIdx],
       currentString: this.trmrkString,
-      newString: '',
+      newString: this.trmrkString.substring(
+        0,
+        Math.min(Math.max(this.trmrkFocusedCharIdx, 0), this.trmrkString.length)
+      ),
     } as FocusedCharDeleteBtnShortPressOrLeftClickEvent;
 
     this.trmrkCharDeleteBtnLongPressOrRightClick.emit(event);
+  }
+
+  charBackspaceBtnShortPressOrLeftClick(srcEvt: TouchOrMouseCoords) {
+    const event = {
+      srcEvt,
+      focusedCharIdx: this.trmrkFocusedCharIdx,
+      focusedChar: this.trmrkString[this.trmrkFocusedCharIdx],
+      currentString: this.trmrkString,
+      newString:
+        this.trmrkFocusedCharIdx > 0
+          ? actWithVal([...this.trmrkString], (charsArr) =>
+              charsArr.splice(this.trmrkFocusedCharIdx - 1, 1)
+            ).join('')
+          : this.trmrkString,
+    } as FocusedCharDeleteBtnShortPressOrLeftClickEvent;
+
+    this.trmrkCharBackspaceBtnShortPressOrLeftClick.emit(event);
+  }
+
+  charBackspaceBtnLongPressOrRightClick(srcEvt: TouchOrMouseCoords) {
+    const event = {
+      srcEvt,
+      focusedCharIdx: this.trmrkFocusedCharIdx,
+      focusedChar: this.trmrkString[this.trmrkFocusedCharIdx],
+      currentString: this.trmrkString,
+      newString: this.trmrkString.substring(Math.min(Math.max(this.trmrkFocusedCharIdx, 0))),
+    } as FocusedCharDeleteBtnShortPressOrLeftClickEvent;
+
+    this.trmrkCharBackspaceBtnLongPressOrRightClick.emit(event);
   }
 
   charInsertBtnShortPressOrLeftClick(srcEvt: TouchOrMouseCoords, insertAtTheEnd: boolean) {

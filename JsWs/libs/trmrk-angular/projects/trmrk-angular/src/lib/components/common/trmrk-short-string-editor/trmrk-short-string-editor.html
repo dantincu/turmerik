@@ -25,6 +25,17 @@
       <mat-icon class="trmrk-icon">space_bar</mat-icon>
     </button>
   </div>
+  } @if (trmrkAllowDeleteChar) {
+  <div class="trmrk-icon-wrapper">
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (trmrkLongPressOrRightClick)="charBackspaceBtnLongPressOrRightClick($event)"
+      (trmrkShortPressOrLeftClick)="charBackspaceBtnShortPressOrLeftClick($event)"
+    >
+      <mat-icon class="trmrk-icon">backspace</mat-icon>
+    </button>
+  </div>
   } @for (char of chars; track char.id) {
   <ng-container
     *ngTemplateOutlet="trmrkBeforeCharWrapperTemplate; context: { char, idx: $index }"
@@ -65,6 +76,7 @@
     </button>
   </div>
   }
+  <ng-container *ngTemplateOutlet="trmrkBeforeDoneBtnTemplate"></ng-container>
   <div class="trmrk-icon-wrapper">
     <button
       mat-icon-button

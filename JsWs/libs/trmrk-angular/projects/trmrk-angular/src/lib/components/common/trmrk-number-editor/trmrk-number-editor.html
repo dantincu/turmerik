@@ -13,28 +13,36 @@
   [trmrkAllowInsertChar]="true"
   [trmrkAllowInsertChar]="true"
   [trmrkAllowDeleteChar]="true"
+  [trmrkBeforeDoneBtnTemplate]="beforeDoneBtnTpl"
   [trmrkTrailingTemplate]="trailingTpl"
   (trmrkCharShortPressOrLeftClick)="charShortPressOrLeftClick($event)"
   (trmrkInputKeyPressed)="inputKeyPressed($event)"
   (trmrkCharDeleteBtnLongPressOrRightClick)="charDeleteBtnLongPressOrRightClick($event)"
   (trmrkCharDeleteBtnShortPressOrLeftClick)="charDeleteBtnShortPressOrLeftClick($event)"
+  (trmrkCharBackspaceBtnLongPressOrRightClick)="charBackspaceBtnLongPressOrRightClick($event)"
+  (trmrkCharBackspaceBtnShortPressOrLeftClick)="charBackspaceBtnShortPressOrLeftClick($event)"
   (trmrkCharInsertBtnLongPressOrRightClick)="charInsertBtnLongPressOrRightClick($event)"
   (trmrkCharInsertBtnShortPressOrLeftClick)="charInsertBtnShortPressOrLeftClick($event)"
   (trmrkDoneBtnTouchStartOrMouseDown)="doneBtnTouchStartOrMouseDown($event)"
 ></trmrk-short-string-editor>
-<ng-template #trailingTpl>
+<ng-template #beforeDoneBtnTpl>
   @if (maxAllowedDecimals > 0) {
   <div class="trmrk-icon-wrapper trmrk-decimal-point" (click)="moveDecimalPlaceClicked()">
     <div class="trmrk-char-btn">.</div>
   </div>
   } @if (minValue < 0) {
-  <div class="trmrk-icon-wrapper trmrk-plus-minus-sign" (click)="toggleSignClicked()">
-    <div class="trmrk-plus-minus-sign-wrapper">
-      <div class="trmrk-char-btn">+</div>
-      <div class="trmrk-char-btn">-</div>
-    </div>
+  <div
+    [ngClass]="[
+      'trmrk-icon-wrapper',
+      (value.number ?? 0) >= 0 ? 'trmrk-minus-sign' : 'trmrk-plus-sign'
+    ]"
+    (click)="toggleSignClicked()"
+  >
+    <div class="trmrk-char-btn">{{ (value.number ?? 0) >= 0 ? '-' : '+' }}</div>
   </div>
   }
+</ng-template>
+<ng-template #trailingTpl>
   <div class="trmrk-output-wrapper">
     <span class="trmrk-text">{{ isNaN(value.number ?? NaN) ? '' : value.number }}</span>
   </div>
@@ -42,5 +50,5 @@
   <div class="trmrk-error-wrapper">
     <span class="trmrk-text-level-error"> {{ errorMessage }} </span>
   </div>
-  }
-</ng-template>
+  }</ng-template
+>

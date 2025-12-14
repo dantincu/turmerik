@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges, EventEmitter, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { NullOrUndef, ValidationResult } from '../../../../trmrk/core';
 import { getNumberDigits } from '../../../../trmrk/math';
@@ -63,7 +64,7 @@ export const numOrTextToTrmrkNumberInputValue = (
 @Component({
   selector: 'trmrk-number-editor',
   standalone: true,
-  imports: [TrmrkShortStringEditor],
+  imports: [CommonModule, TrmrkShortStringEditor],
   templateUrl: './trmrk-number-editor.html',
   styleUrls: ['./trmrk-number-editor.scss'],
 })
@@ -187,10 +188,34 @@ export class TrmrkNumberEditor {
 
   charDeleteBtnLongPressOrRightClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {
     setTimeout(() => {
-      this.value.text = '';
+      this.value.text = event.newString;
+      this.updateValue();
+      this.focusNextDigit(this.focusedCharIdx - 1);
+    });
+  }
+
+  charBackspaceBtnShortPressOrLeftClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {
+    this.value.text = event.newString;
+
+    if (this.value.text.endsWith('.')) {
+      this.value.text = this.value.text.substring(0, this.value.text.length - 1);
+    }
+
+    if (event.focusedCharIdx >= this.value.text.length) {
+      this.focusNextDigit(this.value.text.length - 1);
+    } else if (this.value.text[event.focusedCharIdx] === '.') {
+      this.focusNextDigit(event.focusedCharIdx);
+    }
+
+    this.updateValue();
+  }
+
+  charBackspaceBtnLongPressOrRightClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {
+    setTimeout(() => {
+      this.value.text = event.newString;
       this.updateValue();
       this.blurInput++;
-      this.focusedCharIdx = -1;
+      this.focusNextDigit(0);
     });
   }
 
@@ -327,13 +352,19 @@ export class TrmrkNumberEditor {
   }
 
   focusNextDigit(nextCharIdx: number) {
+    const initialNextCharIdx = Math.max(
+      [...this.value.text!].findIndex((char) => this.isFocusableChar(char)),
+      nextCharIdx
+    );
+
+    nextCharIdx = initialNextCharIdx;
     let nextChar: string = this.value.text![nextCharIdx] ?? '';
 
     while (!this.isFocusableChar(nextChar) && nextChar.length) {
       nextChar = this.value.text![++nextCharIdx] ?? '';
     }
 
-    if (!nextChar.length && !this.value.text!.endsWith(' ')) {
+    if (!nextChar.length) {
       let canAddDigit = false;
 
       if (this.value.text!.indexOf('.') >= 0) {
@@ -344,6 +375,14 @@ export class TrmrkNumberEditor {
 
       if (canAddDigit) {
         this.value.text += nextChar = ' ';
+        nextCharIdx = this.value.text!.length - 1;
+      } else {
+        nextCharIdx = initialNextCharIdx - 1;
+        nextChar = this.value.text![nextCharIdx] ?? '';
+
+        while (!this.isFocusableChar(nextChar) && nextChar.length) {
+          nextChar = this.value.text![--nextCharIdx] ?? '';
+        }
       }
     }
 
@@ -379,7 +418,7 @@ export class TrmrkNumberEditor {
     if (this.maxAllowedDecimals > 0) {
       const firstDigitIndex = this.value.text!.startsWith('-') ? 1 : 0;
 
-      if (this.focusedCharIdx > firstDigitIndex) {
+      if (this.focusedCharIdx >= firstDigitIndex) {
         const decPlaceIdx = this.value.text!.indexOf('.');
 
         const focusedCharIdxOffset = decPlaceIdx >= 0 && this.focusedCharIdx > decPlaceIdx ? 0 : 1;
@@ -392,7 +431,7 @@ export class TrmrkNumberEditor {
 
         if (this.value.text!.indexOf('.') < 0) {
           this.value.text += '. ';
-          this.focusNextDigit(this.value.text!.length);
+          this.focusNextDigit(this.value.text!.length - 1);
         } else {
           this.focusNextDigit(this.focusedCharIdx);
         }

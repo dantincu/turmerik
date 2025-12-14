@@ -1230,14 +1230,12 @@ trmrk-short-string-editor {
   .trmrk-char-wrapper, .trmrk-icon-wrapper {
     width: 40px;
     height: 40px;
-    margin: 1px;
+    margin: 2px;
     display: inline-flex;
     position: relative;
     box-sizing: border-box;
     justify-content: center;
     align-items: center;
-    top: 2px;
-    left: 2px;
 
     .trmrk-char-btn {
       font-size: 20px;
@@ -1251,30 +1249,7 @@ trmrk-short-string-editor {
         line-height: 20px;
         margin-top: -14px;
         top: 5px;
-      }
-    }
-
-    &.trmrk-plus-minus-sign {
-      .trmrk-plus-minus-sign-wrapper {
-        display: inline-flex;
-        position: relative;
-
-        .trmrk-char-btn {
-          font-size: 40px;
-          height: 20px;
-          line-height: 20px;
-          position: absolute;
-
-          &:first-child {
-            top: -16px;
-            left: -9px;
-          }
-
-          &:last-child {
-            bottom: -22px;
-            left: -5px;
-          }
-        }
+        left: 1px;
       }
     }
 
@@ -1307,7 +1282,7 @@ trmrk-short-string-editor {
   .trmrk-error-wrapper, .trmrk-output-wrapper {
     display: inline-flex;
     flex-wrap: wrap;
-    margin: 0 3px 0 3px;
+    margin: 3px;
 
     .trmrk-text-level-error, .trmrk-text {
       display: inline-flex;
@@ -1321,8 +1296,7 @@ trmrk-short-string-editor {
 
 trmrk-number-editor-modal-dialog {
   .trmrk-modal-body {
-    padding-right: 5px;
-    padding-bottom: 20px;
+    padding: 5px;
   }
 
   .trmrk-horiz-strip {
