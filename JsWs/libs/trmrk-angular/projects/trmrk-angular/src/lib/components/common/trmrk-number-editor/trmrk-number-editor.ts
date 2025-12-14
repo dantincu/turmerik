@@ -189,6 +189,11 @@ export class TrmrkNumberEditor {
   charDeleteBtnLongPressOrRightClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {
     setTimeout(() => {
       this.value.text = event.newString;
+
+      if (!this.value.text.length) {
+        this.value.text = ' ';
+      }
+
       this.updateValue();
       this.focusNextDigit(this.focusedCharIdx - 1);
     });

@@ -25,10 +25,10 @@
       ></trmrk-mat-number-input>
       <p>{{ matNumberInput1Value.number }}</p>
       <trmrk-mat-number-input
-        [trmrkLabel]="'-1000000-1000000 with step 000.1 (required)'"
+        [trmrkLabel]="'-1000000-500000 with step 000.1 (required)'"
         [trmrkValue]="matNumberInput2Value"
         [trmrkMin]="-1000000"
-        [trmrkMax]="1000000"
+        [trmrkMax]="-500000"
         [trmrkStep]="0.001"
         [trmrkRequired]="true"
         (trmrkValueChanged)="matNumberInput2ValueChanged($event)"
