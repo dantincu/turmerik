@@ -34,6 +34,9 @@
           "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\Release\\net10.0"
         },
         {
+          "CloneDirPath": "Bin\\Turmerik.ListDirsDeep.ConsoleApp\\Release\\net10.0"
+        },
+        {
           "CloneDirPath": "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\Release\\net10.0"
         },
         {
@@ -93,6 +96,9 @@
           "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\Release\\net10.0"
         },
         {
+          "CloneDirPath": "Bin\\Turmerik.ListDirsDeep.ConsoleApp\\Release\\net10.0"
+        },
+        {
           "CloneDirPath": "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\Release\\net10.0"
         },
         {
@@ -150,6 +156,9 @@
           "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\Release\\net10.0"
         },
         {
+          "CloneDirPath": "Bin\\Turmerik.ListDirsDeep.ConsoleApp\\Release\\net10.0"
+        },
+        {
           "CloneDirPath": "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\Release\\net10.0"
         },
         {
@@ -205,6 +214,9 @@
         },
         {
           "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\Release\\net10.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.ListDirsDeep.ConsoleApp\\Release\\net10.0"
         },
         {
           "CloneDirPath": "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\Release\\net10.0"

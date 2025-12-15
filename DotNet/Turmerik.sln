@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11217.181 d18.0
+VisualStudioVersion = 18.0.11217.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik", "Turmerik\Turmerik.csproj", "{0F67229C-CE9B-47A2-93A2-A079E2DA6FA0}"
 EndProject
@@ -117,6 +117,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.GenClnblTypes.ConsoleApp", "Turmerik.GenClnblTypes.ConsoleApp\Turmerik.GenClnblTypes.ConsoleApp.csproj", "{63AF0D7F-B9A7-4AA9-9983-61D95FD7A66E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.Code.CSharp.UnitTests", "Turmerik.Code.CSharp.UnitTests\Turmerik.Code.CSharp.UnitTests.csproj", "{ABAE4427-F485-4273-A649-4BE893376F78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.ListDirsDeep.ConsoleApp", "Turmerik.ListDirsDeep.ConsoleApp\Turmerik.ListDirsDeep.ConsoleApp.csproj", "{90F707D6-6976-475E-A06D-129D88F777ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -312,6 +314,10 @@ Global
 		{ABAE4427-F485-4273-A649-4BE893376F78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABAE4427-F485-4273-A649-4BE893376F78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABAE4427-F485-4273-A649-4BE893376F78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90F707D6-6976-475E-A06D-129D88F777ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90F707D6-6976-475E-A06D-129D88F777ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90F707D6-6976-475E-A06D-129D88F777ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90F707D6-6976-475E-A06D-129D88F777ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -368,6 +374,7 @@ Global
 		{51CF9371-90F6-785B-45E9-3197628CF94D} = {D9246AE3-53C4-4F02-B24F-6E02B5557AA9}
 		{63AF0D7F-B9A7-4AA9-9983-61D95FD7A66E} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
 		{ABAE4427-F485-4273-A649-4BE893376F78} = {2020DE95-DD87-4F1F-8BBB-CCCCF6ABB095}
+		{90F707D6-6976-475E-A06D-129D88F777ED} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

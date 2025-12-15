@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Turmerik.ListDirsDeep.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": ":i"
+    }
+  }
+}
