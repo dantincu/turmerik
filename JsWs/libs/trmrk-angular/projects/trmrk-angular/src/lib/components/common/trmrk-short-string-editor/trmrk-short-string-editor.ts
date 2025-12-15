@@ -24,17 +24,24 @@ import { TrmrkLongPressOrRightClick } from '../../../directives/trmrk-long-press
 import { TrmrkTouchStartOrMouseDown } from '../../../directives/trmrk-touch-start-or-mouse-down';
 import { TrmrkDynamicAttributesDirective } from '../../../directives/trmrk-dynamic-attributes';
 
-export interface FocusedCharKeyPressEvent {
-  evt: KeyboardEvent;
+export interface FocusedCharKeyboardEvent {
+  srcEvt: KeyboardEvent;
   currentString: string;
   newString: string;
   focusedCharIdx: number;
   focusedChar: string;
   hasFocusedChar: boolean;
-  newChar: string;
   nextFocusedCharIdx: number;
   nextFocusedChar: string;
   hasNextFocusedChar: boolean;
+}
+
+export interface FocusedCharKeyPressEvent extends FocusedCharKeyboardEvent {
+  newChar: string;
+}
+
+export interface FocusedCharKeyDownEvent extends FocusedCharKeyboardEvent {
+  key: string;
 }
 
 export interface CharLongPressOrRightClickEvent {
@@ -74,6 +81,31 @@ export interface FocusedCharInsertBtnShortPressOrLeftClickEvent
 
 export interface FocusedCharInsertBtnLongPressOrRightClickEvent
   extends FocusedCharInsertBtnLongPressEventCore {}
+
+export const getNewStringForDeleteCurrentChar = (text: string, focusedCharIdx: number) =>
+  focusedCharIdx >= 0
+    ? actWithVal([...text], (charsArr) => charsArr.splice(focusedCharIdx, 1)).join('')
+    : text;
+
+export const getNewStringForDeleteToTheRight = (text: string, focusedCharIdx: number) =>
+  text.substring(0, Math.min(Math.max(focusedCharIdx, 0), text.length));
+
+export const getNewStringForDeletePrevChar = (text: string, focusedCharIdx: number) =>
+  focusedCharIdx > 0
+    ? actWithVal([...text], (charsArr) => charsArr.splice(focusedCharIdx - 1, 1)).join('')
+    : text;
+
+export const getNewStringForDeleteToTheLeft = (text: string, focusedCharIdx: number) =>
+  text.substring(Math.min(Math.max(focusedCharIdx, 0)));
+
+export const getNewStringForInsertChar = (
+  text: string,
+  focusedCharIdx: number,
+  insertAtTheEnd: boolean
+) =>
+  insertAtTheEnd
+    ? text + ' '
+    : actWithVal([...text], (charsArr) => charsArr.splice(focusedCharIdx, 0, ' ')).join('');
 
 interface TrmrkCharWrapper {
   id: number;
@@ -117,6 +149,7 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
     new EventEmitter<FocusedCharInsertBtnLongPressOrRightClickEvent>();
 
   @Output() trmrkInputKeyPressed = new EventEmitter<FocusedCharKeyPressEvent>();
+  @Output() trmrkInputKeyDown = new EventEmitter<FocusedCharKeyDownEvent>();
   @Output() trmrkDoneBtnTouchStartOrMouseDown = new EventEmitter<TouchEvent | MouseEvent>();
 
   @Input() trmrkInputAttrs: { [key: string]: string } | NullOrUndef;
@@ -150,12 +183,15 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
 
   constructor(public hostEl: ElementRef<HTMLElement>) {
     this.fakeNumberInputKeyPressed = this.fakeNumberInputKeyPressed.bind(this);
+    this.fakeNumberInputKeyDown = this.fakeNumberInputKeyDown.bind(this);
 
     setTimeout(() => {
       this.fakeNumberInput.nativeElement.addEventListener(
         'keypress',
         this.fakeNumberInputKeyPressed
       );
+
+      this.fakeNumberInput.nativeElement.addEventListener('keydown', this.fakeNumberInputKeyDown);
     });
   }
 
@@ -164,6 +200,8 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
       'keypress',
       this.fakeNumberInputKeyPressed
     );
+
+    this.fakeNumberInput.nativeElement.removeEventListener('keydown', this.fakeNumberInputKeyDown);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -219,12 +257,7 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
       focusedCharIdx: this.trmrkFocusedCharIdx,
       focusedChar: this.trmrkString[this.trmrkFocusedCharIdx],
       currentString: this.trmrkString,
-      newString:
-        this.trmrkFocusedCharIdx >= 0
-          ? actWithVal([...this.trmrkString], (charsArr) =>
-              charsArr.splice(this.trmrkFocusedCharIdx, 1)
-            ).join('')
-          : this.trmrkString,
+      newString: getNewStringForDeleteCurrentChar(this.trmrkString, this.trmrkFocusedCharIdx),
     } as FocusedCharDeleteBtnShortPressOrLeftClickEvent;
 
     this.trmrkCharDeleteBtnShortPressOrLeftClick.emit(event);
@@ -236,10 +269,7 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
       focusedCharIdx: this.trmrkFocusedCharIdx,
       focusedChar: this.trmrkString[this.trmrkFocusedCharIdx],
       currentString: this.trmrkString,
-      newString: this.trmrkString.substring(
-        0,
-        Math.min(Math.max(this.trmrkFocusedCharIdx, 0), this.trmrkString.length)
-      ),
+      newString: getNewStringForDeleteToTheRight(this.trmrkString, this.trmrkFocusedCharIdx),
     } as FocusedCharDeleteBtnShortPressOrLeftClickEvent;
 
     this.trmrkCharDeleteBtnLongPressOrRightClick.emit(event);
@@ -251,12 +281,7 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
       focusedCharIdx: this.trmrkFocusedCharIdx,
       focusedChar: this.trmrkString[this.trmrkFocusedCharIdx],
       currentString: this.trmrkString,
-      newString:
-        this.trmrkFocusedCharIdx > 0
-          ? actWithVal([...this.trmrkString], (charsArr) =>
-              charsArr.splice(this.trmrkFocusedCharIdx - 1, 1)
-            ).join('')
-          : this.trmrkString,
+      newString: getNewStringForDeletePrevChar(this.trmrkString, this.trmrkFocusedCharIdx),
     } as FocusedCharDeleteBtnShortPressOrLeftClickEvent;
 
     this.trmrkCharBackspaceBtnShortPressOrLeftClick.emit(event);
@@ -268,7 +293,7 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
       focusedCharIdx: this.trmrkFocusedCharIdx,
       focusedChar: this.trmrkString[this.trmrkFocusedCharIdx],
       currentString: this.trmrkString,
-      newString: this.trmrkString.substring(Math.min(Math.max(this.trmrkFocusedCharIdx, 0))),
+      newString: getNewStringForDeleteToTheLeft(this.trmrkString, this.trmrkFocusedCharIdx),
     } as FocusedCharDeleteBtnShortPressOrLeftClickEvent;
 
     this.trmrkCharBackspaceBtnLongPressOrRightClick.emit(event);
@@ -281,11 +306,11 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
       insertAtTheEnd: insertAtTheEnd,
       focusedChar: this.trmrkString[this.trmrkFocusedCharIdx],
       currentString: this.trmrkString,
-      newString: insertAtTheEnd
-        ? this.trmrkString + ' '
-        : actWithVal([...this.trmrkString], (charsArr) =>
-            charsArr.splice(this.trmrkFocusedCharIdx, 0, ' ')
-          ).join(''),
+      newString: getNewStringForInsertChar(
+        this.trmrkString,
+        this.trmrkFocusedCharIdx,
+        insertAtTheEnd
+      ),
     } as FocusedCharInsertBtnShortPressOrLeftClickEvent;
 
     this.trmrkCharInsertBtnShortPressOrLeftClick.emit(event);
@@ -323,22 +348,21 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
     this.trmrkCharShortPressOrLeftClick.emit(event);
   }
 
-  fakeNumberInputKeyPressed(evt: KeyboardEvent) {
+  fakeNumberInputKeyPressed(srcEvt: KeyboardEvent) {
     const event = {
-      evt,
+      srcEvt,
       currentString: this.trmrkString,
       newString: this.trmrkString,
       focusedCharIdx: this.trmrkFocusedCharIdx,
       focusedChar: this.chars[this.trmrkFocusedCharIdx]?.value ?? null,
-      newChar: evt.key,
+      newChar: srcEvt.key,
     } as FocusedCharKeyPressEvent;
 
     event.hasFocusedChar = (event.focusedChar ?? null) !== null;
     event.nextFocusedCharIdx = this.trmrkFocusedCharIdx + 1;
 
-    if ((event.hasNextFocusedChar = event.nextFocusedCharIdx < event.currentString.length)) {
-      event.nextFocusedChar = event.currentString[event.nextFocusedCharIdx];
-    }
+    event.nextFocusedChar = event.currentString[event.nextFocusedCharIdx] ?? null;
+    event.hasNextFocusedChar = (event.nextFocusedChar ?? null) !== null;
 
     if (
       event.hasFocusedChar &&
@@ -351,5 +375,69 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
 
     this.trmrkInputKeyPressed.emit(event);
     this.fakeNumberInput.nativeElement.value = '';
+  }
+
+  fakeNumberInputKeyDown(srcEvt: KeyboardEvent) {
+    const event = {
+      srcEvt,
+      currentString: this.trmrkString,
+      newString: this.trmrkString,
+      focusedCharIdx: this.trmrkFocusedCharIdx,
+      focusedChar: this.chars[this.trmrkFocusedCharIdx]?.value ?? null,
+      nextFocusedCharIdx: this.trmrkFocusedCharIdx,
+      key: srcEvt.key,
+    } as FocusedCharKeyDownEvent;
+
+    event.hasFocusedChar = (event.focusedChar ?? null) !== null;
+
+    switch (event.key) {
+      case 'Home':
+        event.nextFocusedCharIdx = 0;
+        break;
+      case 'End':
+        event.nextFocusedCharIdx = event.currentString.length - 1;
+        break;
+      case 'ArrowLeft':
+        event.nextFocusedCharIdx--;
+        break;
+      case 'ArrowRight':
+        event.nextFocusedCharIdx++;
+        break;
+      case 'Delete':
+        if (srcEvt.ctrlKey) {
+          event.newString = getNewStringForDeleteToTheRight(
+            this.trmrkString,
+            this.trmrkFocusedCharIdx
+          );
+        } else {
+          event.newString = getNewStringForDeleteCurrentChar(
+            this.trmrkString,
+            this.trmrkFocusedCharIdx
+          );
+        }
+        break;
+      case 'BackSpace':
+        if (srcEvt.ctrlKey) {
+          event.newString = getNewStringForDeleteToTheLeft(
+            this.trmrkString,
+            this.trmrkFocusedCharIdx
+          );
+
+          event.nextFocusedCharIdx = 0;
+        } else {
+          event.newString = getNewStringForDeletePrevChar(
+            this.trmrkString,
+            this.trmrkFocusedCharIdx
+          );
+
+          event.nextFocusedCharIdx--;
+        }
+
+        break;
+    }
+
+    event.nextFocusedChar = event.newString[event.nextFocusedCharIdx] ?? null;
+    event.hasNextFocusedChar = (event.nextFocusedChar ?? null) !== null;
+    this.trmrkInputKeyDown.emit(event);
   }
 }

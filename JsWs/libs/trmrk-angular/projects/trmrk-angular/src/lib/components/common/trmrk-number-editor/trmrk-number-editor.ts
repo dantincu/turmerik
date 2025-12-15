@@ -10,8 +10,14 @@ import {
   CharShortPressOrLeftClickEvent,
   FocusedCharDeleteBtnShortPressOrLeftClickEvent,
   FocusedCharKeyPressEvent,
+  FocusedCharKeyDownEvent,
   FocusedCharInsertBtnLongPressOrRightClickEvent,
   FocusedCharInsertBtnShortPressOrLeftClickEvent,
+  getNewStringForDeleteCurrentChar,
+  getNewStringForDeletePrevChar,
+  getNewStringForDeleteToTheLeft,
+  getNewStringForDeleteToTheRight,
+  getNewStringForInsertChar,
 } from '../trmrk-short-string-editor/trmrk-short-string-editor';
 
 export interface TrmrkNumberEditorOpts {
@@ -171,80 +177,31 @@ export class TrmrkNumberEditor {
   }
 
   charDeleteBtnShortPressOrLeftClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {
-    this.value.text = event.newString;
-
-    if (this.value.text.endsWith('.')) {
-      this.value.text = this.value.text.substring(0, this.value.text.length - 1);
-    }
-
-    if (event.focusedCharIdx >= this.value.text.length) {
-      this.focusNextDigit(this.value.text.length - 1);
-    } else if (this.value.text[event.focusedCharIdx] === '.') {
-      this.focusNextDigit(event.focusedCharIdx);
-    }
-
-    this.updateValue();
+    this.deleteCurrentChar(event.newString);
   }
 
   charDeleteBtnLongPressOrRightClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {
     setTimeout(() => {
-      this.value.text = event.newString;
-
-      if (!this.value.text.length) {
-        this.value.text = ' ';
-      }
-
-      this.updateValue();
-      this.focusNextDigit(this.focusedCharIdx - 1);
+      this.deleteToTheRight(event.newString);
     });
   }
 
   charBackspaceBtnShortPressOrLeftClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {
-    this.value.text = event.newString;
-
-    if (this.value.text.endsWith('.')) {
-      this.value.text = this.value.text.substring(0, this.value.text.length - 1);
-    }
-
-    if (event.focusedCharIdx >= this.value.text.length) {
-      this.focusNextDigit(this.value.text.length - 1);
-    } else if (this.value.text[event.focusedCharIdx] === '.') {
-      this.focusNextDigit(event.focusedCharIdx);
-    }
-
-    this.updateValue();
+    this.deletePrevChar(event.newString);
   }
 
   charBackspaceBtnLongPressOrRightClick(event: FocusedCharDeleteBtnShortPressOrLeftClickEvent) {
     setTimeout(() => {
-      this.value.text = event.newString;
-      this.updateValue();
-      this.blurInput++;
-      this.focusNextDigit(0);
+      this.deleteToTheLeft(event.newString);
     });
   }
 
   charInsertBtnShortPressOrLeftClick(event: FocusedCharInsertBtnShortPressOrLeftClickEvent) {
-    this.value.text = event.newString;
-    this.updateValue();
-
-    if (event.focusedChar !== ' ' && event.insertAtTheEnd) {
-      this.focusNextDigit(this.value.text!.length - 1);
-    } else {
-      this.focusNextDigit(event.focusedCharIdx);
-    }
+    this.insertChar(event.newString, event.focusedChar, event.insertAtTheEnd);
   }
 
   charInsertBtnLongPressOrRightClick(event: FocusedCharInsertBtnLongPressOrRightClickEvent) {
-    if (event.insertAtTheEnd) {
-      this.value.number = this.maxValue;
-    } else {
-      this.value.number = this.minValue;
-    }
-
-    this.updateTextFromValue();
-    this.updateValidation();
-    this.focusNextDigit(0);
+    this.assignBoundaryValue(event.insertAtTheEnd);
   }
 
   charShortPressOrLeftClick(event: CharShortPressOrLeftClickEvent) {
@@ -260,6 +217,8 @@ export class TrmrkNumberEditor {
       this.focusNextDigit(event.nextFocusedCharIdx);
     } else {
       switch (event.newChar) {
+        case ' ':
+          break;
         case '.':
           this.tryMoveDecimalPlace();
           break;
@@ -267,6 +226,47 @@ export class TrmrkNumberEditor {
           this.tryToggleSign();
           break;
       }
+    }
+  }
+
+  inputKeyDown(event: FocusedCharKeyDownEvent) {
+    switch (event.key) {
+      case 'Home':
+      case 'End':
+      case 'ArrowLeft':
+      case 'ArrowRight':
+        this.focusNextDigit(event.nextFocusedCharIdx);
+        break;
+      case 'ArrowUp':
+        if (event.srcEvt.shiftKey) {
+          this.assignBoundaryValue(true);
+        }
+        break;
+      case 'ArrowDown':
+        if (event.srcEvt.shiftKey) {
+          this.assignBoundaryValue(false);
+        }
+        break;
+      case 'Delete':
+        if (event.srcEvt.ctrlKey) {
+          this.deleteToTheRight(
+            getNewStringForDeleteToTheRight(this.value.text!, this.focusedCharIdx)
+          );
+        } else {
+          this.deleteCurrentChar(
+            getNewStringForDeleteCurrentChar(this.value.text!, this.focusedCharIdx)
+          );
+        }
+        break;
+      case 'Backspace':
+        if (event.srcEvt.ctrlKey) {
+          this.deleteToTheLeft(
+            getNewStringForDeleteToTheLeft(this.value.text!, this.focusedCharIdx)
+          );
+        } else {
+          this.deletePrevChar(getNewStringForDeletePrevChar(this.value.text!, this.focusedCharIdx));
+        }
+        break;
     }
   }
 
@@ -280,6 +280,73 @@ export class TrmrkNumberEditor {
 
   toggleSignClicked() {
     this.tryToggleSign();
+  }
+
+  deleteCurrentChar(newString: string) {
+    this.value.text = newString;
+
+    if (this.value.text.endsWith('.')) {
+      this.value.text = this.value.text.substring(0, this.value.text.length - 1);
+    }
+
+    if (this.focusedCharIdx >= this.value.text.length) {
+      this.focusNextDigit(this.value.text.length - 1);
+    } else if (this.value.text[this.focusedCharIdx] === '.') {
+      this.focusNextDigit(this.focusedCharIdx);
+    }
+
+    this.updateValue();
+  }
+
+  deleteToTheRight(newString: string) {
+    this.value.text = newString;
+
+    if (!this.value.text.length) {
+      this.value.text = ' ';
+    }
+
+    this.updateValue();
+    this.focusNextDigit(this.focusedCharIdx - 1);
+  }
+
+  deletePrevChar(newString: string) {
+    this.value.text = newString;
+
+    if (this.value.text.endsWith('.')) {
+      this.value.text = this.value.text.substring(0, this.value.text.length - 1);
+    }
+
+    this.updateValue();
+    this.focusNextDigit(this.focusedCharIdx - 1);
+  }
+
+  deleteToTheLeft(newString: string) {
+    this.value.text = newString;
+    this.updateValue();
+    this.focusNextDigit(0);
+  }
+
+  insertChar(newString: string, focusedChar: string, insertAtTheEnd: boolean) {
+    this.value.text = newString;
+    this.updateValue();
+
+    if (focusedChar !== ' ' && insertAtTheEnd) {
+      this.focusNextDigit(this.value.text!.length - 1);
+    } else {
+      this.focusNextDigit(this.focusedCharIdx);
+    }
+  }
+
+  assignBoundaryValue(useMaxValue: boolean) {
+    if (useMaxValue) {
+      this.value.number = this.maxValue;
+    } else {
+      this.value.number = this.minValue;
+    }
+
+    this.updateTextFromValue();
+    this.updateValidation();
+    this.focusNextDigit(0);
   }
 
   getCharCssClass(chr: string, idx: number) {
