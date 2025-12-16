@@ -174,6 +174,7 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
   @Input() trmrkAfterCharWrapperTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkCharTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkUseCharTemplate: boolean | NullOrUndef;
+  @Input() trmrkShowDoneBtn: boolean | NullOrUndef;
 
   @ViewChild('fakeNumberInput') fakeNumberInput!: ElementRef<HTMLInputElement>;
 

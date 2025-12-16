@@ -71,18 +71,23 @@ namespace Turmerik.ListDirsDeep.ConsoleApp
             ProgramArgs pga,
             string prDirPath)
         {
-            var dirsNamesArr = Directory.GetDirectories(
-                prDirPath).Select(dir => Path.GetFileName(dir)).Where(
+            var allDirNamesArr = Directory.GetDirectories(
+                prDirPath).Select(dir => Path.GetFileName(dir)).ToArray();
+
+            var matchingDirsNamesArr = allDirNamesArr.Where(
                 dirName => pga.DirNameMatchPattern.IsMatch(dirName)).ToArray();
 
-            foreach (var dirName in dirsNamesArr)
+            var childMatchingDirNamesArr = allDirNamesArr.Where(
+                dirName => pga.ChildDirNameMatchPattern.IsMatch(dirName)).ToArray();
+
+            bool skipRest = false;
+            
+            foreach (var dirName in matchingDirsNamesArr)
             {
                 string dirPath = Path.Combine(prDirPath, dirName);
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.WriteLine(dirPath);
                 Console.ResetColor();
-                bool skipSibblings = false;
-                bool skipChildren = false;
 
                 if (pga.IsInteractive)
                 {
@@ -98,10 +103,10 @@ namespace Turmerik.ListDirsDeep.ConsoleApp
                                 Process.Start(new ProcessStartInfo
                                 {
                                     FileName = "cmd",
+                                    WorkingDirectory = dirPath,
                                     UseShellExecute = true,
                                 }.ActWith(info =>
                                 {
-                                    info.ArgumentList.Add(dirPath);
                                 }));
 
                                 Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -114,14 +119,8 @@ namespace Turmerik.ListDirsDeep.ConsoleApp
                                 Console.WriteLine("Path set to clipboard");
                                 Console.ResetColor();
                                 break;
-                            case "skc":
-                                skipChildren = true;
-                                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                                Console.WriteLine("Skipping the subdirs of the current dir");
-                                Console.ResetColor();
-                                break;
-                            case "sks":
-                                skipSibblings = true;
+                            case "skr":
+                                skipRest = true;
                                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                                 Console.WriteLine("Skipping the rest of subdirs of the parent dir");
                                 Console.ResetColor();
@@ -133,7 +132,7 @@ namespace Turmerik.ListDirsDeep.ConsoleApp
                                 break;
                         }
 
-                        if (skipChildren || skipSibblings)
+                        if (skipRest)
                         {
                             break;
                         }
@@ -146,13 +145,17 @@ namespace Turmerik.ListDirsDeep.ConsoleApp
                     Console.WriteLine();
                 }
 
-                if (skipSibblings)
+                if (skipRest)
                 {
                     break;
                 }
+            }
 
-                if (!skipChildren)
+            if (!skipRest)
+            {
+                foreach (var dirName in childMatchingDirNamesArr)
                 {
+                    string dirPath = Path.Combine(prDirPath, dirName);
                     await RunAsyncCore(pga, dirPath);
                 }
             }

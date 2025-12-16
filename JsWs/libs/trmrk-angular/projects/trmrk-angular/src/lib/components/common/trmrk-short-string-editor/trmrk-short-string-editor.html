@@ -77,7 +77,8 @@
   </div>
   }
   <ng-container *ngTemplateOutlet="trmrkBeforeDoneBtnTemplate"></ng-container>
-  <div class="trmrk-icon-wrapper">
+  @if (trmrkShowDoneBtn ?? true) {
+  <div [ngClass]="'trmrk-icon-wrapper'">
     <button
       mat-icon-button
       class="trmrk-icon-btn"
@@ -85,14 +86,15 @@
     >
       <mat-icon class="trmrk-icon">done</mat-icon>
     </button>
-    <div class="trmrk-fake-input-wrapper">
-      <input
-        class="trmrk-fake-input"
-        [type]="trmrkDigitsOnly ? 'number' : 'text'"
-        #fakeNumberInput
-        [trmrkDynamicAttributes]="trmrkInputAttrs ?? {}"
-      />
-    </div>
+  </div>
+  }
+  <div class="trmrk-fake-input-container">
+    <input
+      class="trmrk-fake-input"
+      [type]="trmrkDigitsOnly ? 'number' : 'text'"
+      #fakeNumberInput
+      [trmrkDynamicAttributes]="trmrkInputAttrs ?? {}"
+    />
   </div>
   <ng-container *ngTemplateOutlet="trmrkTrailingTemplate"></ng-container>
 </div>
