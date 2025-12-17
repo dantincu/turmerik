@@ -367,7 +367,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
   @include mixins.rel-flex-stretch-to-parent-size();
 
   &.trmrk-height-diff-x1 {
-    height: calc(100% - 50px);
+    height: calc(100% - 44px);
 
     &.trmrk-has-app-bar {
       animation: trmrk-has-app-bar 0.1s ease-in-out;
@@ -380,15 +380,15 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 
   &.trmrk-height-diff-x2 {
-    height: calc(100vh - 90px);
+    height: calc(100vh - 88px);
   }
 
   &.trmrk-height-diff-x3 {
-    height: calc(100vh - 130px);
+    height: calc(100vh - 132px);
   }
 
   &.trmrk-height-diff-x4 {
-    height: calc(100vh - 170px);
+    height: calc(100vh - 176px);
   }
 }
 
@@ -425,7 +425,7 @@ trmrk-3-panels-layout, .trmrk-3-panels-layout {
       @include mixins.rel-stretch-to-parent-size();
       display: flex;
       flex-direction: column;
-      flex: 1 0 calc(100% - 40px);
+      flex: 1 0 calc(100% - 44px);
     }
 
     > trmrk-horiz-strip > :is(.trmrk-heading-horiz-strip,
@@ -547,7 +547,7 @@ trmrk-app-page {
   .trmrk-text-row {
     display: flex;
     overflow: hidden;
-    min-width: 40px;
+    min-width: 44px;
     width: 100%;
     margin-left: 3px;
     margin-right: 5px;
@@ -559,7 +559,7 @@ trmrk-app-page {
   }
 
   .trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
-    margin-top: -3px;
+    margin-top: -2px;
   }
 }
 
@@ -592,7 +592,7 @@ trmrk-app-page {
   }
 
   &.trmrk-has-border {
-    padding: 2px;
+    padding: 3px;
 
     .trmrk-strip-cap {
       height: 28px;
@@ -601,7 +601,7 @@ trmrk-app-page {
   }
 
   &.trmrk-has-border-x2 {
-    padding: 1px;
+    padding: 2px;
 
     .trmrk-strip-cap {
       height: 26px;
@@ -637,8 +637,8 @@ trmrk-app-page {
 }
 
 .trmrk-app-bar {
-  height: 50px;
-  padding: 5px;
+  height: 44px;
+  padding: 3px;
   overflow-y: hidden;
 
   &.trmrk-show {
@@ -744,7 +744,7 @@ trmrk-app-page {
 }
 
 .trmrk-horiz-strip, .trmrk-horiz-scrollable-strip {
-  height: 40px;
+  height: 44px;
 }
 
 .trmrk-horiz-strip {
@@ -804,7 +804,7 @@ trmrk-app-page {
 
     .trmrk-tree-node-content {
       display: flex;
-      height: 40px;
+      height: 44px;
       margin-top: 3px;
 
       &.trmrk-is-hcy-node {
@@ -933,12 +933,12 @@ trmrk-list-app-panel, .trmrk-app-panel, trmrk-panel-list, .trmrk-panel-list {
   }
 
   .trmrk-panel-body {
-    flex: 1 0 calc(100% - 40px);
+    flex: 1 0 calc(100% - 44px);
   }
 
   trmrk-panel-list {
     // height: calc(100% - 40px);
-    flex: 1 0 calc(100% - 40px);
+    flex: 1 0 calc(100% - 44px);
 
     .trmrk-panel-list {
       height: auto;
@@ -988,21 +988,21 @@ trmrk-list-app-panel, .trmrk-app-panel, trmrk-panel-list, .trmrk-panel-list {
   &.trmrk-has-bottom-horiz-strip, &.trmrk-has-top-message-horiz-strip {
     trmrk-panel-list {
       // height: calc(100% - 80px);
-      flex: 1 0 calc(100% - 80px);
+      flex: 1 0 calc(100% - 88px);
     }
   }
 
   &.trmrk-has-top-message-horiz-strip.trmrk-has-bottom-horiz-strip {
     trmrk-panel-list {
       // height: calc(100% - 120px);
-      flex: 1 0 calc(100% - 120px);
+      flex: 1 0 calc(100% - 132px);
     }
   }
 
   &.trmrk-has-accelerating-popovers.trmrk-has-accelerating-popovers {
     trmrk-panel-list {
       // height: calc(100% - 120px);
-      flex: 1 0 calc(100% - 120px);
+      flex: 1 0 calc(100% - 132px);
     }
   }
 }
@@ -1049,13 +1049,13 @@ trmrk-app-themes-list-view {
 
 .trmrk-mat-dialog-panel {
   &.trmrk-width-lg.trmrk-width-lg {
-    width: max(500px, min(1000px, calc(100vw - 40px)));
-    max-width: max(500px, min(1000px, calc(100vw - 40px)));
+    width: max(500px, min(1000px, calc(100vw - 44px)));
+    max-width: max(500px, min(1000px, calc(100vw - 44px)));
   }
 
   &.trmrk-width-stretch.trmrk-width-stretch {
-    width: max(500px, calc(100vw - 40px));
-    max-width: max(500px, calc(100vw - 40px));
+    width: max(500px, calc(100vw - 44px));
+    max-width: max(500px, calc(100vw - 44px));
   }
 
   .mat-mdc-dialog-surface.mdc-dialog__surface {
@@ -1064,7 +1064,7 @@ trmrk-app-themes-list-view {
 
   .trmrk-horiz-strip {
     height: unset;
-    min-height: 40px;
+    min-height: 44px;
 
     h2 {
       text-align: center;
@@ -1095,8 +1095,8 @@ trmrk-app-themes-list-view {
 @media screen and (min-height: 501px) {
   .trmrk-mat-dialog-panel {
     &.trmrk-height-stretch.trmrk-height-stretch {
-      height: max(500px, calc(100vh - 40px));
-      max-height: max(500px, calc(100vh - 40px));
+      height: max(500px, calc(100vh - 44px));
+      max-height: max(500px, calc(100vh - 44px));
     }
   }
 }
