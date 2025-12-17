@@ -1,3 +1,11 @@
+<div class="trmrk-output-wrapper">
+  <span class="trmrk-text">{{ isNaN(value.number ?? NaN) ? '' : value.number }}</span>
+</div>
+@if (hasError) {
+<div class="trmrk-error-wrapper">
+  <span class="trmrk-text-level-error"> {{ errorMessage }} </span>
+</div>
+}
 <trmrk-short-string-editor
   [trmrkDigitsOnly]="true"
   [trmrkInputAttrs]="{
@@ -44,13 +52,4 @@
   </div>
   }
 </ng-template>
-<ng-template #trailingTpl>
-  <div class="trmrk-output-wrapper">
-    <span class="trmrk-text">{{ isNaN(value.number ?? NaN) ? '' : value.number }}</span>
-  </div>
-  @if (hasError) {
-  <div class="trmrk-error-wrapper">
-    <span class="trmrk-text-level-error"> {{ errorMessage }} </span>
-  </div>
-  }</ng-template
->
+<ng-template #trailingTpl></ng-template>

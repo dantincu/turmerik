@@ -354,18 +354,18 @@
 
   .trmrk-short-string-editor {
     .trmrk-char-wrapper {
-      background-color: #888;
+      background-color: #676767;
       color: #FFF;
-      border-color: #ddd;
+      border-color: #DDD;
 
       &.trmrk-focused-char {
-        background-color: #444;
+        background-color: #222;
       }
     }
 
     .trmrk-icon-wrapper {
       .trmrk-icon.trmrk-icon.trmrk-icon.trmrk-icon {
-        color: #383838;
+        color: #222;
       }
     }
   }
@@ -623,18 +623,18 @@
 
   .trmrk-short-string-editor {
     .trmrk-char-wrapper {
-      background-color: #888;
+      background-color: #AAA;
       color: #000;
       border-color: #333;
 
       &.trmrk-focused-char {
-        background-color: #ccc;
+        background-color: #FFF;
       }
     }
 
     .trmrk-icon-wrapper {
       .trmrk-icon.trmrk-icon.trmrk-icon.trmrk-icon {
-        color: #e0e0e0;
+        color: #EEE;
       }
     }
   }

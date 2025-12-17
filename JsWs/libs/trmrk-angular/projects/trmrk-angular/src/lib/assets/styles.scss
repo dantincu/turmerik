@@ -1198,14 +1198,15 @@ trmrk-list-slice-selector {
 }
 
 trmrk-short-string-editor {
-  display: contents;
+  display: inline-flex;
   flex-wrap: wrap;
 }
 
 .trmrk-short-string-editor {
   cursor: pointer;
-  display: contents;
+  display: inline-flex;
   position: relative;
+  flex-wrap: wrap;
 
   .trmrk-fake-input-container {
     display: inline-flex;
@@ -1222,8 +1223,6 @@ trmrk-short-string-editor {
       font-size: 1px;
       line-height: 1px;
       position: absolute;
-      bottom: -13px;
-      right: 3px;
     }
   }
 
@@ -1278,6 +1277,11 @@ trmrk-short-string-editor {
     border: 1px solid;
     border-radius: 3px;
   }
+}
+
+trmrk-number-editor {
+  display: inline-flex;
+  flex-direction: column;
 
   .trmrk-error-wrapper, .trmrk-output-wrapper {
     display: inline-flex;
@@ -1288,7 +1292,7 @@ trmrk-short-string-editor {
       display: inline-flex;
     }
 
-    .trmrk-text {
+    .trmrk-text.trmrk-text.trmrk-text.trmrk-text {
       font-size: 14px;
     }
   }
