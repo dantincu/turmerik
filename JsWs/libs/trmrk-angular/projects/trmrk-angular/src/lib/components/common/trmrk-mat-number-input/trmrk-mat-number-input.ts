@@ -91,6 +91,7 @@ export class TrmrkMatNumberInput implements OnDestroy {
       dialogComponent: TrmrkNumberEditorModalDialog,
       data: {
         data: {
+          label: this.trmrkLabel,
           value: this.trmrkValue,
           min: this.trmrkMin,
           max: this.trmrkMax,
@@ -100,7 +101,7 @@ export class TrmrkMatNumberInput implements OnDestroy {
             this.trmrkValueChanged.emit(value);
           },
         },
-        title: this.trmrkLabel,
+        title: 'Edit Number',
       },
     });
   }

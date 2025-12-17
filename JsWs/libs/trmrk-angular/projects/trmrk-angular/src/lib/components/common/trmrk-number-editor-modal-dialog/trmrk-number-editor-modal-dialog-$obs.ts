@@ -24,6 +24,7 @@ import {
 } from '../../../services/common/trmrk-dialog';
 
 export interface TrmrkNumberEditorModalDialogData extends TrmrkDialogComponentDataCore {
+  label?: string | NullOrUndef;
   value?: TrmrkNumberInputValue | NullOrUndef;
   valueSubmitted: (value: TrmrkNumberInputValue) => VoidOrAny;
   min?: number | NullOrUndef;

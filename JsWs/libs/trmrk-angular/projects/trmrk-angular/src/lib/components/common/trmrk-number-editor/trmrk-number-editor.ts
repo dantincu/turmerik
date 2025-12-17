@@ -1,5 +1,6 @@
 import { Component, Input, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 import { NullOrUndef, ValidationResult } from '../../../../trmrk/core';
 import { getNumberDigits } from '../../../../trmrk/math';
@@ -21,6 +22,7 @@ import {
 } from '../trmrk-short-string-editor/trmrk-short-string-editor';
 
 export interface TrmrkNumberEditorOpts {
+  label?: string | NullOrUndef;
   value?: TrmrkNumberInputValue | NullOrUndef;
   min?: number | NullOrUndef;
   max?: number | NullOrUndef;
@@ -70,13 +72,16 @@ export const numOrTextToTrmrkNumberInputValue = (
 @Component({
   selector: 'trmrk-number-editor',
   standalone: true,
-  imports: [CommonModule, TrmrkShortStringEditor],
+  imports: [CommonModule, MatCheckbox, TrmrkShortStringEditor],
   templateUrl: './trmrk-number-editor.html',
   styleUrls: ['./trmrk-number-editor.scss'],
 })
 export class TrmrkNumberEditor {
   @Output() trmrkValidationErrorChanged = new EventEmitter<ValidationResult>();
+  @Output() trmrkVisibilityToggled = new EventEmitter<boolean>();
 
+  @Input() trmrkLabel?: string | NullOrUndef;
+  @Input() trmrkIsToggable?: boolean | NullOrUndef;
   @Input() trmrkValue: TrmrkNumberInputValue | NullOrUndef;
   @Input() trmrkMin: number | NullOrUndef;
   @Input() trmrkMax: number | NullOrUndef;
@@ -85,6 +90,9 @@ export class TrmrkNumberEditor {
   @Input() trmrkFocusInput = 0;
   @Input() trmrkBlurInput = 0;
   @Input() trmrkShowOutput: boolean | NullOrUndef;
+  @Input() trmrkHide = 0;
+
+  hide = 0;
 
   NaN = NaN;
   isNaN = isNaN;
@@ -172,6 +180,14 @@ export class TrmrkNumberEditor {
       () => {
         this.required = this.trmrkRequired ?? defaultValues.required!;
         this.updateValidation();
+      }
+    );
+
+    whenChanged(
+      changes,
+      () => this.trmrkHide,
+      () => {
+        this.hide = this.trmrkHide;
       }
     );
   }
@@ -280,6 +296,11 @@ export class TrmrkNumberEditor {
 
   toggleSignClicked() {
     this.tryToggleSign();
+  }
+
+  labelCheckboxToggled() {
+    this.hide = this.hide > 0 ? 0 : 1;
+    this.trmrkVisibilityToggled.emit(this.hide > 0);
   }
 
   deleteCurrentChar(newString: string) {

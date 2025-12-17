@@ -1283,7 +1283,7 @@ trmrk-number-editor {
   display: inline-flex;
   flex-direction: column;
 
-  .trmrk-error-wrapper, .trmrk-output-wrapper {
+  .trmrk-error-wrapper, .trmrk-output-wrapper, .trmrk-label-wrapper {
     display: inline-flex;
     flex-wrap: wrap;
     margin: 3px;

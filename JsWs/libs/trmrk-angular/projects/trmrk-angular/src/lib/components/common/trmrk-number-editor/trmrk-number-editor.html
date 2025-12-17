@@ -1,3 +1,17 @@
+@if ((trmrkLabel ?? null) !== null) {
+<div class="trmrk-label-wrapper">
+  <div class="trmrk-field">
+    @if (trmrkIsToggable) {
+    <mat-checkbox class="trmrk-checkbox" (change)="labelCheckboxToggled()" [checked]="!hide"
+      ><div class="trmrk-text trmrk-text-bold">{{ trmrkLabel }}</div></mat-checkbox
+    >
+    } @if (!trmrkIsToggable) {
+    <div class="trmrk-text trmrk-text-bold">{{ trmrkLabel }}</div>
+    }
+  </div>
+</div>
+} @if (!hide) {
+
 <div class="trmrk-output-wrapper">
   <span class="trmrk-text">{{ isNaN(value.number ?? NaN) ? '' : value.number }}</span>
 </div>
@@ -53,3 +67,4 @@
   }
 </ng-template>
 <ng-template #trailingTpl></ng-template>
+}
