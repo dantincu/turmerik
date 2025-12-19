@@ -1,15 +1,18 @@
 :root {
-  --trmrk-loading-el-dot-pulse_color: #9880ff;
+  --trmrk-body-font-size: 13px;
+  --trmrk-body-small-font-size: 12px;
 
-  --trmrk-scrollable-track_color_dark: #222;
-  --trmrk-scrollable-thumb_color_dark: #444;
-  --trmrk-scrollable-track-hover_color_dark: #333;
-  --trmrk-scrollable-thumb-hover_color_dark: #555;
+  --trmrk-loading-el-dot-pulse_color: #9880ff;
 
   --trmrk-scrollable-track_color_light: #eee;
   --trmrk-scrollable-thumb_color_light: #ccc;
   --trmrk-scrollable-track-hover_color_light: #ddd;
   --trmrk-scrollable-thumb-hover_color_light: #bbb;
+
+  --trmrk-scrollable-track_color_dark: #222;
+  --trmrk-scrollable-thumb_color_dark: #444;
+  --trmrk-scrollable-track-hover_color_dark: #333;
+  --trmrk-scrollable-thumb-hover_color_dark: #555;
 
   --trmrk-user-message-success_back-color_light: #40f040;
   --trmrk-user-message-success_border-color_light: #10d010;

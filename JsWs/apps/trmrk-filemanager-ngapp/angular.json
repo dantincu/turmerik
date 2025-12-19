@@ -32,7 +32,6 @@
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/trmrk-angular/assets/styles.scss",
-              "src/trmrk-angular/assets/form-fields.scss",
               "src/trmrk-angular/assets/themes.scss",
               "src/trmrk-filemanager-nglib/assets/styles.scss",
               "src/trmrk-filemanager-nglib/assets/themes.scss",

@@ -1,0 +1,49 @@
+@use "../mixins.scss" as mixins;
+
+trmrk-infinite-height-panel-scroll-control {
+  margin-left: auto;
+  position: relative;
+  top: -3px;
+  right: -1px;
+  height: 37px;
+  padding-top: 3px;
+
+  .trmrk-middle-btn {
+    font-weight: bold;
+    justify-content: center;
+    line-height: 40px;
+  }
+}
+
+trmrk-infinite-height-panel-scroll-bar {
+  position: absolute;
+  right: 0;
+  width: 40px;
+
+  .trmrk-scrollbar-thumb {
+    position: absolute;
+    cursor: pointer;
+    width: 100%;
+    height: 40px;
+  }
+}
+
+trmrk-infinite-height-panel-scroll-control {
+  display: flex;
+
+  .trmrk-scroll-count-span, .trmrk-scroll-progress-msg {
+    font-size: var(--trmrk-body-small-font-size);
+    height: 40px;
+    margin-top: -3px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    @include mixins.trmrk-wrap-content();
+    overflow: hidden;
+  }
+
+  .trmrk-scroll-count-span {
+    font-weight: bold;
+    width: 40px;
+  }
+}

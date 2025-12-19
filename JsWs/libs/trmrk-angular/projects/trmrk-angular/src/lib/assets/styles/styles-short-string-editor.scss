@@ -1,0 +1,115 @@
+trmrk-short-string-editor {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.trmrk-short-string-editor {
+  cursor: pointer;
+  display: inline-flex;
+  position: relative;
+  flex-wrap: wrap;
+
+  .trmrk-fake-input-container {
+    display: inline-flex;
+    flex-grow: 0;
+    flex-shrink: 1;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    position: relative;
+
+    .trmrk-fake-input {
+      width: 1px;
+      height: 1px;
+      font-size: 1px;
+      line-height: 1px;
+      position: absolute;
+    }
+  }
+
+  .trmrk-char-wrapper, .trmrk-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    margin: 2px;
+    display: inline-flex;
+    position: relative;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+
+    .trmrk-char-btn {
+      font-size: 20px;
+      font-weight: bold;
+      position: relative;
+    }
+
+    &.trmrk-minus-sign, &.trmrk-plus-sign, &.trmrk-decimal-point {
+      .trmrk-char-btn {
+        font-size: 40px;
+        line-height: 20px;
+        margin-top: -14px;
+        top: 5px;
+        left: 1px;
+      }
+    }
+
+    &.trmrk-decimal-point {
+      .trmrk-char-btn {
+        top: 0;
+      }
+    }
+
+    .trmrk-icon-btn {
+      box-sizing: border-box;
+      padding: 0;
+      position: relative;
+      line-height: 20px;
+
+      .trmrk-icon {
+        position: relative;
+        top: 6px;
+        left: 8px;
+        line-height: 30px;
+      }
+    }
+  }
+
+  .trmrk-char-wrapper {
+    border: 1px solid;
+    border-radius: 3px;
+  }
+}
+
+trmrk-number-editor {
+  display: inline-flex;
+  flex-direction: column;
+
+  .trmrk-error-wrapper, .trmrk-output-wrapper, .trmrk-label-wrapper {
+    display: inline-flex;
+    flex-wrap: wrap;
+    margin: 3px;
+
+    .trmrk-text-level-error, .trmrk-text {
+      display: inline-flex;
+    }
+
+    .trmrk-text.trmrk-text.trmrk-text.trmrk-text {
+      font-size: 14px;
+    }
+  }
+}
+
+trmrk-number-editor-modal-dialog {
+  .trmrk-modal-body {
+    padding: 5px;
+  }
+
+  .trmrk-horiz-strip {
+    position: relative;
+
+    .trmrk-apply-changes-btn {
+      position: absolute;
+      right: 0;
+    }
+  }
+}

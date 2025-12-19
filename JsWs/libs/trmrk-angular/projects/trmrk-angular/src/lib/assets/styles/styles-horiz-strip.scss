@@ -1,0 +1,278 @@
+@use "../mixins.scss" as mixins;
+
+.trmrk-app-bar, .trmrk-horiz-strip, .trmrk-horiz-scrollable-strip, .trmrk-thin-horiz-strip {
+  display: flex;
+  box-sizing: border-box;
+  padding: 3px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+
+  .trmrk-text-row {
+    display: flex;
+    overflow: hidden;
+    min-width: 44px;
+    width: 100%;
+    margin-left: 3px;
+    margin-right: 5px;
+  }
+
+  .trmrk-text, .trmrk-details {
+    display: flex;
+    @include mixins.trmrk-no-wrap-anywhere();
+  }
+
+  .trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
+    margin-top: -2px;
+  }
+}
+
+.trmrk-app-bar, .trmrk-horiz-strip, .trmrk-horiz-scrollable-strip {
+  .trmrk-details {
+    font-size: var(--trmrk-body-small-font-size);
+
+    .trmrk-text-part.trmrk-italic {
+      font-style: italic;
+    }
+  }
+
+  .trmrk-text-col {
+    flex-direction: column;
+    padding-top: 8px;
+    padding-left: 5px;
+
+    &.trmrk-has-details {
+      padding-top: 1px;
+      padding-left: 0;
+    }
+  }
+
+  .trmrk-strip-cap {
+    width: 10px;
+    height: 30px;
+    margin-top: 2px;
+    margin-left: 10px;
+    border-radius: 2px;
+  }
+
+  &.trmrk-has-border {
+    padding: 3px;
+
+    .trmrk-strip-cap {
+      height: 28px;
+      margin-top: 3px;
+    }
+  }
+
+  &.trmrk-has-border-x2 {
+    padding: 2px;
+
+    .trmrk-strip-cap {
+      height: 26px;
+      margin-top: 4px;
+    }
+  }
+}
+
+@keyframes trmrk-app-bar-show {
+  from {
+    /* height: 0;
+    padding: 0; */
+
+    height: 50px;
+  }
+
+  to {
+    height: 50px;
+  }
+}
+
+@keyframes trmrk-app-bar-hide {
+  from {
+    // height: 50px;
+    height: 0;
+    padding: 0;
+  }
+
+  to {
+    height: 0;
+    padding: 0;
+  }
+}
+
+.trmrk-app-bar {
+  height: 44px;
+  padding: 3px;
+  overflow-y: hidden;
+
+  &.trmrk-show {
+    animation: trmrk-app-bar-show 0.1s ease-in-out;
+  }
+
+  &.trmrk-hide {
+    height: 0;
+    padding: 0;
+    margin: 0;
+
+    &.trmrk-has-border, &.trmrk-has-border-x2 {
+      padding: 0;
+      border: 0;
+    }
+  }
+
+  .trmrk-icon-btn {
+    margin-top: 0px;
+  }
+
+  .trmrk-page-title {
+    margin: 10px 0;
+    cursor: pointer;
+    flex-grow: 1;
+    text-align: center;
+  }
+
+  .trmrk-text-col {
+    padding-top: 12px;
+
+    &.trmrk-has-details {
+      padding-top: 3px;
+    }
+  }
+
+  .trmrk-strip-cap {
+    margin-top: 1px;
+    height: 37px;
+  }
+
+  &.trmrk-has-border {
+    padding: 4px;
+
+    .trmrk-text-col {
+      padding-top: 10px;
+
+      &.trmrk-has-details {
+        padding-top: 0;
+      }
+    }
+
+    .trmrk-strip-cap {
+      margin-top: 1px;
+      height: 33px;
+    }
+  }
+
+  &.trmrk-has-border-x2 {
+    padding: 3px;
+
+    .trmrk-text-col {
+      padding-top: 12px;
+
+      &.trmrk-has-details {
+        padding-top: 4px;
+      }
+    }
+
+    .trmrk-strip-cap {
+      margin-top: 2px;
+      height: 35px;
+    }
+  }
+}
+
+.trmrk-horiz-strip, .trmrk-horiz-scrollable-strip, .trmrk-thin-horiz-strip {
+  border-radius: 3px;
+
+  &.trmrk-minimal {
+    border-radius: 0;
+  }
+}
+
+.trmrk-horiz-scrollable-strip {
+  user-select: all;
+  -webkit-user-select: all;
+  overflow-x: auto;
+  scrollbar-width: thin;
+
+  .trmrk-text-row, .trmrk-text-row-padded {
+    overflow: visible;
+  }
+
+  .trmrk-text-col {
+    padding-top: 3px;
+  }
+
+  .trmrk-strip-cap {
+    height: 20px;
+    margin-top: 2px;
+  }
+}
+
+.trmrk-horiz-strip, .trmrk-horiz-scrollable-strip {
+  height: 44px;
+}
+
+.trmrk-horiz-strip {
+  .trmrk-text-row {
+    padding: 0;
+    margin: 0;
+
+    h2 {
+      margin: 10px;
+      line-height: 15px;
+    }
+  }
+
+  trmrk-loading {
+    margin-top: -2px;
+  }
+
+  &.trmrk-error-message-horiz-strip {
+    .trmrk-text-row {
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.trmrk-thin-horiz-strip {
+  height: 30px;
+  padding-top: 6px;
+
+  .trmrk-text {
+    display: flex;
+    @include mixins.trmrk-no-wrap-anywhere();
+  }
+
+  .trmrk-strip-cap {
+    width: 10px;
+    height: 20px;
+    margin-top: -1px;
+    margin-left: 10px;
+    border-radius: 2px;
+  }
+
+  &.trmrk-has-border-x2 {
+    padding-top: 4px;
+
+    .trmrk-strip-cap {
+      height: 18px;
+      margin-top: 0;
+    }
+  }
+}
+
+.trmrk-top-message-horiz-strip,
+.trmrk-top-horiz-strip,
+.trmrk-bottom-horiz-strip
+{
+  border-radius: 0;
+
+  .trmrk-text-row {
+    justify-content: center;
+  }
+
+  &.trmrk-has-border-x2 {
+    border-top-width: 2px;
+    border-top-style: solid;
+  }
+}

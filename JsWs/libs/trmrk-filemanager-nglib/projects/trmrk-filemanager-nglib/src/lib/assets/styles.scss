@@ -1,5 +1,5 @@
-@use "./mixins.scss" as mixins;
+@use "./base/mixins.scss" as core-mixins;
 
 trmrk-drive-items-view {
-  @include mixins.rel-flex-stretch-to-parent-size;
+  @include core-mixins.rel-flex-stretch-to-parent-size;
 }

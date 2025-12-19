@@ -1,0 +1,27 @@
+.trmrk-tree-view {
+  .trmrk-tree-node {
+    display: flex;
+    flex-direction: column;
+
+    .trmrk-tree-node-content {
+      display: flex;
+      height: 44px;
+      margin-top: 3px;
+
+      &.trmrk-is-hcy-node {
+        height: unset;
+      }
+
+      .trmrk-trailing-spacer {
+        display: block;
+        width: 10px;
+        min-width: 10px;
+      }
+    }
+
+    .trmrk-child-nodes-list {
+      margin-left: 10px;
+      width: 100%;
+    }
+  }
+}

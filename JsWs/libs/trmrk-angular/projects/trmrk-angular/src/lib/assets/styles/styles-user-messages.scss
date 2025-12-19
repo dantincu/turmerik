@@ -1,0 +1,24 @@
+.trmrk-user-message {
+  border-width: 1px;
+  border-style: solid;
+  font-size: 1em;
+
+  .trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
+    margin-top: 0;
+    position: relative;
+
+    mat-icon.trmrk-icon, svg[trmrk-custom-svg-icon] {
+      font-size: 16px;
+      position: relative;
+      /* top: -4px; */
+      left: -4px;
+      padding: 2px;
+    }
+  }
+}
+
+.trmrk-horiz-strip {
+  .trmrk-user-message {
+    margin-top: -2px;
+  }
+}

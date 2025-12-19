@@ -1,0 +1,196 @@
+@use "../mixins.scss" as mixins;
+
+@keyframes trmrk-has-app-bar {
+  from {
+    // height: 100%;
+    height: calc(100% - 50px);
+  }
+
+  to {
+    height: calc(100% - 50px);
+  }
+}
+
+@keyframes trmrk-has-app-bar-not {
+  from {
+    height: 100%;
+    // height: calc(100% - 50px);
+  }
+
+  to {
+    height: 100%;
+  }
+}
+
+.trmrk-app-page-body {
+  @include mixins.rel-flex-stretch-to-parent-size();
+
+  &.trmrk-height-diff-x1 {
+    height: calc(100% - 44px);
+
+    &.trmrk-has-app-bar {
+      animation: trmrk-has-app-bar 0.1s ease-in-out;
+    }
+
+    &.trmrk-has-app-bar-not {
+      height: 100%;
+      animation: trmrk-has-app-bar-not 0.1s ease-in-out;
+    }
+  }
+
+  &.trmrk-height-diff-x2 {
+    height: calc(100vh - 88px);
+  }
+
+  &.trmrk-height-diff-x3 {
+    height: calc(100vh - 132px);
+  }
+
+  &.trmrk-height-diff-x4 {
+    height: calc(100vh - 176px);
+  }
+}
+
+trmrk-3-panels-layout, .trmrk-3-panels-layout {
+  @include mixins.rel-stretch-to-parent-size;
+
+  display: flex;
+  flex: 1 0 100%;
+}
+
+.trmrk-app-panel {
+  @include mixins.rel-flex-stretch-to-parent-size();
+}
+
+.trmrk-3-panels-layout {
+  > .trmrk-app-panel {
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    box-sizing: border-box;
+
+    &:first-child {
+      border-left: 0;
+    }
+
+    &:last-child {
+      border-right: 0;
+    }
+
+    > .trmrk-app-panel-content {
+      @include mixins.rel-stretch-to-parent-size();
+      display: flex;
+      flex-direction: column;
+      flex: 1 0 calc(100% - 44px);
+    }
+
+    > trmrk-horiz-strip > :is(.trmrk-heading-horiz-strip,
+    .trmrk-top-horiz-strip,
+    .trmrk-bottom-horiz-strip) {
+      padding-left: 6px;
+      padding-right: 6px;
+      overflow: hidden;
+
+      > .trmrk-text-row {
+        min-width: 0;
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+
+    .trmrk-panel-resize-strip {
+      position: absolute;
+      width: 52px;
+      top: 40px;
+      bottom: 0;
+      padding-left: 6px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+
+      &.trmrk-stick-right {
+        right: 0;
+      }
+
+      &.trmrk-stick-left {
+        left: 0;
+      }
+    }
+
+    &.trmrk-left-panel {
+      > trmrk-horiz-strip > .trmrk-app-panel-header {
+        padding-right: 46px;
+
+        > .trmrk-resize-btn-wrapper {
+          width: 52px;
+          height: 40px;
+          position: absolute;
+          right: 0;
+          top: 0;
+
+          > .trmrk-resize-btn {
+            position: absolute;
+            top: 3px;
+            right: 6px;
+            background-color: inherit;
+          }
+        }
+      }
+    }
+
+    &.trmrk-right-panel {
+      > trmrk-horiz-strip > .trmrk-app-panel-header {
+        > .trmrk-resize-btn-wrapper {
+          width: 52px;
+          height: 40px;
+          position: absolute;
+          left: 0;
+          top: 0;
+          z-index: 1;
+
+          > .trmrk-resize-btn {
+            position: absolute;
+            top: 3px;
+            left: 6px;
+            background-color: inherit;
+          }
+        }
+      }
+    }
+  }
+
+  &.trmrk-has-1-panels {
+    > .trmrk-app-panel.trmrk-left-panel {
+      > trmrk-horiz-strip > .trmrk-app-panel-header {
+        padding-right: 6px;
+      }
+    }
+  }
+}
+
+.trmrk-page-body {
+  position: relative;
+  height: 100%;
+}
+
+.trmrk-page-body-thin {
+  width: min(600px, 100%);
+  margin-left: max(0px, calc(50% - 300px));
+}
+
+trmrk-app-page {
+  display: block;
+  @include mixins.rel-stretch-to-parent-size();
+}
+
+@keyframes trmrk-user-message-opacFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

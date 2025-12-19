@@ -1,0 +1,49 @@
+.trmrk-menu {
+  .trmrk-menu-item {
+    min-height: 40px;
+    position: relative;
+
+    &.trmrk-text-menu-item {
+      padding-left: 10px;
+    }
+  }
+}
+
+.trmrk-vert-resize-strip {
+  width: 40px;
+  height: 100%;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+h2.trmrk-page-header {
+  font-size: 30px;
+  margin: 10px;
+  margin-top: 15px;
+}
+
+h3.trmrk-page-summary {
+  margin: 5px;
+}
+
+@keyframes trmrk-blank-placeholder-slide-out {
+  from {
+    margin: 3px 3px 0 3px;
+    padding: 3px;
+    height: 40px;
+  }
+  to {
+    margin: 0;
+    padding: 0;
+    height: 0px;
+  }
+}
+
+.trmrk-spaced-list-item {
+  padding: 10px 0;
+  line-height: 30px;
+}

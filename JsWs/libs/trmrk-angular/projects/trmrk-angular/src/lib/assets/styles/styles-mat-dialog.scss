@@ -1,0 +1,62 @@
+.trmrk-mat-dialog-panel {
+  &.trmrk-width-lg.trmrk-width-lg {
+    width: max(500px, min(1000px, calc(100vw - 44px)));
+    max-width: max(500px, min(1000px, calc(100vw - 44px)));
+  }
+
+  &.trmrk-width-stretch.trmrk-width-stretch {
+    width: max(500px, calc(100vw - 44px));
+    max-width: max(500px, calc(100vw - 44px));
+  }
+
+  .mat-mdc-dialog-surface.mdc-dialog__surface {
+    border-radius: 10px;
+  }
+
+  .trmrk-horiz-strip {
+    height: unset;
+    min-height: 44px;
+
+    h2 {
+      text-align: center;
+      width: 100%;
+    }
+  }
+
+  .mat-mdc-dialog-container .mat-mdc-dialog-content {
+    font-size: var(--trmrk-body-font-size);
+  }
+
+  trmrk-dialog {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex: 1 1 auto;
+  }
+
+  .trmrk-dialog-content {
+    flex: 1 0 auto;
+  }
+
+  .trmrk-dialog-actions {
+    flex: 0 1 auto;
+  }
+}
+
+@media screen and (min-height: 501px) {
+  .trmrk-mat-dialog-panel {
+    &.trmrk-height-stretch.trmrk-height-stretch {
+      height: max(500px, calc(100vh - 44px));
+      max-height: max(500px, calc(100vh - 44px));
+    }
+  }
+}
+
+@media screen and (max-height: 500px) {
+  .trmrk-mat-dialog-panel {
+    &.trmrk-height-stretch.trmrk-height-stretch {
+      height: 100vh;
+      max-height: 100vh;
+    }
+  }
+}
