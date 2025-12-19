@@ -87,6 +87,18 @@
       <mat-icon class="trmrk-icon">done</mat-icon>
     </button>
   </div>
+  } @if (trmrkShowCopyToClipboardBtn ?? false) {
+  <div [ngClass]="'trmrk-icon-wrapper'">
+    <button mat-icon-button class="trmrk-icon-btn" (click)="copyToClipboardClicked()">
+      <mat-icon class="trmrk-icon">content_copy</mat-icon>
+    </button>
+  </div>
+  } @if (trmrkShowPasteFromClipboardBtn ?? false) {
+  <div [ngClass]="'trmrk-icon-wrapper'">
+    <button mat-icon-button class="trmrk-icon-btn" (click)="pasteFromClipboardClicked()">
+      <mat-icon class="trmrk-icon">content_paste</mat-icon>
+    </button>
+  </div>
   }
   <div class="trmrk-fake-input-container">
     <input
@@ -96,5 +108,12 @@
       [trmrkDynamicAttributes]="trmrkInputAttrs ?? {}"
     />
   </div>
+  <trmrk-user-message
+    class="trmrk-copied-to-clipboard-success-message"
+    [trmrkMessage]="'Copied!'"
+    [trmrkShow]="showCopiedToClipboardSuccessMessage"
+    [trmrkLevel]="UserMessageLevel.Success"
+    [trmrkAutoCloseMillis]="1000"
+  ></trmrk-user-message>
   <ng-container *ngTemplateOutlet="trmrkTrailingTemplate"></ng-container>
 </div>

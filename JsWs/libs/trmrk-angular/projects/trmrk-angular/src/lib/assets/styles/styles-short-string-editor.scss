@@ -27,6 +27,11 @@ trmrk-short-string-editor {
     }
   }
 
+  .trmrk-copied-to-clipboard-success-message {
+    top: unset;
+    bottom: 0px;
+  }
+
   .trmrk-char-wrapper, .trmrk-icon-wrapper {
     width: 40px;
     height: 40px;
@@ -93,8 +98,8 @@ trmrk-number-editor {
       display: inline-flex;
     }
 
-    .trmrk-text.trmrk-text.trmrk-text.trmrk-text {
-      font-size: 14px;
+    .trmrk-text-level-error {
+      font-size: 12px;
     }
   }
 }

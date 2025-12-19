@@ -18,11 +18,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { NullOrUndef, actWithVal } from '../../../../trmrk/core';
 import { wsRegex } from '../../../../trmrk/core';
 import { TouchOrMouseCoords } from '../../../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { UserMessageLevel } from '../../../../trmrk/core';
 
 import { whenChanged } from '../../../services/common/simpleChanges';
 import { TrmrkLongPressOrRightClick } from '../../../directives/trmrk-long-press-or-right-click';
 import { TrmrkTouchStartOrMouseDown } from '../../../directives/trmrk-touch-start-or-mouse-down';
 import { TrmrkDynamicAttributesDirective } from '../../../directives/trmrk-dynamic-attributes';
+
+import { TrmrkUserMessage } from '../trmrk-user-message/trmrk-user-message';
+
+export interface ClipboardEvent {
+  text: string;
+}
 
 export interface FocusedCharKeyboardEvent {
   srcEvt: KeyboardEvent;
@@ -122,6 +129,7 @@ interface TrmrkCharWrapper {
     TrmrkLongPressOrRightClick,
     TrmrkTouchStartOrMouseDown,
     TrmrkDynamicAttributesDirective,
+    TrmrkUserMessage,
   ],
   templateUrl: './trmrk-short-string-editor.html',
   styleUrl: './trmrk-short-string-editor.scss',
@@ -147,6 +155,9 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
 
   @Output() trmrkCharInsertBtnLongPressOrRightClick =
     new EventEmitter<FocusedCharInsertBtnLongPressOrRightClickEvent>();
+
+  @Output() trmrkCopiedToClipboard = new EventEmitter<ClipboardEvent>();
+  @Output() trmrkPasteFromClipboardClicked = new EventEmitter<ClipboardEvent>();
 
   @Output() trmrkInputKeyPressed = new EventEmitter<FocusedCharKeyPressEvent>();
   @Output() trmrkInputKeyDown = new EventEmitter<FocusedCharKeyDownEvent>();
@@ -175,10 +186,16 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
   @Input() trmrkCharTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkUseCharTemplate: boolean | NullOrUndef;
   @Input() trmrkShowDoneBtn: boolean | NullOrUndef;
+  @Input() trmrkShowCopyToClipboardBtn: boolean | NullOrUndef;
+  @Input() trmrkShowPasteFromClipboardBtn: boolean | NullOrUndef;
+
+  UserMessageLevel = UserMessageLevel;
 
   @ViewChild('fakeNumberInput') fakeNumberInput!: ElementRef<HTMLInputElement>;
 
   chars: TrmrkCharWrapper[] = [];
+
+  showCopiedToClipboardSuccessMessage = 0;
 
   private _nextCharId = 1;
 
@@ -440,5 +457,23 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
     event.nextFocusedChar = event.newString[event.nextFocusedCharIdx] ?? null;
     event.hasNextFocusedChar = (event.nextFocusedChar ?? null) !== null;
     this.trmrkInputKeyDown.emit(event);
+  }
+
+  async copyToClipboardClicked() {
+    const event: ClipboardEvent = {
+      text: this.trmrkString,
+    };
+
+    await navigator.clipboard.writeText(event.text);
+    this.showCopiedToClipboardSuccessMessage++;
+    this.trmrkCopiedToClipboard.emit(event);
+  }
+
+  async pasteFromClipboardClicked() {
+    const event: ClipboardEvent = {
+      text: await navigator.clipboard.readText(),
+    };
+
+    this.trmrkPasteFromClipboardClicked.emit(event);
   }
 }

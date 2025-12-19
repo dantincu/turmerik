@@ -6,6 +6,7 @@ import { NullOrUndef, ValidationResult } from '../../../../trmrk/core';
 import { getNumberDigits } from '../../../../trmrk/math';
 
 import { whenChanged } from '../../../services/common/simpleChanges';
+
 import {
   TrmrkShortStringEditor,
   CharShortPressOrLeftClickEvent,
@@ -18,7 +19,7 @@ import {
   getNewStringForDeletePrevChar,
   getNewStringForDeleteToTheLeft,
   getNewStringForDeleteToTheRight,
-  getNewStringForInsertChar,
+  ClipboardEvent,
 } from '../trmrk-short-string-editor/trmrk-short-string-editor';
 
 export interface TrmrkNumberEditorOpts {
@@ -303,6 +304,20 @@ export class TrmrkNumberEditor {
     this.trmrkVisibilityToggled.emit(this.hide > 0);
   }
 
+  pasteFromClipboardClicked(event: ClipboardEvent) {
+    if (event.text.length) {
+      let number = Number(event.text);
+
+      if (!isNaN(number)) {
+        if (this.maxAllowedDecimals === 0) {
+          number = Math.round(number);
+        }
+
+        this.setNumber(number);
+      }
+    }
+  }
+
   deleteCurrentChar(newString: string) {
     this.value.text = newString;
 
@@ -416,6 +431,13 @@ export class TrmrkNumberEditor {
       hasError: this.hasError,
       errorMessage: this.errorMessage,
     });
+  }
+
+  setNumber(number: number) {
+    this.value.number = number;
+    this.updateTextFromValue();
+    this.updateValidation();
+    this.focusNextDigit(0);
   }
 
   updateValue() {

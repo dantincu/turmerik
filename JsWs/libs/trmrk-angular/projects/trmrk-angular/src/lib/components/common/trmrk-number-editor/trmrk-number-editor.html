@@ -6,7 +6,7 @@
       ><div class="trmrk-text trmrk-text-bold">{{ trmrkLabel }}</div></mat-checkbox
     >
     } @if (!trmrkIsToggable) {
-    <div class="trmrk-text trmrk-text-bold">{{ trmrkLabel }}</div>
+    <h3>{{ trmrkLabel }}</h3>
     }
   </div>
 </div>
@@ -38,6 +38,8 @@
   [trmrkBeforeDoneBtnTemplate]="beforeDoneBtnTpl"
   [trmrkTrailingTemplate]="trailingTpl"
   [trmrkShowDoneBtn]="true"
+  [trmrkShowCopyToClipboardBtn]="true"
+  [trmrkShowPasteFromClipboardBtn]="true"
   (trmrkCharShortPressOrLeftClick)="charShortPressOrLeftClick($event)"
   (trmrkInputKeyPressed)="inputKeyPressed($event)"
   (trmrkInputKeyDown)="inputKeyDown($event)"
@@ -48,6 +50,7 @@
   (trmrkCharInsertBtnLongPressOrRightClick)="charInsertBtnLongPressOrRightClick($event)"
   (trmrkCharInsertBtnShortPressOrLeftClick)="charInsertBtnShortPressOrLeftClick($event)"
   (trmrkDoneBtnTouchStartOrMouseDown)="doneBtnTouchStartOrMouseDown($event)"
+  (trmrkPasteFromClipboardClicked)="pasteFromClipboardClicked($event)"
 ></trmrk-short-string-editor>
 <ng-template #beforeDoneBtnTpl>
   @if (maxAllowedDecimals > 0) {
