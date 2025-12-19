@@ -1,0 +1,31 @@
+.trmrk-app-theme-light {
+  .trmrk-form-section {
+    background-color: #FFFFFF;
+
+    &.trmrk-nesting-level-odd {
+      background-color: #EEEEEE;
+    }
+  }
+
+  .trmrk-form-node {
+    :is(option, mat-option).trmrk-has-no-value {
+      background-color: #EEEEEE;
+    }
+  }
+}
+
+.trmrk-app-theme-dark {
+  .trmrk-form-section {
+    background-color: #000000;
+
+    &.trmrk-nesting-level-odd {
+      background-color: #111111;
+    }
+  }
+
+  .trmrk-form-node {
+    :is(option, mat-option).trmrk-has-no-value {
+      background-color: #111111;
+    }
+  }
+}

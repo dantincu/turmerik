@@ -1,0 +1,182 @@
+@keyframes trmrk-infinite-height-panel-scroll-control-blink-light {
+  0%, 100% {
+    background-color: #0000; /* bright yellow */
+  }
+  50% {
+    background-color: #000; /* white or any alternate color */
+  }
+}
+
+@keyframes trmrk-infinite-height-panel-scroll-control-blink-dark {
+  0%, 100% {
+    background-color: #0000; /* bright yellow */
+  }
+  50% {
+    background-color: #fff; /* white or any alternate color */
+  }
+}
+
+.trmrk-app-theme-light {
+  .trmrk-vert-resize-strip {
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.3), /* Transparent stripe */
+      rgba(0, 0, 0, 0.3) 10px,
+      rgba(255, 255, 255, 0) 10px, /* Fully transparent stripe */
+      rgba(255, 255, 255, 0) 20px
+    );
+  }
+
+  .trmrk-accelerating-scroll-popover {
+    .trmrk-scroll-pad {
+      background-color: rgba(0, 0, 0, 0.125);
+
+      &.trmrk-is-focused {
+        background-color: rgba(0, 0, 0, 0.25);
+      }
+
+      [mat-icon-button].trmrk-icon-btn.trmrk-cancel-icon-btn {
+        border-color: #000;
+      }
+
+      .trmrk-cancel-icon-btn-highlighter {
+        border-color: var(--trmrk-reject-color);
+      }
+    }
+  }
+
+  .trmrk-horiz-strip {
+    &.trmrk-error-message-horiz-strip {
+      .trmrk-text-row {
+        color: var(--trmrk-reject-color-theme-light);
+      }
+    }
+  }
+
+  .trmrk-mat-dialog-panel {
+    .mat-mdc-dialog-surface {
+      border: 1px solid #888;
+    }
+
+    .mat-mdc-dialog-container .mat-mdc-dialog-content {
+      color: #000;
+    }
+  }
+
+  .cdk-overlay-dark-backdrop {
+    background-color: #0008;
+  }
+
+  .trmrk-highlight-blink {
+    animation: trmrk-infinite-height-panel-scroll-control-blink-light 0.5s forwards;
+  }
+
+  trmrk-infinite-height-panel-scroll-bar {
+    background-color: var(--trmrk-scrollable-track_color_light);
+
+    .trmrk-scrollbar-thumb {
+      background-color: var(--trmrk-scrollable-thumb_color_light);
+    }
+  }
+
+  .trmrk-short-string-editor {
+    .trmrk-char-wrapper {
+      background-color: #676767;
+      color: #FFF;
+      border-color: #DDD;
+
+      &.trmrk-focused-char {
+        background-color: #222;
+      }
+    }
+
+    .trmrk-icon-wrapper {
+      .trmrk-icon.trmrk-icon.trmrk-icon.trmrk-icon {
+        color: #222;
+      }
+    }
+  }
+}
+
+.trmrk-app-theme-dark {
+  .trmrk-vert-resize-strip {
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.3), /* Transparent stripe */
+      rgba(255, 255, 255, 0.3) 10px,
+      rgba(0, 0, 0, 0) 10px, /* Fully transparent stripe */
+      rgba(0, 0, 0, 0) 20px
+    );
+  }
+
+  .trmrk-accelerating-scroll-popover {
+    .trmrk-scroll-pad {
+      background-color: rgba(255, 255, 255, 0.125);
+
+      &.trmrk-is-focused {
+        background-color: rgba(255, 255, 255, 0.25);
+      }
+
+      [mat-icon-button].trmrk-icon-btn.trmrk-cancel-icon-btn {
+        border-color: #FFF;
+      }
+
+      .trmrk-cancel-icon-btn-highlighter {
+        border-color: var(--trmrk-reject-color);
+      }
+    }
+  }
+
+  .trmrk-horiz-strip {
+    &.trmrk-error-message-horiz-strip {
+      .trmrk-text-row {
+        color: var(--trmrk-reject-color-theme-dark);
+      }
+    }
+  }
+
+  .trmrk-mat-dialog-panel {
+    .mat-mdc-dialog-surface {
+      background-color: #000;
+      border: 1px solid #888;
+    }
+
+    .mat-mdc-dialog-container .mat-mdc-dialog-content {
+      color: #FFF;
+    }
+  }
+
+  .cdk-overlay-dark-backdrop {
+    background-color: #000D;
+  }
+
+  .trmrk-highlight-blink {
+    animation: trmrk-infinite-height-panel-scroll-control-blink-dark 0.5s forwards;
+  }
+
+  trmrk-infinite-height-panel-scroll-bar {
+    background-color: var(--trmrk-scrollable-track_color_dark);
+
+    .trmrk-scrollbar-thumb {
+      background-color: var(--trmrk-scrollable-thumb_color_dark);
+    }
+  }
+
+  .trmrk-short-string-editor {
+    .trmrk-char-wrapper {
+      background-color: #AAA;
+      color: #000;
+      border-color: #333;
+
+      &.trmrk-focused-char {
+        background-color: #FFF;
+      }
+    }
+
+    .trmrk-icon-wrapper {
+      .trmrk-icon.trmrk-icon.trmrk-icon.trmrk-icon {
+        color: #EEE;
+      }
+    }
+  }
+}

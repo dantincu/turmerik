@@ -1,0 +1,105 @@
+
+:is(.trmrk-app-theme-light,
+  .trmrk-app-theme-dark)
+  :is(.trmrk-btn.trmrk-btn-filled-primary,
+  .trmrk-btn.trmrk-btn-filled-secondary,
+  .trmrk-btn.trmrk-btn-filled-accept,
+  .trmrk-btn.trmrk-btn-filled-reject) {
+  color: #FFF;
+}
+
+:is(.trmrk-app-theme-light,
+  .trmrk-app-theme-dark)
+  :is(.trmrk-btn.trmrk-btn-filled-warn) {
+  color: #000;
+}
+
+:is(.trmrk-app-theme-light,
+  .trmrk-app-theme-dark)
+  :is(.trmrk-icon-btn-filled-primary,
+    .trmrk-icon-btn-filled-secondary,
+    .trmrk-icon-btn-filled-accept,
+    .trmrk-icon-btn-filled-reject) {
+  color: #FFF;
+
+  &[mat-icon-button].trmrk-icon-btn {
+    mat-icon.trmrk-icon {
+      color: #FFF;
+    }
+  }
+}
+
+:is(.trmrk-app-theme-light,
+  .trmrk-app-theme-dark)
+  :is(.trmrk-icon-btn-filled-warn) {
+  color: #000;
+
+  &[mat-icon-button].trmrk-icon-btn {
+    mat-icon.trmrk-icon {
+      color: #000;
+    }
+  }
+}
+
+:is(.trmrk-app-theme-light,
+  .trmrk-app-theme-dark) {
+  .trmrk-icon-btn-filled-primary, .trmrk-btn-filled-primary, .trmrk-background-color-primary {
+    background-color: var(--trmrk-primary-back-color);
+  }
+
+  .trmrk-icon-btn-filled-secondary, .trmrk-btn-filled-secondary, .trmrk-background-color-secondary {
+    background-color: var(--trmrk-secondary-back-color);
+  }
+
+  .trmrk-icon-btn-filled-accept, .trmrk-btn-filled-accept, .trmrk-background-color-accept {
+    background-color: var(--trmrk-accept-back-color);
+  }
+
+  .trmrk-icon-btn-filled-reject, .trmrk-btn-filled-reject, .trmrk-background-color-reject {
+    background-color: var(--trmrk-reject-back-color);
+  }
+
+  .trmrk-icon-btn-filled-warn, .trmrk-btn-filled-warn, .trmrk-background-color-warn {
+    background-color: var(--trmrk-warn-back-color);
+  }
+}
+
+.trmrk-app-theme-light {
+  .trmrk-icon-btn-filled-default, .trmrk-btn.trmrk-btn-filled-default {
+    background-color: #000;
+    color: #FFF;
+
+    &[mat-icon-button].trmrk-icon-btn {
+      mat-icon.trmrk-icon {
+        color: #FFF;
+      }
+    }
+  }
+
+  [mat-icon-button].trmrk-icon-btn, .trmrk-icon-btn, .trmrk-custom-svg-icon-btn, .trmrk-custom-svg-icon-wrapper, .trmrk-icon-link, [mat-button].trmrk-icon-link {
+    mat-icon.trmrk-icon, svg[trmrk-custom-svg-icon] {
+      color: #000;
+      fill: #000;
+    }
+  }
+}
+
+.trmrk-app-theme-dark {
+  .trmrk-icon-btn-filled-default.trmrk-icon-btn-filled-default, .trmrk-btn-filled-default.trmrk-btn-filled-default {
+    background-color: #FFF;
+    color: #000;
+
+    &[mat-icon-button].trmrk-icon-btn {
+      mat-icon.trmrk-icon {
+        color: #000;
+      }
+    }
+  }
+
+  [mat-icon-button].trmrk-icon-btn, .trmrk-icon-btn, .trmrk-custom-svg-icon-btn, .trmrk-custom-svg-icon-wrapper, .trmrk-icon-link, [mat-button].trmrk-icon-link {
+    mat-icon.trmrk-icon, svg[trmrk-custom-svg-icon] {
+      color: #fff;
+      fill: #fff;
+    }
+  }
+}

@@ -1,0 +1,49 @@
+@use "../mixins.scss" as mixins;
+
+.trmrk-app-theme-light {
+  background-color: #FFF;
+  color: #000;
+
+  input.trmrk-input {
+    background-color: #FFF;
+    color: #000;
+  }
+
+  select.trmrk-select.trmrk-select {
+    background-color: #FFF;
+    color: #000;
+
+    option {
+      background-color: #FFF;
+      color: #000;
+    }
+  }
+
+  &.trmrk-scrollable, .trmrk-scrollable, .trmrk-horiz-scrollable-strip {
+    @include mixins.scrollableLight();
+  }
+}
+
+.trmrk-app-theme-dark {
+  background-color: #000;
+  color: #fff;
+
+  input.trmrk-input {
+    background-color: #000;
+    color: #fff;
+  }
+
+  select.trmrk-select.trmrk-select {
+    background-color: #000;
+    color: #fff;
+
+    option {
+    background-color: #000;
+    color: #fff;
+    }
+  }
+
+  &.trmrk-scrollable, .trmrk-scrollable, .trmrk-horiz-scrollable-strip {
+    @include mixins.scrollableDark();
+  }
+}

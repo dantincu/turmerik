@@ -1,0 +1,57 @@
+.trmrk-app-theme-light {
+  .trmrk-3-panels-layout {
+    > .trmrk-app-panel {
+      border-color: #ddd;
+
+       > trmrk-horiz-strip > .trmrk-app-panel-header > .trmrk-resize-btn-wrapper {
+        &.trmrk-close-action-activated {
+          background-color: #FAA;
+        }
+
+        &.trmrk-reset-action-activated {
+          background-color: #F8F;
+        }
+      }
+
+      > .trmrk-panel-resize-strip {
+        background-color: var(--trmrk-app-bar_background-color_light);
+
+        &.trmrk-close-action-activated {
+          background-color: #FAA;
+        }
+
+        &.trmrk-reset-action-activated {
+          background-color: #F8F;
+        }
+      }
+    }
+  }
+}
+
+.trmrk-app-theme-dark {
+  .trmrk-3-panels-layout {
+    > .trmrk-app-panel {
+      border-color: #222;
+
+      > trmrk-horiz-strip > .trmrk-app-panel-header > .trmrk-resize-btn-wrapper {
+        &.trmrk-close-action-activated {
+          background-color: #880800;
+        }
+
+        &.trmrk-reset-action-activated {
+          background-color: #606;
+        }
+      }
+
+      > .trmrk-panel-resize-strip {
+        &.trmrk-close-action-activated {
+          background-color: #880800;
+        }
+
+        &.trmrk-reset-action-activated {
+          background-color: #606;
+        }
+      }
+    }
+  }
+}

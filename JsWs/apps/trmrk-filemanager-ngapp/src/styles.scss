@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @use '@angular/material' as mat;
-@use "./mixins.scss" as mixins;
+@use "./trmrk-angular/assets/mixins.scss" as mixins;
 
 // Light theme configuration
 $light-theme: mat.define-theme(

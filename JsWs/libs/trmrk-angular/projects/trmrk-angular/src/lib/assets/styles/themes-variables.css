@@ -1,0 +1,17 @@
+:root {
+  --trmrk-primary-color-theme-light: #04F;
+  --trmrk-primary-color-theme-dark: #48F;
+  --trmrk-primary-back-color: #04F;
+  --trmrk-secondary-color-theme-light: #667;
+  --trmrk-secondary-color-theme-dark: #AAA;
+  --trmrk-secondary-back-color: #444;
+  --trmrk-accept-color-theme-light: #090;
+  --trmrk-accept-color-theme-dark: #090;
+  --trmrk-accept-back-color: #090;
+  --trmrk-reject-color-theme-light: #E10;
+  --trmrk-reject-color-theme-dark: #F20;
+  --trmrk-reject-back-color: #E10;
+  --trmrk-warn-color-theme-light: #970;
+  --trmrk-warn-color-theme-dark: #DB0;
+  --trmrk-warn-back-color: #FD0;
+}

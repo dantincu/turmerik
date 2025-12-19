@@ -1,6 +1,6 @@
-@use "./mixins.scss" as mixins;
-@use "./styles/styles-loading.scss";
+@use "./variables.css";
 @use "./styles/styles-core.scss";
+@use "./styles/styles-loading.scss";
 @use "./styles/styles-buttons.scss";
 @use "./styles/styles-layout.scss";
 @use "./styles/styles-horiz-strip.scss";
