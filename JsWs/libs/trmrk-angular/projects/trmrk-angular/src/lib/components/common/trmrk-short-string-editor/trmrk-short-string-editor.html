@@ -77,7 +77,7 @@
   </div>
   }
   <ng-container *ngTemplateOutlet="trmrkBeforeDoneBtnTemplate"></ng-container>
-  @if (trmrkShowDoneBtn ?? true) {
+  @if (trmrkShowDoneBtn) {
   <div [ngClass]="'trmrk-icon-wrapper'">
     <button
       mat-icon-button
@@ -87,13 +87,13 @@
       <mat-icon class="trmrk-icon">done</mat-icon>
     </button>
   </div>
-  } @if (trmrkShowCopyToClipboardBtn ?? false) {
+  } @if (trmrkShowCopyToClipboardBtn) {
   <div [ngClass]="'trmrk-icon-wrapper'">
     <button mat-icon-button class="trmrk-icon-btn" (click)="copyToClipboardClicked()">
       <mat-icon class="trmrk-icon">content_copy</mat-icon>
     </button>
   </div>
-  } @if (trmrkShowPasteFromClipboardBtn ?? false) {
+  } @if (trmrkShowPasteFromClipboardBtn) {
   <div [ngClass]="'trmrk-icon-wrapper'">
     <button mat-icon-button class="trmrk-icon-btn" (click)="pasteFromClipboardClicked()">
       <mat-icon class="trmrk-icon">content_paste</mat-icon>

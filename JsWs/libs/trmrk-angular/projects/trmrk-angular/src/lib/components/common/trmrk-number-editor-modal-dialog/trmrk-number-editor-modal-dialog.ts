@@ -57,6 +57,8 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
 
   @ViewChild('numberEditor', { read: TrmrkNumberEditor }) numberEditor!: TrmrkNumberEditor;
 
+  focusInput = 0;
+
   private modalService: ModalService;
   private modalOpenedSubscription: Subscription;
 
@@ -73,7 +75,7 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
 
     this.modalOpenedSubscription = dialogRef.afterOpened().subscribe(() => {
       setTimeout(() => {
-        this.numberEditor.focusInput++;
+        this.focusInput++;
       });
     });
 

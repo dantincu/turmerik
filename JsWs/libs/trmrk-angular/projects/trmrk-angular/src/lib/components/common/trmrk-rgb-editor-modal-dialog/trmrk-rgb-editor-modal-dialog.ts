@@ -57,6 +57,8 @@ export class TrmrkRgbEditorModalDialog {
 
   @ViewChild('rgbEditor', { read: TrmrkRgbEditor }) rgbEditor!: TrmrkRgbEditor;
 
+  focusInput = 0;
+
   private modalService: ModalService;
   private modalOpenedSubscription: Subscription;
 
@@ -73,7 +75,7 @@ export class TrmrkRgbEditorModalDialog {
 
     this.modalOpenedSubscription = dialogRef.afterOpened().subscribe(() => {
       setTimeout(() => {
-        this.rgbEditor.focusInput++;
+        this.focusInput++;
       });
     });
 

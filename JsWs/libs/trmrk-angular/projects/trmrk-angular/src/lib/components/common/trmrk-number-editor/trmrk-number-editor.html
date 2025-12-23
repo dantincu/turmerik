@@ -10,12 +10,11 @@
     }
   </div>
 </div>
-} @if (!hide) {
-
+} @if (!hide) { @if (trmrkShowOutput) {
 <div class="trmrk-output-wrapper">
   <span class="trmrk-text">{{ isNaN(value.number ?? NaN) ? '' : value.number }}</span>
 </div>
-@if (hasError) {
+} @if (hasError) {
 <div class="trmrk-error-wrapper">
   <span class="trmrk-text-level-error"> {{ errorMessage }} </span>
 </div>
@@ -32,8 +31,8 @@
   [trmrkFocusedCharIdx]="focusedCharIdx"
   [trmrkFocusInput]="focusInput"
   [trmrkBlurInput]="blurInput"
-  [trmrkAllowInsertChar]="trmrkAllowInsertChar ?? true"
-  [trmrkAllowDeleteChar]="trmrkAllowDeleteChar ?? true"
+  [trmrkAllowInsertChar]="trmrkAllowInsertChar"
+  [trmrkAllowDeleteChar]="trmrkAllowDeleteChar"
   [trmrkBeforeDoneBtnTemplate]="beforeDoneBtnTpl"
   [trmrkTrailingTemplate]="trailingTpl"
   [trmrkShowDoneBtn]="trmrkShowDoneBtn"

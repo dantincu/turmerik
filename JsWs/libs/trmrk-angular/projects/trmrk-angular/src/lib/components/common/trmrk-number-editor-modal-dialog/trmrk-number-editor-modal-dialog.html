@@ -25,8 +25,13 @@
     <trmrk-number-editor
       #numberEditor
       [trmrkLabel]="dialogData.label"
+      [trmrkFocusInput]="focusInput"
+      [trmrkAllowDeleteChar]="true"
+      [trmrkAllowInsertChar]="true"
       [trmrkShowCopyToClipboardBtn]="true"
       [trmrkShowPasteFromClipboardBtn]="true"
+      [trmrkShowOutput]="true"
+      [trmrkShowDoneBtn]="true"
       [trmrkValue]="dialogData.value"
       [trmrkMin]="dialogData.min"
       [trmrkMax]="dialogData.max"

@@ -1,33 +1,37 @@
 <trmrk-number-editor
   [trmrkLabel]="'Red'"
   [trmrkValue]="{}"
-  [trmrkAllowInsertChar]="false"
-  [trmrkAllowDeleteChar]="false"
   [trmrkMin]="0"
   [trmrkMax]="255"
+  [trmrkFocusInput]="focusRedInput"
+  [trmrkBlurInput]="blurRedInput"
+  (trmrkFocusToggled)="inputFocusToggled($event, 'R')"
 ></trmrk-number-editor>
 <trmrk-number-editor
   [trmrkLabel]="'Green'"
   [trmrkValue]="{}"
-  [trmrkAllowInsertChar]="false"
-  [trmrkAllowDeleteChar]="false"
   [trmrkMin]="0"
   [trmrkMax]="255"
+  [trmrkFocusInput]="focusGreenInput"
+  [trmrkBlurInput]="blurGreenInput"
+  (trmrkFocusToggled)="inputFocusToggled($event, 'G')"
 ></trmrk-number-editor>
 <trmrk-number-editor
   [trmrkLabel]="'Blue'"
   [trmrkValue]="{}"
-  [trmrkAllowInsertChar]="false"
-  [trmrkAllowDeleteChar]="false"
   [trmrkMin]="0"
   [trmrkMax]="255"
+  [trmrkFocusInput]="focusBlueInput"
+  [trmrkBlurInput]="blurBlueInput"
+  (trmrkFocusToggled)="inputFocusToggled($event, 'B')"
 ></trmrk-number-editor>
 <trmrk-number-editor
   [trmrkLabel]="'Alpha'"
   [trmrkValue]="{}"
   [trmrkIsTogglable]="true"
-  [trmrkAllowInsertChar]="false"
-  [trmrkAllowDeleteChar]="false"
   [trmrkMin]="0"
   [trmrkMax]="255"
+  [trmrkFocusInput]="focusAlphaInput"
+  [trmrkBlurInput]="blurAlphaInput"
+  (trmrkFocusToggled)="inputFocusToggled($event, 'A')"
 ></trmrk-number-editor>

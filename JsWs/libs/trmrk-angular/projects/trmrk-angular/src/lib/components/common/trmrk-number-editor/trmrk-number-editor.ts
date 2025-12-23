@@ -80,6 +80,7 @@ export const numOrTextToTrmrkNumberInputValue = (
 export class TrmrkNumberEditor {
   @Output() trmrkValidationErrorChanged = new EventEmitter<ValidationResult>();
   @Output() trmrkVisibilityToggled = new EventEmitter<boolean>();
+  @Output() trmrkFocusToggled = new EventEmitter<boolean>();
 
   @Input() trmrkLabel?: string | NullOrUndef;
   @Input() trmrkIsTogglable?: boolean | NullOrUndef;
@@ -113,7 +114,7 @@ export class TrmrkNumberEditor {
   hasError = false;
   errorMessage = '';
 
-  focusedCharIdx = 0;
+  focusedCharIdx = -1;
   isPlacingDecimalPoint = false;
   value: TrmrkNumberInputValue;
   focusInput = 0;
@@ -128,7 +129,13 @@ export class TrmrkNumberEditor {
       changes,
       () => this.trmrkFocusInput,
       () => {
-        this.focusInput = this.trmrkFocusInput ? ++this.focusInput : 0;
+        if (this.trmrkFocusInput) {
+          setTimeout(() => {
+            this.focusNextDigit(this.focusedCharIdx);
+          });
+        } else {
+          this.focusInput = 0;
+        }
       }
     );
 
@@ -137,16 +144,23 @@ export class TrmrkNumberEditor {
       () => this.trmrkBlurInput,
       () => {
         this.blurInput = this.trmrkBlurInput ? ++this.blurInput : 0;
+
+        if (this.blurInput) {
+          this.focusedCharIdx = -1;
+        }
       }
     );
 
     whenChanged(
       changes,
       () => this.trmrkValue,
-      () => {
+      (_, change) => {
         this.value = normalizeTrmrkNumberInputValue(this.trmrkValue ?? this.getDefaultValue());
         this.updateValidation();
-        this.focusNextDigit(0);
+
+        if (!change.firstChange) {
+          this.focusNextDigit(0);
+        }
       }
     );
 
@@ -512,8 +526,10 @@ export class TrmrkNumberEditor {
 
     if (nextChar.length) {
       this.focusInput++;
+      this.trmrkFocusToggled.emit(true);
     } else {
       this.blurInput++;
+      this.trmrkFocusToggled.emit(false);
     }
   }
 
