@@ -6,6 +6,8 @@ import { ColorCore, normalizeColor } from '../../../../trmrk/colors';
 import { whenChanged } from '../../../services/common/simpleChanges';
 import { TrmrkNumberEditor } from '../trmrk-number-editor/trmrk-number-editor';
 
+import { FocusedCharKeyPressEvent } from '../trmrk-short-string-editor/trmrk-short-string-editor';
+
 export interface TrmrkRgbInputValue extends ColorCore {}
 
 export interface TrmrkRgbEditorOpts {
@@ -89,7 +91,7 @@ export class TrmrkRgbEditor implements OnChanges {
     );
   }
 
-  inputFocusToggled(isFocused: boolean, inputCode: string) {
+  inputFocusUpdated(isFocused: boolean, inputCode: string) {
     if (isFocused) {
       switch (inputCode) {
         case 'R':
@@ -111,6 +113,24 @@ export class TrmrkRgbEditor implements OnChanges {
           this.blurRedInput++;
           this.blurGreenInput++;
           this.blurBlueInput++;
+          break;
+      }
+    }
+  }
+
+  inputKeyPressed(event: FocusedCharKeyPressEvent, inputCode: string) {
+    if (!event.hasNextFocusedChar) {
+      switch (inputCode) {
+        case 'R':
+          this.focusGreenInput++;
+          break;
+        case 'G':
+          this.focusBlueInput++;
+          break;
+        case 'B':
+          this.focusAlphaInput++;
+          break;
+        case 'A':
           break;
       }
     }

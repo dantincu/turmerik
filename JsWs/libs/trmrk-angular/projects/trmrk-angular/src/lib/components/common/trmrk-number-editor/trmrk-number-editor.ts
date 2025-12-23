@@ -80,7 +80,8 @@ export const numOrTextToTrmrkNumberInputValue = (
 export class TrmrkNumberEditor {
   @Output() trmrkValidationErrorChanged = new EventEmitter<ValidationResult>();
   @Output() trmrkVisibilityToggled = new EventEmitter<boolean>();
-  @Output() trmrkFocusToggled = new EventEmitter<boolean>();
+  @Output() trmrkFocusUpdated = new EventEmitter<boolean>();
+  @Output() trmrkInputKeyPressed = new EventEmitter<FocusedCharKeyPressEvent>();
 
   @Input() trmrkLabel?: string | NullOrUndef;
   @Input() trmrkIsTogglable?: boolean | NullOrUndef;
@@ -250,7 +251,11 @@ export class TrmrkNumberEditor {
     if (/\d/.test(event.newChar)) {
       this.value.text = event.newString;
       this.updateValue();
-      this.focusNextDigit(event.nextFocusedCharIdx);
+
+      event = {
+        ...event,
+        hasNextFocusedChar: this.focusNextDigit(event.nextFocusedCharIdx),
+      };
     } else {
       switch (event.newChar) {
         case ' ':
@@ -263,6 +268,8 @@ export class TrmrkNumberEditor {
           break;
       }
     }
+
+    this.trmrkInputKeyPressed.emit(event);
   }
 
   inputKeyDown(event: FocusedCharKeyDownEvent) {
@@ -498,7 +505,9 @@ export class TrmrkNumberEditor {
       nextChar = this.value.text![++nextCharIdx] ?? '';
     }
 
-    if (!nextChar.length) {
+    let hasNext = nextChar.length > 0;
+
+    if (!hasNext) {
       let canAddDigit = [...this.value.text!].findIndex((c) => ' .0'.indexOf(c) < 0) >= 0;
 
       if (canAddDigit) {
@@ -512,6 +521,7 @@ export class TrmrkNumberEditor {
       if (canAddDigit) {
         this.value.text += nextChar = ' ';
         nextCharIdx = this.value.text!.length - 1;
+        hasNext = true;
       } else {
         nextCharIdx = initialNextCharIdx - 1;
         nextChar = this.value.text![nextCharIdx] ?? '';
@@ -526,11 +536,13 @@ export class TrmrkNumberEditor {
 
     if (nextChar.length) {
       this.focusInput++;
-      this.trmrkFocusToggled.emit(true);
+      this.trmrkFocusUpdated.emit(true);
     } else {
       this.blurInput++;
-      this.trmrkFocusToggled.emit(false);
+      this.trmrkFocusUpdated.emit(false);
     }
+
+    return hasNext;
   }
 
   isFocusableChar(char: string) {

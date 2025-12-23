@@ -5,7 +5,8 @@
   [trmrkMax]="255"
   [trmrkFocusInput]="focusRedInput"
   [trmrkBlurInput]="blurRedInput"
-  (trmrkFocusToggled)="inputFocusToggled($event, 'R')"
+  (trmrkFocusUpdated)="inputFocusUpdated($event, 'R')"
+  (trmrkInputKeyPressed)="inputKeyPressed($event, 'R')"
 ></trmrk-number-editor>
 <trmrk-number-editor
   [trmrkLabel]="'Green'"
@@ -14,7 +15,8 @@
   [trmrkMax]="255"
   [trmrkFocusInput]="focusGreenInput"
   [trmrkBlurInput]="blurGreenInput"
-  (trmrkFocusToggled)="inputFocusToggled($event, 'G')"
+  (trmrkFocusUpdated)="inputFocusUpdated($event, 'G')"
+  (trmrkInputKeyPressed)="inputKeyPressed($event, 'G')"
 ></trmrk-number-editor>
 <trmrk-number-editor
   [trmrkLabel]="'Blue'"
@@ -23,7 +25,8 @@
   [trmrkMax]="255"
   [trmrkFocusInput]="focusBlueInput"
   [trmrkBlurInput]="blurBlueInput"
-  (trmrkFocusToggled)="inputFocusToggled($event, 'B')"
+  (trmrkFocusUpdated)="inputFocusUpdated($event, 'B')"
+  (trmrkInputKeyPressed)="inputKeyPressed($event, 'B')"
 ></trmrk-number-editor>
 <trmrk-number-editor
   [trmrkLabel]="'Alpha'"
@@ -33,5 +36,6 @@
   [trmrkMax]="255"
   [trmrkFocusInput]="focusAlphaInput"
   [trmrkBlurInput]="blurAlphaInput"
-  (trmrkFocusToggled)="inputFocusToggled($event, 'A')"
+  (trmrkFocusUpdated)="inputFocusUpdated($event, 'A')"
+  (trmrkInputKeyPressed)="inputKeyPressed($event, 'A')"
 ></trmrk-number-editor>
