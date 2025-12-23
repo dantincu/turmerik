@@ -1,4 +1,6 @@
-import { NullOrUndef } from './core';
+import Big from 'big.js';
+
+import { actWithVal, NullOrUndef } from './core';
 
 export const maxSafeInteger = Number.MAX_SAFE_INTEGER;
 
@@ -44,6 +46,8 @@ export const getOrderOfMagnitude = (num: number) => {
   return magn;
 };
 
+export const numToString = (num: number) => new Big(num).toFixed();
+
 export interface NumberDigits {
   intPartDigits: number[];
   decimals: number[];
@@ -53,7 +57,7 @@ export interface NumberDigits {
 export const getNumberDigits = (num: number | NullOrUndef) => {
   if ((num ?? null) !== null && !isNaN(num!)) {
     const isNegative = num! < 0;
-    let numStr = num!.toString();
+    let numStr = numToString(num!);
 
     if (isNegative) {
       numStr = numStr.substring(1);

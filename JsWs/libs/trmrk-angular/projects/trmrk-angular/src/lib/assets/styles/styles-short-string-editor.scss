@@ -106,21 +106,10 @@ trmrk-number-editor {
 
 trmrk-rgb-editor, trmrk-date-time-editor {
   display: inline-flex;
+  flex-direction: column;
 }
 
 trmrk-number-editor-modal-dialog,
 trmrk-rgb-editor-modal-dialog,
 trmrk-date-time-editor-modal-dialog {
-  .trmrk-modal-body {
-    padding: 5px;
-  }
-
-  .trmrk-horiz-strip {
-    position: relative;
-
-    .trmrk-apply-changes-btn {
-      position: absolute;
-      right: 0;
-    }
-  }
 }

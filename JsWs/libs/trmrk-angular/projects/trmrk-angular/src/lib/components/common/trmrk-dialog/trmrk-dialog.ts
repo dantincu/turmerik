@@ -65,7 +65,9 @@ export class TrmrkDialog<TData extends TrmrkDialogComponentDataCore = TrmrkDialo
     this.tabGroupIcon = domSanitizer.bypassSecurityTrustHtml(tab_group);
 
     setTimeout(() => {
-      this.optionsMenuTrigger.menu = this.optionsMenu;
+      if (this.optionsMenuTrigger) {
+        this.optionsMenuTrigger.menu = this.optionsMenu;
+      }
     });
   }
 

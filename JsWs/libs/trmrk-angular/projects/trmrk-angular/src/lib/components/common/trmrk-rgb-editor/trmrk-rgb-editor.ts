@@ -3,6 +3,8 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { NullOrUndef, ValidationResult } from '../../../../trmrk/core';
 import { ColorCore, normalizeColor } from '../../../../trmrk/colors';
 
+import { TrmrkNumberEditor } from '../trmrk-number-editor/trmrk-number-editor';
+
 export interface TrmrkRgbInputValue extends ColorCore {}
 
 export interface TrmrkRgbEditorOpts {
@@ -20,7 +22,7 @@ export const defaultValues = Object.freeze<TrmrkRgbEditorOpts>({
 
 @Component({
   selector: 'trmrk-rgb-editor',
-  imports: [],
+  imports: [TrmrkNumberEditor],
   templateUrl: './trmrk-rgb-editor.html',
   styleUrl: './trmrk-rgb-editor.scss',
 })

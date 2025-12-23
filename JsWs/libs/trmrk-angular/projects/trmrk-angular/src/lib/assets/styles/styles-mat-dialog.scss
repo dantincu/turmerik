@@ -27,10 +27,33 @@
     font-size: var(--trmrk-body-font-size);
   }
 
+  .mat-mdc-dialog-component-host {
+    display: flex !important;
+    flex-direction: column;
+    height: 100%;
+    max-height: 100vh;
+    flex: 1 1 auto;
+
+    .trmrk-modal-body {
+      padding: 5px;
+    }
+
+    .trmrk-horiz-strip {
+      position: relative;
+
+      .trmrk-apply-changes-btn {
+        position: absolute;
+        right: 0;
+      }
+    }
+  }
+
   trmrk-dialog {
     display: flex;
     flex-direction: column;
     height: 100%;
+    min-height: 0;
+    max-height: 100%;
     flex: 1 1 auto;
   }
 
@@ -40,6 +63,11 @@
 
   .trmrk-dialog-actions {
     flex: 0 1 auto;
+  }
+
+  .trmrk-modal-body {
+    flex: 0 1 auto;
+    max-height: 100%;
   }
 }
 

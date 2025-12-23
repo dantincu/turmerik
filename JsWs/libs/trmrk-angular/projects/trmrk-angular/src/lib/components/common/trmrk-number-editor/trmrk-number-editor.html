@@ -1,11 +1,11 @@
 @if ((trmrkLabel ?? null) !== null) {
 <div class="trmrk-label-wrapper">
   <div class="trmrk-field">
-    @if (trmrkIsToggable) {
+    @if (trmrkIsTogglable) {
     <mat-checkbox class="trmrk-checkbox" (change)="labelCheckboxToggled()" [checked]="!hide"
       ><h3>{{ trmrkLabel }}</h3></mat-checkbox
     >
-    } @if (!trmrkIsToggable) {
+    } @if (!trmrkIsTogglable) {
     <h3>{{ trmrkLabel }}</h3>
     }
   </div>
@@ -36,9 +36,9 @@
   [trmrkAllowDeleteChar]="trmrkAllowDeleteChar ?? true"
   [trmrkBeforeDoneBtnTemplate]="beforeDoneBtnTpl"
   [trmrkTrailingTemplate]="trailingTpl"
-  [trmrkShowDoneBtn]="true"
-  [trmrkShowCopyToClipboardBtn]="true"
-  [trmrkShowPasteFromClipboardBtn]="true"
+  [trmrkShowDoneBtn]="trmrkShowDoneBtn"
+  [trmrkShowCopyToClipboardBtn]="trmrkShowCopyToClipboardBtn"
+  [trmrkShowPasteFromClipboardBtn]="trmrkShowPasteFromClipboardBtn"
   (trmrkCharShortPressOrLeftClick)="charShortPressOrLeftClick($event)"
   (trmrkInputKeyPressed)="inputKeyPressed($event)"
   (trmrkInputKeyDown)="inputKeyDown($event)"

@@ -82,7 +82,7 @@ export class TrmrkNumberEditor {
   @Output() trmrkVisibilityToggled = new EventEmitter<boolean>();
 
   @Input() trmrkLabel?: string | NullOrUndef;
-  @Input() trmrkIsToggable?: boolean | NullOrUndef;
+  @Input() trmrkIsTogglable?: boolean | NullOrUndef;
   @Input() trmrkValue: TrmrkNumberInputValue | NullOrUndef;
   @Input() trmrkMin: number | NullOrUndef;
   @Input() trmrkMax: number | NullOrUndef;
@@ -94,6 +94,9 @@ export class TrmrkNumberEditor {
   @Input() trmrkAllowDeleteChar: boolean | NullOrUndef;
   @Input() trmrkAllowInsertChar: boolean | NullOrUndef;
   @Input() trmrkHide = 0;
+  @Input() trmrkShowDoneBtn: boolean | NullOrUndef;
+  @Input() trmrkShowCopyToClipboardBtn: boolean | NullOrUndef;
+  @Input() trmrkShowPasteFromClipboardBtn: boolean | NullOrUndef;
 
   hide = 0;
 
@@ -482,12 +485,14 @@ export class TrmrkNumberEditor {
     }
 
     if (!nextChar.length) {
-      let canAddDigit = false;
+      let canAddDigit = [...this.value.text!].findIndex((c) => ' .0'.indexOf(c) < 0) >= 0;
 
-      if (this.value.text!.indexOf('.') >= 0) {
-        canAddDigit = this.getDecimalsCount() < this.maxAllowedDecimals;
-      } else {
-        canAddDigit = this.getIntDigitsCount() < this.maxAllowedIntDigits;
+      if (canAddDigit) {
+        if (this.value.text!.indexOf('.') >= 0) {
+          canAddDigit = this.getDecimalsCount() < this.maxAllowedDecimals;
+        } else {
+          canAddDigit = this.getIntDigitsCount() < this.maxAllowedIntDigits;
+        }
       }
 
       if (canAddDigit) {
