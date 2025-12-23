@@ -1,0 +1,33 @@
+<trmrk-dialog
+  [trmrkModalId]="modalId"
+  [trmrkData]="
+    mergeDialogData(data, {
+      contentTemplate: content,
+      useMatDialogComponents: false
+    })
+  "
+></trmrk-dialog>
+<ng-template #content>
+  <trmrk-horiz-strip
+    [trmrkCssClass]="['trmrk-has-border-x2 trmrk-top-horiz-strip']"
+    [trmrkUseContentInsteadOfTextRow]="true"
+  >
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn trmrk-icon-btn-filled-accept trmrk-apply-changes-btn"
+      (click)="doneClick()"
+      [disabled]="validationResult.hasError"
+    >
+      <mat-icon class="trmrk-icon">done</mat-icon>
+    </button>
+  </trmrk-horiz-strip>
+  <div class="trmrk-scrollable trmrk-scrollable-y trmrk-modal-body">
+    <trmrk-date-time-editor
+      #dateTimeEditor
+      [trmrkLabel]="dialogData.label"
+      [trmrkValue]="dialogData.value"
+      [trmrkRequired]="dialogData.required"
+      (trmrkValidationErrorChanged)="validationResultChanged($event)"
+    ></trmrk-date-time-editor>
+  </div>
+</ng-template>

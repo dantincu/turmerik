@@ -79,3 +79,68 @@ export const getNumberDigits = (num: number | NullOrUndef) => {
     return null;
   }
 };
+
+export const getIntNumberDigits = (num: number, base: number = 10) => {
+  if (base <= 0) {
+    throw new Error(`Base must be a strictly positive number, but received ${base}`);
+  }
+
+  let digit = num % base;
+  let remainder = num / base;
+  const digitsArr = [digit];
+
+  while (remainder > 0) {
+    digit = num % base;
+    remainder = num / base;
+    digitsArr.push(digit);
+  }
+
+  return digitsArr;
+};
+
+export const getIntNumberFromDigits = (digitsArr: number[], base: number = 10) => {
+  if (base <= 0) {
+    throw new Error(`Base must be a strictly positive number, but received ${base}`);
+  }
+
+  let num = digitsArr.at(-1) ?? null;
+
+  if (num !== null) {
+    let multiplier = base;
+
+    for (let i = digitsArr.length - 2; i >= 0; i--) {
+      num += digitsArr[i] * multiplier;
+      multiplier *= base;
+    }
+  }
+
+  return num;
+};
+
+export const numToHexStr = (number: number) =>
+  getIntNumberDigits(number, 16)
+    .map((num) => num.toString(16))
+    .join('');
+
+export const numFromHexStr = (hexStr: string) =>
+  getIntNumberFromDigits(
+    [...hexStr].map((char) => parseInt(char, 16)),
+    16
+  );
+
+export const bytesToHexStr = (bytesArr: number[]) =>
+  bytesArr.map((byte) => numToHexStr(byte)).join('');
+
+export const bytesFromHexStr = (hexStr: string) => {
+  const bytesArr: number[] = [];
+
+  for (let i = hexStr.length - 1; i > 0; i--) {
+    bytesArr.splice(0, 0, numFromHexStr(hexStr.substring(i, 2))!);
+  }
+
+  if (hexStr.length % 2) {
+    bytesArr.splice(0, 0, numFromHexStr(hexStr[0])!);
+  }
+
+  return bytesArr;
+};

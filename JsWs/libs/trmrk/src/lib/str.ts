@@ -7,6 +7,7 @@ import {
   UnifiedMap,
   StrMap,
   Kvp,
+  AnyOrUnknown,
 } from './core';
 
 import { numIsBetween } from './math';
@@ -232,3 +233,51 @@ export const splitStr = (str: string, delimsArr: string[]) => {
 
   return retArr;
 };
+
+export const tryDigest = <T = any>(
+  inputStr: string,
+  predicate: (char: string, idx: number) => number,
+  callback: (newStr: string, strIdx: number, newStrStartIdx: number) => T,
+  sliceAfter = true,
+  startPosition = 0
+) => {
+  let strLen = 0;
+
+  const strIdx = [...inputStr]
+    .slice(startPosition)
+    .findIndex((char, idx) => (strLen = predicate(char, idx)) >= 0);
+    
+  let newStr: string;
+  let newStrStartIdx: number;
+
+  if (strIdx >= 0) {
+    if (sliceAfter) {
+      newStrStartIdx = strIdx + strLen;
+      newStr = inputStr.substring(newStrStartIdx);
+    } else {
+      newStrStartIdx = 0;
+      newStr = inputStr.substring(0, strIdx);
+    }
+  } else {
+    newStrStartIdx = 0;
+    newStr = inputStr;
+  }
+
+  const retVal = callback(newStr, strIdx, newStrStartIdx);
+  return retVal;
+};
+
+export const tryDigestStr = <T = any>(
+  inputStr: string,
+  str: string,
+  callback: (newStr: string, strIdx: number, newStrStartIdx: number) => T,
+  sliceAfter = true,
+  startPosition = 0
+) =>
+  tryDigest(
+    inputStr,
+    (_, idx) => (inputStr.startsWith(str, idx) ? str.length : -1),
+    callback,
+    sliceAfter,
+    startPosition
+  );

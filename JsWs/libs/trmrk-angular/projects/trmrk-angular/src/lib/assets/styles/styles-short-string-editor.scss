@@ -104,7 +104,13 @@ trmrk-number-editor {
   }
 }
 
-trmrk-number-editor-modal-dialog {
+trmrk-rgb-editor, trmrk-date-time-editor {
+  display: inline-flex;
+}
+
+trmrk-number-editor-modal-dialog,
+trmrk-rgb-editor-modal-dialog,
+trmrk-date-time-editor-modal-dialog {
   .trmrk-modal-body {
     padding: 5px;
   }

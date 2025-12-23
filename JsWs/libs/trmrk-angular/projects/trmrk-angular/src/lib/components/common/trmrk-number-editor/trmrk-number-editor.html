@@ -3,7 +3,7 @@
   <div class="trmrk-field">
     @if (trmrkIsToggable) {
     <mat-checkbox class="trmrk-checkbox" (change)="labelCheckboxToggled()" [checked]="!hide"
-      ><div class="trmrk-text trmrk-text-bold">{{ trmrkLabel }}</div></mat-checkbox
+      ><h3>{{ trmrkLabel }}</h3></mat-checkbox
     >
     } @if (!trmrkIsToggable) {
     <h3>{{ trmrkLabel }}</h3>
@@ -32,9 +32,8 @@
   [trmrkFocusedCharIdx]="focusedCharIdx"
   [trmrkFocusInput]="focusInput"
   [trmrkBlurInput]="blurInput"
-  [trmrkAllowInsertChar]="true"
-  [trmrkAllowInsertChar]="true"
-  [trmrkAllowDeleteChar]="true"
+  [trmrkAllowInsertChar]="trmrkAllowInsertChar ?? true"
+  [trmrkAllowDeleteChar]="trmrkAllowDeleteChar ?? true"
   [trmrkBeforeDoneBtnTemplate]="beforeDoneBtnTpl"
   [trmrkTrailingTemplate]="trailingTpl"
   [trmrkShowDoneBtn]="true"

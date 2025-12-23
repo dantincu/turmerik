@@ -18,7 +18,7 @@ export interface TrmrkDialogDataCore {
   showOptionsBtn?: boolean | NullOrUndef;
   showOptionsMenuTopStrip?: boolean | NullOrUndef;
   optionsMenuTopStripTemplate?: TemplateRef<any> | NullOrUndef;
-  showManageTabsOptionsMenuBtn?: boolean | NullOrUndef;
+  showPeekOtherTabsOptionsMenuBtn?: boolean | NullOrUndef;
   optionsMenuTemplate?: TemplateRef<any> | NullOrUndef;
 }
 

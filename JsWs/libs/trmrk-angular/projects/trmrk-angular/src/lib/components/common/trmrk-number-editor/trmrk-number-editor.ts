@@ -91,6 +91,8 @@ export class TrmrkNumberEditor {
   @Input() trmrkFocusInput = 0;
   @Input() trmrkBlurInput = 0;
   @Input() trmrkShowOutput: boolean | NullOrUndef;
+  @Input() trmrkAllowDeleteChar: boolean | NullOrUndef;
+  @Input() trmrkAllowInsertChar: boolean | NullOrUndef;
   @Input() trmrkHide = 0;
 
   hide = 0;
@@ -222,13 +224,13 @@ export class TrmrkNumberEditor {
   }
 
   charShortPressOrLeftClick(event: CharShortPressOrLeftClickEvent) {
-    if (event.nextFocusedChar === ' ' || /\d/g.test(event.nextFocusedChar)) {
+    if (event.nextFocusedChar === ' ' || /\d/.test(event.nextFocusedChar)) {
       this.focusNextDigit(event.nextFocusedCharIdx);
     }
   }
 
   inputKeyPressed(event: FocusedCharKeyPressEvent) {
-    if (/\d/g.test(event.newChar)) {
+    if (/\d/.test(event.newChar)) {
       this.value.text = event.newString;
       this.updateValue();
       this.focusNextDigit(event.nextFocusedCharIdx);
@@ -511,7 +513,7 @@ export class TrmrkNumberEditor {
   }
 
   isFocusableChar(char: string) {
-    const isFocusable = char === ' ' || /\d/g.test(char);
+    const isFocusable = char === ' ' || /\d/.test(char);
     return isFocusable;
   }
 

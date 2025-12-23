@@ -1,12 +1,12 @@
-import { Component, Inject, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ViewChild, Inject, ElementRef } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Subscription } from 'rxjs';
 
-import { VoidOrAny, ValidationResult } from '../../../../trmrk/core';
 import { getVarName } from '../../../../trmrk/Reflection/core';
+import { VoidOrAny, ValidationResult } from '../../../../trmrk/core';
 
 import { ModalService } from '../../../services/common/modal-service';
 import { ModalServiceFactory } from '../../../services/common/modal-service-factory';
@@ -22,20 +22,20 @@ import {
 } from '../../../services/common/trmrk-dialog';
 
 import {
-  TrmrkNumberEditor,
-  TrmrkNumberInputValue,
-  TrmrkNumberEditorOpts,
-} from '../trmrk-number-editor/trmrk-number-editor';
+  TrmrkDateTimeEditor,
+  TrmrkDateTimeEditorOpts,
+  TrmrkDateTimeInputValue,
+  defaultValues,
+} from '../trmrk-date-time-editor/trmrk-date-time-editor';
 
-export interface TrmrkNumberEditorModalDialogData
+export interface TrmrkDateTimeEditorModalDialogData
   extends TrmrkDialogComponentDataCore,
-    TrmrkNumberEditorOpts {
-  valueSubmitted: (value: TrmrkNumberInputValue) => VoidOrAny;
+    TrmrkDateTimeEditorOpts {
+  valueSubmitted: (value: TrmrkDateTimeInputValue) => VoidOrAny;
 }
 
 @Component({
-  selector: 'trmrk-number-editor-modal-dialog',
-  standalone: true,
+  selector: 'trmrk-date-time-editor-modal-dialog',
   imports: [
     CommonModule,
     MatDialogModule,
@@ -43,26 +43,26 @@ export interface TrmrkNumberEditorModalDialogData
     MatButtonModule,
     TrmrkDialog,
     TrmrkHorizStrip,
-    TrmrkNumberEditor,
+    TrmrkDateTimeEditor,
   ],
-  templateUrl: './trmrk-number-editor-modal-dialog.html',
-  styleUrls: ['./trmrk-number-editor-modal-dialog.scss'],
+  templateUrl: './trmrk-date-time-editor-modal-dialog.html',
+  styleUrl: './trmrk-date-time-editor-modal-dialog.scss',
 })
-export class TrmrkNumberEditorModalDialog implements OnDestroy {
+export class TrmrkDateTimeEditorModalDialog {
   mergeDialogData = mergeDialogData;
   modalId: number;
-  dialogData: TrmrkNumberEditorModalDialogData;
+  dialogData: TrmrkDateTimeEditorModalDialogData;
 
   validationResult: ValidationResult = {};
 
-  @ViewChild('numberEditor', { read: TrmrkNumberEditor }) numberEditor!: TrmrkNumberEditor;
+  @ViewChild('dateTimeEditor', { read: TrmrkDateTimeEditor }) dateTimeEditor!: TrmrkDateTimeEditor;
 
   private modalService: ModalService;
   private modalOpenedSubscription: Subscription;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public data: TrmrkDialogData<TrmrkNumberEditorModalDialogData>,
+    public data: TrmrkDialogData<TrmrkDateTimeEditorModalDialogData>,
     public dialogRef: MatDialogRef<any>,
     private appStateService: AppStateServiceBase,
     private appService: AppServiceBase,
@@ -73,7 +73,7 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
 
     this.modalOpenedSubscription = dialogRef.afterOpened().subscribe(() => {
       setTimeout(() => {
-        this.numberEditor.focusInput++;
+        this.dateTimeEditor.focusInput++;
       });
     });
 
@@ -81,7 +81,7 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
 
     this.modalService.setup({
       hostEl: () => hostEl.nativeElement,
-      modalType: getVarName(() => TrmrkNumberEditorModalDialog),
+      modalType: getVarName(() => TrmrkDateTimeEditorModalDialog),
       data: this.data.data,
       dialogRef,
     });
@@ -95,14 +95,10 @@ export class TrmrkNumberEditorModalDialog implements OnDestroy {
   }
 
   doneClick() {
-    this.numberEditor.updateValidation();
+    this.dateTimeEditor.updateValidation();
 
     if (!this.validationResult.hasError) {
-      this.data.data.valueSubmitted({
-        text: this.numberEditor.value.text!.replace(' ', ''),
-        number: this.numberEditor.value.number,
-      });
-
+      this.data.data.valueSubmitted(this.dateTimeEditor.value);
       this.appService.closeModal(this.modalId);
     }
   }

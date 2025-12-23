@@ -11,7 +11,7 @@
   }</trmrk-horiz-strip
 >
 <ng-template #topStripTrailingTemplate>
-  @if (data.showOptionsBtn !== false) {
+  @if (data.showOptionsBtn) {
   <button
     mat-icon-button
     class="trmrk-icon-btn trmrk-options-btn"
@@ -22,9 +22,9 @@
     <mat-icon class="trmrk-icon">more_vert</mat-icon>
   </button>
   <mat-menu class="trmrk-menu" dense>
-    @if (data.showOptionsMenuTopStrip !== false) {
+    @if (data.showOptionsMenuTopStrip) {
     <div mat-menu-item class="trmrk-menu-item">
-      @if (data.showManageTabsOptionsMenuBtn !== false) {
+      @if (data.showPeekOtherTabsOptionsMenuBtn) {
       <button mat-icon-button class="trmrk-icon-btn">
         <div class="trmrk-custom-svg-icon-wrapper" [innerHtml]="tabGroupIcon"></div>
       </button>
