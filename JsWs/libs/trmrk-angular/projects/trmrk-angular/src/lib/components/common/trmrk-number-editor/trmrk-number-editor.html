@@ -3,11 +3,21 @@
   <div class="trmrk-field">
     @if (trmrkIsTogglable) {
     <mat-checkbox class="trmrk-checkbox" (change)="labelCheckboxToggled()" [checked]="!hide"
-      ><h3>{{ trmrkLabel }}</h3></mat-checkbox
+      >@if (!trmrkLabelTemplate) {
+      <h3>{{ trmrkLabel }}</h3>
+      } @if (trmrkLabelTemplate) {
+      <ng-container
+        *ngTemplateOutlet="trmrkLabelTemplate; context: { label: trmrkLabel }"
+      ></ng-container>
+      }</mat-checkbox
     >
-    } @if (!trmrkIsTogglable) {
+    } @if (!trmrkIsTogglable) { @if (!trmrkLabelTemplate) {
     <h3>{{ trmrkLabel }}</h3>
-    }
+    } @if (trmrkLabelTemplate) {
+    <ng-container
+      *ngTemplateOutlet="trmrkLabelTemplate; context: { label: trmrkLabel }"
+    ></ng-container>
+    } }
   </div>
 </div>
 } @if (!hide) { @if (trmrkShowOutput) {

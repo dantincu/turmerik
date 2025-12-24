@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges, EventEmitter, Output } from '@angular/core';
+import { Component, Input, SimpleChanges, EventEmitter, Output, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCheckbox } from '@angular/material/checkbox';
 
@@ -84,6 +84,7 @@ export class TrmrkNumberEditor {
   @Output() trmrkInputKeyPressed = new EventEmitter<FocusedCharKeyPressEvent>();
 
   @Input() trmrkLabel?: string | NullOrUndef;
+  @Input() trmrkLabelTemplate?: TemplateRef<any>;
   @Input() trmrkIsTogglable?: boolean | NullOrUndef;
   @Input() trmrkValue: TrmrkNumberInputValue | NullOrUndef;
   @Input() trmrkMin: number | NullOrUndef;

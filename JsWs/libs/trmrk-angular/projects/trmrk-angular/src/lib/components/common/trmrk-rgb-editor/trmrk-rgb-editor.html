@@ -1,5 +1,6 @@
 <trmrk-number-editor
   [trmrkLabel]="'Red'"
+  [trmrkLabelTemplate]="redLabel"
   [trmrkValue]="{}"
   [trmrkMin]="0"
   [trmrkMax]="255"
@@ -10,6 +11,7 @@
 ></trmrk-number-editor>
 <trmrk-number-editor
   [trmrkLabel]="'Green'"
+  [trmrkLabelTemplate]="greenLabel"
   [trmrkValue]="{}"
   [trmrkMin]="0"
   [trmrkMax]="255"
@@ -20,6 +22,7 @@
 ></trmrk-number-editor>
 <trmrk-number-editor
   [trmrkLabel]="'Blue'"
+  [trmrkLabelTemplate]="blueLabel"
   [trmrkValue]="{}"
   [trmrkMin]="0"
   [trmrkMax]="255"
@@ -30,6 +33,7 @@
 ></trmrk-number-editor>
 <trmrk-number-editor
   [trmrkLabel]="'Alpha'"
+  [trmrkLabelTemplate]="alphaLabel"
   [trmrkValue]="{}"
   [trmrkIsTogglable]="true"
   [trmrkMin]="0"
@@ -39,3 +43,36 @@
   (trmrkFocusUpdated)="inputFocusUpdated($event, 'A')"
   (trmrkInputKeyPressed)="inputKeyPressed($event, 'A')"
 ></trmrk-number-editor>
+
+<ng-template #redLabel let-label="label"
+  ><div class="header-container">
+    <div class="trmrk-disc-rad-15 trmrk-red-disc"></div>
+    <h3>
+      {{ label }}
+    </h3>
+  </div></ng-template
+>
+<ng-template #greenLabel let-label="label"
+  ><div class="header-container">
+    <div class="trmrk-disc-rad-15 trmrk-green-disc"></div>
+    <h3>
+      {{ label }}
+    </h3>
+  </div></ng-template
+>
+<ng-template #blueLabel let-label="label"
+  ><div class="header-container">
+    <div class="trmrk-disc-rad-15 trmrk-blue-disc"></div>
+    <h3>
+      {{ label }}
+    </h3>
+  </div></ng-template
+>
+<ng-template #alphaLabel let-label="label"
+  ><div class="header-container">
+    <div class="trmrk-disc-rad-15 trmrk-alpha-disc"></div>
+    <h3>
+      {{ label }}
+    </h3>
+  </div></ng-template
+>

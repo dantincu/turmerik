@@ -15,8 +15,7 @@ export interface AppMainMenuControlsVisibility {
   manageTabsBtn: boolean;
   duplicateTabBtn: boolean;
   shareBtn: boolean;
-  userProfileBtn: boolean;
-  manageAppBtn: boolean;
+  manageSessionBtn: boolean;
   settingsBtn: boolean;
   helpBtn: boolean;
 }
@@ -47,8 +46,7 @@ export const getAppDefaultValues = (): AppDefaultValues => ({
       manageTabsBtn: true,
       duplicateTabBtn: true,
       shareBtn: true,
-      userProfileBtn: true,
-      manageAppBtn: true,
+      manageSessionBtn: true,
       settingsBtn: true,
       helpBtn: true,
     },

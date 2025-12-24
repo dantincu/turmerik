@@ -96,6 +96,26 @@
       }
     }
   }
+
+  trmrk-rgb-editor {
+    .trmrk-disc-rad-15 {
+      &.trmrk-red-disc {
+        background-color: #F00;
+      }
+
+      &.trmrk-green-disc {
+        background-color: #0A0;
+      }
+
+      &.trmrk-blue-disc {
+        background-color: #44F;
+      }
+
+      &.trmrk-alpha-disc {
+        background-color: #888;
+      }
+    }
+  }
 }
 
 .trmrk-app-theme-dark {
@@ -176,6 +196,26 @@
     .trmrk-icon-wrapper {
       .trmrk-icon.trmrk-icon.trmrk-icon.trmrk-icon {
         color: #EEE;
+      }
+    }
+  }
+
+  trmrk-rgb-editor {
+    .trmrk-disc-rad-15 {
+      &.trmrk-red-disc {
+        background-color: #F00;
+      }
+
+      &.trmrk-green-disc {
+        background-color: #0A0;
+      }
+
+      &.trmrk-blue-disc {
+        background-color: #44F;
+      }
+
+      &.trmrk-alpha-disc {
+        background-color: #888;
       }
     }
   }

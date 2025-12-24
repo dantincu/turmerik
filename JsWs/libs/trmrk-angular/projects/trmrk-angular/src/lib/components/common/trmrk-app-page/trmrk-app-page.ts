@@ -73,8 +73,7 @@ export class TrmrkAppPage implements OnDestroy {
   @Input() trmrkShowManageTabsMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowDupplicateTabMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowShareMenuBtn: boolean | NullOrUndef;
-  @Input() trmrkShowUserProfileMenuBtn: boolean | NullOrUndef;
-  @Input() trmrkShowManageAppMenuBtn: boolean | NullOrUndef;
+  @Input() trmrkShowManageSessionMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowSettingsMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowHomeMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowHelpMenuBtn: boolean | NullOrUndef;

@@ -108,3 +108,19 @@ trmrk-rgb-editor, trmrk-date-time-editor {
   display: inline-flex;
   flex-direction: column;
 }
+
+trmrk-rgb-editor {
+  trmrk-number-editor {
+    margin-top: 10px;
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center; /* This vertically centers both items */
+    gap: 10px;           /* Adds space between the text and circle */
+  }
+
+  h3 {
+    margin: 0;           /* Remove default margins to prevent "pushing" */
+  }
+}

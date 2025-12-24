@@ -45,20 +45,11 @@
       <button mat-icon-button class="trmrk-icon-btn">
         <mat-icon class="trmrk-icon">share</mat-icon>
       </button>
-      } @if (trmrkShowUserProfileMenuBtn ?? appStateService.defaults.show.mainMenu.userProfileBtn) {
+      } @if (trmrkShowManageSessionMenuBtn ??
+      appStateService.defaults.show.mainMenu.manageSessionBtn) {
       <trmrk-app-link
         [trmrkRouterLink]="[
-          [appConfig.value.routeBasePath, defaultCommonChildRouteKeys.UserProfile].join('/')
-        ]"
-      >
-        <button mat-icon-button class="trmrk-icon-btn">
-          <mat-icon class="trmrk-icon">account_circle</mat-icon>
-        </button>
-      </trmrk-app-link>
-      } @if (trmrkShowManageAppMenuBtn ?? appStateService.defaults.show.mainMenu.manageAppBtn) {
-      <trmrk-app-link
-        [trmrkRouterLink]="[
-          [appConfig.value.routeBasePath, defaultCommonChildRouteKeys.ManageApp].join('/')
+          [appConfig.value.routeBasePath, defaultCommonChildRouteKeys.ManageSession].join('/')
         ]"
       >
         <button mat-icon-button class="trmrk-icon-btn">

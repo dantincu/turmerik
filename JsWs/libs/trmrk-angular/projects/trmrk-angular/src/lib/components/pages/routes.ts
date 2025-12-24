@@ -26,11 +26,10 @@ export enum CommonRoutes {
   App,
   Setup,
   Settings,
+  ManageSession,
   Themes,
   ResetApp,
   Reset,
-  UserProfile,
-  ManageApp,
   Help,
 }
 
@@ -61,8 +60,7 @@ export const defaultMainCommonChildRouteKeys = Object.freeze(
 export const defaultCommonChildRouteKeys = Object.freeze(
   mapPropNamesToThemselves(
     {
-      UserProfile: '',
-      ManageApp: '',
+      ManageSession: '',
       Help: '',
     },
     PropNameWordsConvention.KebabCase,
