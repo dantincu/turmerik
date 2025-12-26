@@ -97,10 +97,10 @@ export class TrmrkRgbEditorModalDialog {
   }
 
   doneClick() {
-    this.rgbEditor.updateValidation();
+    this.rgbEditor.refreshValidation(true);
 
     if (!this.validationResult.hasError) {
-      this.data.data.valueSubmitted(this.rgbEditor.value);
+      this.data.data.valueSubmitted(this.rgbEditor.value!);
       this.appService.closeModal(this.modalId);
     }
   }

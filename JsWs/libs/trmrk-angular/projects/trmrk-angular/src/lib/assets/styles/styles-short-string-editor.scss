@@ -1,29 +1,33 @@
 trmrk-short-string-editor {
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
 }
 
 .trmrk-short-string-editor {
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
   position: relative;
   flex-wrap: wrap;
 
   .trmrk-fake-input-container {
-    display: inline-flex;
-    flex-grow: 0;
-    flex-shrink: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    flex-grow: 1;
+    flex-shrink: 0;
     width: 0;
-    height: 0;
+    height: 40px;
+    min-height: 40px;
     overflow: hidden;
     position: relative;
+    box-sizing: border-box;
 
     .trmrk-fake-input {
       width: 1px;
       height: 1px;
       font-size: 1px;
       line-height: 1px;
-      position: absolute;
+      align-self: flex-end;
     }
   }
 
@@ -86,16 +90,16 @@ trmrk-short-string-editor {
 }
 
 trmrk-number-editor {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
 
   .trmrk-error-wrapper, .trmrk-output-wrapper, .trmrk-label-wrapper {
-    display: inline-flex;
+    display: flex;
     flex-wrap: wrap;
     margin: 3px;
 
     .trmrk-text-level-error, .trmrk-text {
-      display: inline-flex;
+      display: flex;
     }
 
     .trmrk-text-level-error {
@@ -105,22 +109,70 @@ trmrk-number-editor {
 }
 
 trmrk-rgb-editor, trmrk-date-time-editor {
-  display: inline-flex;
-  flex-direction: column;
+  display: flex;
+  position: relative;
 }
 
 trmrk-rgb-editor {
-  trmrk-number-editor {
-    margin-top: 10px;
-  }
+  width: 100%;
+  height: 100%;
+  position: relative;
 
-  .header-container {
+  .trmrk-rgb-editor {
     display: flex;
-    align-items: center; /* This vertically centers both items */
-    gap: 10px;           /* Adds space between the text and circle */
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+
+    trmrk-number-editor {
+      margin: 10px;
+
+      .trmrk-header-container {
+        margin-left: 2px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center; /* This vertically centers both items */
+        gap: 10px;           /* Adds space between the text and circle */
+
+          h3 {
+          margin: 0;           /* Remove default margins to prevent "pushing" */
+        }
+      }
+
+      &.trmrk-alpha-input {
+        .trmrk-header-container {
+          margin-top: 10px;
+        }
+      }
+    }
   }
 
-  h3 {
-    margin: 0;           /* Remove default margins to prevent "pushing" */
+  .trmrk-color-container, .trmrk-color-inner-container, .trmrk-color {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border-radius: 10px;
+    flex: 1 1 auto;
+    justify-content: center;
+    align-items: stretch;
   }
+
+  .trmrk-color-container {
+    margin: 10px;
+    border: 2px solid #FFFA;
+  }
+
+  .trmrk-color-inner-container {
+    border: 2px solid #000A;
+    background: linear-gradient(to right, white 50%, black 50%);
+    background-size: 100% 100%; /* The gradient covers the whole div */
+  }
+
+  .trmrk-color {
+    background-size: 100% 100%;
+  }
+}
+
+trmrk-date-time-editor {
+  flex-direction: column;
 }

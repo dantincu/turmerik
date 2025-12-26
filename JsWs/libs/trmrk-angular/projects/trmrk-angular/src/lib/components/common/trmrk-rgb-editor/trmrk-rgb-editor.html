@@ -1,78 +1,100 @@
-<trmrk-number-editor
-  [trmrkLabel]="'Red'"
-  [trmrkLabelTemplate]="redLabel"
-  [trmrkValue]="{}"
-  [trmrkMin]="0"
-  [trmrkMax]="255"
-  [trmrkFocusInput]="focusRedInput"
-  [trmrkBlurInput]="blurRedInput"
-  (trmrkFocusUpdated)="inputFocusUpdated($event, 'R')"
-  (trmrkInputKeyPressed)="inputKeyPressed($event, 'R')"
-></trmrk-number-editor>
-<trmrk-number-editor
-  [trmrkLabel]="'Green'"
-  [trmrkLabelTemplate]="greenLabel"
-  [trmrkValue]="{}"
-  [trmrkMin]="0"
-  [trmrkMax]="255"
-  [trmrkFocusInput]="focusGreenInput"
-  [trmrkBlurInput]="blurGreenInput"
-  (trmrkFocusUpdated)="inputFocusUpdated($event, 'G')"
-  (trmrkInputKeyPressed)="inputKeyPressed($event, 'G')"
-></trmrk-number-editor>
-<trmrk-number-editor
-  [trmrkLabel]="'Blue'"
-  [trmrkLabelTemplate]="blueLabel"
-  [trmrkValue]="{}"
-  [trmrkMin]="0"
-  [trmrkMax]="255"
-  [trmrkFocusInput]="focusBlueInput"
-  [trmrkBlurInput]="blurBlueInput"
-  (trmrkFocusUpdated)="inputFocusUpdated($event, 'B')"
-  (trmrkInputKeyPressed)="inputKeyPressed($event, 'B')"
-></trmrk-number-editor>
-<trmrk-number-editor
-  [trmrkLabel]="'Alpha'"
-  [trmrkLabelTemplate]="alphaLabel"
-  [trmrkValue]="{}"
-  [trmrkIsTogglable]="true"
-  [trmrkMin]="0"
-  [trmrkMax]="255"
-  [trmrkFocusInput]="focusAlphaInput"
-  [trmrkBlurInput]="blurAlphaInput"
-  (trmrkFocusUpdated)="inputFocusUpdated($event, 'A')"
-  (trmrkInputKeyPressed)="inputKeyPressed($event, 'A')"
-></trmrk-number-editor>
+<div class="trmrk-rgb-editor">
+  <trmrk-number-editor
+    #redInput
+    [trmrkLabel]="'Red'"
+    [trmrkLabelTemplate]="redLabel"
+    [trmrkValue]="redInputValue"
+    [trmrkMin]="0"
+    [trmrkMax]="255"
+    [trmrkRequired]="true"
+    [trmrkFocusInput]="focusRedInput"
+    [trmrkBlurInput]="blurRedInput"
+    (trmrkFocusUpdated)="inputFocusUpdated($event, 'R')"
+    (trmrkInputKeyDown)="inputKeyDown($event, 'R')"
+    (trmrkValueChanged)="inputValueChanged($event, 'R')"
+  ></trmrk-number-editor>
+  <trmrk-number-editor
+    #greenInput
+    [trmrkLabel]="'Green'"
+    [trmrkLabelTemplate]="greenLabel"
+    [trmrkValue]="greenInputValue"
+    [trmrkMin]="0"
+    [trmrkMax]="255"
+    [trmrkRequired]="true"
+    [trmrkFocusInput]="focusGreenInput"
+    [trmrkBlurInput]="blurGreenInput"
+    (trmrkFocusUpdated)="inputFocusUpdated($event, 'G')"
+    (trmrkInputKeyDown)="inputKeyDown($event, 'G')"
+    (trmrkValueChanged)="inputValueChanged($event, 'G')"
+  ></trmrk-number-editor>
+  <trmrk-number-editor
+    #blueInput
+    [trmrkLabel]="'Blue'"
+    [trmrkLabelTemplate]="blueLabel"
+    [trmrkValue]="blueInputValue"
+    [trmrkMin]="0"
+    [trmrkMax]="255"
+    [trmrkRequired]="true"
+    [trmrkFocusInput]="focusBlueInput"
+    [trmrkBlurInput]="blurBlueInput"
+    (trmrkFocusUpdated)="inputFocusUpdated($event, 'B')"
+    (trmrkInputKeyDown)="inputKeyDown($event, 'B')"
+    (trmrkValueChanged)="inputValueChanged($event, 'B')"
+  ></trmrk-number-editor>
+  <trmrk-number-editor
+    #alphaInput
+    class="trmrk-alpha-input"
+    [trmrkLabel]="'Alpha'"
+    [trmrkLabelTemplate]="alphaLabel"
+    [trmrkValue]="alphaInputValue"
+    [trmrkIsTogglable]="true"
+    [trmrkHide]="hideAlphaInput"
+    [trmrkMin]="0"
+    [trmrkMax]="255"
+    [trmrkRequired]="!this.hideAlphaInput"
+    [trmrkFocusInput]="focusAlphaInput"
+    [trmrkBlurInput]="blurAlphaInput"
+    (trmrkFocusUpdated)="inputFocusUpdated($event, 'A')"
+    (trmrkInputKeyDown)="inputKeyDown($event, 'A')"
+    (trmrkValueChanged)="inputValueChanged($event, 'A')"
+    (trmrkVisibilityToggled)="alphaInputToggled($event)"
+  ></trmrk-number-editor>
 
-<ng-template #redLabel let-label="label"
-  ><div class="header-container">
-    <div class="trmrk-disc-rad-15 trmrk-red-disc"></div>
-    <h3>
-      {{ label }}
-    </h3>
-  </div></ng-template
->
-<ng-template #greenLabel let-label="label"
-  ><div class="header-container">
-    <div class="trmrk-disc-rad-15 trmrk-green-disc"></div>
-    <h3>
-      {{ label }}
-    </h3>
-  </div></ng-template
->
-<ng-template #blueLabel let-label="label"
-  ><div class="header-container">
-    <div class="trmrk-disc-rad-15 trmrk-blue-disc"></div>
-    <h3>
-      {{ label }}
-    </h3>
-  </div></ng-template
->
-<ng-template #alphaLabel let-label="label"
-  ><div class="header-container">
-    <div class="trmrk-disc-rad-15 trmrk-alpha-disc"></div>
-    <h3>
-      {{ label }}
-    </h3>
-  </div></ng-template
->
+  <ng-template #redLabel let-label="label"
+    ><div class="trmrk-header-container">
+      <div class="trmrk-disc-rad-15 trmrk-red-disc"></div>
+      <h3>
+        {{ label }}
+      </h3>
+    </div></ng-template
+  >
+  <ng-template #greenLabel let-label="label"
+    ><div class="trmrk-header-container">
+      <div class="trmrk-disc-rad-15 trmrk-green-disc"></div>
+      <h3>
+        {{ label }}
+      </h3>
+    </div></ng-template
+  >
+  <ng-template #blueLabel let-label="label"
+    ><div class="trmrk-header-container">
+      <div class="trmrk-disc-rad-15 trmrk-blue-disc"></div>
+      <h3>
+        {{ label }}
+      </h3>
+    </div></ng-template
+  >
+  <ng-template #alphaLabel let-label="label"
+    ><div class="trmrk-header-container">
+      <div class="trmrk-disc-rad-15 trmrk-alpha-disc"></div>
+      <h3>
+        {{ label }}
+      </h3>
+    </div></ng-template
+  >
+</div>
+<div class="trmrk-color-container">
+  <div class="trmrk-color-inner-container">
+    <div class="trmrk-color"></div>
+  </div>
+</div>

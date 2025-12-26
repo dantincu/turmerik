@@ -99,11 +99,11 @@ export const getNewStringForDeleteToTheRight = (text: string, focusedCharIdx: nu
 
 export const getNewStringForDeletePrevChar = (text: string, focusedCharIdx: number) =>
   focusedCharIdx > 0
-    ? actWithVal([...text], (charsArr) => charsArr.splice(focusedCharIdx - 1, 1)).join('')
+    ? actWithVal([...text], (charsArr) => charsArr.splice(focusedCharIdx, 1)).join('')
     : text;
 
 export const getNewStringForDeleteToTheLeft = (text: string, focusedCharIdx: number) =>
-  text.substring(Math.min(Math.max(focusedCharIdx, 0)));
+  text.substring(Math.min(Math.max(focusedCharIdx + 1, 0)));
 
 export const getNewStringForInsertChar = (
   text: string,

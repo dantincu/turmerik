@@ -1,14 +1,7 @@
 import { NullOrUndef } from './core';
 import { tryDigestStr } from './str';
 
-import {
-  bytesFromHexStr,
-  bytesToHexStr,
-  getIntNumberDigits,
-  getIntNumberFromDigits,
-  numFromHexStr,
-  numToHexStr,
-} from './math';
+import { bytesFromHexStr, bytesToHexStr } from './math';
 
 export interface ColorCore {
   text?: string | NullOrUndef;
@@ -39,8 +32,11 @@ export const updateColorHasAlphaFlag = (color: ColorCore) => {
 };
 
 export const updateColorRgbaFromBytes = (color: ColorCore) => {
-  color.rgbaStr = bytesToRgba(color.bytes!);
-  color = updateColorHasAlphaFlag(color);
+  if (color.bytes && color.bytes.findIndex((byte) => (byte ?? null) === null) < 0) {
+    color.rgbaStr = bytesToRgba(color.bytes);
+    color = updateColorHasAlphaFlag(color);
+  }
+
   return color;
 };
 
@@ -107,7 +103,7 @@ export const normalizeColorFromText = (color: ColorCore) => {
 
 export const normalizeColor = (color: ColorCore | NullOrUndef) => {
   if (color) {
-    if (color.bytes) {
+    if (color.bytes && color.bytes.findIndex((byte) => (byte ?? null) === null) < 0) {
       color = normalizeColorFromBytes(color);
     } else if ((color.hexStr ?? null) !== null) {
       color = normalizeColorFromHexStr(color);

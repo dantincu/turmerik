@@ -1,7 +1,12 @@
 <div class="trmrk-form-node">
   <mat-form-field appearance="outline">
     <mat-label>{{ trmrkLabel ?? '' }} </mat-label>
-    <input #inputEl matInput [placeholder]="trmrkLabel ?? ''" [value]="defaultValues.value!.text" />
+    <input
+      #inputEl
+      matInput
+      [placeholder]="trmrkLabel ?? ''"
+      [value]="defaultValues.value?.text ?? ''"
+    />
     @if ((trmrkRequired ?? defaultValues.required)) { <sup class="trmrk-required-text">*</sup> }
   </mat-form-field>
   <button mat-icon-button class="trmrk-icon-btn" (click)="editClicked()">

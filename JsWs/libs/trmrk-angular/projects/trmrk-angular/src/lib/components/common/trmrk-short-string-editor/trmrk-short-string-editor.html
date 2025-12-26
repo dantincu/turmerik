@@ -103,7 +103,9 @@
   <div class="trmrk-fake-input-container">
     <input
       class="trmrk-fake-input"
-      [type]="trmrkDigitsOnly ? 'number' : 'text'"
+      type="text"
+      [inputMode]="trmrkDigitsOnly ? 'decimal' : 'text'"
+      enterkeyhint="go"
       #fakeNumberInput
       [trmrkDynamicAttributes]="trmrkInputAttrs ?? {}"
     />

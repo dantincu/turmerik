@@ -1,12 +1,24 @@
-import { Component, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 
 import { NullOrUndef, ValidationResult } from '../../../../trmrk/core';
 import { ColorCore, normalizeColor } from '../../../../trmrk/colors';
 
 import { whenChanged } from '../../../services/common/simpleChanges';
-import { TrmrkNumberEditor } from '../trmrk-number-editor/trmrk-number-editor';
+import {
+  TrmrkNumberEditor,
+  TrmrkNumberInputValue,
+  defaultValues as numberDefaultValues,
+} from '../trmrk-number-editor/trmrk-number-editor';
 
-import { FocusedCharKeyPressEvent } from '../trmrk-short-string-editor/trmrk-short-string-editor';
+import { FocusedCharKeyDownEvent } from '../trmrk-short-string-editor/trmrk-short-string-editor';
 
 export interface TrmrkRgbInputValue extends ColorCore {}
 
@@ -17,9 +29,7 @@ export interface TrmrkRgbEditorOpts {
 }
 
 export const defaultValues = Object.freeze<TrmrkRgbEditorOpts>({
-  value: Object.freeze<TrmrkRgbInputValue>({
-    text: '',
-  }) as TrmrkRgbInputValue,
+  value: null,
   required: false,
 }) as TrmrkRgbEditorOpts;
 
@@ -38,7 +48,20 @@ export class TrmrkRgbEditor implements OnChanges {
   @Input() trmrkFocusInput = 0;
   @Input() trmrkBlurInput = 0;
 
-  value: TrmrkRgbInputValue;
+  @ViewChild('redInput', { read: TrmrkNumberEditor }) redInput!: TrmrkNumberEditor;
+  @ViewChild('greenInput', { read: TrmrkNumberEditor }) greenInput!: TrmrkNumberEditor;
+  @ViewChild('blueInput', { read: TrmrkNumberEditor }) blueInput!: TrmrkNumberEditor;
+  @ViewChild('alphaInput', { read: TrmrkNumberEditor }) alphaInput!: TrmrkNumberEditor;
+
+  value: TrmrkRgbInputValue | null;
+
+  redInputValue = { ...numberDefaultValues.value };
+  greenInputValue = { ...numberDefaultValues.value };
+  blueInputValue = { ...numberDefaultValues.value };
+  alphaInputValue = { ...numberDefaultValues.value };
+
+  hasError = false;
+
   focusRedInput = 0;
   blurRedInput = 0;
 
@@ -50,6 +73,7 @@ export class TrmrkRgbEditor implements OnChanges {
 
   focusAlphaInput = 0;
   blurAlphaInput = 0;
+  hideAlphaInput = 1;
 
   constructor() {
     this.value = this.getDefaultValue();
@@ -89,6 +113,15 @@ export class TrmrkRgbEditor implements OnChanges {
         }
       }
     );
+
+    whenChanged(
+      changes,
+      () => this.trmrkValue,
+      () => {
+        this.value = normalizeColor(this.trmrkValue) ?? null;
+        this.updateValueComponents();
+      }
+    );
   }
 
   inputFocusUpdated(isFocused: boolean, inputCode: string) {
@@ -118,8 +151,8 @@ export class TrmrkRgbEditor implements OnChanges {
     }
   }
 
-  inputKeyPressed(event: FocusedCharKeyPressEvent, inputCode: string) {
-    if (!event.hasNextFocusedChar) {
+  inputKeyDown(event: FocusedCharKeyDownEvent, inputCode: string) {
+    if (['Enter', 'Tab'].indexOf(event.srcEvt.key) >= 0) {
       switch (inputCode) {
         case 'R':
           this.focusGreenInput++;
@@ -128,7 +161,9 @@ export class TrmrkRgbEditor implements OnChanges {
           this.focusBlueInput++;
           break;
         case 'B':
-          this.focusAlphaInput++;
+          if (this.hideAlphaInput === 0) {
+            this.focusAlphaInput++;
+          }
           break;
         case 'A':
           break;
@@ -136,9 +171,101 @@ export class TrmrkRgbEditor implements OnChanges {
     }
   }
 
-  updateValidation() {}
+  inputValueChanged(newValue: TrmrkNumberInputValue, inputCode: string) {
+    setTimeout(() => {
+      /* switch (inputCode) {
+        case 'R':
+          this.redInputValue = newValue;
+          break;
+        case 'G':
+          this.greenInputValue = newValue;
+          break;
+        case 'B':
+          this.blueInputValue = newValue;
+          break;
+        case 'A':
+          this.alphaInputValue = newValue;
+          break;
+      } */
 
-  getDefaultValue(): TrmrkRgbInputValue {
-    return { ...defaultValues.value! };
+      const valuesArr = [this.redInputValue, this.greenInputValue, this.blueInputValue];
+
+      if (this.hideAlphaInput === 0) {
+        valuesArr.push(this.alphaInputValue);
+      }
+
+      valuesArr['RGBA'.indexOf(inputCode)] = newValue;
+
+      this.value =
+        normalizeColor({
+          bytes: valuesArr.map((value) => value.number!),
+        }) ?? null;
+
+      this.refreshValidation();
+    });
+  }
+
+  alphaInputToggled(show: boolean) {
+    this.hideAlphaInput = show ? 0 : 1;
+
+    if (show) {
+      this.focusAlphaInput++;
+    }
+  }
+
+  updateValueComponents() {
+    if (this.value?.bytes) {
+      this.redInputValue = {
+        number: this.value.bytes[0],
+      };
+
+      this.greenInputValue = {
+        number: this.value.bytes[1],
+      };
+
+      this.blueInputValue = {
+        number: this.value.bytes[2],
+      };
+
+      this.alphaInputValue = {
+        number: this.value.bytes[3],
+      };
+    } else {
+      this.redInputValue = { ...numberDefaultValues.value };
+      this.greenInputValue = { ...numberDefaultValues.value };
+      this.blueInputValue = { ...numberDefaultValues.value };
+      this.alphaInputValue = { ...numberDefaultValues.value };
+    }
+
+    this.refreshValidation();
+  }
+
+  refreshValidation(update = false) {
+    if (update) {
+      this.redInput?.updateValidation();
+      this.greenInput?.updateValidation();
+      this.blueInput?.updateValidation();
+
+      if (!this.hideAlphaInput) {
+        this.alphaInput?.updateValidation();
+      }
+    }
+
+    this.hasError = [
+      this.redInput?.hasError ?? true,
+      this.greenInput?.hasError ?? true,
+      this.blueInput?.hasError ?? true,
+      this.hideAlphaInput > 0 ? false : this.alphaInput?.hasError ?? true,
+    ].reduce((hasError1, hasError2) => hasError1 || hasError2);
+
+    this.trmrkValidationErrorChanged.emit({
+      hasError: this.hasError,
+    });
+
+    return !this.hasError;
+  }
+
+  getDefaultValue(): TrmrkRgbInputValue | null {
+    return defaultValues.value ? { ...defaultValues.value! } : null;
   }
 }

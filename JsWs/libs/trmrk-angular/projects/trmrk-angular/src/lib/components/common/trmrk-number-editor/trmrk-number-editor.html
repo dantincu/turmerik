@@ -31,11 +31,7 @@
 }
 <trmrk-short-string-editor
   [trmrkDigitsOnly]="true"
-  [trmrkInputAttrs]="{
-    min: minValue.toString(),
-    max: maxValue.toString(),
-    step: step.toString(),
-  }"
+  [trmrkInputAttrs]="inputAttrs"
   [trmrkCharCssClassFactory]="getCharCssClass"
   [trmrkString]="value.text!"
   [trmrkFocusedCharIdx]="focusedCharIdx"

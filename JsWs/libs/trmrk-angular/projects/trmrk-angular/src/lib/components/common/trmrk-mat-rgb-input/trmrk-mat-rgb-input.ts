@@ -93,6 +93,7 @@ export class TrmrkMatRgbInput implements OnDestroy {
         },
         title: 'Edit Color',
       },
+      dialogPanelSize: DialogPanelSize.Large,
     });
   }
 }

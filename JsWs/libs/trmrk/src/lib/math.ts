@@ -90,12 +90,12 @@ export const getIntNumberDigits = (num: number, base: number = 10) => {
   }
 
   let digit = num % base;
-  let remainder = num / base;
+  let remainder = Math.floor(num / base);
   const digitsArr = [digit];
 
   while (remainder > 0) {
     digit = num % base;
-    remainder = num / base;
+    remainder = Math.floor(num / base);
     digitsArr.push(digit);
   }
 

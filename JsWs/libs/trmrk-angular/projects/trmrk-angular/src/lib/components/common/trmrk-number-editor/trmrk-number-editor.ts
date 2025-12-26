@@ -32,9 +32,7 @@ export interface TrmrkNumberEditorOpts {
 }
 
 export const defaultValues = Object.freeze<TrmrkNumberEditorOpts>({
-  value: Object.freeze<TrmrkNumberInputValue>({
-    text: '',
-  }) as TrmrkNumberInputValue,
+  value: Object.freeze<TrmrkNumberInputValue>({}) as TrmrkNumberInputValue,
   min: Number.MIN_SAFE_INTEGER,
   max: Number.MAX_SAFE_INTEGER,
   step: 1,
@@ -82,7 +80,10 @@ export class TrmrkNumberEditor {
   @Output() trmrkVisibilityToggled = new EventEmitter<boolean>();
   @Output() trmrkFocusUpdated = new EventEmitter<boolean>();
   @Output() trmrkInputKeyPressed = new EventEmitter<FocusedCharKeyPressEvent>();
+  @Output() trmrkInputKeyDown = new EventEmitter<FocusedCharKeyDownEvent>();
+  @Output() trmrkValueChanged = new EventEmitter<TrmrkNumberInputValue>();
 
+  @Input() trmrkInputAttrs: { [key: string]: string } | NullOrUndef;
   @Input() trmrkLabel?: string | NullOrUndef;
   @Input() trmrkLabelTemplate?: TemplateRef<any>;
   @Input() trmrkIsTogglable?: boolean | NullOrUndef;
@@ -100,6 +101,8 @@ export class TrmrkNumberEditor {
   @Input() trmrkShowDoneBtn: boolean | NullOrUndef;
   @Input() trmrkShowCopyToClipboardBtn: boolean | NullOrUndef;
   @Input() trmrkShowPasteFromClipboardBtn: boolean | NullOrUndef;
+
+  inputAttrs: { [key: string]: string } = {};
 
   hide = 0;
 
@@ -127,6 +130,14 @@ export class TrmrkNumberEditor {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    whenChanged(
+      changes,
+      () => this.trmrkInputAttrs,
+      () => {
+        this.updateInputAttrs();
+      }
+    );
+
     whenChanged(
       changes,
       () => this.trmrkFocusInput,
@@ -171,6 +182,7 @@ export class TrmrkNumberEditor {
       () => this.trmrkMin,
       () => {
         this.minValue = this.trmrkMin ?? defaultValues.min!;
+        this.updateInputAttrs();
         this.updateMaxAllowedDigitsCount();
         this.updateValidation();
       }
@@ -181,6 +193,7 @@ export class TrmrkNumberEditor {
       () => this.trmrkMax,
       () => {
         this.maxValue = this.trmrkMax ?? defaultValues.max!;
+        this.updateInputAttrs();
         this.updateMaxAllowedDigitsCount();
         this.updateValidation();
       }
@@ -191,6 +204,7 @@ export class TrmrkNumberEditor {
       () => this.trmrkStep,
       () => {
         this.step = this.trmrkStep ?? defaultValues.step!;
+        this.updateInputAttrs();
         this.updateMaxAllowedDecimalsCount();
         this.updateValidation();
       }
@@ -201,6 +215,7 @@ export class TrmrkNumberEditor {
       () => this.trmrkRequired,
       () => {
         this.required = this.trmrkRequired ?? defaultValues.required!;
+        this.updateInputAttrs();
         this.updateValidation();
       }
     );
@@ -312,6 +327,8 @@ export class TrmrkNumberEditor {
         }
         break;
     }
+
+    this.trmrkInputKeyDown.emit(event);
   }
 
   doneBtnTouchStartOrMouseDown(event: MouseEvent | TouchEvent) {
@@ -328,7 +345,7 @@ export class TrmrkNumberEditor {
 
   labelCheckboxToggled() {
     this.hide = this.hide > 0 ? 0 : 1;
-    this.trmrkVisibilityToggled.emit(this.hide > 0);
+    this.trmrkVisibilityToggled.emit(this.hide === 0);
   }
 
   pasteFromClipboardClicked(event: ClipboardEvent) {
@@ -380,7 +397,12 @@ export class TrmrkNumberEditor {
     }
 
     this.updateValue();
-    this.focusNextDigit(this.focusedCharIdx - 1);
+
+    if (this.value.text[this.focusedCharIdx - 1] === '.') {
+      this.focusNextDigit(this.focusedCharIdx - 2);
+    } else {
+      this.focusNextDigit(this.focusedCharIdx - 1);
+    }
   }
 
   deleteToTheLeft(newString: string) {
@@ -458,6 +480,8 @@ export class TrmrkNumberEditor {
       hasError: this.hasError,
       errorMessage: this.errorMessage,
     });
+
+    return !this.hasError;
   }
 
   setNumber(number: number) {
@@ -476,11 +500,13 @@ export class TrmrkNumberEditor {
       this.value.number = null;
     }
 
+    this.trmrkValueChanged.emit(this.value);
     this.updateValidation();
   }
 
   updateTextFromValue() {
     this.value.text = isNaN(this.value.number ?? NaN) ? '' : this.value.number!.toString();
+    this.trmrkValueChanged.emit(this.value);
   }
 
   updateMaxAllowedDigitsCount() {
@@ -604,5 +630,14 @@ export class TrmrkNumberEditor {
         this.focusNextDigit(this.focusedCharIdx);
       }
     }
+  }
+
+  updateInputAttrs() {
+    this.inputAttrs = {
+      ...(this.trmrkInputAttrs ?? {}),
+      min: this.minValue.toString(),
+      max: this.maxValue.toString(),
+      step: this.step.toString(),
+    };
   }
 }
