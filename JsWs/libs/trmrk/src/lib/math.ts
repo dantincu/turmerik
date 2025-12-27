@@ -1,6 +1,6 @@
 import Big from 'big.js';
 
-import { actWithVal, NullOrUndef } from './core';
+import { withVal, NullOrUndef } from './core';
 
 export const maxSafeInteger = Number.MAX_SAFE_INTEGER;
 
@@ -94,9 +94,9 @@ export const getIntNumberDigits = (num: number, base: number = 10) => {
   const digitsArr = [digit];
 
   while (remainder > 0) {
-    digit = num % base;
-    remainder = Math.floor(num / base);
-    digitsArr.push(digit);
+    digit = remainder % base;
+    remainder = Math.floor(remainder / base);
+    digitsArr.splice(0, 0, digit);
   }
 
   return digitsArr;
@@ -121,10 +121,13 @@ export const getIntNumberFromDigits = (digitsArr: number[], base: number = 10) =
   return num;
 };
 
-export const numToHexStr = (number: number) =>
-  getIntNumberDigits(number, 16)
-    .map((num) => num.toString(16))
-    .join('');
+export const numToHexStr = (number: number, reqLen = 0) =>
+  withVal(
+    getIntNumberDigits(number, 16)
+      .map((num) => num.toString(16))
+      .join(''),
+    (str) => str.padStart(reqLen, '0')
+  );
 
 export const numFromHexStr = (hexStr: string) =>
   getIntNumberFromDigits(
@@ -133,7 +136,7 @@ export const numFromHexStr = (hexStr: string) =>
   );
 
 export const bytesToHexStr = (bytesArr: number[]) =>
-  bytesArr.map((byte) => numToHexStr(byte)).join('');
+  bytesArr.map((byte) => numToHexStr(byte, 2)).join('');
 
 export const bytesFromHexStr = (hexStr: string) => {
   const bytesArr: number[] = [];

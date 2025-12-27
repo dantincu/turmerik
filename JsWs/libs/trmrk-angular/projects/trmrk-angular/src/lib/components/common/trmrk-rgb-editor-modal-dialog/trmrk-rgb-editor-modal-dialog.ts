@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Subscription } from 'rxjs';
 
 import { getVarName } from '../../../../trmrk/Reflection/core';
+import { withVal } from '../../../../trmrk/core';
 import { VoidOrAny, ValidationResult } from '../../../../trmrk/core';
 
 import { ModalService } from '../../../services/common/modal-service';
@@ -14,6 +15,16 @@ import { AppStateServiceBase } from '../../../services/common/app-state-service-
 import { AppServiceBase } from '../../../services/common/app-service-base';
 import { TrmrkDialog } from '../trmrk-dialog/trmrk-dialog';
 import { TrmrkHorizStrip } from '../trmrk-horiz-strip/trmrk-horiz-strip';
+
+import { KeyboardShortcutService } from '../../../services/common/keyboard-shortcut-service';
+import { ComponentIdService } from '../../../services/common/component-id-service';
+import { runOnceWhenValueIs } from '../../../services/common/TrmrkObservable';
+
+import {
+  keyboardShortcutKeys,
+  keyboardShortcutScopes,
+  KeyboardServiceRegistrarBase,
+} from '../../../services/common/keyboard-service-registrar-base';
 
 import {
   TrmrkDialogData,
@@ -50,6 +61,7 @@ export interface TrmrkRgbEditorModalDialogData
 })
 export class TrmrkRgbEditorModalDialog {
   mergeDialogData = mergeDialogData;
+  id: number;
   modalId: number;
   dialogData: TrmrkRgbEditorModalDialogData;
 
@@ -61,6 +73,7 @@ export class TrmrkRgbEditorModalDialog {
 
   private modalService: ModalService;
   private modalOpenedSubscription: Subscription;
+  private keyboardShortcutSubscriptions: Subscription[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -69,9 +82,13 @@ export class TrmrkRgbEditorModalDialog {
     private appStateService: AppStateServiceBase,
     private appService: AppServiceBase,
     private modalServiceFactory: ModalServiceFactory,
+    private componentIdService: ComponentIdService,
+    private keyboardShortcutService: KeyboardShortcutService,
+    private keyboardServiceRegistrar: KeyboardServiceRegistrarBase,
     private hostEl: ElementRef
   ) {
     this.dialogData = data.data;
+    this.id = componentIdService.getNextId();
 
     this.modalOpenedSubscription = dialogRef.afterOpened().subscribe(() => {
       setTimeout(() => {
@@ -89,11 +106,17 @@ export class TrmrkRgbEditorModalDialog {
     });
 
     this.modalId = this.modalService.modalId;
+    this.setupKeyboardShortcuts();
   }
 
   ngOnDestroy(): void {
     this.modalOpenedSubscription.unsubscribe();
     this.modalService.dispose();
+
+    this.keyboardShortcutService.unregisterAndUnsubscribeFromScopes(
+      this.id,
+      this.keyboardShortcutSubscriptions
+    );
   }
 
   doneClick() {
@@ -108,6 +131,27 @@ export class TrmrkRgbEditorModalDialog {
   validationResultChanged(result: ValidationResult) {
     setTimeout(() => {
       this.validationResult = result;
+    });
+  }
+
+  setupKeyboardShortcuts() {
+    return runOnceWhenValueIs(this.keyboardServiceRegistrar.shortcutsReady, true, () => {
+      this.keyboardShortcutSubscriptions.push(
+        ...this.keyboardShortcutService.registerAndSubscribeToScopes(
+          {
+            componentId: this.id,
+            considerShortcutPredicate: () =>
+              this.appService.appStateService.currentModalId.value === this.modalId,
+          },
+          {
+            [keyboardShortcutScopes.editColorModal]: {
+              [keyboardShortcutKeys.closeEditColorModal]: () => {
+                this.appService.closeModal(this.modalId);
+              },
+            },
+          }
+        )
+      );
     });
   }
 }

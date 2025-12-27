@@ -19,6 +19,7 @@ import { APP_NAME } from './services/common/core';
 import { environment } from '../environments/environment';
 import { AppService } from './services/common/app-service';
 import { AppStateService } from './services/common/app-state-service';
+import { KeyboardServiceRegistrar } from './services/common/keyboard-service-registrar';
 import { AppConfig } from './services/common/app-config';
 import { routes } from './app.routes';
 
@@ -42,6 +43,7 @@ export const appConfig: ApplicationConfig = {
       },
       appServiceType: AppService,
       appStateServiceType: AppStateService,
+      keyboardServiceRegistrarType: KeyboardServiceRegistrar,
       sessionServiceAppInitializer: true,
     },
     routes,

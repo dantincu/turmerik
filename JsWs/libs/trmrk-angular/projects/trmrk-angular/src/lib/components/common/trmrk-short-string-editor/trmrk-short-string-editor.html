@@ -14,7 +14,7 @@
       <mat-icon class="trmrk-icon">delete</mat-icon>
     </button>
   </div>
-  } @if (trmrkAllowInsertChar) {
+  } @if (trmrkAllowInsertChar || !chars.length) {
   <div class="trmrk-icon-wrapper">
     <button
       mat-icon-button

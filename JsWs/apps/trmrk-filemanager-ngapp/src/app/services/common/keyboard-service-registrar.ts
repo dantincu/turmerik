@@ -1,47 +1,16 @@
 import { Injectable } from '@angular/core';
 
-import { KeyboardShortcutService } from '../../../trmrk-angular/services/common/keyboard-shortcut-service';
-import { mapPropNamesToThemselves, PropNameWordsConvention } from '../../../trmrk/propNames';
-import { TrmrkObservable } from '../../../trmrk-angular/services/common/TrmrkObservable';
+import { KeyboardServiceRegistrarBase } from '../../../trmrk-angular/services/common/keyboard-service-registrar-base';
 
-export const keyboardShortcutKeys = mapPropNamesToThemselves(
-  {
-    closeAppSetupModal: '',
-  },
-  PropNameWordsConvention.KebabCase,
-  PropNameWordsConvention.CamelCase
-);
-
-export const keyboardShortcutScopes = mapPropNamesToThemselves(
-  {
-    appSetupModal: '',
-  },
-  PropNameWordsConvention.KebabCase,
-  PropNameWordsConvention.CamelCase
-);
-
-@Injectable({
-  providedIn: 'root',
-})
-export class KeyboardServiceRegistrar {
-  public shortcutsReady = new TrmrkObservable<boolean>(false);
-
-  constructor(private keyboardShortcutService: KeyboardShortcutService) {
-    this.setupKeyboardShortcuts();
+@Injectable()
+export class KeyboardServiceRegistrar extends KeyboardServiceRegistrarBase {
+  override getSetupArgs() {
+    const args = super.getSetupArgs();
+    return args;
   }
 
-  async setupKeyboardShortcuts() {
-    await this.keyboardShortcutService.setup({
-      shortcuts: [
-        {
-          name: keyboardShortcutKeys.closeAppSetupModal,
-          displayName: 'Close App Setup Modal',
-          scopes: [keyboardShortcutScopes.appSetupModal],
-          sequence: [{ key: 'm', ctrlKey: true }, { key: 'Escape' }],
-        },
-      ],
-    });
-
-    this.shortcutsReady.next(true);
+  override getSetupArgsFactoryOpts() {
+    const opts = super.getSetupArgsFactoryOpts();
+    return opts;
   }
 }

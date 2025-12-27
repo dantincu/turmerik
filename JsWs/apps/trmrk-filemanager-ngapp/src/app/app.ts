@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 
+import { withVal } from '../trmrk/core';
 import { openDialog, DialogPanelSize } from '../trmrk-angular/services/common/trmrk-dialog';
 import { AppServiceBase } from '../trmrk-angular/services/common/app-service-base';
 import { KeyboardShortcutService } from '../trmrk-angular/services/common/keyboard-shortcut-service';
@@ -10,12 +11,13 @@ import { ComponentIdService } from '../trmrk-angular/services/common/component-i
 import { runOnceWhenValueIs } from '../trmrk-angular/services/common/TrmrkObservable';
 import { TrmrkSessionService } from '../trmrk-angular/services/common/trmrk-session-service';
 
-import { KeyboardServiceRegistrar } from './services/common/keyboard-service-registrar';
-
 import {
   keyboardShortcutKeys,
   keyboardShortcutScopes,
-} from './services/common/keyboard-service-registrar';
+  KeyboardServiceRegistrarBase,
+} from '../trmrk-angular/services/common/keyboard-service-registrar-base';
+
+import { KeyboardServiceRegistrar } from './services/common/keyboard-service-registrar';
 
 import { AppService } from './services/common/app-service';
 
@@ -42,6 +44,7 @@ export class App implements OnDestroy {
     private appSetupDialog: MatDialog,
     private keyboardShortcutService: KeyboardShortcutService,
     private componentIdService: ComponentIdService,
+    @Inject(KeyboardServiceRegistrarBase)
     private keyboardServiceRegistrar: KeyboardServiceRegistrar,
     private sessionService: TrmrkSessionService
   ) {
@@ -121,7 +124,13 @@ export class App implements OnDestroy {
         ...this.keyboardShortcutService.registerAndSubscribeToScopes(
           {
             componentId: this.id,
-            considerShortcutPredicate: () => this.appService.appStateService.performAppSetup.value,
+            considerShortcutPredicate: () =>
+              withVal(
+                this.appService.appStateService,
+                (stateSvc) =>
+                  stateSvc.performAppSetup.value &&
+                  this.setupModalId === stateSvc.currentModalId.value
+              ),
           },
           {
             [keyboardShortcutScopes.appSetupModal]: {

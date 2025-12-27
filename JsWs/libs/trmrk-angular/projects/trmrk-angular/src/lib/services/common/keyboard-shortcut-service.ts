@@ -21,7 +21,7 @@ export interface KeyboardShortcutServiceSetupArgs {
 
 export interface KeyboardShortcutContainerCore {
   containerElRetriever?: (() => HTMLElement | NullOrUndef) | NullOrUndef;
-  considerShortcutPredicate?: ((event: Event) => boolean) | NullOrUndef;
+  considerShortcutPredicate?: ((event: KeyboardEvent) => boolean) | NullOrUndef;
   componentId: number;
 }
 

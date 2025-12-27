@@ -6,12 +6,27 @@ import {
   OnChanges,
   SimpleChanges,
   ViewChild,
+  OnDestroy,
 } from '@angular/core';
+
+import { MatCheckbox } from '@angular/material/checkbox';
+import { Subscription } from 'rxjs';
 
 import { NullOrUndef, ValidationResult } from '../../../../trmrk/core';
 import { ColorCore, normalizeColor } from '../../../../trmrk/colors';
 
+import { KeyboardShortcutService } from '../../../services/common/keyboard-shortcut-service';
+import { ComponentIdService } from '../../../services/common/component-id-service';
+import { runOnceWhenValueIs } from '../../../services/common/TrmrkObservable';
+
+import {
+  keyboardShortcutKeys,
+  keyboardShortcutScopes,
+  KeyboardServiceRegistrarBase,
+} from '../../../services/common/keyboard-service-registrar-base';
+
 import { whenChanged } from '../../../services/common/simpleChanges';
+
 import {
   TrmrkNumberEditor,
   TrmrkNumberInputValue,
@@ -35,11 +50,11 @@ export const defaultValues = Object.freeze<TrmrkRgbEditorOpts>({
 
 @Component({
   selector: 'trmrk-rgb-editor',
-  imports: [TrmrkNumberEditor],
+  imports: [MatCheckbox, TrmrkNumberEditor],
   templateUrl: './trmrk-rgb-editor.html',
   styleUrl: './trmrk-rgb-editor.scss',
 })
-export class TrmrkRgbEditor implements OnChanges {
+export class TrmrkRgbEditor implements OnChanges, OnDestroy {
   @Output() trmrkValidationErrorChanged = new EventEmitter<ValidationResult>();
 
   @Input() trmrkLabel?: string | NullOrUndef;
@@ -53,12 +68,22 @@ export class TrmrkRgbEditor implements OnChanges {
   @ViewChild('blueInput', { read: TrmrkNumberEditor }) blueInput!: TrmrkNumberEditor;
   @ViewChild('alphaInput', { read: TrmrkNumberEditor }) alphaInput!: TrmrkNumberEditor;
 
+  id: number;
   value: TrmrkRgbInputValue | null;
+  hexValue: string | null = null;
+  rgbaValue: string | null = null;
+  hexValueIsChecked = true;
+  rgbaValueIsChecked = false;
 
   redInputValue = { ...numberDefaultValues.value };
   greenInputValue = { ...numberDefaultValues.value };
   blueInputValue = { ...numberDefaultValues.value };
   alphaInputValue = { ...numberDefaultValues.value };
+
+  latestRedInputValue = { ...numberDefaultValues.value };
+  latestGreenInputValue = { ...numberDefaultValues.value };
+  latestBlueInputValue = { ...numberDefaultValues.value };
+  latestAlphaInputValue = { ...numberDefaultValues.value };
 
   hasError = false;
 
@@ -75,8 +100,23 @@ export class TrmrkRgbEditor implements OnChanges {
   blurAlphaInput = 0;
   hideAlphaInput = 1;
 
-  constructor() {
+  private keyboardShortcutSubscriptions: Subscription[] = [];
+
+  constructor(
+    private componentIdService: ComponentIdService,
+    private keyboardShortcutService: KeyboardShortcutService,
+    private keyboardServiceRegistrar: KeyboardServiceRegistrarBase
+  ) {
+    this.id = componentIdService.getNextId();
     this.value = this.getDefaultValue();
+    this.setupKeyboardShortcuts();
+  }
+
+  ngOnDestroy(): void {
+    this.keyboardShortcutService.unregisterAndUnsubscribeFromScopes(
+      this.id,
+      this.keyboardShortcutSubscriptions
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -118,7 +158,7 @@ export class TrmrkRgbEditor implements OnChanges {
       changes,
       () => this.trmrkValue,
       () => {
-        this.value = normalizeColor(this.trmrkValue) ?? null;
+        this.updateValue(normalizeColor(this.trmrkValue) ?? null);
         this.updateValueComponents();
       }
     );
@@ -153,19 +193,52 @@ export class TrmrkRgbEditor implements OnChanges {
 
   inputKeyDown(event: FocusedCharKeyDownEvent, inputCode: string) {
     if (['Enter', 'Tab'].indexOf(event.srcEvt.key) >= 0) {
+      const focusPrevInput = event.srcEvt.shiftKey;
+
       switch (inputCode) {
         case 'R':
-          this.focusGreenInput++;
+          if (focusPrevInput) {
+            if (this.hideAlphaInput === 0) {
+              this.focusAlphaInput++;
+            } else {
+              this.focusBlueInput++;
+            }
+          } else {
+            this.focusGreenInput++;
+          }
           break;
         case 'G':
-          this.focusBlueInput++;
+          if (focusPrevInput) {
+            this.focusRedInput++;
+          } else {
+            this.focusBlueInput++;
+          }
           break;
         case 'B':
-          if (this.hideAlphaInput === 0) {
-            this.focusAlphaInput++;
+          if (focusPrevInput) {
+            this.focusGreenInput++;
+          } else {
+            if (event.srcEvt.ctrlKey) {
+              this.toggleAlphaInput(this.hideAlphaInput > 0);
+
+              if (this.hideAlphaInput === 0) {
+                this.focusAlphaInput++;
+              }
+            } else {
+              if (this.hideAlphaInput === 0) {
+                this.focusAlphaInput++;
+              } else {
+                this.focusRedInput++;
+              }
+            }
           }
           break;
         case 'A':
+          if (focusPrevInput) {
+            this.focusBlueInput++;
+          } else {
+            this.focusRedInput++;
+          }
           break;
       }
     }
@@ -173,44 +246,109 @@ export class TrmrkRgbEditor implements OnChanges {
 
   inputValueChanged(newValue: TrmrkNumberInputValue, inputCode: string) {
     setTimeout(() => {
-      /* switch (inputCode) {
+      switch (inputCode) {
         case 'R':
-          this.redInputValue = newValue;
+          this.latestRedInputValue = newValue;
           break;
         case 'G':
-          this.greenInputValue = newValue;
+          this.latestGreenInputValue = newValue;
           break;
         case 'B':
-          this.blueInputValue = newValue;
+          this.latestBlueInputValue = newValue;
           break;
         case 'A':
-          this.alphaInputValue = newValue;
+          this.latestAlphaInputValue = newValue;
           break;
-      } */
-
-      const valuesArr = [this.redInputValue, this.greenInputValue, this.blueInputValue];
-
-      if (this.hideAlphaInput === 0) {
-        valuesArr.push(this.alphaInputValue);
       }
 
-      valuesArr['RGBA'.indexOf(inputCode)] = newValue;
-
-      this.value =
-        normalizeColor({
-          bytes: valuesArr.map((value) => value.number!),
-        }) ?? null;
-
+      this.updateValueFromLatest();
       this.refreshValidation();
     });
   }
 
   alphaInputToggled(show: boolean) {
+    this.toggleAlphaInput(show);
+  }
+
+  setupKeyboardShortcuts() {
+    return runOnceWhenValueIs(this.keyboardServiceRegistrar.shortcutsReady, true, () => {
+      this.keyboardShortcutSubscriptions.push(
+        ...this.keyboardShortcutService.registerAndSubscribeToScopes(
+          {
+            componentId: this.id,
+            considerShortcutPredicate: () => true,
+          },
+          {
+            [keyboardShortcutScopes.colorEditor]: {
+              [keyboardShortcutKeys.colorEditorFocusRedInput]: () => {
+                this.blurGreenInput++;
+                this.blurBlueInput++;
+                this.blurAlphaInput++;
+                this.focusRedInput++;
+              },
+              [keyboardShortcutKeys.colorEditorFocusGreenInput]: () => {
+                this.blurRedInput++;
+                this.blurBlueInput++;
+                this.blurAlphaInput++;
+                this.focusGreenInput++;
+              },
+              [keyboardShortcutKeys.colorEditorFocusBlueInput]: () => {
+                this.blurRedInput++;
+                this.blurGreenInput++;
+                this.blurAlphaInput++;
+                this.focusBlueInput++;
+              },
+              [keyboardShortcutKeys.colorEditorFocusAlphaInput]: () => {
+                if (this.hideAlphaInput === 0) {
+                  this.blurRedInput++;
+                  this.blurGreenInput++;
+                  this.blurBlueInput++;
+                  this.focusAlphaInput++;
+                }
+              },
+            },
+          }
+        )
+      );
+    });
+  }
+
+  toggleAlphaInput(show: boolean) {
     this.hideAlphaInput = show ? 0 : 1;
 
     if (show) {
       this.focusAlphaInput++;
     }
+
+    this.updateValueFromLatest();
+
+    setTimeout(() => {
+      this.refreshValidation();
+    });
+  }
+
+  updateValueFromLatest() {
+    const valuesArr = [
+      this.latestRedInputValue,
+      this.latestGreenInputValue,
+      this.latestBlueInputValue,
+    ];
+
+    if (this.hideAlphaInput === 0) {
+      valuesArr.push(this.latestAlphaInputValue);
+    }
+
+    this.updateValue(
+      normalizeColor({
+        bytes: valuesArr.map((value) => value.number!),
+      }) ?? null
+    );
+  }
+
+  updateValue(value: TrmrkRgbInputValue | null) {
+    this.value = value;
+    this.hexValue = value?.hexStr ?? null;
+    this.rgbaValue = value?.rgbaStr ?? null;
   }
 
   updateValueComponents() {
@@ -236,6 +374,11 @@ export class TrmrkRgbEditor implements OnChanges {
       this.blueInputValue = { ...numberDefaultValues.value };
       this.alphaInputValue = { ...numberDefaultValues.value };
     }
+
+    this.latestRedInputValue = { ...this.redInputValue };
+    this.latestGreenInputValue = { ...this.greenInputValue };
+    this.latestBlueInputValue = { ...this.blueInputValue };
+    this.latestAlphaInputValue = { ...this.alphaInputValue };
 
     this.refreshValidation();
   }

@@ -21,6 +21,7 @@ import { AsyncRequestStateManagerFactory } from '../../../trmrk/AsyncRequestStat
 
 import { AppServiceBase } from '../common/app-service-base';
 import { AppStateServiceBase } from '../common/app-state-service-base';
+import { KeyboardServiceRegistrarBase } from '../common/keyboard-service-registrar-base';
 import { IntIdServiceFactory } from '../common/int-id-service-factory';
 import { loadAppConfig, LoadAppConfigOpts } from '../common/app-config-loader';
 import { TimeStampGeneratorBase } from '../common/timestamp-generator-base';
@@ -60,6 +61,7 @@ export interface GetCommonServiceProviderOpts<
   appConfig?: LoadAppConfigOpts<TAppConfig> | NullOrUndef;
   appServiceType?: Type<any> | NullOrUndef;
   appStateServiceType?: Type<any> | NullOrUndef;
+  keyboardServiceRegistrarType?: Type<any> | NullOrUndef;
   defaultTimeStampGenerator?: boolean | NullOrUndef;
   defaultStrIdGenerator?: boolean | NullOrUndef;
   defaultBrowserTabIdService?: boolean | NullOrUndef;
@@ -213,6 +215,10 @@ export const getServiceProviders = <TAppConfig extends NgAppConfigCore = NgAppCo
 
     opts.appStateServiceType
       ? { provide: AppStateServiceBase, useClass: opts.appStateServiceType }
+      : null,
+
+    opts.keyboardServiceRegistrarType
+      ? { provide: KeyboardServiceRegistrarBase, useClass: opts.keyboardServiceRegistrarType }
       : null,
 
     opts.asyncRequestStateManagerFactory ?? includeAllByDefault
