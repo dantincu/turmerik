@@ -141,8 +141,9 @@ export const bytesToHexStr = (bytesArr: number[]) =>
 export const bytesFromHexStr = (hexStr: string) => {
   const bytesArr: number[] = [];
 
-  for (let i = hexStr.length - 1; i > 0; i--) {
-    bytesArr.splice(0, 0, numFromHexStr(hexStr.substring(i, 2))!);
+  for (let i = hexStr.length - 2; i >= 0; i -= 2) {
+    const hexByteStr = hexStr.substring(i, i + 2);
+    bytesArr.splice(0, 0, numFromHexStr(hexByteStr)!);
   }
 
   if (hexStr.length % 2) {

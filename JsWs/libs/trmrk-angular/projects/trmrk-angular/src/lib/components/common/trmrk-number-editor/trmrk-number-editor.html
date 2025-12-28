@@ -58,7 +58,11 @@
 ></trmrk-short-string-editor>
 <ng-template #beforeDoneBtnTpl>
   @if (maxAllowedDecimals > 0) {
-  <div class="trmrk-icon-wrapper trmrk-decimal-point" (click)="moveDecimalPlaceClicked()">
+  <div
+    class="trmrk-icon-wrapper trmrk-decimal-point"
+    (trmrkLongPressOrRightClick)="doNothing()"
+    (trmrkShortPressOrLeftClick)="moveDecimalPlaceClicked()"
+  >
     <div class="trmrk-char-btn">.</div>
   </div>
   } @if (minValue < 0) {
@@ -67,7 +71,8 @@
       'trmrk-icon-wrapper',
       (value.number ?? 0) >= 0 ? 'trmrk-minus-sign' : 'trmrk-plus-sign'
     ]"
-    (click)="toggleSignClicked()"
+    (trmrkLongPressOrRightClick)="doNothing()"
+    (trmrkShortPressOrLeftClick)="toggleSignClicked()"
   >
     <div class="trmrk-char-btn">{{ (value.number ?? 0) >= 0 ? '-' : '+' }}</div>
   </div>

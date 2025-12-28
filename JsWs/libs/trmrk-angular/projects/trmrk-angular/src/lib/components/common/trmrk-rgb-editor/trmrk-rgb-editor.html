@@ -54,6 +54,7 @@
     (trmrkInputKeyDown)="inputKeyDown($event, 'B')"
     (trmrkValueChanged)="inputValueChanged($event, 'B')"
   ></trmrk-number-editor>
+  @if (trmrkAllowAlpha ?? true) {
   <trmrk-number-editor
     #alphaInput
     class="trmrk-alpha-input"
@@ -72,6 +73,7 @@
     (trmrkValueChanged)="inputValueChanged($event, 'A')"
     (trmrkVisibilityToggled)="alphaInputToggled($event)"
   ></trmrk-number-editor>
+  }
 
   <ng-template #redLabel let-label="label"
     ><div class="trmrk-header-container">

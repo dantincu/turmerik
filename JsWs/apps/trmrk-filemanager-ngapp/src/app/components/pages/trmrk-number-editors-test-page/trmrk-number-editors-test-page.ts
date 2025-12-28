@@ -38,6 +38,8 @@ export class TrmrkNumberEditorsTestPage {
 
   matRgbInput1Value: TrmrkRgbInputValue = {};
 
+  matRgbInput2Value: TrmrkRgbInputValue = {};
+
   matDateTimeInput1Value: TrmrkRgbInputValue = {};
 
   matNumberInput1ValueChanged(value: TrmrkNumberInputValue) {
@@ -50,6 +52,10 @@ export class TrmrkNumberEditorsTestPage {
 
   matRgbInput1ValueChanged(value: TrmrkRgbInputValue) {
     this.matRgbInput1Value = value;
+  }
+
+  matRgbInput2ValueChanged(value: TrmrkRgbInputValue) {
+    this.matRgbInput2Value = value;
   }
 
   matDateTimeInput1ValueChanged(value: TrmrkDateTimeInputValue) {

@@ -5,9 +5,9 @@
       #inputEl
       matInput
       [placeholder]="trmrkLabel ?? ''"
-      [value]="defaultValues.value?.text ?? ''"
+      [value]="trmrkValue?.text ?? defaultValues.value?.text ?? ''"
     />
-    @if ((trmrkRequired ?? defaultValues.required)) { <sup class="trmrk-required-text">*</sup> }
+    @if ((trmrkRequired ?? false)) { <sup class="trmrk-required-text">*</sup> }
   </mat-form-field>
   <button mat-icon-button class="trmrk-icon-btn" (click)="editClicked()">
     <mat-icon>edit</mat-icon>

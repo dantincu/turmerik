@@ -7,6 +7,7 @@ import {
   EventEmitter,
   OnDestroy,
 } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,12 +16,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { NullOrUndef } from '../../../../trmrk/core';
-import { ColorCore, normalizeColor } from '../../../../trmrk/colors';
+import { normalizeColor } from '../../../../trmrk/colors';
 
-import { whenChanged } from '../../../services/common/simpleChanges';
 import { openDialog, DialogPanelSize } from '../../../services/common/trmrk-dialog';
 import { TrmrkRgbInputValue, defaultValues } from '../trmrk-rgb-editor/trmrk-rgb-editor';
 
@@ -52,6 +52,7 @@ export class TrmrkMatRgbInput implements OnDestroy {
   @Input() trmrkLabel?: string | NullOrUndef;
   @Input() trmrkValue?: TrmrkRgbInputValue | NullOrUndef;
   @Input() trmrkRequired?: boolean | NullOrUndef;
+  @Input() trmrkAllowAlpha?: boolean | NullOrUndef;
 
   @ViewChild('inputEl') inputEl!: ElementRef<HTMLInputElement>;
 
@@ -86,7 +87,7 @@ export class TrmrkMatRgbInput implements OnDestroy {
         data: {
           label: this.trmrkLabel,
           value: this.trmrkValue,
-          required: this.trmrkRequired,
+          allowAlpha: this.trmrkAllowAlpha,
           valueSubmitted: (value: TrmrkRgbInputValue) => {
             this.trmrkValueChanged.emit(value);
           },

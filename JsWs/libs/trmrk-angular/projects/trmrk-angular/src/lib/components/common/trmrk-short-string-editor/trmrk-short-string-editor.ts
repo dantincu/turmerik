@@ -476,4 +476,6 @@ export class TrmrkShortStringEditor implements OnChanges, OnDestroy {
 
     this.trmrkPasteFromClipboardClicked.emit(event);
   }
+
+  doNothing() {}
 }

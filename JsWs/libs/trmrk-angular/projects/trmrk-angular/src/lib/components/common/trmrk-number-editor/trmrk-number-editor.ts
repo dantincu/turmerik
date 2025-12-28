@@ -6,6 +6,7 @@ import { NullOrUndef, ValidationResult } from '../../../../trmrk/core';
 import { getNumberDigits } from '../../../../trmrk/math';
 
 import { whenChanged } from '../../../services/common/simpleChanges';
+import { TrmrkLongPressOrRightClick } from '../../../directives/trmrk-long-press-or-right-click';
 
 import {
   TrmrkShortStringEditor,
@@ -71,7 +72,7 @@ export const numOrTextToTrmrkNumberInputValue = (
 @Component({
   selector: 'trmrk-number-editor',
   standalone: true,
-  imports: [CommonModule, MatCheckbox, TrmrkShortStringEditor],
+  imports: [CommonModule, MatCheckbox, TrmrkShortStringEditor, TrmrkLongPressOrRightClick],
   templateUrl: './trmrk-number-editor.html',
   styleUrls: ['./trmrk-number-editor.scss'],
 })
@@ -292,9 +293,11 @@ export class TrmrkNumberEditor {
     switch (event.key) {
       case 'Home':
       case 'End':
-      case 'ArrowLeft':
       case 'ArrowRight':
         this.focusNextDigit(event.nextFocusedCharIdx);
+        break;
+      case 'ArrowLeft':
+        this.focusNextDigit(event.nextFocusedCharIdx - (event.nextFocusedChar === '.' ? 1 : 0));
         break;
       case 'ArrowUp':
         if (event.srcEvt.shiftKey) {
@@ -625,9 +628,9 @@ export class TrmrkNumberEditor {
       this.updateValidation();
 
       if (this.value.number! > 0) {
-        this.focusNextDigit(this.focusedCharIdx - 2);
+        this.focusNextDigit(this.focusedCharIdx - 1);
       } else {
-        this.focusNextDigit(this.focusedCharIdx);
+        this.focusNextDigit(this.focusedCharIdx + 1);
       }
     }
   }
@@ -640,4 +643,6 @@ export class TrmrkNumberEditor {
       step: this.step.toString(),
     };
   }
+
+  doNothing() {}
 }

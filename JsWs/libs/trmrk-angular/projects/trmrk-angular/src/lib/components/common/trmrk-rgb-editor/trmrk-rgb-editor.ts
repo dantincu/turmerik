@@ -40,12 +40,11 @@ export interface TrmrkRgbInputValue extends ColorCore {}
 export interface TrmrkRgbEditorOpts {
   label?: string | NullOrUndef;
   value?: TrmrkRgbInputValue | NullOrUndef;
-  required?: boolean | NullOrUndef;
+  allowAlpha?: boolean | NullOrUndef;
 }
 
 export const defaultValues = Object.freeze<TrmrkRgbEditorOpts>({
   value: null,
-  required: false,
 }) as TrmrkRgbEditorOpts;
 
 @Component({
@@ -59,7 +58,7 @@ export class TrmrkRgbEditor implements OnChanges, OnDestroy {
 
   @Input() trmrkLabel?: string | NullOrUndef;
   @Input() trmrkValue: TrmrkRgbInputValue | NullOrUndef;
-  @Input() trmrkRequired: boolean | NullOrUndef;
+  @Input() trmrkAllowAlpha?: boolean | NullOrUndef;
   @Input() trmrkFocusInput = 0;
   @Input() trmrkBlurInput = 0;
 
@@ -219,13 +218,15 @@ export class TrmrkRgbEditor implements OnChanges, OnDestroy {
             this.focusGreenInput++;
           } else {
             if (event.srcEvt.ctrlKey) {
-              this.toggleAlphaInput(this.hideAlphaInput > 0);
+              if (this.trmrkAllowAlpha ?? true) {
+                this.toggleAlphaInput(this.hideAlphaInput > 0);
 
-              if (this.hideAlphaInput === 0) {
-                this.focusAlphaInput++;
+                if (this.hideAlphaInput === 0) {
+                  this.focusAlphaInput++;
+                }
               }
             } else {
-              if (this.hideAlphaInput === 0) {
+              if (this.hideAlphaInput === 0 && (this.trmrkAllowAlpha ?? true)) {
                 this.focusAlphaInput++;
               } else {
                 this.focusRedInput++;
@@ -299,7 +300,7 @@ export class TrmrkRgbEditor implements OnChanges, OnDestroy {
                 this.focusBlueInput++;
               },
               [keyboardShortcutKeys.colorEditorFocusAlphaInput]: () => {
-                if (this.hideAlphaInput === 0) {
+                if (this.hideAlphaInput === 0 && (this.trmrkAllowAlpha ?? true)) {
                   this.blurRedInput++;
                   this.blurGreenInput++;
                   this.blurBlueInput++;

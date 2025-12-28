@@ -86,10 +86,12 @@ export const normalizeColorFromText = (color: ColorCore) => {
     switch (color.text!.length) {
       case 7:
       case 9:
+        color = { ...color, hexStr: color.text };
         retColor = normalizeColorFromHexStr(color);
         break;
       case 4:
       case 5:
+        color = { ...color, shortHexStr: color.text };
         retColor = normalizeColorFromShortHexStr(color);
         break;
       default:

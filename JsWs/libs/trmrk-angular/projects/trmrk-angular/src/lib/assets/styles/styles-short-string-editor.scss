@@ -6,16 +6,27 @@ trmrk-short-string-editor {
 .trmrk-short-string-editor {
   cursor: pointer;
   display: flex;
+  flex-direction: column;
   position: relative;
   flex-wrap: wrap;
+
+  .trmrk-section {
+    cursor: pointer;
+    display: flex;
+    position: relative;
+    flex-wrap: wrap;
+  }
 
   .trmrk-fake-input-container {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    align-self: flex-start;
     flex-grow: 1;
-    flex-shrink: 0;
+    flex-shrink: 1;
     width: 0;
+    min-width: 0;
+    max-width: 0;
     height: 40px;
     min-height: 40px;
     overflow: hidden;
@@ -40,6 +51,7 @@ trmrk-short-string-editor {
     width: 40px;
     height: 40px;
     margin: 2px;
+    cursor: pointer;
     display: inline-flex;
     position: relative;
     box-sizing: border-box;
@@ -73,6 +85,7 @@ trmrk-short-string-editor {
       padding: 0;
       position: relative;
       line-height: 20px;
+      cursor: pointer;
 
       .trmrk-icon {
         position: relative;
