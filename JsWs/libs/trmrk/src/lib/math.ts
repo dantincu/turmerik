@@ -124,7 +124,7 @@ export const getIntNumberFromDigits = (digitsArr: number[], base: number = 10) =
 export const numToHexStr = (number: number, reqLen = 0) =>
   withVal(
     getIntNumberDigits(number, 16)
-      .map((num) => num.toString(16))
+      .map((num) => num.toString(16).toUpperCase())
       .join(''),
     (str) => str.padStart(reqLen, '0')
   );

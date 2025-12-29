@@ -16,13 +16,23 @@ export const getShortHexStr = (hexStr: string) =>
   [...hexStr].map((char, i) => (i % 2 ? '' : char)).join('');
 
 export const bytesToRgba = (bytesArr: number[]) =>
-  ['rgba(', bytesArr.map((byte) => byte.toString()).join(', '), ')'].join('');
+  [
+    bytesArr.length === 4 ? 'rgba(' : 'rgb(',
+    bytesArr.map((byte, i) => (i === 3 ? byte / 256 : byte).toString()).join(', '),
+    ')',
+  ].join('');
 
 export const bytesFromRgba = (rgbaStr: string) => {
-  rgbaStr = tryDigestStr(rgbaStr, 'rgba', (newStr) => newStr);
+  const componentsArr = rgbaStr.split(',');
+  const hasAlpha = componentsArr.length === 4;
+  rgbaStr = tryDigestStr(rgbaStr, hasAlpha ? 'rgba' : 'rgb', (newStr) => newStr);
   rgbaStr = tryDigestStr(rgbaStr, '(', (newStr) => newStr);
   rgbaStr = tryDigestStr(rgbaStr, ')', (newStr) => newStr, false);
-  const bytesArr = rgbaStr.split(',').map((component) => parseInt(component));
+  const bytesArr = rgbaStr
+    .split(',')
+    .map((component, i) =>
+      i === 3 ? Math.round(parseFloat(component) * 256) : parseInt(component)
+    );
   return bytesArr;
 };
 
@@ -78,20 +88,22 @@ export const normalizeColorFromRgbaStr = (color: ColorCore) => {
 };
 
 export const normalizeColorFromText = (color: ColorCore) => {
+  color = { ...color };
   let retColor: ColorCore | NullOrUndef;
 
   if (color.text!.indexOf(',') >= 0) {
+    color.rgbaStr = color.text;
     retColor = normalizeColorFromRgbaStr(color);
   } else {
     switch (color.text!.length) {
       case 7:
       case 9:
-        color = { ...color, hexStr: color.text };
+        color.hexStr = color.text;
         retColor = normalizeColorFromHexStr(color);
         break;
       case 4:
       case 5:
-        color = { ...color, shortHexStr: color.text };
+        color.shortHexStr = color.text;
         retColor = normalizeColorFromShortHexStr(color);
         break;
       default:

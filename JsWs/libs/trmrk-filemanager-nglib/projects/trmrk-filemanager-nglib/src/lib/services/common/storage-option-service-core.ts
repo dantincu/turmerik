@@ -65,27 +65,26 @@ export class StorageOptionServiceCore implements OnDestroy {
           dbRequestToPromise<
             | AppSettingsChoice<StorageOptionWrapperSrlzbl>
             | AppSessionSettingsChoice<StorageOptionWrapperSrlzbl>
-          >(basicAppSettingsDbAdapter.stores.tabChoices.store(db).get(this.getKeyPath(tabId))).then(
-            (dbResponse) => {
-              const choice = dbResponse.value;
+          >(
+            basicAppSettingsDbAdapter.stores.sessionTabChoices.store(db).get(this.getKeyPath(tabId))
+          ).then((dbResponse) => {
+            const choice = dbResponse.value;
 
-              if (choice) {
-                this.currentStorageOption.next(choice.value.option);
+            if (choice) {
+              this.currentStorageOption.next(choice.value.option);
 
-                this.currentUserIdnf.next(
-                  choice.value.userIdnf,
-                  true,
-                  (prev, next) => (prev ?? null) !== (next ?? null)
-                );
+              this.currentUserIdnf.next(
+                choice.value.userIdnf,
+                true,
+                (prev, next) => (prev ?? null) !== (next ?? null)
+              );
 
-                this.appStateService.hasBeenSetUp.next(true, true);
-                resolve(choice.value);
-              } else {
-                resolve(null);
-              }
-            },
-            reject
-          );
+              this.appStateService.hasBeenSetUp.next(true, true);
+              resolve(choice.value);
+            } else {
+              resolve(null);
+            }
+          }, reject);
         },
         (_, error) => {
           reject(error);
@@ -102,7 +101,7 @@ export class StorageOptionServiceCore implements OnDestroy {
         (_, db) => {
           if (this.currentStorageOption) {
             dbRequestToPromise(
-              basicAppSettingsDbAdapter.stores.tabChoices
+              basicAppSettingsDbAdapter.stores.sessionTabChoices
                 .store(db, null, 'readwrite')
                 .put(this.getAppSettingsChoiceToWrite(tabId))
             ).then(() => resolve(), reject);

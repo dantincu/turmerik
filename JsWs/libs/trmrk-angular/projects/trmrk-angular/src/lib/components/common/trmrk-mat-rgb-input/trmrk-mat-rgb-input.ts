@@ -6,6 +6,8 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -20,6 +22,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { NullOrUndef } from '../../../../trmrk/core';
 import { normalizeColor } from '../../../../trmrk/colors';
+import { whenChanged } from '../../../services/common/simpleChanges';
 
 import { openDialog, DialogPanelSize } from '../../../services/common/trmrk-dialog';
 import { TrmrkRgbInputValue, defaultValues } from '../trmrk-rgb-editor/trmrk-rgb-editor';
@@ -46,7 +49,7 @@ import {
   templateUrl: './trmrk-mat-rgb-input.html',
   styleUrl: './trmrk-mat-rgb-input.scss',
 })
-export class TrmrkMatRgbInput implements OnDestroy {
+export class TrmrkMatRgbInput implements OnDestroy, OnChanges {
   @Output() trmrkValueChanged = new EventEmitter<TrmrkRgbInputValue>();
 
   @Input() trmrkLabel?: string | NullOrUndef;
@@ -57,6 +60,7 @@ export class TrmrkMatRgbInput implements OnDestroy {
   @ViewChild('inputEl') inputEl!: ElementRef<HTMLInputElement>;
 
   defaultValues = defaultValues;
+  value: TrmrkRgbInputValue | NullOrUndef;
 
   constructor(private editDialog: MatDialog) {
     this.inputChanged = this.inputChanged.bind(this);
@@ -70,12 +74,23 @@ export class TrmrkMatRgbInput implements OnDestroy {
     this.inputEl.nativeElement.removeEventListener('change', this.inputChanged);
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    whenChanged(
+      changes,
+      () => this.trmrkValue,
+      () => {
+        this.value = this.trmrkValue;
+      }
+    );
+  }
+
   inputChanged(event: Event) {
     let value: TrmrkRgbInputValue = {
       text: this.inputEl.nativeElement.value,
     };
 
     value = normalizeColor(value) ?? value;
+    this.value = value;
     this.trmrkValueChanged.emit(value);
   }
 
@@ -86,9 +101,10 @@ export class TrmrkMatRgbInput implements OnDestroy {
       data: {
         data: {
           label: this.trmrkLabel,
-          value: this.trmrkValue,
+          value: this.value,
           allowAlpha: this.trmrkAllowAlpha,
           valueSubmitted: (value: TrmrkRgbInputValue) => {
+            this.value = value;
             this.trmrkValueChanged.emit(value);
           },
         },

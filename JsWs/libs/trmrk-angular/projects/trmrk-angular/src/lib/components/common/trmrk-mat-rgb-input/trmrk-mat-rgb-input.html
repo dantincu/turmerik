@@ -5,7 +5,7 @@
       #inputEl
       matInput
       [placeholder]="trmrkLabel ?? ''"
-      [value]="trmrkValue?.text ?? defaultValues.value?.text ?? ''"
+      [value]="value?.text ?? defaultValues.value?.text ?? ''"
     />
     @if ((trmrkRequired ?? false)) { <sup class="trmrk-required-text">*</sup> }
   </mat-form-field>

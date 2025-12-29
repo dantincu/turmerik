@@ -4,18 +4,7 @@
 >
   <ng-container *ngTemplateOutlet="trmrkLeadingTemplate"></ng-container>
   <div class="trmrk-section">
-    @if (trmrkAllowDeleteChar) {
-    <div class="trmrk-icon-wrapper">
-      <button
-        mat-icon-button
-        class="trmrk-icon-btn"
-        (trmrkLongPressOrRightClick)="charDeleteBtnLongPressOrRightClick($event)"
-        (trmrkShortPressOrLeftClick)="charDeleteBtnShortPressOrLeftClick($event)"
-      >
-        <mat-icon class="trmrk-icon">delete</mat-icon>
-      </button>
-    </div>
-    } @if (trmrkAllowInsertChar || !chars.length) {
+    @if (trmrkAllowInsertChar || !chars.length) {
     <div class="trmrk-icon-wrapper">
       <button
         mat-icon-button
@@ -27,6 +16,16 @@
       </button>
     </div>
     } @if (trmrkAllowDeleteChar) {
+    <div class="trmrk-icon-wrapper">
+      <button
+        mat-icon-button
+        class="trmrk-icon-btn"
+        (trmrkLongPressOrRightClick)="charDeleteBtnLongPressOrRightClick($event)"
+        (trmrkShortPressOrLeftClick)="charDeleteBtnShortPressOrLeftClick($event)"
+      >
+        <mat-icon class="trmrk-icon">delete</mat-icon>
+      </button>
+    </div>
     <div class="trmrk-icon-wrapper">
       <button
         mat-icon-button

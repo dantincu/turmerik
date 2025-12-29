@@ -35,9 +35,13 @@
       ></trmrk-mat-number-input>
       <p>{{ matNumberInput2Value.number }}</p>
       <trmrk-mat-rgb-input
+        [trmrkLabel]="'Allows Alpha'"
+        [trmrkValue]="matRgbInput1Value"
         (trmrkValueChanged)="matRgbInput1ValueChanged($event)"
       ></trmrk-mat-rgb-input>
       <trmrk-mat-rgb-input
+        [trmrkLabel]="'Allows Not Alpha'"
+        [trmrkValue]="matRgbInput2Value"
         (trmrkValueChanged)="matRgbInput2ValueChanged($event)"
         [trmrkAllowAlpha]="false"
       ></trmrk-mat-rgb-input>

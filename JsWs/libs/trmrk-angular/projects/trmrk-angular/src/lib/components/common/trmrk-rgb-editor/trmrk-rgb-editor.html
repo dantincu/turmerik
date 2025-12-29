@@ -1,15 +1,20 @@
 <div class="trmrk-rgb-editor">
+  <div class="trmrk-label-wrapper">
+    <h3>{{ trmrkLabel }}</h3>
+  </div>
   @if ((hexValue ?? null) !== null) {
   <div class="trmrk-field">
-    <mat-checkbox [checked]="hexValueIsChecked"
-      ><code class="trmrk-text-bold">{{ hexValue }}</code></mat-checkbox
+    <mat-checkbox [checked]="hexValueIsChecked" (change)="hexValueToggled()"
+      ><span class="trmrk-text-bold">HEX</span></mat-checkbox
     >
+    <code class="trmrk-text-bold">{{ hexValue }}</code>
   </div>
   } @if ((rgbaValue ?? null) !== null) {
   <div class="trmrk-field">
-    <mat-checkbox [checked]="rgbaValueIsChecked"
-      ><code class="trmrk-text-bold">{{ rgbaValue }}</code></mat-checkbox
+    <mat-checkbox [checked]="rgbaValueIsChecked" (change)="rgbaValueToggled()"
+      ><span class="trmrk-text-bold">RGBA</span></mat-checkbox
     >
+    <code class="trmrk-text-bold">{{ rgbaValue }}</code>
   </div>
   }
   <trmrk-number-editor
@@ -110,6 +115,6 @@
 </div>
 <div class="trmrk-color-container">
   <div class="trmrk-color-inner-container">
-    <div class="trmrk-color"></div>
+    <div class="trmrk-color" [ngStyle]="{ background: colorPanelBackground }"></div>
   </div>
 </div>

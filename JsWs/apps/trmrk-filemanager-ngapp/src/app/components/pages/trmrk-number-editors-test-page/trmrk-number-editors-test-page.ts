@@ -36,29 +36,29 @@ export class TrmrkNumberEditorsTestPage {
 
   matNumberInput2Value: TrmrkNumberInputValue = {};
 
-  matRgbInput1Value: TrmrkRgbInputValue = {};
+  matRgbInput1Value: TrmrkRgbInputValue = { text: '#1234' };
 
-  matRgbInput2Value: TrmrkRgbInputValue = {};
+  matRgbInput2Value: TrmrkRgbInputValue = { text: '#123' };
 
   matDateTimeInput1Value: TrmrkRgbInputValue = {};
 
   matNumberInput1ValueChanged(value: TrmrkNumberInputValue) {
-    this.matNumberInput1Value = value;
+    // this.matNumberInput1Value = value;
   }
 
   matNumberInput2ValueChanged(value: TrmrkNumberInputValue) {
-    this.matNumberInput2Value = value;
+    // this.matNumberInput2Value = value;
   }
 
   matRgbInput1ValueChanged(value: TrmrkRgbInputValue) {
-    this.matRgbInput1Value = value;
+    // this.matRgbInput1Value = value;
   }
 
   matRgbInput2ValueChanged(value: TrmrkRgbInputValue) {
-    this.matRgbInput2Value = value;
+    // this.matRgbInput2Value = value;
   }
 
   matDateTimeInput1ValueChanged(value: TrmrkDateTimeInputValue) {
-    this.matDateTimeInput1Value = value;
+    // this.matDateTimeInput1Value = value;
   }
 }

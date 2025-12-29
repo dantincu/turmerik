@@ -6,6 +6,8 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -46,7 +48,7 @@ import { TrmrkNumberInputValue, defaultValues } from '../trmrk-number-editor/trm
   templateUrl: './trmrk-mat-number-input.html',
   styleUrl: './trmrk-mat-number-input.scss',
 })
-export class TrmrkMatNumberInput implements OnDestroy {
+export class TrmrkMatNumberInput implements OnDestroy, OnChanges {
   @Output() trmrkValueChanged = new EventEmitter<TrmrkNumberInputValue>();
 
   @Input() trmrkLabel?: string | NullOrUndef;
@@ -59,6 +61,7 @@ export class TrmrkMatNumberInput implements OnDestroy {
   @ViewChild('inputEl') inputEl!: ElementRef<HTMLInputElement>;
 
   defaultValues = defaultValues;
+  value: TrmrkNumberInputValue | NullOrUndef;
 
   constructor(private editDialog: MatDialog) {
     this.inputChanged = this.inputChanged.bind(this);
@@ -72,6 +75,16 @@ export class TrmrkMatNumberInput implements OnDestroy {
     this.inputEl.nativeElement.removeEventListener('change', this.inputChanged);
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    whenChanged(
+      changes,
+      () => this.trmrkValue,
+      () => {
+        this.value = this.trmrkValue;
+      }
+    );
+  }
+
   inputChanged(event: Event) {
     const value: TrmrkNumberInputValue = {
       text: this.inputEl.nativeElement.value,
@@ -82,6 +95,7 @@ export class TrmrkMatNumberInput implements OnDestroy {
       value.number = Number(value.text);
     }
 
+    this.value = value;
     this.trmrkValueChanged.emit(value);
   }
 
@@ -92,12 +106,13 @@ export class TrmrkMatNumberInput implements OnDestroy {
       data: {
         data: {
           label: this.trmrkLabel,
-          value: this.trmrkValue,
+          value: this.value,
           min: this.trmrkMin,
           max: this.trmrkMax,
           step: this.trmrkStep,
           required: this.trmrkRequired,
           valueSubmitted: (value: TrmrkNumberInputValue) => {
+            this.value = value;
             this.trmrkValueChanged.emit(value);
           },
         },

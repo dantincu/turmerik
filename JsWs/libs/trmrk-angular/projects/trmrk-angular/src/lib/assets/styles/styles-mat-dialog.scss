@@ -28,10 +28,10 @@
   }
 
   .mat-mdc-dialog-component-host {
-    display: flex !important;
+    display: flex;
     flex-direction: column;
     height: 100%;
-    max-height: 100vh;
+    max-height: calc(100vh - 2px);
     flex: 1 1 auto;
 
     .trmrk-modal-body {

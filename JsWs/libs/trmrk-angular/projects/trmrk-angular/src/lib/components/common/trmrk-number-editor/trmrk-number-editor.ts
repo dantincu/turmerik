@@ -1,6 +1,8 @@
 import { Component, Input, SimpleChanges, EventEmitter, Output, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 import { NullOrUndef, ValidationResult } from '../../../../trmrk/core';
 import { getNumberDigits } from '../../../../trmrk/math';
@@ -72,7 +74,14 @@ export const numOrTextToTrmrkNumberInputValue = (
 @Component({
   selector: 'trmrk-number-editor',
   standalone: true,
-  imports: [CommonModule, MatCheckbox, TrmrkShortStringEditor, TrmrkLongPressOrRightClick],
+  imports: [
+    CommonModule,
+    MatCheckbox,
+    MatButtonModule,
+    MatIconModule,
+    TrmrkShortStringEditor,
+    TrmrkLongPressOrRightClick,
+  ],
   templateUrl: './trmrk-number-editor.html',
   styleUrls: ['./trmrk-number-editor.scss'],
 })
@@ -83,6 +92,8 @@ export class TrmrkNumberEditor {
   @Output() trmrkInputKeyPressed = new EventEmitter<FocusedCharKeyPressEvent>();
   @Output() trmrkInputKeyDown = new EventEmitter<FocusedCharKeyDownEvent>();
   @Output() trmrkValueChanged = new EventEmitter<TrmrkNumberInputValue>();
+  @Output() trmrkIncremented = new EventEmitter<number>();
+  @Output() trmrkDecremented = new EventEmitter<number>();
 
   @Input() trmrkInputAttrs: { [key: string]: string } | NullOrUndef;
   @Input() trmrkLabel?: string | NullOrUndef;
@@ -102,6 +113,7 @@ export class TrmrkNumberEditor {
   @Input() trmrkShowDoneBtn: boolean | NullOrUndef;
   @Input() trmrkShowCopyToClipboardBtn: boolean | NullOrUndef;
   @Input() trmrkShowPasteFromClipboardBtn: boolean | NullOrUndef;
+  @Input() trmrkShowIncrementBtns: boolean | NullOrUndef;
 
   inputAttrs: { [key: string]: string } = {};
 
@@ -254,10 +266,6 @@ export class TrmrkNumberEditor {
     this.insertChar(event.newString, event.focusedChar, event.insertAtTheEnd);
   }
 
-  charInsertBtnLongPressOrRightClick(event: FocusedCharInsertBtnLongPressOrRightClickEvent) {
-    this.assignBoundaryValue(event.insertAtTheEnd);
-  }
-
   charShortPressOrLeftClick(event: CharShortPressOrLeftClickEvent) {
     if (event.nextFocusedChar === ' ' || /\d/.test(event.nextFocusedChar)) {
       this.focusNextDigit(event.nextFocusedCharIdx);
@@ -302,11 +310,15 @@ export class TrmrkNumberEditor {
       case 'ArrowUp':
         if (event.srcEvt.shiftKey) {
           this.assignBoundaryValue(true);
+        } else {
+          this.incrementValue(true);
         }
         break;
       case 'ArrowDown':
         if (event.srcEvt.shiftKey) {
           this.assignBoundaryValue(false);
+        } else {
+          this.incrementValue(false);
         }
         break;
       case 'Delete':
@@ -332,6 +344,22 @@ export class TrmrkNumberEditor {
     }
 
     this.trmrkInputKeyDown.emit(event);
+  }
+
+  incrementBtnLongPressOrRightClick() {
+    this.assignBoundaryValue(true);
+  }
+
+  incrementBtnShortPressOrLeftClick() {
+    this.incrementValue(true);
+  }
+
+  decrementBtnLongPressOrRightClick() {
+    this.assignBoundaryValue(false);
+  }
+
+  decrementBtnShortPressOrLeftClick() {
+    this.incrementValue(false);
   }
 
   doneBtnTouchStartOrMouseDown(event: MouseEvent | TouchEvent) {
@@ -435,6 +463,22 @@ export class TrmrkNumberEditor {
     this.updateTextFromValue();
     this.updateValidation();
     this.focusNextDigit(0);
+  }
+
+  incrementValue(increment: boolean) {
+    let prevValue = this.value.number;
+
+    if (increment) {
+      this.value.number = Math.min(this.maxValue, ++this.value.number!);
+      this.trmrkIncremented.emit(this.value.number - prevValue!);
+    } else {
+      this.value.number = Math.max(this.minValue, --this.value.number!);
+      this.trmrkDecremented.emit(this.value.number - prevValue!);
+    }
+
+    this.updateTextFromValue();
+    this.updateValidation();
+    this.focusNextDigit(this.focusedCharIdx);
   }
 
   getCharCssClass(chr: string, idx: number) {

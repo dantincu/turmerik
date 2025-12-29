@@ -67,7 +67,7 @@ export class BasicAppSettingsDbStores {
     BasicAppSettingsDbAdapter.DB_STORES.SessionChoices.name
   );
 
-  public readonly tabChoices = new DbStoreAdapter(
+  public readonly sessionTabChoices = new DbStoreAdapter(
     BasicAppSettingsDbAdapter.DB_STORES.SessionTabChoices.name
   );
 

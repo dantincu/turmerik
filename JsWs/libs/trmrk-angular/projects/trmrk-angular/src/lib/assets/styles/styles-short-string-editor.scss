@@ -92,6 +92,11 @@ trmrk-short-string-editor {
         top: 6px;
         left: 8px;
         line-height: 30px;
+
+        &.trmrk-font-size-40px {
+          left: 0;
+          width: 40px;
+        }
       }
     }
   }
@@ -137,12 +142,37 @@ trmrk-rgb-editor {
     align-items: stretch;
     position: relative;
 
+    .trmrk-label-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 3px;
+
+      h3 {
+        margin: 5px;
+        margin-bottom: 0;
+      }
+
+      .trmrk-text-level-error, .trmrk-text {
+        display: flex;
+      }
+
+      .trmrk-text-level-error {
+        font-size: 12px;
+      }
+    }
+
+    > .trmrk-field {
+      display: flex;
+      flex-direction: column;
+      margin: 5px;
+    }
+
     trmrk-number-editor {
       margin: 10px;
 
       .trmrk-header-container {
+        margin-top: 10px;
         margin-left: 2px;
-        margin-bottom: 10px;
         display: flex;
         align-items: center; /* This vertically centers both items */
         gap: 10px;           /* Adds space between the text and circle */
@@ -154,7 +184,7 @@ trmrk-rgb-editor {
 
       &.trmrk-alpha-input {
         .trmrk-header-container {
-          margin-top: 10px;
+          margin-bottom: 10px;
         }
       }
     }

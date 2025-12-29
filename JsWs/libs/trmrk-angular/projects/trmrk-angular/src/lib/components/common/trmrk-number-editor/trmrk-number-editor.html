@@ -51,21 +51,13 @@
   (trmrkCharDeleteBtnShortPressOrLeftClick)="charDeleteBtnShortPressOrLeftClick($event)"
   (trmrkCharBackspaceBtnLongPressOrRightClick)="charBackspaceBtnLongPressOrRightClick($event)"
   (trmrkCharBackspaceBtnShortPressOrLeftClick)="charBackspaceBtnShortPressOrLeftClick($event)"
-  (trmrkCharInsertBtnLongPressOrRightClick)="charInsertBtnLongPressOrRightClick($event)"
+  (trmrkCharInsertBtnLongPressOrRightClick)="doNothing()"
   (trmrkCharInsertBtnShortPressOrLeftClick)="charInsertBtnShortPressOrLeftClick($event)"
   (trmrkDoneBtnTouchStartOrMouseDown)="doneBtnTouchStartOrMouseDown($event)"
   (trmrkPasteFromClipboardClicked)="pasteFromClipboardClicked($event)"
 ></trmrk-short-string-editor>
 <ng-template #beforeDoneBtnTpl>
-  @if (maxAllowedDecimals > 0) {
-  <div
-    class="trmrk-icon-wrapper trmrk-decimal-point"
-    (trmrkLongPressOrRightClick)="doNothing()"
-    (trmrkShortPressOrLeftClick)="moveDecimalPlaceClicked()"
-  >
-    <div class="trmrk-char-btn">.</div>
-  </div>
-  } @if (minValue < 0) {
+  @if (minValue < 0) {
   <div
     [ngClass]="[
       'trmrk-icon-wrapper',
@@ -75,6 +67,35 @@
     (trmrkShortPressOrLeftClick)="toggleSignClicked()"
   >
     <div class="trmrk-char-btn">{{ (value.number ?? 0) >= 0 ? '-' : '+' }}</div>
+  </div>
+  } @if (maxAllowedDecimals > 0) {
+  <div
+    class="trmrk-icon-wrapper trmrk-decimal-point"
+    (trmrkLongPressOrRightClick)="doNothing()"
+    (trmrkShortPressOrLeftClick)="moveDecimalPlaceClicked()"
+  >
+    <div class="trmrk-char-btn">.</div>
+  </div>
+  } @if (trmrkShowIncrementBtns ?? true) {
+  <div class="trmrk-icon-wrapper">
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (trmrkLongPressOrRightClick)="incrementBtnLongPressOrRightClick()"
+      (trmrkShortPressOrLeftClick)="incrementBtnShortPressOrLeftClick()"
+    >
+      <mat-icon class="trmrk-icon trmrk-font-size-40px">arrow_drop_up</mat-icon>
+    </button>
+  </div>
+  <div class="trmrk-icon-wrapper">
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (trmrkLongPressOrRightClick)="decrementBtnLongPressOrRightClick()"
+      (trmrkShortPressOrLeftClick)="decrementBtnShortPressOrLeftClick()"
+    >
+      <mat-icon class="trmrk-icon trmrk-font-size-40px">arrow_drop_down</mat-icon>
+    </button>
   </div>
   }
 </ng-template>

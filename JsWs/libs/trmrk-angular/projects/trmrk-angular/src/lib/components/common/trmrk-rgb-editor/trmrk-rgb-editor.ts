@@ -9,11 +9,12 @@ import {
   OnDestroy,
 } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
 
 import { NullOrUndef, ValidationResult } from '../../../../trmrk/core';
-import { ColorCore, normalizeColor } from '../../../../trmrk/colors';
+import { ColorCore, normalizeColor, bytesToRgba } from '../../../../trmrk/colors';
 
 import { KeyboardShortcutService } from '../../../services/common/keyboard-shortcut-service';
 import { ComponentIdService } from '../../../services/common/component-id-service';
@@ -49,7 +50,7 @@ export const defaultValues = Object.freeze<TrmrkRgbEditorOpts>({
 
 @Component({
   selector: 'trmrk-rgb-editor',
-  imports: [MatCheckbox, TrmrkNumberEditor],
+  imports: [MatCheckbox, CommonModule, TrmrkNumberEditor],
   templateUrl: './trmrk-rgb-editor.html',
   styleUrl: './trmrk-rgb-editor.scss',
 })
@@ -69,10 +70,12 @@ export class TrmrkRgbEditor implements OnChanges, OnDestroy {
 
   id: number;
   value: TrmrkRgbInputValue | null;
+  text: string | null = null;
   hexValue: string | null = null;
   rgbaValue: string | null = null;
   hexValueIsChecked = true;
   rgbaValueIsChecked = false;
+  colorPanelBackground = '';
 
   redInputValue = { ...numberDefaultValues.value };
   greenInputValue = { ...numberDefaultValues.value };
@@ -157,6 +160,30 @@ export class TrmrkRgbEditor implements OnChanges, OnDestroy {
       changes,
       () => this.trmrkValue,
       () => {
+        if (this.trmrkValue) {
+          let isHex: boolean | null = null;
+
+          if (this.trmrkValue.text) {
+            if (this.trmrkValue.text!.trim().startsWith('#')) {
+              isHex = true;
+            } else if (this.trmrkValue.text.trim().startsWith('rgba')) {
+              isHex = false;
+            }
+
+            if (isHex === null) {
+              if (this.trmrkValue.hexStr || this.trmrkValue.shortHexStr) {
+                isHex = true;
+              } else if (this.trmrkValue.rgbaStr) {
+                isHex = false;
+              }
+            }
+
+            if (isHex !== null && isHex !== this.hexValueIsChecked) {
+              this.toggleHexValue();
+            }
+          }
+        }
+
         this.updateValue(normalizeColor(this.trmrkValue) ?? null);
         this.updateValueComponents();
       }
@@ -271,6 +298,24 @@ export class TrmrkRgbEditor implements OnChanges, OnDestroy {
     this.toggleAlphaInput(show);
   }
 
+  hexValueToggled() {
+    this.toggleHexValue();
+  }
+
+  rgbaValueToggled() {
+    this.toggleHexValue();
+  }
+
+  toggleHexValue() {
+    this.toggleHexValueCore();
+    this.updateValue(this.value);
+  }
+
+  toggleHexValueCore() {
+    this.hexValueIsChecked = !this.hexValueIsChecked;
+    this.rgbaValueIsChecked = !this.rgbaValueIsChecked;
+  }
+
   setupKeyboardShortcuts() {
     return runOnceWhenValueIs(this.keyboardServiceRegistrar.shortcutsReady, true, () => {
       this.keyboardShortcutSubscriptions.push(
@@ -350,6 +395,34 @@ export class TrmrkRgbEditor implements OnChanges, OnDestroy {
     this.value = value;
     this.hexValue = value?.hexStr ?? null;
     this.rgbaValue = value?.rgbaStr ?? null;
+
+    if (value) {
+      this.text = this.hexValueIsChecked ? this.hexValue : this.rgbaValue;
+    } else {
+      this.text = null;
+    }
+
+    this.updateColorPanelBackground();
+  }
+
+  updateColorPanelBackground() {
+    const bytesArr = this.value?.bytes;
+
+    if (bytesArr) {
+      const rgbaStr = bytesToRgba(bytesArr);
+      const hasAlpha = (bytesArr[3] ?? null) !== null;
+      const rgbStr = hasAlpha ? bytesToRgba(bytesArr.slice(0, 3)) : rgbaStr;
+
+      if (hasAlpha) {
+        this.colorPanelBackground = `linear-gradient(to right, ${rgbaStr} 0% 33.333%, ${rgbStr} 33.333% 66.666%, ${rgbaStr} 66.666% 100%)`;
+      } else {
+        this.colorPanelBackground = rgbaStr;
+      }
+
+      console.log('this.colorPanelBackground', this.colorPanelBackground);
+    } else {
+      this.colorPanelBackground = '';
+    }
   }
 
   updateValueComponents() {
@@ -369,6 +442,8 @@ export class TrmrkRgbEditor implements OnChanges, OnDestroy {
       this.alphaInputValue = {
         number: this.value.bytes[3],
       };
+
+      this.hideAlphaInput = (this.alphaInputValue.number ?? null) !== null ? 0 : 1;
     } else {
       this.redInputValue = { ...numberDefaultValues.value };
       this.greenInputValue = { ...numberDefaultValues.value };
@@ -381,7 +456,9 @@ export class TrmrkRgbEditor implements OnChanges, OnDestroy {
     this.latestBlueInputValue = { ...this.blueInputValue };
     this.latestAlphaInputValue = { ...this.alphaInputValue };
 
-    this.refreshValidation();
+    setTimeout(() => {
+      this.refreshValidation();
+    });
   }
 
   refreshValidation(update = false) {

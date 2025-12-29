@@ -290,7 +290,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
 
       const choice = (
         await dbRequestToPromise<AppSessionTabSettingsChoice<boolean>>(
-          this.basicAppSettingsDbAdapter.stores.tabChoices.store(db).get(keyPath)
+          this.basicAppSettingsDbAdapter.stores.sessionTabChoices.store(db).get(keyPath)
         )
       ).value;
 
@@ -319,7 +319,7 @@ export class TrmrkInfiniteHeightPanelScrollService implements OnDestroy {
       const db = (await openDbRequestToPromise(this.basicAppSettingsDbAdapter.open())).value;
 
       await dbRequestToPromise(
-        this.basicAppSettingsDbAdapter.stores.tabChoices.store(db, null, 'readwrite').put({
+        this.basicAppSettingsDbAdapter.stores.sessionTabChoices.store(db, null, 'readwrite').put({
           catKey: this.scrollControlSetupArgs.appSettingsChoicesCatKey,
           key: commonAppSettingsChoiceKeys.isExpanded,
           sessionId: this.trmrkSessionService.currentSession.value.sessionId,
