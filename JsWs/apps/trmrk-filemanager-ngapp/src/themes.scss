@@ -31,21 +31,11 @@
     }
   }
 
-  .trmrk-accelerating-scroll-popover {
-    background-color: var(--trmrk-app-bar_background-color_light);
-  }
-
   .trmrk-3-panels-layout {
     > .trmrk-app-panel {
       > .trmrk-panel-resize-strip {
         background-color: var(--trmrk-app-bar_background-color_light);
       }
-    }
-  }
-
-  trmrk-infinite-height-panel-scroll-control {
-    .trmrk-scroll-count-span {
-      background-color: var(--trmrk-top-horiz-strip_border-color-light);
     }
   }
 }
@@ -65,21 +55,11 @@
     }
   }
 
-  .trmrk-accelerating-scroll-popover {
-    background-color: var(--trmrk-app-bar_background-color_dark);
-  }
-
   .trmrk-3-panels-layout {
     > .trmrk-app-panel {
       > .trmrk-panel-resize-strip {
         background-color: var(--trmrk-app-bar_background-color_dark);
       }
-    }
-  }
-
-  trmrk-infinite-height-panel-scroll-control {
-    .trmrk-scroll-count-span {
-      background-color: var(--trmrk-top-horiz-strip_border-color-dark);
     }
   }
 }

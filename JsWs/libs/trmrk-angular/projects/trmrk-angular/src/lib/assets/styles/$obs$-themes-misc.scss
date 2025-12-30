@@ -1,0 +1,97 @@
+@keyframes trmrk-infinite-height-panel-scroll-control-blink-light {
+  0%, 100% {
+    background-color: #0000; /* bright yellow */
+  }
+  50% {
+    background-color: #000; /* white or any alternate color */
+  }
+}
+
+@keyframes trmrk-infinite-height-panel-scroll-control-blink-dark {
+  0%, 100% {
+    background-color: #0000; /* bright yellow */
+  }
+  50% {
+    background-color: #fff; /* white or any alternate color */
+  }
+}
+
+.trmrk-app-theme-light {
+  .trmrk-accelerating-scroll-popover {
+    .trmrk-scroll-pad {
+      background-color: rgba(0, 0, 0, 0.125);
+
+      &.trmrk-is-focused {
+        background-color: rgba(0, 0, 0, 0.25);
+      }
+
+      [mat-icon-button].trmrk-icon-btn.trmrk-cancel-icon-btn {
+        border-color: #000;
+      }
+
+      .trmrk-cancel-icon-btn-highlighter {
+        border-color: var(--trmrk-reject-color);
+      }
+    }
+
+    background-color: var(--trmrk-app-bar_background-color_light);
+  }
+
+  .trmrk-highlight-blink {
+    animation: trmrk-infinite-height-panel-scroll-control-blink-light 0.5s forwards;
+  }
+
+  trmrk-infinite-height-panel-scroll-bar {
+    background-color: var(--trmrk-scrollable-track_color_light);
+
+    .trmrk-scrollbar-thumb {
+      background-color: var(--trmrk-scrollable-thumb_color_light);
+    }
+  }
+
+  trmrk-infinite-height-panel-scroll-control {
+    .trmrk-scroll-count-span {
+      background-color: var(--trmrk-top-horiz-strip_border-color-light);
+    }
+  }
+}
+
+.trmrk-app-theme-dark {
+  .trmrk-accelerating-scroll-popover {
+    .trmrk-scroll-pad {
+      background-color: rgba(255, 255, 255, 0.125);
+
+      &.trmrk-is-focused {
+        background-color: rgba(255, 255, 255, 0.25);
+      }
+
+      [mat-icon-button].trmrk-icon-btn.trmrk-cancel-icon-btn {
+        border-color: #FFF;
+      }
+
+      .trmrk-cancel-icon-btn-highlighter {
+        border-color: var(--trmrk-reject-color);
+      }
+    }
+
+    background-color: var(--trmrk-app-bar_background-color_dark);
+  }
+
+  .trmrk-highlight-blink {
+    animation: trmrk-infinite-height-panel-scroll-control-blink-dark 0.5s forwards;
+  }
+
+  trmrk-infinite-height-panel-scroll-bar {
+    background-color: var(--trmrk-scrollable-track_color_dark);
+
+    .trmrk-scrollbar-thumb {
+      background-color: var(--trmrk-scrollable-thumb_color_dark);
+    }
+  }
+
+  trmrk-infinite-height-panel-scroll-control {
+    .trmrk-scroll-count-span {
+      background-color: var(--trmrk-top-horiz-strip_border-color-dark);
+    }
+  }
+}

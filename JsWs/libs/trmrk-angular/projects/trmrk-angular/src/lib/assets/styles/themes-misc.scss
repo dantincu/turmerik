@@ -1,21 +1,3 @@
-@keyframes trmrk-infinite-height-panel-scroll-control-blink-light {
-  0%, 100% {
-    background-color: #0000; /* bright yellow */
-  }
-  50% {
-    background-color: #000; /* white or any alternate color */
-  }
-}
-
-@keyframes trmrk-infinite-height-panel-scroll-control-blink-dark {
-  0%, 100% {
-    background-color: #0000; /* bright yellow */
-  }
-  50% {
-    background-color: #fff; /* white or any alternate color */
-  }
-}
-
 .trmrk-app-theme-light {
   .trmrk-vert-resize-strip {
     background: repeating-linear-gradient(
@@ -25,24 +7,6 @@
       rgba(255, 255, 255, 0) 10px, /* Fully transparent stripe */
       rgba(255, 255, 255, 0) 20px
     );
-  }
-
-  .trmrk-accelerating-scroll-popover {
-    .trmrk-scroll-pad {
-      background-color: rgba(0, 0, 0, 0.125);
-
-      &.trmrk-is-focused {
-        background-color: rgba(0, 0, 0, 0.25);
-      }
-
-      [mat-icon-button].trmrk-icon-btn.trmrk-cancel-icon-btn {
-        border-color: #000;
-      }
-
-      .trmrk-cancel-icon-btn-highlighter {
-        border-color: var(--trmrk-reject-color);
-      }
-    }
   }
 
   .trmrk-horiz-strip {
@@ -65,18 +29,6 @@
 
   .cdk-overlay-dark-backdrop {
     background-color: #0008;
-  }
-
-  .trmrk-highlight-blink {
-    animation: trmrk-infinite-height-panel-scroll-control-blink-light 0.5s forwards;
-  }
-
-  trmrk-infinite-height-panel-scroll-bar {
-    background-color: var(--trmrk-scrollable-track_color_light);
-
-    .trmrk-scrollbar-thumb {
-      background-color: var(--trmrk-scrollable-thumb_color_light);
-    }
   }
 
   .trmrk-short-string-editor {
@@ -129,24 +81,6 @@
     );
   }
 
-  .trmrk-accelerating-scroll-popover {
-    .trmrk-scroll-pad {
-      background-color: rgba(255, 255, 255, 0.125);
-
-      &.trmrk-is-focused {
-        background-color: rgba(255, 255, 255, 0.25);
-      }
-
-      [mat-icon-button].trmrk-icon-btn.trmrk-cancel-icon-btn {
-        border-color: #FFF;
-      }
-
-      .trmrk-cancel-icon-btn-highlighter {
-        border-color: var(--trmrk-reject-color);
-      }
-    }
-  }
-
   .trmrk-horiz-strip {
     &.trmrk-error-message-horiz-strip {
       .trmrk-text-row {
@@ -168,18 +102,6 @@
 
   .cdk-overlay-dark-backdrop {
     background-color: #000D;
-  }
-
-  .trmrk-highlight-blink {
-    animation: trmrk-infinite-height-panel-scroll-control-blink-dark 0.5s forwards;
-  }
-
-  trmrk-infinite-height-panel-scroll-bar {
-    background-color: var(--trmrk-scrollable-track_color_dark);
-
-    .trmrk-scrollbar-thumb {
-      background-color: var(--trmrk-scrollable-thumb_color_dark);
-    }
   }
 
   .trmrk-short-string-editor {

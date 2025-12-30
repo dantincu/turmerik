@@ -30,19 +30,6 @@ h3.trmrk-page-summary {
   margin: 5px;
 }
 
-@keyframes trmrk-blank-placeholder-slide-out {
-  from {
-    margin: 3px 3px 0 3px;
-    padding: 3px;
-    height: 40px;
-  }
-  to {
-    margin: 0;
-    padding: 0;
-    height: 0px;
-  }
-}
-
 .trmrk-spaced-list-item {
   padding: 10px 0;
   line-height: 30px;
