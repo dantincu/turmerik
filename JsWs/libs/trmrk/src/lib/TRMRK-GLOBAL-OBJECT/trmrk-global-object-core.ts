@@ -5,9 +5,7 @@ interface TrmrkGlobalObjectCoreIntf {
 
 const trmrkRef = {} as { value: TrmrkGlobalObjectCoreIntf };
 
-const createTrmrkFunc = <TObject extends TrmrkGlobalObjectCoreIntf>(
-  appName: string
-) => {
+const createTrmrkFunc = <TObject extends TrmrkGlobalObjectCoreIntf>(appName: string) => {
   const trmrk = (trmrkRef.value = (globalThis as any).trmrk ??= {}) as TObject;
   trmrk.appName = appName;
   trmrk.dbObjNamePrefix = `[${appName}]`;
