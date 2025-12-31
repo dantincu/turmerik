@@ -20,4 +20,3 @@ if ('undefined' !== typeof globalThisAsAny[trmrkGlobalObjName]) {
 else {
     globalThisAsAny[trmrkGlobalObjName] = trmrk;
 }
-export {};
