@@ -8,7 +8,7 @@ import { maxSafeInteger } from '../../../../trmrk/math';
 import { withValIf, NullOrUndef } from '../../../../trmrk/core';
 import { TrmrkTouchStartOrMouseDown } from '../../../directives/trmrk-touch-start-or-mouse-down';
 import { TrmrkMultiClick } from '../../../directives/trmrk-multi-click';
-import { TrmrkInfiniteHeightPanelScrollService } from '../../../services/common/trmrk-infinite-height-panel-scroll-service';
+import { TrmrkInfiniteHeightPanelScrollService } from '../../../services/common/$obs$-trmrk-infinite-height-panel-scroll-service';
 
 import { AppServiceBase } from '../../../services/common/app-service-base';
 

@@ -1,0 +1,99 @@
+.trmrk-app-theme-light {
+  .trmrk-short-string-editor {
+    .trmrk-char-wrapper {
+      background-color: #676767;
+      color: #FFF;
+      border-color: #DDD;
+
+      &.trmrk-focused-char {
+        background-color: #222;
+      }
+    }
+
+    .trmrk-icon-wrapper {
+      .trmrk-icon.trmrk-icon.trmrk-icon.trmrk-icon {
+        color: #222;
+      }
+    }
+  }
+
+  trmrk-rgb-editor {
+    trmrk-number-editor {
+      border-color: #bbb;
+    }
+
+    .trmrk-rgb-editor {
+      > .trmrk-field {
+        border-color: #bbb;
+      }
+    }
+
+    .trmrk-disc-rad-15 {
+      &.trmrk-red-disc {
+        background-color: #F00;
+      }
+
+      &.trmrk-green-disc {
+        background-color: #0A0;
+      }
+
+      &.trmrk-blue-disc {
+        background-color: #44F;
+      }
+
+      &.trmrk-alpha-disc {
+        background-color: #888;
+      }
+    }
+  }
+}
+
+.trmrk-app-theme-dark {
+  .trmrk-short-string-editor {
+    .trmrk-char-wrapper {
+      background-color: #AAA;
+      color: #000;
+      border-color: #333;
+
+      &.trmrk-focused-char {
+        background-color: #FFF;
+      }
+    }
+
+    .trmrk-icon-wrapper {
+      .trmrk-icon.trmrk-icon.trmrk-icon.trmrk-icon {
+        color: #EEE;
+      }
+    }
+  }
+
+  trmrk-rgb-editor {
+    trmrk-number-editor {
+      border-color: #444;
+    }
+
+    .trmrk-rgb-editor {
+      > .trmrk-field {
+        border-color: #444;
+      }
+    }
+
+    .trmrk-disc-rad-15 {
+      &.trmrk-red-disc {
+        background-color: #F00;
+      }
+
+      &.trmrk-green-disc {
+        background-color: #0A0;
+      }
+
+      &.trmrk-blue-disc {
+        background-color: #44F;
+      }
+
+      &.trmrk-alpha-disc {
+        background-color: #888;
+      }
+    }
+  }
+}

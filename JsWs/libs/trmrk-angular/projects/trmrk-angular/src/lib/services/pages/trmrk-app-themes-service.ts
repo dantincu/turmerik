@@ -13,7 +13,7 @@ import { getIDbRequestOpenErrorMsg } from '../../../trmrk-browser/indexedDB/core
 import { TouchOrMouseCoords } from '../../../trmrk-browser/domUtils/touchAndMouseEvents';
 import { AppTheme } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
-import { TrmrkPanelListServiceRow } from '../common/trmrk-panel-list-service';
+import { TrmrkPanelListServiceRow } from '../common/$obs$-trmrk-panel-list-service';
 import { IndexedDbDatabasesServiceCore } from '../common/indexedDb/indexed-db-databases-service-core';
 
 import {

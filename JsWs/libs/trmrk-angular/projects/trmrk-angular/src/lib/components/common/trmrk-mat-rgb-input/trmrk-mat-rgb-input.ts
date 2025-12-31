@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,7 +38,6 @@ import {
     MatIconModule,
     MatButtonModule,
     MatIconButton,
-    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -110,7 +108,6 @@ export class TrmrkMatRgbInput implements OnDestroy, OnChanges {
         },
         title: 'Edit Color',
       },
-      dialogPanelSize: DialogPanelSize.Large,
     });
   }
 }

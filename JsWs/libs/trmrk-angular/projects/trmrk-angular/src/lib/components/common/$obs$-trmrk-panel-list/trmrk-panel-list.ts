@@ -20,30 +20,24 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
-import { TrmrkPanelListItem } from '../trmrk-panel-list-item/trmrk-panel-list-item';
+import { TrmrkPanelListItem } from '../$obs$-trmrk-panel-list-item/trmrk-panel-list-item';
 import { TrmrkHorizStrip } from '../trmrk-horiz-strip/trmrk-horiz-strip';
 
 import { whenChanged } from '../../../services/common/simpleChanges';
 
 import { NullOrUndef, VoidOrAny } from '../../../../trmrk/core';
 
-import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
+import { TrmrkAcceleratingScrollPopover } from '../$obs$-trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
 import { TrmrkCancelContextMenu } from '../trmrk-cancel-context-menu/trmrk-cancel-context-menu';
 
 import {
   TrmrkPanelListService,
   TrmrkPanelListServiceRow,
-} from '../../../services/common/trmrk-panel-list-service';
+} from '../../../services/common/$obs$-trmrk-panel-list-service';
 
 @Component({
   selector: 'trmrk-panel-list',
-  imports: [
-    MatIconModule,
-    MatButtonModule,
-    MatMenuModule,
-    CommonModule,
-    TrmrkCancelContextMenu,
-  ],
+  imports: [MatIconModule, MatButtonModule, MatMenuModule, CommonModule, TrmrkCancelContextMenu],
   templateUrl: './trmrk-panel-list.html',
   styleUrl: './trmrk-panel-list.scss',
   encapsulation: ViewEncapsulation.None,
@@ -74,13 +68,9 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
     | NullOrUndef;
 
   @Input()
-  trmrkGetAppBarHeight?:
-    | ((svc: TrmrkPanelListService<any, any>) => number)
-    | NullOrUndef;
+  trmrkGetAppBarHeight?: ((svc: TrmrkPanelListService<any, any>) => number) | NullOrUndef;
 
-  @Output() trmrkRowsUpdated = new EventEmitter<
-    TrmrkPanelListServiceRow<any>[]
-  >();
+  @Output() trmrkRowsUpdated = new EventEmitter<TrmrkPanelListServiceRow<any>[]>();
 
   @ViewChild('panelList')
   panelList!: ElementRef<HTMLDivElement>;
@@ -124,17 +114,14 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
             rowsMenu: () => this.rowsMenu,
             getVisuallyMovingListItems: this.trmrkVisuallyMovingListItems,
             getPanelHeader: this.trmrkPanelHeader,
-            getUpAcceleratingScrollPopover:
-              this.trmrkUpAcceleratingScrollPopover,
-            getDownAcceleratingScrollPopover:
-              this.trmrkDownAcceleratingScrollPopover,
+            getUpAcceleratingScrollPopover: this.trmrkUpAcceleratingScrollPopover,
+            getDownAcceleratingScrollPopover: this.trmrkDownAcceleratingScrollPopover,
             toggleAppBar: this.trmrkToggleAppBar,
             getAppBarHeight: this.trmrkGetAppBarHeight,
             entities: this.trmrkEntities,
             idPropName: this.trmrkEntityKeyPropName,
             rowsSelectionIsAllowed: this.trmrkRowsSelectionIsAllowed,
-            selectedRowsReorderIsAllowed:
-              this.trmrkSelectedRowsReorderIsAllowed,
+            selectedRowsReorderIsAllowed: this.trmrkSelectedRowsReorderIsAllowed,
             selectedRowsReorderAggRowVertIsOriented:
               this.trmrkSelectedRowsReorderAggRowVertIsOriented,
           });

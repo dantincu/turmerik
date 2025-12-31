@@ -9,6 +9,8 @@ import {
   OnDestroy,
 } from '@angular/core';
 
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
@@ -50,7 +52,7 @@ export const defaultValues = Object.freeze<TrmrkRgbEditorOpts>({
 
 @Component({
   selector: 'trmrk-rgb-editor',
-  imports: [MatCheckbox, CommonModule, TrmrkNumberEditor],
+  imports: [MatCheckbox, CommonModule, MatButtonModule, MatIconModule, TrmrkNumberEditor],
   templateUrl: './trmrk-rgb-editor.html',
   styleUrl: './trmrk-rgb-editor.scss',
 })
@@ -306,6 +308,10 @@ export class TrmrkRgbEditor implements OnChanges, OnDestroy {
     this.toggleHexValue();
   }
 
+  copyToClipboardClicked() {}
+
+  pasteFromClipboardClicked() {}
+
   toggleHexValue() {
     this.toggleHexValueCore();
     this.updateValue(this.value);
@@ -418,8 +424,6 @@ export class TrmrkRgbEditor implements OnChanges, OnDestroy {
       } else {
         this.colorPanelBackground = rgbaStr;
       }
-
-      console.log('this.colorPanelBackground', this.colorPanelBackground);
     } else {
       this.colorPanelBackground = '';
     }
@@ -489,4 +493,6 @@ export class TrmrkRgbEditor implements OnChanges, OnDestroy {
   getDefaultValue(): TrmrkRgbInputValue | null {
     return defaultValues.value ? { ...defaultValues.value! } : null;
   }
+
+  doNothing() {}
 }

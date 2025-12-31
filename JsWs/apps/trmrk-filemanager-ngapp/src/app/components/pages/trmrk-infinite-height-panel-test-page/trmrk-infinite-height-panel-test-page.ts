@@ -8,8 +8,8 @@ import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dial
 
 import { getVarName } from '../../../../trmrk/Reflection/core';
 import { TrmrkAppPage } from '../../../../trmrk-angular/components/common/trmrk-app-page/trmrk-app-page';
-import { TrmrkInfiniteHeightPanelScrollControl } from '../../../../trmrk-angular/components/common/trmrk-infinite-height-panel-scroll-control/trmrk-infinite-height-panel-scroll-control';
-import { TrmrkInfiniteHeightPanelScrollBar } from '../../../../trmrk-angular/components/common/trmrk-infinite-height-panel-scroll-bar/trmrk-infinite-height-panel-scroll-bar';
+import { TrmrkInfiniteHeightPanelScrollControl } from '../../../../trmrk-angular/components/common/$obs$-trmrk-infinite-height-panel-scroll-control/trmrk-infinite-height-panel-scroll-control';
+import { TrmrkInfiniteHeightPanelScrollBar } from '../../../../trmrk-angular/components/common/$obs$-trmrk-infinite-height-panel-scroll-bar/trmrk-infinite-height-panel-scroll-bar';
 import { TrmrkHorizStrip } from '../../../../trmrk-angular/components/common/trmrk-horiz-strip/trmrk-horiz-strip';
 
 import {
@@ -24,7 +24,7 @@ import {
   TrmrkInfiniteHeightPanelScrollService,
   TrmrkInfiniteHeightPanelScrollEvent,
   TrmrkInfiniteHeightPanelNewContentRequestedEvent,
-} from '../../../../trmrk-angular/services/common/trmrk-infinite-height-panel-scroll-service';
+} from '../../../../trmrk-angular/services/common/$obs$-trmrk-infinite-height-panel-scroll-service';
 
 import { commonAppSettingsChoiceCatKeys } from '../../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 

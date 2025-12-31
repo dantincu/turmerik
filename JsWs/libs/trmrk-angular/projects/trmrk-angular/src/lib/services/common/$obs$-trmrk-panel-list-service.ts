@@ -26,7 +26,7 @@ import {
   defaultFastAnimationDurationMillis,
 } from '../../../trmrk-browser/core';
 
-import { TrmrkAcceleratingScrollPopover } from '../../components/common/trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
+import { TrmrkAcceleratingScrollPopover } from '../../components/common/$obs$-trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
 
 export interface TrmrkPanelListServiceRow<TEntity> {
   item: TrmrkPanelListServiceItemData<TEntity> | null;

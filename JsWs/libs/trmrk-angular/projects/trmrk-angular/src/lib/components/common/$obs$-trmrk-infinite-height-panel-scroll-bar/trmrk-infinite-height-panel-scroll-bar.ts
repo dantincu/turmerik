@@ -7,7 +7,7 @@ import {
   TrmrkInfiniteHeightPanelScrollService,
   TrmrkInfiniteHeightPanelScrollEvent,
   TrmrkInfiniteHeightPanelNewContentRequestedEvent,
-} from '../../../services/common/trmrk-infinite-height-panel-scroll-service';
+} from '../../../services/common/$obs$-trmrk-infinite-height-panel-scroll-service';
 
 @Component({
   selector: 'trmrk-infinite-height-panel-scroll-bar',

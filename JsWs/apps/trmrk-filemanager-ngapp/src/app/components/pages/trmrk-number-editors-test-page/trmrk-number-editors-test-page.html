@@ -1,17 +1,23 @@
 <trmrk-app-page [trmrkAppBarTitle]="'Number editors test'"
   ><trmrk-horiz-strip
-    [trmrkCssClass]="['trmrk-has-border-x2 trmrk-top-horiz-strip']"
+    [trmrkCssClass]="['trmrk-has-border-x1 trmrk-top-horiz-strip']"
     [trmrkUseContentInsteadOfTextRow]="true"
   >
   </trmrk-horiz-strip>
-  <div [ngClass]="['trmrk-page-body trmrk-scrollable trmrk-scrollable-y']">
+  <div
+    [ngClass]="['trmrk-page-body trmrk-scrollable trmrk-scrollable-y']"
+    [ngStyle]="{
+      boxSizing: 'border-box',
+    }"
+  >
     <div
       [ngStyle]="{
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
         paddingTop: '10px',
-        paddingRight: '3px'
+        paddingRight: '3px',
+        minWidth: 0,
       }"
     >
       <trmrk-mat-number-input
@@ -40,14 +46,25 @@
         (trmrkValueChanged)="matRgbInput1ValueChanged($event)"
       ></trmrk-mat-rgb-input>
       <trmrk-mat-rgb-input
-        [trmrkLabel]="'Allows Not Alpha'"
+        [trmrkLabel]="
+          'Allows Not Alpha asjkdhfgaskjdhfgaskjdhfgasdjkhfgjkashdgfkjhasdgfjkhgasdasjkdhfgaskjdhfgaskjdhfgasdjkhfgjkashdgfkjhasdgfjkhgasd'
+        "
         [trmrkValue]="matRgbInput2Value"
         (trmrkValueChanged)="matRgbInput2ValueChanged($event)"
         [trmrkAllowAlpha]="false"
       ></trmrk-mat-rgb-input>
       <trmrk-mat-date-time-input></trmrk-mat-date-time-input>
     </div>
-    <div [ngStyle]="{}">
+    <div
+      [ngStyle]="{
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'column',
+        paddingTop: '10px',
+        paddingRight: '3px',
+        minWidth: 0,
+      }"
+    >
       <trmrk-short-string-editor
         [trmrkString]="'short '"
         [trmrkFocusedCharIdx]="-1"
@@ -69,9 +86,30 @@
         [trmrkFocusedCharIdx]="0"
       ></trmrk-short-string-editor>
     </div>
+    <div>
+      <div class="trmrk-form-node">
+        <mat-form-field appearance="outline" class="trmrk-form-field">
+          <input matInput required />
+          <sup class="trmrk-required-text">*</sup>
+        </mat-form-field>
+        <button mat-icon-button class="trmrk-icon-btn">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <mat-spinner [diameter]="40" class="trmrk-mat-spinner"></mat-spinner>
+      </div>
+      <div class="trmrk-form-node">
+        <mat-form-field appearance="outline" class="trmrk-form-field">
+          <input matInput type="number" required />
+          <sup class="trmrk-required-text">*</sup>
+        </mat-form-field>
+        <button mat-icon-button class="trmrk-icon-btn">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+    </div>
   </div>
   <trmrk-horiz-strip
-    [trmrkCssClass]="['trmrk-has-border-x2 trmrk-bottom-horiz-strip']"
+    [trmrkCssClass]="['trmrk-has-border-x1 trmrk-bottom-horiz-strip']"
     [trmrkUseContentInsteadOfTextRow]="true"
   ></trmrk-horiz-strip
 ></trmrk-app-page>

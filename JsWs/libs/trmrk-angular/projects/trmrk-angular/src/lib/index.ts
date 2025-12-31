@@ -9,7 +9,7 @@ import {
   TrmrkPanelListServiceItemData as TrmrkPanelListServiceItemDataTsIntf,
   TrmrkPanelListServiceRow as TrmrkPanelListServiceRowTsIntf,
   TrmrkPanelListServiceSetupArgs as TrmrkPanelListServiceSetupArgsTsIntf,
-} from './services/common/trmrk-panel-list-service';
+} from './services/common/$obs$-trmrk-panel-list-service';
 
 import {
   TrmrkTree as TrmrkTreeTsIntf,
@@ -31,18 +31,18 @@ export { TrmrkFormRow } from './USER-CODE/forms/components/common/trmrk-form-row
 export { TrmrkFormTextNode } from './USER-CODE/forms/components/common/trmrk-form-text-node/trmrk-form-text-node';
 export { TrmrkSpinner } from './USER-CODE/forms/components/common/trmrk-spinner/trmrk-spinner';
 
-export { TrmrkAcceleratingScrollControl } from './components/common/trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
-export { TrmrkAcceleratingScrollPopover } from './components/common/trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
+export { TrmrkAcceleratingScrollControl } from './components/common/$obs$-trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
+export { TrmrkAcceleratingScrollPopover } from './components/common/$obs$-trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
 export { TrmrkAppBar } from './components/common/trmrk-app-bar/trmrk-app-bar';
 export { TrmrkAppLink } from './components/common/trmrk-app-link/trmrk-app-link';
 export { TrmrkAppPage } from './components/common/trmrk-app-page/trmrk-app-page';
 export { TrmrkCancelContextMenu as TrmrkCancelContextMenuComponent } from './components/common/trmrk-cancel-context-menu/trmrk-cancel-context-menu';
 export { TrmrkDialog } from './components/common/trmrk-dialog/trmrk-dialog';
 export { TrmrkHorizStrip } from './components/common/trmrk-horiz-strip/trmrk-horiz-strip';
-export { TrmrkListAppPanel } from './components/common/trmrk-list-app-panel/trmrk-list-app-panel';
+export { TrmrkListAppPanel } from './components/common/$obs$-trmrk-list-app-panel/trmrk-list-app-panel';
 export { TrmrkLoading } from './components/common/trmrk-loading/trmrk-loading';
-export { TrmrkPanelList } from './components/common/trmrk-panel-list/trmrk-panel-list';
-export { TrmrkPanelListItem } from './components/common/trmrk-panel-list-item/trmrk-panel-list-item';
+export { TrmrkPanelList } from './components/common/$obs$-trmrk-panel-list/trmrk-panel-list';
+export { TrmrkPanelListItem } from './components/common/$obs$-trmrk-panel-list-item/trmrk-panel-list-item';
 export { TrmrkThinHorizStrip } from './components/common/trmrk-thin-horiz-strip/trmrk-thin-horiz-strip';
 export { TrmrkTreeViewNode } from './components/common/trmrk-tree-view-node/trmrk-tree-view-node';
 export { TrmrkUserMessage } from './components/common/trmrk-user-message/trmrk-user-message';
@@ -74,8 +74,8 @@ export { IntIdService } from './services/common/int-id-service';
 export { IntIdServiceFactory } from './services/common/int-id-service-factory';
 export { ModalIdService } from './services/common/modal-id-service';
 export { ToggleAppBarServiceBase } from './services/common/toggle-app-bar-service-base';
-export { TrmrkAcceleratingScrollService } from './services/common/trmrk-accelerating-scroll-service';
-export { TrmrkPanelListService } from './services/common/trmrk-panel-list-service';
+export { TrmrkAcceleratingScrollService } from './services/common/$obs$-trmrk-accelerating-scroll-service';
+export { TrmrkPanelListService } from './services/common/$obs$-trmrk-panel-list-service';
 
 export type AppConfigCore = AppConfigCoreTsIntf;
 export type EnvironmentCore = EnvironmentCoreTsIntf;

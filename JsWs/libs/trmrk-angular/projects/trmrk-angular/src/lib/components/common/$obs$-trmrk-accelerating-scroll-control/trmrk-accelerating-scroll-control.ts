@@ -17,7 +17,7 @@ import { getCoords } from '../../../../trmrk-browser/domUtils/touchAndMouseEvent
 import { getElemIdx } from '../../../../trmrk-browser/domUtils/getDomElemBounds';
 
 import { TrmrkContinuousPress } from '../../../directives/trmrk-continuous-press';
-import { TrmrkAcceleratingScrollService } from '../../../services/common/trmrk-accelerating-scroll-service';
+import { TrmrkAcceleratingScrollService } from '../../../services/common/$obs$-trmrk-accelerating-scroll-service';
 
 @Component({
   selector: 'trmrk-accelerating-scroll-control',

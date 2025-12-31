@@ -55,7 +55,7 @@
     border-radius: 2px;
   }
 
-  &.trmrk-has-border {
+  &.trmrk-has-border-x1 {
     padding: 3px;
 
     .trmrk-strip-cap {
@@ -114,7 +114,7 @@
     padding: 0;
     margin: 0;
 
-    &.trmrk-has-border, &.trmrk-has-border-x2 {
+    &.trmrk-has-border-x1, &.trmrk-has-border-x2 {
       padding: 0;
       border: 0;
     }
@@ -144,7 +144,7 @@
     height: 37px;
   }
 
-  &.trmrk-has-border {
+  &.trmrk-has-border-x1 {
     padding: 4px;
 
     .trmrk-text-col {
@@ -271,8 +271,15 @@
     justify-content: center;
   }
 
+  &.trmrk-has-border-x1, &.trmrk-has-border-x2 {
+    border-top-style: solid;
+  }
+
+  &.trmrk-has-border-x1 {
+    border-top-width: 1px;
+  }
+
   &.trmrk-has-border-x2 {
     border-top-width: 2px;
-    border-top-style: solid;
   }
 }

@@ -45,6 +45,14 @@ app-root {
   display: flex;
 }
 
+.trmrk-flex-dir-row {
+  flex-direction: row;
+}
+
+.trmrk-flex-dir-column {
+  flex-direction: column;
+}
+
 .trmrk-wrap-content {
   @include mixins.trmrk-wrap-content();
 }

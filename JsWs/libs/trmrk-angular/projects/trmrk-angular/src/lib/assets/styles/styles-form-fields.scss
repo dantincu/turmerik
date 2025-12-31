@@ -51,9 +51,9 @@
     height: 30px;
   }
 
-  > .trmrk-icon-btn {
+  /* > .trmrk-icon-btn {
     margin: 3px;
-  }
+  } */
 }
 
 .trmrk-icon-btn {
@@ -69,5 +69,39 @@
       top: -5px;
       left: -5px;
     }
+  }
+}
+
+mat-form-field.trmrk-form-field.mat-mdc-form-field {
+  height: 40px;
+
+  .mat-mdc-text-field-wrapper.mdc-text-field {
+    height: 100%;
+
+    .mat-mdc-form-field-flex {
+      height: 100%;
+
+      .mat-mdc-form-field-infix {
+        height: 100%;
+        min-height: 0;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+    }
+  }
+
+  .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
+    display: none;
+  }
+
+  .trmrk-required-text {
+    position: absolute;
+    top: 3px;
+    right: -10px;
+  }
+
+  .trmrk-mat-spinner {
+    width: 40px;
+    height: 40px;
   }
 }

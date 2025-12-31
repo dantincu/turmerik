@@ -2,119 +2,145 @@
   <div class="trmrk-label-wrapper">
     <h3>{{ trmrkLabel }}</h3>
   </div>
+  <div class="trmrk-field trmrk-no-border trmrk-flex-dir-row">
+    <div [ngClass]="'trmrk-icon-wrapper'">
+      <button
+        mat-icon-button
+        class="trmrk-icon-btn"
+        (trmrkLongPressOrRightClick)="doNothing()"
+        (trmrkShortPressOrLeftClick)="copyToClipboardClicked()"
+      >
+        <mat-icon class="trmrk-icon">content_copy</mat-icon>
+      </button>
+    </div>
+    <div [ngClass]="'trmrk-icon-wrapper'">
+      <button
+        mat-icon-button
+        class="trmrk-icon-btn"
+        (trmrkLongPressOrRightClick)="doNothing()"
+        (trmrkShortPressOrLeftClick)="pasteFromClipboardClicked()"
+      >
+        <mat-icon class="trmrk-icon">content_paste</mat-icon>
+      </button>
+    </div>
+  </div>
   @if ((hexValue ?? null) !== null) {
-  <div class="trmrk-field">
+  <div class="trmrk-field trmrk-flex-dir-column">
     <mat-checkbox [checked]="hexValueIsChecked" (change)="hexValueToggled()"
       ><span class="trmrk-text-bold">HEX</span></mat-checkbox
     >
     <code class="trmrk-text-bold">{{ hexValue }}</code>
   </div>
   } @if ((rgbaValue ?? null) !== null) {
-  <div class="trmrk-field">
+  <div class="trmrk-field trmrk-flex-dir-column">
     <mat-checkbox [checked]="rgbaValueIsChecked" (change)="rgbaValueToggled()"
       ><span class="trmrk-text-bold">RGBA</span></mat-checkbox
     >
     <code class="trmrk-text-bold">{{ rgbaValue }}</code>
   </div>
   }
-  <trmrk-number-editor
-    #redInput
-    [trmrkLabel]="'Red'"
-    [trmrkLabelTemplate]="redLabel"
-    [trmrkValue]="redInputValue"
-    [trmrkMin]="0"
-    [trmrkMax]="255"
-    [trmrkRequired]="true"
-    [trmrkFocusInput]="focusRedInput"
-    [trmrkBlurInput]="blurRedInput"
-    (trmrkFocusUpdated)="inputFocusUpdated($event, 'R')"
-    (trmrkInputKeyDown)="inputKeyDown($event, 'R')"
-    (trmrkValueChanged)="inputValueChanged($event, 'R')"
-  ></trmrk-number-editor>
-  <trmrk-number-editor
-    #greenInput
-    [trmrkLabel]="'Green'"
-    [trmrkLabelTemplate]="greenLabel"
-    [trmrkValue]="greenInputValue"
-    [trmrkMin]="0"
-    [trmrkMax]="255"
-    [trmrkRequired]="true"
-    [trmrkFocusInput]="focusGreenInput"
-    [trmrkBlurInput]="blurGreenInput"
-    (trmrkFocusUpdated)="inputFocusUpdated($event, 'G')"
-    (trmrkInputKeyDown)="inputKeyDown($event, 'G')"
-    (trmrkValueChanged)="inputValueChanged($event, 'G')"
-  ></trmrk-number-editor>
-  <trmrk-number-editor
-    #blueInput
-    [trmrkLabel]="'Blue'"
-    [trmrkLabelTemplate]="blueLabel"
-    [trmrkValue]="blueInputValue"
-    [trmrkMin]="0"
-    [trmrkMax]="255"
-    [trmrkRequired]="true"
-    [trmrkFocusInput]="focusBlueInput"
-    [trmrkBlurInput]="blurBlueInput"
-    (trmrkFocusUpdated)="inputFocusUpdated($event, 'B')"
-    (trmrkInputKeyDown)="inputKeyDown($event, 'B')"
-    (trmrkValueChanged)="inputValueChanged($event, 'B')"
-  ></trmrk-number-editor>
-  @if (trmrkAllowAlpha ?? true) {
-  <trmrk-number-editor
-    #alphaInput
-    class="trmrk-alpha-input"
-    [trmrkLabel]="'Alpha'"
-    [trmrkLabelTemplate]="alphaLabel"
-    [trmrkValue]="alphaInputValue"
-    [trmrkIsTogglable]="true"
-    [trmrkHide]="hideAlphaInput"
-    [trmrkMin]="0"
-    [trmrkMax]="255"
-    [trmrkRequired]="!this.hideAlphaInput"
-    [trmrkFocusInput]="focusAlphaInput"
-    [trmrkBlurInput]="blurAlphaInput"
-    (trmrkFocusUpdated)="inputFocusUpdated($event, 'A')"
-    (trmrkInputKeyDown)="inputKeyDown($event, 'A')"
-    (trmrkValueChanged)="inputValueChanged($event, 'A')"
-    (trmrkVisibilityToggled)="alphaInputToggled($event)"
-  ></trmrk-number-editor>
-  }
+  <div class="trmrk-components-container">
+    <div class="trmrk-components-inner-container">
+      <trmrk-number-editor
+        #redInput
+        [trmrkLabel]="'Red'"
+        [trmrkLabelTemplate]="redLabel"
+        [trmrkValue]="redInputValue"
+        [trmrkMin]="0"
+        [trmrkMax]="255"
+        [trmrkRequired]="true"
+        [trmrkFocusInput]="focusRedInput"
+        [trmrkBlurInput]="blurRedInput"
+        (trmrkFocusUpdated)="inputFocusUpdated($event, 'R')"
+        (trmrkInputKeyDown)="inputKeyDown($event, 'R')"
+        (trmrkValueChanged)="inputValueChanged($event, 'R')"
+      ></trmrk-number-editor>
+      <trmrk-number-editor
+        #greenInput
+        [trmrkLabel]="'Green'"
+        [trmrkLabelTemplate]="greenLabel"
+        [trmrkValue]="greenInputValue"
+        [trmrkMin]="0"
+        [trmrkMax]="255"
+        [trmrkRequired]="true"
+        [trmrkFocusInput]="focusGreenInput"
+        [trmrkBlurInput]="blurGreenInput"
+        (trmrkFocusUpdated)="inputFocusUpdated($event, 'G')"
+        (trmrkInputKeyDown)="inputKeyDown($event, 'G')"
+        (trmrkValueChanged)="inputValueChanged($event, 'G')"
+      ></trmrk-number-editor>
+      <trmrk-number-editor
+        #blueInput
+        [trmrkLabel]="'Blue'"
+        [trmrkLabelTemplate]="blueLabel"
+        [trmrkValue]="blueInputValue"
+        [trmrkMin]="0"
+        [trmrkMax]="255"
+        [trmrkRequired]="true"
+        [trmrkFocusInput]="focusBlueInput"
+        [trmrkBlurInput]="blurBlueInput"
+        (trmrkFocusUpdated)="inputFocusUpdated($event, 'B')"
+        (trmrkInputKeyDown)="inputKeyDown($event, 'B')"
+        (trmrkValueChanged)="inputValueChanged($event, 'B')"
+      ></trmrk-number-editor>
+      @if (trmrkAllowAlpha ?? true) {
+      <trmrk-number-editor
+        #alphaInput
+        class="trmrk-alpha-input"
+        [trmrkLabel]="'Alpha'"
+        [trmrkLabelTemplate]="alphaLabel"
+        [trmrkValue]="alphaInputValue"
+        [trmrkIsTogglable]="true"
+        [trmrkHide]="hideAlphaInput"
+        [trmrkMin]="0"
+        [trmrkMax]="255"
+        [trmrkRequired]="!this.hideAlphaInput"
+        [trmrkFocusInput]="focusAlphaInput"
+        [trmrkBlurInput]="blurAlphaInput"
+        (trmrkFocusUpdated)="inputFocusUpdated($event, 'A')"
+        (trmrkInputKeyDown)="inputKeyDown($event, 'A')"
+        (trmrkValueChanged)="inputValueChanged($event, 'A')"
+        (trmrkVisibilityToggled)="alphaInputToggled($event)"
+      ></trmrk-number-editor>
+      }
 
-  <ng-template #redLabel let-label="label"
-    ><div class="trmrk-header-container">
-      <div class="trmrk-disc-rad-15 trmrk-red-disc"></div>
-      <h3>
-        {{ label }}
-      </h3>
-    </div></ng-template
-  >
-  <ng-template #greenLabel let-label="label"
-    ><div class="trmrk-header-container">
-      <div class="trmrk-disc-rad-15 trmrk-green-disc"></div>
-      <h3>
-        {{ label }}
-      </h3>
-    </div></ng-template
-  >
-  <ng-template #blueLabel let-label="label"
-    ><div class="trmrk-header-container">
-      <div class="trmrk-disc-rad-15 trmrk-blue-disc"></div>
-      <h3>
-        {{ label }}
-      </h3>
-    </div></ng-template
-  >
-  <ng-template #alphaLabel let-label="label"
-    ><div class="trmrk-header-container">
-      <div class="trmrk-disc-rad-15 trmrk-alpha-disc"></div>
-      <h3>
-        {{ label }}
-      </h3>
-    </div></ng-template
-  >
-</div>
-<div class="trmrk-color-container">
-  <div class="trmrk-color-inner-container">
-    <div class="trmrk-color" [ngStyle]="{ background: colorPanelBackground }"></div>
+      <ng-template #redLabel let-label="label"
+        ><div class="trmrk-header-container">
+          <div class="trmrk-disc-rad-15 trmrk-red-disc"></div>
+          <h3>
+            {{ label }}
+          </h3>
+        </div></ng-template
+      >
+      <ng-template #greenLabel let-label="label"
+        ><div class="trmrk-header-container">
+          <div class="trmrk-disc-rad-15 trmrk-green-disc"></div>
+          <h3>
+            {{ label }}
+          </h3>
+        </div></ng-template
+      >
+      <ng-template #blueLabel let-label="label"
+        ><div class="trmrk-header-container">
+          <div class="trmrk-disc-rad-15 trmrk-blue-disc"></div>
+          <h3>
+            {{ label }}
+          </h3>
+        </div></ng-template
+      >
+      <ng-template #alphaLabel let-label="label"
+        ><div class="trmrk-header-container">
+          <div class="trmrk-disc-rad-15 trmrk-alpha-disc"></div>
+          <h3>
+            {{ label }}
+          </h3>
+        </div></ng-template
+      >
+    </div>
+    <div class="trmrk-color-container">
+      <div class="trmrk-color-inner-container">
+        <div class="trmrk-color" [ngStyle]="{ background: colorPanelBackground }"></div>
+      </div>
+    </div>
   </div>
 </div>

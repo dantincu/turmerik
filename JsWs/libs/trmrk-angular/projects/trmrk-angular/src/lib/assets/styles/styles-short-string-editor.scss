@@ -1,6 +1,7 @@
 trmrk-short-string-editor {
   display: flex;
   flex-wrap: wrap;
+  width: fit-content;
 }
 
 .trmrk-short-string-editor {
@@ -9,6 +10,7 @@ trmrk-short-string-editor {
   flex-direction: column;
   position: relative;
   flex-wrap: wrap;
+  width: fit-content;
 
   .trmrk-section {
     cursor: pointer;
@@ -110,6 +112,9 @@ trmrk-short-string-editor {
 trmrk-number-editor {
   display: flex;
   flex-direction: column;
+  width: fit-content;
+  border: 1px solid;
+  border-radius: 3px;
 
   .trmrk-error-wrapper, .trmrk-output-wrapper, .trmrk-label-wrapper {
     display: flex;
@@ -137,6 +142,7 @@ trmrk-rgb-editor {
   position: relative;
 
   .trmrk-rgb-editor {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -163,16 +169,37 @@ trmrk-rgb-editor {
 
     > .trmrk-field {
       display: flex;
-      flex-direction: column;
       margin: 5px;
+      border-width: 1px;
+      border-style: solid;
+      border-radius: 3px;
+
+      &.trmrk-no-border {
+        border: none;
+      }
+
+      > code.trmrk-text-bold {
+        padding: 10px;
+        padding-top: 0;
+      }
+    }
+
+    .trmrk-components-container {
+      display: flex;
+    }
+
+    .trmrk-components-inner-container {
+      display: flex;
+      flex-direction: column;
     }
 
     trmrk-number-editor {
-      margin: 10px;
+      margin: 5px;
 
       .trmrk-header-container {
         margin-top: 10px;
         margin-left: 2px;
+        margin-right: 5px;
         display: flex;
         align-items: center; /* This vertically centers both items */
         gap: 10px;           /* Adds space between the text and circle */
@@ -192,21 +219,21 @@ trmrk-rgb-editor {
 
   .trmrk-color-container, .trmrk-color-inner-container, .trmrk-color {
     display: flex;
-    flex-direction: column;
     position: relative;
-    border-radius: 10px;
+    border-radius: 3px;
     flex: 1 1 auto;
     justify-content: center;
     align-items: stretch;
   }
 
   .trmrk-color-container {
-    margin: 10px;
-    border: 2px solid #FFFA;
+    height: calc(100% - 13px);
+    margin: 5px;
+    border: 1px solid #FFFA;
   }
 
   .trmrk-color-inner-container {
-    border: 2px solid #000A;
+    border: 1px solid #000A;
     background: linear-gradient(to right, white 50%, black 50%);
     background-size: 100% 100%; /* The gradient covers the whole div */
   }

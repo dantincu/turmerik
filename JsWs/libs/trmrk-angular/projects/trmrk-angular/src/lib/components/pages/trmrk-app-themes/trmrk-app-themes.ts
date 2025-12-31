@@ -6,15 +6,15 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { TrmrkTouchStartOrMouseDown } from '../../../directives/trmrk-touch-start-or-mouse-down';
 
-import { TrmrkPanelListItem } from '../../common/trmrk-panel-list-item/trmrk-panel-list-item';
+import { TrmrkPanelListItem } from '../../common/$obs$-trmrk-panel-list-item/trmrk-panel-list-item';
 
-import { TrmrkListAppPanel } from '../../common/trmrk-list-app-panel/trmrk-list-app-panel';
+import { TrmrkListAppPanel } from '../../common/$obs$-trmrk-list-app-panel/trmrk-list-app-panel';
 import { TrmrkEditAppThemeDialog } from './trmrk-edit-app-theme/trmrk-edit-app-theme-dialog';
 
 import {
   TrmrkPanelListService,
   TrmrkPanelListServiceRow,
-} from '../../../services/common/trmrk-panel-list-service';
+} from '../../../services/common/$obs$-trmrk-panel-list-service';
 
 import { TrmrkAppThemesService } from '../../../services/pages/trmrk-app-themes-service';
 

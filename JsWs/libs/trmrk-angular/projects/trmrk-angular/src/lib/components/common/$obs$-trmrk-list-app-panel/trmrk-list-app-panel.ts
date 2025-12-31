@@ -24,17 +24,17 @@ import * as materialIcons from '../../../assets/icons/material';
 
 import { TrmrkHorizStrip } from '../trmrk-horiz-strip/trmrk-horiz-strip';
 import { TrmrkLoading } from '../trmrk-loading/trmrk-loading';
-import { TrmrkPanelListItem } from '../trmrk-panel-list-item/trmrk-panel-list-item';
+import { TrmrkPanelListItem } from '../$obs$-trmrk-panel-list-item/trmrk-panel-list-item';
 
 import { NullOrUndef } from '../../../../trmrk/core';
 
 import {
   TrmrkPanelListService,
   TrmrkPanelListServiceRow,
-} from '../../../services/common/trmrk-panel-list-service';
-import { TrmrkAcceleratingScrollControl } from '../trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
-import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
-import { TrmrkPanelList } from '../trmrk-panel-list/trmrk-panel-list';
+} from '../../../services/common/$obs$-trmrk-panel-list-service';
+import { TrmrkAcceleratingScrollControl } from '../$obs$-trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
+import { TrmrkAcceleratingScrollPopover } from '../$obs$-trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
+import { TrmrkPanelList } from '../$obs$-trmrk-panel-list/trmrk-panel-list';
 
 import { TrmrkCancelContextMenu as TrmrkCancelContextMenuDirective } from '../../../directives/trmrk-cancel-context-menu';
 
@@ -79,9 +79,7 @@ export class TrmrkListAppPanel implements OnChanges, OnDestroy {
   @Input() trmrkHasError = 0;
   @Input() trmrkCanCloseError = false;
 
-  @Output() trmrkRowsUpdated = new EventEmitter<
-    TrmrkPanelListServiceRow<any>[]
-  >();
+  @Output() trmrkRowsUpdated = new EventEmitter<TrmrkPanelListServiceRow<any>[]>();
 
   @ViewChild('panelList')
   panelList!: TrmrkPanelList;
@@ -129,9 +127,7 @@ export class TrmrkListAppPanel implements OnChanges, OnDestroy {
     public panelListService: TrmrkPanelListService<any, any>,
     private sanitizer: DomSanitizer
   ) {
-    this.dragPanIcon = this.sanitizer.bypassSecurityTrustHtml(
-      materialIcons.drag_pan
-    );
+    this.dragPanIcon = this.sanitizer.bypassSecurityTrustHtml(materialIcons.drag_pan);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -148,8 +144,7 @@ export class TrmrkListAppPanel implements OnChanges, OnDestroy {
         changes,
         () => this.trmrkEntities,
         () => {
-          this.panelListService.getMovingAggregateRowEl = () =>
-            this.movingAggregateRowEl;
+          this.panelListService.getMovingAggregateRowEl = () => this.movingAggregateRowEl;
         }
       );
     });

@@ -17,8 +17,8 @@ import {
   TrmrkMultiClickStepEventData,
 } from '../../directives/trmrk-multi-click';
 
-import { TrmrkSessionService } from '../../services/common/trmrk-session-service';
-import { IndexedDbDatabasesServiceCore } from '../../services/common/indexedDb/indexed-db-databases-service-core';
+import { TrmrkSessionService } from './trmrk-session-service';
+import { IndexedDbDatabasesServiceCore } from './indexedDb/indexed-db-databases-service-core';
 
 import { TrmrkDragEvent } from './types';
 import { TrmrkObservable } from './TrmrkObservable';
