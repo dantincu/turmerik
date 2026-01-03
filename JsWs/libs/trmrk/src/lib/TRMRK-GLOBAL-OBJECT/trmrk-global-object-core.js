@@ -1,6 +1,8 @@
 const trmrkRef = {};
-const createTrmrkFunc = (appName) => {
-    const trmrk = (trmrkRef.value = globalThis.trmrk ??= {});
+const createTrmrkFunc = (appName, createGlobalTrmrkObj = false) => {
+    const trmrk = (trmrkRef.value = createGlobalTrmrkObj
+        ? (globalThis.trmrk ??= {})
+        : {});
     trmrk.appName = appName;
     trmrk.dbObjNamePrefix = `[${appName}]`;
     return trmrk;

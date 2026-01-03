@@ -1,12 +1,15 @@
 const trmrkRef = {};
-const createTrmrkFunc = (appName) => {
-    const trmrk = (trmrkRef.value = globalThis.trmrk ??= {});
+const createTrmrkFunc = (appName, createGlobalTrmrkObj = false) => {
+    const trmrk = (trmrkRef.value = createGlobalTrmrkObj
+        ? (globalThis.trmrk ??= {})
+        : {});
     trmrk.appName = appName;
     trmrk.dbObjNamePrefix = `[${appName}]`;
     return trmrk;
 };
 const getTrmrk = () => trmrkRef.value;
 const createTrmrk = createTrmrkFunc;
+
 const prefersDarkMode = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 const isDarkMode = (localStorageIsDarkModeKey) => {
     const localStorageIsDarkMode = localStorage.getItem(localStorageIsDarkModeKey);
@@ -79,8 +82,8 @@ class DarkModeService {
         this.dispose();
     }
 }
-const initApp = (appName) => {
-    const trmrk = createTrmrk(appName);
+const initApp = (appName, createGlobalTrmrkObj = false) => {
+    const trmrk = createTrmrk(appName, createGlobalTrmrkObj);
     trmrk.darkModeService = new DarkModeService();
     trmrk.darkModeService.init();
 };
