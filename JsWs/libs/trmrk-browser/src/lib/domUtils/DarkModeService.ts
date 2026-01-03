@@ -2,6 +2,7 @@ import { getTrmrk } from '../../trmrk/TRMRK-GLOBAL-OBJECT/trmrk-global-object-co
 
 export interface DarkModeServiceInitArgs {
   onDarkModeStateChanged?: (isDarkMode: boolean) => void;
+  addStorageEventListener?: boolean | null | undefined;
 }
 
 export const prefersDarkMode = () =>
@@ -39,11 +40,18 @@ export class DarkModeService implements Disposable {
   }
 
   init(args?: DarkModeServiceInitArgs | null | undefined) {
-    args ??= {};
+    args ??= {
+      addStorageEventListener: false,
+    };
+
     this.onDarkModeStateChanged = args.onDarkModeStateChanged ??= () => {};
     this.dbObjNamePrefix = getTrmrk().dbObjNamePrefix;
     this.appThemeIsDarkModeLocalStorageKey = `${this.dbObjNamePrefix}[appThemeIsDarkMode]`;
-    window.addEventListener('storage', this.storageEvent);
+
+    if (args.addStorageEventListener !== false) {
+      window.addEventListener('storage', this.storageEvent);
+    }
+
     this.detectDarkMode();
   }
 
@@ -60,12 +68,8 @@ export class DarkModeService implements Disposable {
         isDarkModeValue = event.newValue === 'true';
       }
 
-      this.darkModeLocalStorageValueChanged(isDarkModeValue);
+      this.darkModeStateChange(isDarkModeValue);
     }
-  }
-
-  darkModeLocalStorageValueChanged(isDarkModeValue: boolean) {
-    this.darkModeStateChange(isDarkModeValue);
   }
 
   darkModeStateChange(isDarkModeValue: boolean) {

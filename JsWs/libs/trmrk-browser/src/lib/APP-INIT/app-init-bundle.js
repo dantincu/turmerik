@@ -1,16 +1,13 @@
 const trmrkRef = {};
-
-const createTrmrk = (appName) => {
+const createTrmrkFunc = (appName) => {
     const trmrk = (trmrkRef.value = globalThis.trmrk ??= {});
     trmrk.appName = appName;
     trmrk.dbObjNamePrefix = `[${appName}]`;
     return trmrk;
 };
-
 const getTrmrk = () => trmrkRef.value;
-
+const createTrmrk = createTrmrkFunc;
 const prefersDarkMode = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-
 const isDarkMode = (localStorageIsDarkModeKey) => {
     const localStorageIsDarkMode = localStorage.getItem(localStorageIsDarkModeKey);
     let isDarkMode;
@@ -30,7 +27,6 @@ const isDarkMode = (localStorageIsDarkModeKey) => {
     }
     return isDarkMode;
 };
-
 class DarkModeService {
     onDarkModeStateChanged;
     dbObjNamePrefix;
@@ -40,11 +36,15 @@ class DarkModeService {
         this.storageEvent = this.storageEvent.bind(this);
     }
     init(args) {
-        args ??= {};
+        args ??= {
+            addStorageEventListener: false,
+        };
         this.onDarkModeStateChanged = args.onDarkModeStateChanged ??= () => { };
         this.dbObjNamePrefix = getTrmrk().dbObjNamePrefix;
         this.appThemeIsDarkModeLocalStorageKey = `${this.dbObjNamePrefix}[appThemeIsDarkMode]`;
-        window.addEventListener('storage', this.storageEvent);
+        if (args.addStorageEventListener !== false) {
+            window.addEventListener('storage', this.storageEvent);
+        }
         this.detectDarkMode();
     }
     storageEvent(event) {
@@ -57,11 +57,8 @@ class DarkModeService {
             else {
                 isDarkModeValue = event.newValue === 'true';
             }
-            this.darkModeLocalStorageValueChanged(isDarkModeValue);
+            this.darkModeStateChange(isDarkModeValue);
         }
-    }
-    darkModeLocalStorageValueChanged(isDarkModeValue) {
-        this.darkModeStateChange(isDarkModeValue);
     }
     darkModeStateChange(isDarkModeValue) {
         document.documentElement.setAttribute('data-theme', isDarkModeValue ? 'dark' : 'light');
@@ -82,11 +79,8 @@ class DarkModeService {
         this.dispose();
     }
 }
-
 const initApp = (appName) => {
     const trmrk = createTrmrk(appName);
     trmrk.darkModeService = new DarkModeService();
     trmrk.darkModeService.init();
 };
-
-// initApp('my-app-name');

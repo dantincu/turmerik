@@ -28,11 +28,15 @@ export class DarkModeService {
         this.storageEvent = this.storageEvent.bind(this);
     }
     init(args) {
-        args ??= {};
+        args ??= {
+            addStorageEventListener: false,
+        };
         this.onDarkModeStateChanged = args.onDarkModeStateChanged ??= () => { };
         this.dbObjNamePrefix = getTrmrk().dbObjNamePrefix;
         this.appThemeIsDarkModeLocalStorageKey = `${this.dbObjNamePrefix}[appThemeIsDarkMode]`;
-        window.addEventListener('storage', this.storageEvent);
+        if (args.addStorageEventListener !== false) {
+            window.addEventListener('storage', this.storageEvent);
+        }
         this.detectDarkMode();
     }
     storageEvent(event) {
@@ -45,11 +49,8 @@ export class DarkModeService {
             else {
                 isDarkModeValue = event.newValue === 'true';
             }
-            this.darkModeLocalStorageValueChanged(isDarkModeValue);
+            this.darkModeStateChange(isDarkModeValue);
         }
-    }
-    darkModeLocalStorageValueChanged(isDarkModeValue) {
-        this.darkModeStateChange(isDarkModeValue);
     }
     darkModeStateChange(isDarkModeValue) {
         document.documentElement.setAttribute('data-theme', isDarkModeValue ? 'dark' : 'light');
