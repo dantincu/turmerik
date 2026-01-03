@@ -17,6 +17,7 @@ const srcFoldersArr: { [key: string]: string } = {
   "trmrk-angular": "libs\\trmrk-angular\\projects\\trmrk-angular\\src\\lib",
   "trmrk-axios": "libs\\trmrk-axios\\src\\lib",
   "trmrk-browser": "libs\\trmrk-browser\\src\\lib",
+  "trmrk-svelte": "libs\\trmrk-svelte\\src\\lib",
   "trmrk-filemanager-nglib":
     "libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib\\src\\lib",
   "trmrk-mailbox-nglib":
@@ -25,6 +26,7 @@ const srcFoldersArr: { [key: string]: string } = {
     "libs\\trmrk-mkscripts-jsws-sync-behavior\\src\\lib",
   "trmrk-notes-nglib":
     "libs\\trmrk-notes-nglib\\projects\\trmrk-notes-nglib\\src\\lib",
+  "trmrk-notes-sveltelib": "libs\\trmrk-notes-sveltelib\\src\\lib",
   "trmrk-testing-nglib":
     "libs\\trmrk-testing-nglib\\projects\\trmrk-testing-nglib\\src\\lib",
   "trmrk-text-transform-behavior":
@@ -54,14 +56,28 @@ const destnLocationsArr: {
     dirPath: "libs\\trmrk-browser\\src",
     syncedLibs: ["trmrk", "trmrk-axios"],
   },
+  "trmrk-svelte": {
+    dirPath: "libs\\trmrk-svelte\\src",
+    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-axios"],
+  },
   "trmrk-filemanager-nglib": {
     dirPath:
       "libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib\\src",
-    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-angular", "trmrk-testing-nglib"],
+    syncedLibs: [
+      "trmrk",
+      "trmrk-browser",
+      "trmrk-angular",
+      "trmrk-testing-nglib",
+    ],
   },
   "trmrk-mailbox-nglib": {
     dirPath: "libs\\trmrk-mailbox-nglib\\projects\\trmrk-mailbox-nglib\\src",
-    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-angular", "trmrk-testing-nglib"],
+    syncedLibs: [
+      "trmrk",
+      "trmrk-browser",
+      "trmrk-angular",
+      "trmrk-testing-nglib",
+    ],
   },
   "trmrk-text-transform-behavior": {
     dirPath: "libs\\trmrk-text-transform-behavior\\src",
@@ -93,13 +109,13 @@ const destnLocationsArr: {
       "trmrk-filemanager-nglib",
     ],
   },
+  "trmrk-notes-sveltelib": {
+    dirPath: "libs\\trmrk-notes-sveltelib\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-svelte"],
+  },
   "trmrk-testing-nglib": {
     dirPath: "libs\\trmrk-testing-nglib\\projects\\trmrk-testing-nglib\\src",
-    syncedLibs: [
-      "trmrk",
-      "trmrk-browser",
-      "trmrk-angular",
-    ],
+    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-angular"],
   },
   "trmrk-mkscripts-jsws-sync-behavior": {
     dirPath: "libs\\trmrk-mkscripts-jsws-sync-behavior\\src",
@@ -143,6 +159,20 @@ const destnLocationsArr: {
       "trmrk-notes-nglib",
       "trmrk-testing-nglib",
     ],
+  },
+  "trmrk-notes-svelteapp": {
+    dirPath: "apps\\trmrk-notes-svelteapp\\src",
+    syncedLibs: [
+      "trmrk",
+      "trmrk-axios",
+      "trmrk-browser",
+      "trmrk-svelte",
+      "trmrk-notes-sveltelib",
+    ],
+  },
+  "trmrk-svelte-testapp": {
+    dirPath: "apps\\trmrk-svelte-testapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-svelte"],
   },
 };
 

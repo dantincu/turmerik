@@ -17,11 +17,13 @@
               [ "..\\..\\libs\\trmrk-angular" ],
               [ "..\\..\\libs\\trmrk-axios" ],
               [ "..\\..\\libs\\trmrk-browser" ],
+              [ "..\\..\\libs\\trmrk-svelte" ],
               [ "..\\..\\libs\\trmrk-filemanager-nglib" ],
               [ "..\\..\\libs\\trmrk-mailbox-nglib" ],
               [ "..\\..\\libs\\trmrk-mkscripts-jsws-sync-behavior" ],
               [ "..\\..\\libs\\trmrk-mkscripts-jsws-sync-behavior-testapp" ],
               [ "..\\..\\libs\\trmrk-notes-nglib" ],
+              [ "..\\..\\libs\\trmrk-notes-sveltelib" ],
               [ "..\\..\\libs\\trmrk-testing-nglib" ],
               [ "..\\..\\libs\\trmrk-text-transform-behavior" ],
               [ "..\\..\\libs\\trmrk-text-transform-behavior-testapp" ],
@@ -31,7 +33,9 @@
               [ "..\\..\\apps\\trmrk-filemanager-ngapp" ],
               [ "..\\..\\apps\\trmrk-http-proxy-nodejsapp" ],
               [ "..\\..\\apps\\trmrk-mailbox-ngapp" ],
-              [ "..\\..\\apps\\trmrk-notes-ngapp" ]
+              [ "..\\..\\apps\\trmrk-notes-ngapp" ],
+              [ "..\\..\\apps\\trmrk-svelte-testapp" ],
+              [ "..\\..\\apps\\trmrk-notes-svelteapp" ]
             ],
             "ArgFilters": {
               "libs": {
@@ -182,11 +186,13 @@
           "libs\\trmrk-angular\\_",
           "libs\\trmrk-axios\\_",
           "libs\\trmrk-browser\\_",
+          "libs\\trmrk-svelte\\_",
           "libs\\trmrk-filemanager-nglib\\_",
           "libs\\trmrk-mailbox-nglib\\_",
           "libs\\trmrk-mkscripts-jsws-sync-behavior\\_",
           "libs\\trmrk-mkscripts-jsws-sync-behavior-testapp\\_",
           "libs\\trmrk-notes-nglib\\_",
+          "libs\\trmrk-notes-sveltelib\\_",
           "libs\\trmrk-testing-nglib\\_",
           "libs\\trmrk-text-transform-behavior\\_",
           "libs\\trmrk-text-transform-behavior-testapp\\_",
@@ -196,7 +202,9 @@
           "apps\\trmrk-filemanager-ngapp\\_",
           "apps\\trmrk-http-proxy-nodejsapp\\_",
           "apps\\trmrk-mailbox-ngapp\\_",
-          "apps\\trmrk-notes-ngapp\\_"
+          "apps\\trmrk-notes-ngapp\\_",
+          "apps\\trmrk-notes-svelteapp\\_",
+          "apps\\trmrk-svelte-testapp\\_"
         ],
         "Filters": {
           "libs": {

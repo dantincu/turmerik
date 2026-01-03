@@ -3,7 +3,9 @@
 for %%a in ("..\..\apps\trmrk-filemanager-ngapp",
 "..\..\apps\trmrk-http-proxy-nodejsapp",
 "..\..\apps\trmrk-mailbox-ngapp",
-"..\..\apps\trmrk-notes-ngapp") do (
+"..\..\apps\trmrk-notes-ngapp",
+"..\..\apps\trmrk-svelte-testapp",
+"..\..\apps\trmrk-notes-svelteapp") do (
   cd %%a
   .\_\rm-ch_dst.bat
   npm run build
