@@ -92,6 +92,56 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
             },
             new()
             {
+                Factory = (args) => new ([
+                    GetSpecialTokensTextPart(@""":t:"),
+                    GetTitleTextPart(NormalizeTitle(args).Replace(
+                        "&", "&&").Replace(
+                        "\"", "\"\"").Replace(
+                        ":", "::")),
+                    GetSpecialTokensTextPart(@""" "":url:"),
+                    GetUrlTextPart(args),
+                    GetSpecialTokensTextPart(@"""")])
+            },
+            new()
+            {
+                Factory = (args) => new ([
+                    GetSpecialTokensTextPart(@""":t:"),
+                    GetTitleTextPart(NormalizeTitle(args).Replace(
+                        "&", "&&").Replace(
+                        "\"", "\"\"").Replace(
+                        ":", "::")),
+                    GetSpecialTokensTextPart(@""" "":url:"),
+                    GetRedirectedUrlTextPart(args),
+                    GetSpecialTokensTextPart(@"""")])
+            },
+            new()
+            {
+                Factory = (args) => new (NormalizeTitle(args).Replace(
+                        "&", "&amp;").Replace(
+                        "\\", "\\\\").Replace(
+                        "[", "\\[").Replace(
+                        "]", "\\]").With(
+                    title => GetSpecialTokensTextPart("[").Arr(
+                        GetTitleTextPart(args),
+                        GetSpecialTokensTextPart("]("),
+                        GetUrlTextPart(args),
+                        GetSpecialTokensTextPart(")"))))
+            },
+            new()
+            {
+                Factory = (args) => new (NormalizeTitle(args).Replace(
+                        "&", "&amp;").Replace(
+                        "\\", "\\\\").Replace(
+                        "[", "\\[").Replace(
+                        "]", "\\]").With(
+                    title => GetSpecialTokensTextPart("[").Arr(
+                        GetTitleTextPart(args),
+                        GetSpecialTokensTextPart("]("),
+                        GetRedirectedUrlTextPart(args),
+                        GetSpecialTokensTextPart(")"))))
+            },
+            new()
+            {
                 Factory = (args) => new (NormalizeTitle(args).Replace(
                         "&", "&amp;").Replace(
                         "\\", "\\\\").Replace(
@@ -131,30 +181,6 @@ namespace Turmerik.Utility.WinFormsApp.Services.FetchMultipleLinks
                         GetSpecialTokensTextPart("]("),
                         GetRedirectedUrlTextPart(args),
                         GetSpecialTokensTextPart(")"))))
-            },
-            new()
-            {
-                Factory = (args) => new ([
-                    GetSpecialTokensTextPart(@""":t:"),
-                    GetTitleTextPart(NormalizeTitle(args).Replace(
-                        "&", "&&").Replace(
-                        "\"", "\"\"").Replace(
-                        ":", "::")),
-                    GetSpecialTokensTextPart(@""" "":url:"),
-                    GetUrlTextPart(args),
-                    GetSpecialTokensTextPart(@"""")])
-            },
-            new()
-            {
-                Factory = (args) => new ([
-                    GetSpecialTokensTextPart(@""":t:"),
-                    GetTitleTextPart(NormalizeTitle(args).Replace(
-                        "&", "&&").Replace(
-                        "\"", "\"\"").Replace(
-                        ":", "::")),
-                    GetSpecialTokensTextPart(@""" "":url:"),
-                    GetRedirectedUrlTextPart(args),
-                    GetSpecialTokensTextPart(@"""")])
             },
         }.Select((item, i) => new UrlScript(item)
         {
