@@ -18,12 +18,14 @@
               [ "..\\..\\libs\\trmrk-axios" ],
               [ "..\\..\\libs\\trmrk-browser" ],
               [ "..\\..\\libs\\trmrk-svelte" ],
+              [ "..\\..\\libs\\trmrk-react" ],
               [ "..\\..\\libs\\trmrk-filemanager-nglib" ],
               [ "..\\..\\libs\\trmrk-mailbox-nglib" ],
               [ "..\\..\\libs\\trmrk-mkscripts-jsws-sync-behavior" ],
               [ "..\\..\\libs\\trmrk-mkscripts-jsws-sync-behavior-testapp" ],
               [ "..\\..\\libs\\trmrk-notes-nglib" ],
               [ "..\\..\\libs\\trmrk-notes-sveltelib" ],
+              [ "..\\..\\libs\\trmrk-notes-reactlib" ],
               [ "..\\..\\libs\\trmrk-testing-nglib" ],
               [ "..\\..\\libs\\trmrk-text-transform-behavior" ],
               [ "..\\..\\libs\\trmrk-text-transform-behavior-testapp" ],
@@ -35,7 +37,9 @@
               [ "..\\..\\apps\\trmrk-mailbox-ngapp" ],
               [ "..\\..\\apps\\trmrk-notes-ngapp" ],
               [ "..\\..\\apps\\trmrk-svelte-testapp" ],
-              [ "..\\..\\apps\\trmrk-notes-svelteapp" ]
+              [ "..\\..\\apps\\trmrk-react-testapp" ],
+              [ "..\\..\\apps\\trmrk-notes-svelteapp" ],
+              [ "..\\..\\apps\\trmrk-notes-reactapp" ]
             ],
             "ArgFilters": {
               "libs": {
@@ -187,12 +191,14 @@
           "libs\\trmrk-axios\\_",
           "libs\\trmrk-browser\\_",
           "libs\\trmrk-svelte\\_",
+          "libs\\trmrk-react\\_",
           "libs\\trmrk-filemanager-nglib\\_",
           "libs\\trmrk-mailbox-nglib\\_",
           "libs\\trmrk-mkscripts-jsws-sync-behavior\\_",
           "libs\\trmrk-mkscripts-jsws-sync-behavior-testapp\\_",
           "libs\\trmrk-notes-nglib\\_",
           "libs\\trmrk-notes-sveltelib\\_",
+          "libs\\trmrk-notes-reactlib\\_",
           "libs\\trmrk-testing-nglib\\_",
           "libs\\trmrk-text-transform-behavior\\_",
           "libs\\trmrk-text-transform-behavior-testapp\\_",
@@ -204,7 +210,9 @@
           "apps\\trmrk-mailbox-ngapp\\_",
           "apps\\trmrk-notes-ngapp\\_",
           "apps\\trmrk-notes-svelteapp\\_",
-          "apps\\trmrk-svelte-testapp\\_"
+          "apps\\trmrk-notes-reactapp\\_",
+          "apps\\trmrk-svelte-testapp\\_",
+          "apps\\trmrk-react-testapp\\_"
         ],
         "Filters": {
           "libs": {

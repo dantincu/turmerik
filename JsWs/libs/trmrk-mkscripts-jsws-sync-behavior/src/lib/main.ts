@@ -18,6 +18,7 @@ const srcFoldersArr: { [key: string]: string } = {
   "trmrk-axios": "libs\\trmrk-axios\\src\\lib",
   "trmrk-browser": "libs\\trmrk-browser\\src\\lib",
   "trmrk-svelte": "libs\\trmrk-svelte\\src\\lib",
+  "trmrk-react": "libs\\trmrk-react\\src\\lib",
   "trmrk-filemanager-nglib":
     "libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib\\src\\lib",
   "trmrk-mailbox-nglib":
@@ -27,6 +28,7 @@ const srcFoldersArr: { [key: string]: string } = {
   "trmrk-notes-nglib":
     "libs\\trmrk-notes-nglib\\projects\\trmrk-notes-nglib\\src\\lib",
   "trmrk-notes-sveltelib": "libs\\trmrk-notes-sveltelib\\src\\lib",
+  "trmrk-notes-reactlib": "libs\\trmrk-notes-reactlib\\src\\lib",
   "trmrk-testing-nglib":
     "libs\\trmrk-testing-nglib\\projects\\trmrk-testing-nglib\\src\\lib",
   "trmrk-text-transform-behavior":
@@ -58,6 +60,10 @@ const destnLocationsArr: {
   },
   "trmrk-svelte": {
     dirPath: "libs\\trmrk-svelte\\src",
+    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-axios"],
+  },
+  "trmrk-react": {
+    dirPath: "libs\\trmrk-react\\src",
     syncedLibs: ["trmrk", "trmrk-browser", "trmrk-axios"],
   },
   "trmrk-filemanager-nglib": {
@@ -112,6 +118,10 @@ const destnLocationsArr: {
   "trmrk-notes-sveltelib": {
     dirPath: "libs\\trmrk-notes-sveltelib\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-svelte"],
+  },
+  "trmrk-notes-reactlib": {
+    dirPath: "libs\\trmrk-notes-reactlib\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
   },
   "trmrk-testing-nglib": {
     dirPath: "libs\\trmrk-testing-nglib\\projects\\trmrk-testing-nglib\\src",
@@ -173,6 +183,20 @@ const destnLocationsArr: {
   "trmrk-svelte-testapp": {
     dirPath: "apps\\trmrk-svelte-testapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-svelte"],
+  },
+  "trmrk-notes-reactapp": {
+    dirPath: "apps\\trmrk-notes-reactapp\\src",
+    syncedLibs: [
+      "trmrk",
+      "trmrk-axios",
+      "trmrk-browser",
+      "trmrk-react",
+      "trmrk-notes-reactlib",
+    ],
+  },
+  "trmrk-react-testapp": {
+    dirPath: "apps\\trmrk-react-testapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
   },
 };
 

@@ -5,7 +5,9 @@ for %%a in ("..\..\apps\trmrk-filemanager-ngapp",
 "..\..\apps\trmrk-mailbox-ngapp",
 "..\..\apps\trmrk-notes-ngapp",
 "..\..\apps\trmrk-svelte-testapp",
-"..\..\apps\trmrk-notes-svelteapp") do (
+"..\..\apps\trmrk-react-testapp",
+"..\..\apps\trmrk-notes-svelteapp",
+"..\..\apps\trmrk-notes-reactapp") do (
   cd %%a
   .\_\upd-pcks.bat
 )

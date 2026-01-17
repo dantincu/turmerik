@@ -33,6 +33,10 @@
       "DirPath": "libs\\trmrk-svelte\\src\\lib"
     },
     {
+      "Name": "trmrk-react",
+      "DirPath": "libs\\trmrk-react\\src\\lib"
+    },
+    {
       "Name": "trmrk-filemanager-nglib",
       "DirPath": "libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib\\src\\lib"
     },
@@ -51,6 +55,10 @@
     {
       "Name": "trmrk-notes-sveltelib",
       "DirPath": "libs\\trmrk-notes-sveltelib\\src\\lib"
+    },
+    {
+      "Name": "trmrk-notes-reactlib",
+      "DirPath": "libs\\trmrk-notes-reactlib\\src\\lib"
     },
     {
       "Name": "trmrk-notes-nglib",
@@ -118,6 +126,21 @@
     {
       "Name": "trmrk-svelte",
       "DirPath": "libs\\trmrk-svelte\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-react",
+      "DirPath": "libs\\trmrk-react\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
@@ -238,6 +261,24 @@
         },
         "trmrk-svelte": {
           "DirPath": "trmrk-svelte"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-notes-reactlib",
+      "DirPath": "libs\\trmrk-notes-reactlib\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        },
+        "trmrk-svelte": {
+          "DirPath": "trmrk-reactlib"
         }
       }
     },
@@ -381,7 +422,25 @@
           "DirPath": "trmrk-svelte"
         }
       }
-    }
+    },
+    {
+      "Name": "trmrk-react-testapp",
+      "DirPath": "apps\\trmrk-react-testapp\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        },
+        "trmrk-svelte": {
+          "DirPath": "trmrk-react"
+        }
+      }
+    },
     {
       "Name": "trmrk-notes-svelteapp",
       "DirPath": "apps\\trmrk-notes-svelteapp\\src",
@@ -400,6 +459,27 @@
         },
         "trmrk-notes-sveltelib": {
           "DirPath": "trmrk-notes-sveltelib"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-notes-reactapp",
+      "DirPath": "apps\\trmrk-notes-reactapp\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        },
+        "trmrk-svelte": {
+          "DirPath": "trmrk-reactlib"
+        },
+        "trmrk-notes-sveltelib": {
+          "DirPath": "trmrk-notes-reactlib"
         }
       }
     }
