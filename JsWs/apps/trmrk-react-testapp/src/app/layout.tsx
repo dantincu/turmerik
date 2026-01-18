@@ -43,6 +43,7 @@ export default function RootLayout({
           alignItems: 'center',
           justifyContent: 'center',
           background: 'white', // We'll handle dark mode below
+          color: 'black',
           zIndex: 9999,
           fontFamily: 'sans-serif',
           fontSize: '16px',
@@ -54,7 +55,7 @@ export default function RootLayout({
               @keyframes fadeIn { from { opacity: 0.5; } to { opacity: 1; } }
               
               /* Immediate Dark Mode support before React */
-              .dark #initial-loader { background: #000 !important; color: #fff; }
+              .dark #initial-loader { background: #000 !important; color: #fff !important; }
             `}</style>
           </div>
         </div>
