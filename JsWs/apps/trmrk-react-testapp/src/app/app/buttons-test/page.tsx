@@ -1,13 +1,15 @@
 import styles from './page.module.scss';
 
-export default function ButtonsTestPage() {
-  console.log('Styles object:', styles)
+import ThemeToggle from '@/src/code/components/ThemeToggle';
 
+export default function ButtonsTestPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <div className={styles.trmrkAsdf}>
+    <div className="flex min-h-screen items-center justify-center">
+      <div>
         <h1>Buttons Test Page</h1>
+        asdfasdf
       </div>
+      <ThemeToggle />
     </div>
   );
 }

@@ -1,0 +1,39 @@
+@use "tailwindcss" as tw;
+
+@use "./global-variables.module.scss" as trmrk-vars;
+
+@theme {
+  /* This tells v4 to use the .dark class selector strategy */
+  --dark-mode: selector; 
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+html, body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+body {
+  font-family: var(--trmrk-default-font-family);
+  font-size: var(--trmrk-default-font-size);
+}
+
+.light body {
+  background: var(--trmrk-default-back-color-light);
+  color: var(--trmrk-default-fore-color-light);
+}
+
+.dark body {
+  background: var(--trmrk-default-back-color-dark);
+  color: var(--trmrk-default-fore-color-dark);
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-size: revert;
+    font-weight: revert;
+  }
+}
