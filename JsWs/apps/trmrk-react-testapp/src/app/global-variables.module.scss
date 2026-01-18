@@ -1,10 +1,70 @@
 :root {
   --trmrk-default-font-family: Arial, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   --trmrk-default-font-size: 13px;
-
+  
   --trmrk-default-back-color-light: #fff;
   --trmrk-default-fore-color-light: #333;
 
   --trmrk-default-back-color-dark: #000;
   --trmrk-default-fore-color-dark: #ddd;
+
+  --trmrk-primary-color-theme-light: #04F;
+  --trmrk-primary-color-theme-dark: #48F;
+  --trmrk-primary-back-color: #04F;
+  --trmrk-secondary-color-theme-light: #667;
+  --trmrk-secondary-color-theme-dark: #AAA;
+  --trmrk-secondary-back-color: #444;
+  --trmrk-accept-color-theme-light: #090;
+  --trmrk-accept-color-theme-dark: #090;
+  --trmrk-accept-back-color: #090;
+  --trmrk-reject-color-theme-light: #E10;
+  --trmrk-reject-color-theme-dark: #F20;
+  --trmrk-reject-back-color: #E10;
+  --trmrk-warn-color-theme-light: #970;
+  --trmrk-warn-color-theme-dark: #DB0;
+  --trmrk-warn-back-color: #FD0;
+
+  --trmrk-scrollable-track_color_light: #eee;
+  --trmrk-scrollable-thumb_color_light: #ccc;
+  --trmrk-scrollable-track-hover_color_light: #ddd;
+  --trmrk-scrollable-thumb-hover_color_light: #bbb;
+
+  --trmrk-scrollable-track_color_dark: #222;
+  --trmrk-scrollable-thumb_color_dark: #444;
+  --trmrk-scrollable-track-hover_color_dark: #333;
+  --trmrk-scrollable-thumb-hover_color_dark: #555;
+
+  --trmrk-user-message-success_back-color_light: #40f040;
+  --trmrk-user-message-success_border-color_light: #10d010;
+
+  --trmrk-user-message-info_back-color_light: #a0c0f0;
+  --trmrk-user-message-info_border-color_light: #80a0e0;
+
+  --trmrk-user-message-warn_back-color_light: #f0f080;
+  --trmrk-user-message-warn_border-color_light: #d0d060;
+
+  --trmrk-user-message-error_back-color_light: #f0a0a0;
+  --trmrk-user-message-error_border-color_light: #d07070;
+
+  --trmrk-user-message-success_back-color_dark: #002000;
+  --trmrk-user-message-success_border-color_dark: #004000;
+
+  --trmrk-user-message-info_back-color_dark: #000040;
+  --trmrk-user-message-info_border-color_dark: #000080;
+
+  --trmrk-user-message-warn_back-color_dark: #808000;
+  --trmrk-user-message-warn_border-color_dark: #a0a000;
+
+  --trmrk-user-message-error_back-color_dark: #600000;
+  --trmrk-user-message-error_border-color_dark: #a00000;
+}
+
+/* app theme */
+
+:root {
+  --trmrk-tool-bar_back-color_light: #ffe000;
+  --trmrk-tool-bar_fore-color_light: #000;
+
+  --trmrk-tool-bar_back-color_dark: #200800;
+  --trmrk-tool-bar_fore-color_dark: #fff;
 }

@@ -1,19 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 
 import './globals.scss';
 
 import { ThemeProvider } from "@/src/code/components/theme-provider";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Turmerik React Test App",
@@ -29,7 +18,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       {/* suppressHydrationWarning is required because next-themes updates the <html> tag */}
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`antialiased`}
       ><ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         {/* 1. The Raw HTML Loader */}
         <div id="initial-loader" style={{

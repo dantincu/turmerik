@@ -4,12 +4,18 @@ import ThemeToggle from '@/src/code/components/ThemeToggle';
 
 export default function ButtonsTestPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div>
-        <h1>Buttons Test Page</h1>
-        asdfasdf
+    <div className="trmrk-app-layout">
+      <div className="trmrk-app-header">
+        <div className="trmrk-horiz-strip">
+        </div>
+        <div className="trmrk-horiz-strip">
+        </div>
       </div>
-      <ThemeToggle />
+      <div className="trmrk-app-body"></div>
+      <div className="trmrk-app-footer">
+        <div className="trmrk-horiz-strip">
+        </div>
+      </div>
     </div>
   );
 }

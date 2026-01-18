@@ -1,0 +1,7 @@
+@mixin scrollable-light() {
+  scrollbar-color: var(--trmrk-scrollable-thumb_color_light) var(--trmrk-scrollable-track_color_light);
+}
+
+@mixin scrollable-dark() {
+  scrollbar-color: var(--trmrk-scrollable-thumb_color_dark) var(--trmrk-scrollable-track_color_dark);
+}
