@@ -277,8 +277,8 @@
         "trmrk-browser": {
           "DirPath": "trmrk-browser"
         },
-        "trmrk-svelte": {
-          "DirPath": "trmrk-reactlib"
+        "trmrk-react": {
+          "DirPath": "trmrk-react"
         }
       }
     },
@@ -436,7 +436,7 @@
         "trmrk-browser": {
           "DirPath": "trmrk-browser"
         },
-        "trmrk-svelte": {
+        "trmrk-react": {
           "DirPath": "trmrk-react"
         }
       }
@@ -475,10 +475,10 @@
         "trmrk-browser": {
           "DirPath": "trmrk-browser"
         },
-        "trmrk-svelte": {
-          "DirPath": "trmrk-reactlib"
+        "trmrk-react": {
+          "DirPath": "trmrk-react"
         },
-        "trmrk-notes-sveltelib": {
+        "trmrk-notes-reactlib": {
           "DirPath": "trmrk-notes-reactlib"
         }
       }

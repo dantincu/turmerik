@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import './globals.scss';
+import '../trmrk-react/globals.scss';
 
 import { ThemeProvider } from "@/src/code/components/theme-provider";
 
