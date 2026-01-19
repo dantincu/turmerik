@@ -35,15 +35,15 @@ export default function ButtonsTestPage() {
     setShowRightPanel(true);
   }, []);
 
-  return <div className="block">
-    <TrmrkBtn borderWidth={1} cssClass="my-[2px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
+  return <div className="flex flex-wrap">
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={1} cssClass="my-[1px]">
-      <div className="trmrk-icon-wrapper"><Icon icon="mdi-light:home" /></div>
-      <div className="trmrk-text">My Button</div>
+      <span className="trmrk-icon-wrapper"><Icon icon="mdi-light:home" /></span>
+      <span className="trmrk-text">My Button</span>
     </TrmrkBtn>
     <TrmrkBtn borderWidth={1} cssClass="my-[1px]">
-      <div className="trmrk-text">My Button</div>
-      <div className="trmrk-icon-wrapper"><Icon icon="mdi-light:home" /></div>
+      <span className="trmrk-text">My Button</span>
+      <span className="trmrk-icon-wrapper"><Icon icon="mdi-light:home" /></span>
     </TrmrkBtn>
     <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
     <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
