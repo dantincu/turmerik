@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 
 import '../trmrk-react/globals.scss';
 
+import { initialLoaderKillSwitchScript, initialLoaderStyles } from "@/src/trmrk-react/initial-loader";
+import TrmrkAppLayout from "@/src/trmrk-react/components/TrmrkAppLayout/TrmrkAppLayout";
+
 import { ThemeProvider } from "@/src/code/components/theme-provider";
 
 export const metadata: Metadata = {
@@ -20,49 +23,21 @@ export default function RootLayout({
       <body
         className={`antialiased`}
       ><ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        {/* 1. The Raw HTML Loader */}
-        <div id="initial-loader" style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'white', // We'll handle dark mode below
-          color: 'black',
-          zIndex: 9999,
-          fontFamily: 'sans-serif',
-          fontSize: '16px',
-        }}>
+        <style dangerouslySetInnerHTML={{
+          __html: initialLoaderStyles}}>
+        </style>
+        <div id="trmrk-app-initial-loader">
           <div className="spinner">
             Loading App...
-            <style>{`
-              .spinner { animation: fadeIn 0.5s infinite alternate; }
-              @keyframes fadeIn { from { opacity: 0.5; } to { opacity: 1; } }
-              
-              /* Immediate Dark Mode support before React */
-              .dark #initial-loader { background: #000 !important; color: #fff !important; }
-            `}</style>
           </div>
         </div>
 
-        {/* 2. The "Kill Switch" Script */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `
-              // This runs as soon as React is loaded and executing
-              window.addEventListener('load', function() {
-                var loader = document.getElementById('initial-loader');
-                if (loader) {
-                  loader.style.display = 'none';
-                }
-              });
-            `,
+            __html: initialLoaderKillSwitchScript,
           }}
         />
-          {children}
+          <TrmrkAppLayout>{children}</TrmrkAppLayout>
         </ThemeProvider>
       </body>
     </html>
