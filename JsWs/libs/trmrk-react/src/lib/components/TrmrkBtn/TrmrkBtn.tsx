@@ -1,17 +1,19 @@
-import "./TrmrkButton.scss";
+import "./TrmrkBtn.scss";
 
 import { CommponentProps } from "../defs/common";
+import { NullOrUndef } from "@/src/trmrk/core";
 
 export interface TrmrkBtnProps extends CommponentProps {
+  borderWidth?: number | NullOrUndef;
   onClick?: () => void;
 }
 
 export default function TrmrkBtn(
-  { cssClass, onClick, children }: Readonly<TrmrkBtnProps>
+  { cssClass, onClick, children, borderWidth }: Readonly<TrmrkBtnProps>
 ) {
   return (
     <button
-      className={['trmrk-btn', cssClass ?? ''].join(' ')}
+      className={['trmrk-btn', ((borderWidth ?? null) !== null ? `border-solid border-[${borderWidth}px]` : ''), cssClass ?? ''].join(' ')}
       onClick={onClick}
     >{children}</button>
   );

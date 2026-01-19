@@ -21,6 +21,8 @@ export default function TrmrkBasicAppLayout({children, cssClass}: Readonly<Trmrk
   const [showBottomToolbarValue] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
   const [bottomToolbarComponentKeyValue] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarComponentKey);
 
+  console.log("topToolbarComponents.map[topToolbarComponentKeyValue!]", topToolbarComponents.map[topToolbarComponentKeyValue!]);
+
   return (
     <div className={['trmrk-app-layout', cssClass ?? ''].join(' ')}>
       <div className="trmrk-app-header">

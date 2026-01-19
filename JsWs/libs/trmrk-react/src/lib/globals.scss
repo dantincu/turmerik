@@ -30,14 +30,14 @@ body, input, select, option {
 }
 
 .light {
-  body, input, select, option, .trmrk-split-container > .trmrk-split-panel1, .trmrk-split-container > .trmrk-split-panel2 {
+  body, input, select, option {
     background: var(--trmrk-default-back-color-light);
     color: var(--trmrk-default-fore-color-light);
   }
 }
 
 .dark {
-  body, input, select, option, .trmrk-split-container > .trmrk-split-panel1, .trmrk-split-container > .trmrk-split-panel2 {
+  body, input, select, option {
     background: var(--trmrk-default-back-color-dark);
     color: var(--trmrk-default-fore-color-dark);
   }

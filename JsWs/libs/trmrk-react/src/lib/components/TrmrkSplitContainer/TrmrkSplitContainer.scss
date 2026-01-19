@@ -1,3 +1,18 @@
+.light {
+  .trmrk-split-container > .trmrk-split-panel1, .trmrk-split-container > .trmrk-split-panel2 {
+    background: var(--trmrk-default-back-color-light);
+    color: var(--trmrk-default-fore-color-light);
+  }
+}
+
+.dark {
+  .trmrk-split-container > .trmrk-split-panel1, .trmrk-split-container > .trmrk-split-panel2 {
+    background: var(--trmrk-default-back-color-dark);
+    color: var(--trmrk-default-fore-color-dark);
+  }
+}
+
+
 .trmrk-split-container {
   display: flex;
   position: relative;

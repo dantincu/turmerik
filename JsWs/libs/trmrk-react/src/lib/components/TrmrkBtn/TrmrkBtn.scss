@@ -1,7 +1,22 @@
+@use "../../global-variables.module.scss" as trmrk-vars;
+
+.trmrk-icon-wrapper {
+  font-size: 24px;
+  cursor: pointer;
+}
+
 .trmrk-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 40px;
   height: 40px;
+  min-width: 40px;
+  border-radius: var(--trmrk-default-border-radius);
+  margin-left: 2px;
+  padding: 0 6px;
+  cursor: pointer;
+
+  .trmrk-text {
+    margin: 0 6px;
+  }
 }
