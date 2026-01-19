@@ -6,13 +6,14 @@ import { useAtom } from 'jotai';
 import './page.scss';
 
 import ThemeToggle from '@/src/code/components/ThemeToggle';
+
 import { appBarComponents, appLayoutAtoms } from "@/src/trmrk-react/components/TrmrkAppLayout/TrmrkAppLayoutService";
 
-import ButtonsTestAppBar, { ButtonsTestAppBarTypeName } from './ButtonsTestAppBar';
+import AppSettingsBar, { AppSettingsBarTypeName } from './AppSettingsBar';
 
-appBarComponents.map[ButtonsTestAppBarTypeName] = () => (<ButtonsTestAppBar />);
+appBarComponents.map[AppSettingsBarTypeName] = () => (<AppSettingsBar />);
 
-export default function ButtonsTestPage() {
+export default function AppSettingsPage() {
   const [, setShowAppBar] = useAtom(appLayoutAtoms.showAppBar);
   const [, setShowTopToolbar] = useAtom(appLayoutAtoms.showTopToolbar);
   const [, setShowBottomToolbar] = useAtom(appLayoutAtoms.showBottomToolbar);
@@ -21,11 +22,12 @@ export default function ButtonsTestPage() {
 
   React.useEffect(() => {
     setShowAppBar(true);
-    setShowTopToolbar(true);
-    setShowBottomToolbar(true);
-    setShowLeftPanel(true);
-    setShowRightPanel(true);
+    setShowTopToolbar(false);
+    setShowBottomToolbar(false);
+    setShowLeftPanel(false);
+    setShowRightPanel(false);
   }, []);
 
-  return null;
+  return <ThemeToggle />;
 }
+

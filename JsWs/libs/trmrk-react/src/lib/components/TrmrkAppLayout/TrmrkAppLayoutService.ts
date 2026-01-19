@@ -1,23 +1,21 @@
 import { atom } from "jotai";
 
-export const showAppBar = atom(true);
-export const showAppBarOnly = atom(false);
-export const appBarComponentKey = atom<string | null>(null);
-
-export const showTopToolbar = atom(false);
-export const topToolbarComponentKey = atom<string | null>(null);
-
-export const showBottomToolbar = atom(false);
-export const bottomToolbarComponentKey = atom<string | null>(null);
-
-export const showLeftPanel = atom(false);
-export const leftPanelComponentKey = atom<string | null>(null);
-
-export const showRightPanel = atom(false);
-export const rightPanelComponentKey = atom<string | null>(null);
+export const appLayoutAtoms = {
+  showAppBar: atom(false),
+  showAppBarOnly: atom(false),
+  appBarComponentKey: atom<string | null>(null),
+  showTopToolbar: atom(false),
+  topToolbarComponentKey: atom<string | null>(null),
+  showBottomToolbar: atom(false),
+  bottomToolbarComponentKey: atom<string | null>(null),
+  showLeftPanel: atom(false),
+  leftPanelComponentKey: atom<string | null>(null),
+  showRightPanel: atom(false),
+  rightPanelComponentKey: atom<string | null>(null),
+};
 
 export interface TrmrkAppLayoutComponentsMap {
-  map: { [key: string]: React.ReactNode };
+  map: { [key: string]: () => React.ReactNode };
 }
 
 export const appBarComponents: TrmrkAppLayoutComponentsMap = {

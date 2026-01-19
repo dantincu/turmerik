@@ -13,7 +13,7 @@ export const letterRegex = () => /[a-zA-Z]/;
 export const unicodeLetterRegex = () => /\p{L}/u;
 
 // . ^ $ * + ? ( ) [ ] { } \ |
-export const regexSpecialChars = '.^$*+?()[]{}|\\';
+export const regexSpecialChars = ".^$*+?()[]{}|\\";
 
 export type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -43,7 +43,9 @@ export class Singleton<T> {
 
   get value() {
     if (!this._initialized) {
-      throw new Error('Singleton must be registered before its value can be used');
+      throw new Error(
+        "Singleton must be registered before its value can be used",
+      );
     }
 
     return this._value as T;
@@ -51,7 +53,9 @@ export class Singleton<T> {
 
   register(value: T) {
     if (this._initialized) {
-      throw new Error('Singleton has already been registered and cannot be registered twice');
+      throw new Error(
+        "Singleton has already been registered and cannot be registered twice",
+      );
     }
 
     this._value = value;
@@ -83,16 +87,23 @@ export const jsonBool = Object.freeze({
   true: JSON.stringify(true),
 });
 
-export const getJsonBool = (value: boolean) => (value ? jsonBool.true : jsonBool.false);
+export const getJsonBool = (value: boolean) =>
+  value ? jsonBool.true : jsonBool.false;
 
 export const isNumStr = (arg: string) => {
   const retVal = !!numberRegex().test(arg);
   return retVal;
 };
 
-export const withVal = <TIn, TOut>(inVal: TIn, convertor: (input: TIn) => TOut) => convertor(inVal);
+export const withVal = <TIn, TOut>(
+  inVal: TIn,
+  convertor: (input: TIn) => TOut,
+) => convertor(inVal);
 
-export const actWithVal = <TVal>(val: TVal, action: (value: TVal) => unknown | any | void) => {
+export const actWithVal = <TVal>(
+  val: TVal,
+  action: (value: TVal) => unknown | any | void,
+) => {
   action(val);
   return val;
 };
@@ -100,14 +111,18 @@ export const actWithVal = <TVal>(val: TVal, action: (value: TVal) => unknown | a
 export const withValIf = <TIn, TOut>(
   inVal: TIn,
   convertor: (input: TIn) => TOut,
-  defaultValueFactory: (input: TIn | NullOrUndef) => TOut,
-  defaultInputPredicate?: ((input: TIn | NullOrUndef) => boolean) | NullOrUndef
+  defaultValueFactory?: ((input: TIn | NullOrUndef) => TOut) | NullOrUndef,
+  defaultInputPredicate?: ((input: TIn | NullOrUndef) => boolean) | NullOrUndef,
 ) => {
   defaultInputPredicate ??= (input) => (input ?? null) === null;
   let retVal: TOut;
 
   if (defaultInputPredicate(inVal)) {
-    retVal = defaultValueFactory(inVal);
+    if (defaultValueFactory) {
+      retVal = defaultValueFactory(inVal);
+    } else {
+      retVal = null as any;
+    }
   } else {
     retVal = convertor(inVal);
   }
@@ -118,8 +133,12 @@ export const withValIf = <TIn, TOut>(
 export const actWithValIf = <TVal>(
   inVal: TVal | NullOrUndef,
   action: (input: TVal) => unknown | any | void,
-  defaultAction: ((input: TVal | NullOrUndef) => unknown | any | void) | NullOrUndef = null,
-  defaultInputPredicate?: ((input: TVal | NullOrUndef) => boolean) | NullOrUndef
+  defaultAction:
+    | ((input: TVal | NullOrUndef) => unknown | any | void)
+    | NullOrUndef = null,
+  defaultInputPredicate?:
+    | ((input: TVal | NullOrUndef) => boolean)
+    | NullOrUndef,
 ) => {
   defaultInputPredicate ??= (input) => (input ?? null) === null;
 
@@ -137,8 +156,12 @@ export const actWithValIf = <TVal>(
 export const actWithIf = <TVal>(
   inVal: TVal | NullOrUndef,
   action: (input: TVal) => unknown | any | void,
-  defaultAction: ((input: TVal | NullOrUndef) => unknown | any | void) | NullOrUndef = null,
-  defaultInputPredicate?: ((input: TVal | NullOrUndef) => boolean) | NullOrUndef
+  defaultAction:
+    | ((input: TVal | NullOrUndef) => unknown | any | void)
+    | NullOrUndef = null,
+  defaultInputPredicate?:
+    | ((input: TVal | NullOrUndef) => boolean)
+    | NullOrUndef,
 ) => {
   defaultInputPredicate ??= (input) => (input ?? null) === null;
   const retVal = defaultInputPredicate(inVal);

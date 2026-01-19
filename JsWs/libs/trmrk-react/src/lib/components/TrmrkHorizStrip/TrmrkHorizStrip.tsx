@@ -2,7 +2,7 @@ import { NullOrUndef } from "@/src/trmrk/core";
 
 import "./TrmrkHorizStrip.scss";
 
-import { CommponentProps } from "../defs/Common";
+import { CommponentProps } from "../defs/common";
 
 export interface TrmrkHorizStripProps extends CommponentProps {}
 
