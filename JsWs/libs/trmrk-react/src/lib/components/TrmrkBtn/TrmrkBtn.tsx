@@ -13,7 +13,7 @@ export default function TrmrkBtn(
 ) {
   return (
     <button
-      className={['trmrk-btn', ((borderWidth ?? null) !== null ? `border-solid border-[${borderWidth}px]` : ''), cssClass ?? ''].join(' ')}
+      className={['trmrk-btn', ((borderWidth ?? null) !== null ? `trmrk-border trmrk-border-${borderWidth}px` : ''), cssClass ?? ''].join(' ')}
       onClick={onClick}
     >{children}</button>
   );
