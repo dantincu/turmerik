@@ -46,44 +46,47 @@
   }
 }
 
-.trmrk-btn.trmrk-btn-filled-primary,
-.trmrk-btn.trmrk-btn-filled-secondary,
-.trmrk-btn.trmrk-btn-filled-accept,
-.trmrk-btn.trmrk-btn-filled-reject {
-  color: var(--trmrk-tool-bar_fore-color_dark);
-}
+.trmrk-btn {
+  &.trmrk-btn-filled-primary,
+  &.trmrk-btn-filled-secondary,
+  &.trmrk-btn-filled-accept,
+  &.trmrk-btn-filled-reject {
+    color: var(--trmrk-tool-bar_fore-color_dark);
+  }
 
-.trmrk-btn.trmrk-btn-filled-warn {
-  color: var(--trmrk-tool-bar_fore-color_light);
-}
+  &.trmrk-btn-filled-warn {
+    color: var(--trmrk-tool-bar_fore-color_light);
+  }
+    
+  &.trmrk-btn-filled-primary, .trmrk-background-color-primary {
+    background-color: var(--trmrk-primary-back-color);
+  }
 
-.trmrk-btn-filled-primary, .trmrk-background-color-primary {
-  background-color: var(--trmrk-primary-back-color);
-}
+  &.trmrk-btn-filled-secondary, .trmrk-background-color-secondary {
+    background-color: var(--trmrk-secondary-back-color);
+  }
 
-.trmrk-btn-filled-secondary, .trmrk-background-color-secondary {
-  background-color: var(--trmrk-secondary-back-color);
-}
+  &.trmrk-btn-filled-accept, .trmrk-background-color-accept {
+    background-color: var(--trmrk-accept-back-color);
+  }
 
-.trmrk-btn-filled-accept, .trmrk-background-color-accept {
-  background-color: var(--trmrk-accept-back-color);
-}
+  &.trmrk-btn-filled-reject, .trmrk-background-color-reject {
+    background-color: var(--trmrk-reject-back-color);
+  }
 
-.trmrk-btn-filled-reject, .trmrk-background-color-reject {
-  background-color: var(--trmrk-reject-back-color);
-}
+  &.trmrk-btn-filled-warn, .trmrk-background-color-warn {
+    background-color: var(--trmrk-warn-back-color);
+  }
 
-.trmrk-btn-filled-warn, .trmrk-background-color-warn {
-  background-color: var(--trmrk-warn-back-color);
 }
 
 .light {
-  .trmrk-btn-filled-opposite {
-    background-color: var(--trmrk-default-fore-color-light);
-    color: var(--trmrk-default-back-color-light);
-  }
-
   .trmrk-btn {
+    &.trmrk-btn-filled-opposite {
+      background-color: var(--trmrk-default-fore-color-light);
+      color: var(--trmrk-default-back-color-light);
+    }
+
     .trmrk-btn-overlay {
       &:hover {
         background-color: #0002;
@@ -103,12 +106,12 @@
 }
 
 .dark {
-  .trmrk-btn-filled-opposite {
-    background-color: var(--trmrk-default-fore-color-dark);
-    color: var(--trmrk-default-back-color-dark);
-  }
-
   .trmrk-btn {
+    &.trmrk-btn-filled-opposite {
+      background-color: var(--trmrk-default-fore-color-dark);
+      color: var(--trmrk-default-back-color-dark);
+    }
+
     .trmrk-btn-overlay {
       &:hover {
         background-color: #FFF2;

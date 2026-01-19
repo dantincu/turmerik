@@ -45,59 +45,49 @@ export default function ButtonsTestPage() {
       <span className="trmrk-text">My Button</span>
       <span className="trmrk-icon-wrapper"><Icon icon="mdi-light:home" /></span>
     </TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><div className="trmrk-text">My Button</div></TrmrkBtn>
+    <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-primary"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-secondary"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-accept"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-reject"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-primary"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-secondary"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-accept"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-reject"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={2} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-primary"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-secondary"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-accept"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-reject"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={0} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
   </div>;
 }
