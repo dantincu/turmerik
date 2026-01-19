@@ -7,8 +7,6 @@ export default function ThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  console.log("ThemeToggle render:", { theme, resolvedTheme });
-
   // Avoid hydration mismatch by only rendering after mounting
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;

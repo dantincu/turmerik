@@ -1,0 +1,38 @@
+.light {
+  .trmrk-app-layout {
+    background-color: var(--trmrk-tool-bar_back-color_light);
+    color: var(--trmrk-tool-bar_fore-color_light);
+  }
+}
+
+.dark {
+  .trmrk-app-layout {
+    background-color: var(--trmrk-tool-bar_back-color_dark);
+    color: var(--trmrk-tool-bar_fore-color_dark);
+  }
+}
+
+.trmrk-app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  flex: 1 0 100%;
+}
+
+.trmrk-app-header, .trmrk-app-footer {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 1px;
+}
+
+.trmrk-app-footer {
+  margin-top: auto;
+}
+
+.trmrk-app-body {
+  display: flex;
+  position: relative;
+  flex-grow: 1;
+}

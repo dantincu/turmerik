@@ -1,0 +1,13 @@
+.light {
+  .trmrk-split-container {
+    background-color: var(--trmrk-tool-bar_back-color_light);
+    color: var(--trmrk-tool-bar_fore-color_light);
+  }
+}
+
+.dark {
+  .trmrk-split-container {
+    background-color: var(--trmrk-tool-bar_back-color_dark);
+    color: var(--trmrk-tool-bar_fore-color_dark);
+  }
+}

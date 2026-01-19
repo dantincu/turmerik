@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import '../trmrk-react/globals.scss';
 
 import { initialLoaderKillSwitchScript, initialLoaderStyles } from "@/src/trmrk-react/initial-loader";
-import TrmrkAppLayout from "@/src/trmrk-react/components/TrmrkAppLayout/TrmrkAppLayout";
+import Trmrk3PanelsAppLayout from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayout";
 
 import { ThemeProvider } from "@/src/code/components/theme-provider";
 
@@ -37,7 +37,7 @@ export default function RootLayout({
             __html: initialLoaderKillSwitchScript,
           }}
         />
-          <TrmrkAppLayout>{children}</TrmrkAppLayout>
+          <Trmrk3PanelsAppLayout>{children}</Trmrk3PanelsAppLayout>
         </ThemeProvider>
       </body>
     </html>

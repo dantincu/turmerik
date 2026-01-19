@@ -7,21 +7,24 @@ import './page.scss';
 
 import ThemeToggle from '@/src/code/components/ThemeToggle';
 
-import { appBarComponents, appLayoutAtoms } from "@/src/trmrk-react/components/TrmrkAppLayout/TrmrkAppLayoutService";
+import { trmrk3PanelsAppLayoutAtoms } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
+import { appBarComponents, trmrkBasicAppLayoutAtoms } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 import AppSettingsBar, { AppSettingsBarTypeName } from './AppSettingsBar';
 
 appBarComponents.map[AppSettingsBarTypeName] = () => (<AppSettingsBar />);
 
 export default function AppSettingsPage() {
-  const [, setShowAppBar] = useAtom(appLayoutAtoms.showAppBar);
-  const [, setShowTopToolbar] = useAtom(appLayoutAtoms.showTopToolbar);
-  const [, setShowBottomToolbar] = useAtom(appLayoutAtoms.showBottomToolbar);
-  const [, setShowLeftPanel] = useAtom(appLayoutAtoms.showLeftPanel);
-  const [, setShowRightPanel] = useAtom(appLayoutAtoms.showRightPanel);
+  const [, setShowAppBar] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);
+  const [, setAppBarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.appBarComponentKey);
+  const [, setShowTopToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showTopToolbar);
+  const [, setShowBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
+  const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
+  const [, setShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
 
   React.useEffect(() => {
     setShowAppBar(true);
+    setAppBarComponentKey(AppSettingsBarTypeName);
     setShowTopToolbar(false);
     setShowBottomToolbar(false);
     setShowLeftPanel(false);
