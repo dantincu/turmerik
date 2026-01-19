@@ -10,12 +10,24 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  position: relative;
   height: 40px;
   min-width: 40px;
   border-radius: var(--trmrk-default-border-radius);
   margin-left: 2px;
   padding: 0 6px;
   cursor: pointer;
+
+  .trmrk-btn-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--trmrk-default-border-radius);
+    background-color: #0000;
+    transition: background-color 0.2s;
+  }
 
   &.trmrk-border {
     border-style: solid;
@@ -72,6 +84,18 @@
   }
 
   .trmrk-btn {
+    .trmrk-btn-overlay {
+      &:hover {
+        background-color: #0002;
+      }
+    }
+
+    &.trmrk-btn-pressed {
+      .trmrk-btn-overlay {
+        background-color: #0004;
+      }
+    }
+
     &.trmrk-border {
       border-color: #0002;
     }
@@ -85,6 +109,18 @@
   }
 
   .trmrk-btn {
+    .trmrk-btn-overlay {
+      &:hover {
+        background-color: #FFF2;
+      }
+    }
+
+    &.trmrk-btn-pressed {
+      .trmrk-btn-overlay {
+        background-color: #FFF4;
+      }
+    }
+
     &.trmrk-border {
       border-color: #FFF2;
     }

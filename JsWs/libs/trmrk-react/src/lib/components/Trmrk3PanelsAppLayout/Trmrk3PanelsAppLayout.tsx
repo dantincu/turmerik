@@ -26,10 +26,10 @@ export default function Trmrk3PanelsAppLayout({children, cssClass}: Readonly<Trm
 
   return (
     <TrmrkBasicAppLayout cssClass={cssClass}>
-      <TrmrkSplitContainer showPanel1={showLeftPanelValue} showPanel2={true} panel1Content={() =>
+      <TrmrkSplitContainer showPanel1={showLeftPanelValue} showPanel2={true} panel1WidthPercent={33.333} panel1Content={() =>
         showLeftPanelValue && withValIf(leftPanelComponents.map[leftPanelComponentKeyValue!], f => f())
         } panel2Content={() =>
-          <TrmrkSplitContainer showPanel1={true} showPanel2={showRightPanelValue} panel1Content={() => children}
+          <TrmrkSplitContainer showPanel1={true} showPanel2={showRightPanelValue} panel1WidthPercent={50} panel1Content={() => children}
             panel2Content={() => showRightPanelValue && withValIf(rightPanelComponents.map[rightPanelComponentKeyValue!], f => f()) }>
           </TrmrkSplitContainer>}>
       </TrmrkSplitContainer>
