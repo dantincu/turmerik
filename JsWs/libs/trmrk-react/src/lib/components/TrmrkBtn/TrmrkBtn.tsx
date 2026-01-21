@@ -11,17 +11,17 @@ import { HOCArgs, normalizeHoc } from "../defs/HOC";
 import { clearRefVal } from "../defs/utils";
 
 export interface TrmrkBtnProps<T extends React.ElementType = "button",
-  TRootHtmlElement extends HTMLElement = HTMLElement,> extends CommponentProps {
+  TRootHtmlElement extends HTMLElement = HTMLButtonElement> extends CommponentProps {
   hoc?: HOCArgs<T, TRootHtmlElement> | NullOrUndef,
   borderWidth?: number | NullOrUndef;
 }
 
 export default function TrmrkBtn<T extends React.ElementType = "button",
-  TRootHtmlElement extends HTMLElement = HTMLElement>(
+  TRootHtmlElement extends HTMLElement = HTMLButtonElement>(
   { cssClass, children, hoc, borderWidth }: Readonly<TrmrkBtnProps<T, TRootHtmlElement>>
 ) {
-  const hocArgs = normalizeHoc(hoc, () => (props) => <button ref={hocArgs.rootElRef}
-    {...props}>{props.children}</button>);
+  const hocArgs = normalizeHoc(hoc, () => (props) => <button
+    {...props} ref={hocArgs.rootElRef}>{props.children}</button>);
 
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
