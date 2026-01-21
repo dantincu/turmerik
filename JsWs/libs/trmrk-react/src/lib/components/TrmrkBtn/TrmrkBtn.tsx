@@ -5,14 +5,13 @@ import "./TrmrkBtn.scss";
 import { CommponentProps } from "../defs/common";
 import { NullOrUndef } from "@/src/trmrk/core";
 
-export interface TrmrkBtnProps extends CommponentProps<HTMLButtonElement> {
+export interface TrmrkBtnProps extends CommponentProps {
+  btnFactory?: React.ComponentType<React.ComponentPropsWithRef<React.ElementType>> | NullOrUndef,
   borderWidth?: number | NullOrUndef;
-  onClick?: ((event: React.MouseEvent<HTMLButtonElement>) => void) | NullOrUndef;
-  onClickCapture?: ((event: React.MouseEvent<HTMLButtonElement>) => void) | NullOrUndef;
 }
 
 export default function TrmrkBtn(
-  { cssClass, rootElRef, onClick, onClickCapture, children, borderWidth }: Readonly<TrmrkBtnProps>
+  { cssClass, children, btnFactory, borderWidth }: Readonly<TrmrkBtnProps>
 ) {
   const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     const btnElem = e.currentTarget;
@@ -23,12 +22,11 @@ export default function TrmrkBtn(
     }, 200);
   }
 
+  const Button = (btnFactory ?? ((props: React.ComponentProps<'button'>) => <button {...props}>{props.children}</button>));
+
   return (
-    <button ref={rootElRef ?? undefined}
-      className={['trmrk-btn', ((borderWidth ?? null) !== null ? `trmrk-border trmrk-border-${borderWidth}px` : ''), cssClass ?? ''].join(' ')}
-      onClick={onClick ?? undefined}
-      onClickCapture={onClickCapture ?? undefined}
+    <Button className={['trmrk-btn', ((borderWidth ?? null) !== null ? `trmrk-border trmrk-border-${borderWidth}px` : ''), cssClass ?? ''].join(' ')}
       onPointerDown={onPointerDown}
-    ><div className="trmrk-btn-overlay"></div>{children}</button>
+    >{children}<div className="trmrk-btn-overlay"></div></Button>
   );
 }

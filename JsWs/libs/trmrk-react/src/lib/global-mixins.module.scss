@@ -5,3 +5,11 @@
 @mixin scrollable-dark() {
   scrollbar-color: var(--trmrk-scrollable-thumb_color_dark) var(--trmrk-scrollable-track_color_dark);
 }
+
+@mixin trmrk-wrap-content {
+  flex-wrap: wrap;
+  text-wrap: wrap;
+  word-break: normal;
+  white-space-collapse: collapse;
+  line-break: anywhere;
+}

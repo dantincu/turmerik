@@ -126,3 +126,7 @@ body, input, select, option {
     color: var(--trmrk-reject-color-theme-dark);
   }
 }
+
+.trmrk-wrap-content {
+  @include trmrk-mixins.trmrk-wrap-content();
+}

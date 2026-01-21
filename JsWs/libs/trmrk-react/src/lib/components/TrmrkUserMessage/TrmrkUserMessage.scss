@@ -1,3 +1,75 @@
+.trmrk-user-message-container {
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+}
+
+.trmrk-user-message {
+  position: relative;
+  padding: 5px;
+  display: inline-block;
+  flex-direction: row;
+  border-radius: 10px;
+  max-width: 100vw;
+
+  &.trmrk-fade {
+    animation: trmrk-user-message-opacFadeOut 1s forwards;
+  }
+
+  [mat-icon-button].trmrk-icon-btn {
+    height: 30px;
+    width: 30px;
+    padding: 5px;
+    display: inline-block;
+    margin-left: 5px;
+    z-index: 1;
+  }
+
+  .trmrk-content-text {
+    display: flex;
+    margin: 6px;
+    margin-right: 40px;
+  }
+
+  .trmrk-text-part {
+    line-break: loose;
+  }
+
+  .trmrk-close-icon-btn {
+    float: right;
+  }
+
+  .trmrk-arrow {
+    z-index: 1;
+    position: absolute;
+    width: 20px;
+    height: 10px;
+
+    &.trmrk-placement-top {
+      top: -10px;
+      left: calc(50% - 5px);
+    }
+
+    &.trmrk-placement-right {
+      right: -15px;
+      top: calc(50% - 5px);
+      transform: rotate(90deg);
+    }
+
+    &.trmrk-placement-bottom {
+      bottom: -10px;
+      left: calc(50% - 5px);
+      transform: rotate(180deg);
+    }
+
+    &.trmrk-placement-left {
+      left: -15px;
+      top: calc(50% - 5px);
+      transform: rotate(270deg);
+    }
+  }
+}
+
 .light {
   .trmrk-user-message {
     .trmrk-icon-btn {

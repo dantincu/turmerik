@@ -109,7 +109,7 @@ export const actWithVal = <TVal>(
 };
 
 export const withValIf = <TIn, TOut>(
-  inVal: TIn,
+  inVal: TIn | NullOrUndef,
   convertor: (input: TIn) => TOut,
   defaultValueFactory?: ((input: TIn | NullOrUndef) => TOut) | NullOrUndef,
   defaultInputPredicate?: ((input: TIn | NullOrUndef) => boolean) | NullOrUndef,
@@ -124,7 +124,7 @@ export const withValIf = <TIn, TOut>(
       retVal = null as any;
     }
   } else {
-    retVal = convertor(inVal);
+    retVal = convertor(inVal!);
   }
 
   return retVal;

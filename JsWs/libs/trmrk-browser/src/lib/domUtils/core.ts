@@ -1,7 +1,15 @@
-import trmrk from '../../trmrk';
-import { mapPropNamesToThemselves, PropNameWordsConvention } from '../../trmrk/propNames';
+import trmrk from "../../trmrk";
+import {
+  mapPropNamesToThemselves,
+  PropNameWordsConvention,
+} from "../../trmrk/propNames";
 
-import { MtblRefValue, jsonBool, actWithIf, NullOrUndef } from '../../trmrk/core';
+import {
+  MtblRefValue,
+  jsonBool,
+  actWithIf,
+  NullOrUndef,
+} from "../../trmrk/core";
 
 export const supportedFeatures = {
   fileSystemApi: !!(window as any).showDirectoryPicker,
@@ -9,29 +17,29 @@ export const supportedFeatures = {
 
 export const localStorageKeys = Object.freeze(
   mapPropNamesToThemselves({
-    appThemeIsDarkMode: '',
-    appIsCompactMode: '',
-    textCaretPositionerOpts: '',
-    currentBrowserTabId: '',
-  })
+    appThemeIsDarkMode: "",
+    appIsCompactMode: "",
+    textCaretPositionerOpts: "",
+    currentBrowserTabId: "",
+  }),
 );
 
 export const appModeCssClasses = Object.freeze(
   mapPropNamesToThemselves({
-    trmrkAppModeCompact: '',
-    trmrkAppModeFull: '',
-  })
+    trmrkAppModeCompact: "",
+    trmrkAppModeFull: "",
+  }),
 );
 
 export const appThemeCssClasses = Object.freeze(
   mapPropNamesToThemselves(
     {
-      trmrkAppThemeDark: '',
-      trmrkAppThemeLight: '',
+      trmrkAppThemeDark: "",
+      trmrkAppThemeLight: "",
     },
     PropNameWordsConvention.KebabCase,
-    PropNameWordsConvention.CamelCase
-  )
+    PropNameWordsConvention.CamelCase,
+  ),
 );
 
 export const getAppModeCssClassName = (isCompactMode: boolean) => {
@@ -53,32 +61,35 @@ export const getAppThemeCssClassName = (isDarkMode: boolean) => {
 export const getRoute = (
   routeBase: string,
   path: string | NullOrUndef = null,
-  relPath: string | NullOrUndef = null
+  relPath: string | NullOrUndef = null,
 ) => {
   const partsArr = [path, relPath]
     .filter((value) => value)
     .map((value) => encodeURIComponent(value!));
 
   partsArr.splice(0, 0, routeBase);
-  const route = partsArr.join('/');
+  const route = partsArr.join("/");
 
   return route;
 };
 
 export const appModeCssClass = {
-  value: '',
+  value: "",
 } as MtblRefValue<string>;
 
 export const appThemeCssClass = {
-  value: '',
+  value: "",
 } as MtblRefValue<string>;
 
 export const prefersDarkMode = () =>
-  window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  window.matchMedia &&
+  window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-export const isDarkMode = (localStorageIsDarkModeKey: string | NullOrUndef = null) => {
+export const isDarkMode = (
+  localStorageIsDarkModeKey: string | NullOrUndef = null,
+) => {
   const localStorageIsDarkMode = localStorage.getItem(
-    localStorageIsDarkModeKey ?? localStorageKeys.appThemeIsDarkMode
+    localStorageIsDarkModeKey ?? localStorageKeys.appThemeIsDarkMode,
   );
 
   let isDarkMode: boolean;
@@ -98,9 +109,11 @@ export const isDarkMode = (localStorageIsDarkModeKey: string | NullOrUndef = nul
   return isDarkMode;
 };
 
-export const isCompactMode = (localStorageIsCompactModeKey: string | NullOrUndef = null) => {
+export const isCompactMode = (
+  localStorageIsCompactModeKey: string | NullOrUndef = null,
+) => {
   const localStorageIsCompactMode = localStorage.getItem(
-    localStorageIsCompactModeKey ?? localStorageKeys.appIsCompactMode
+    localStorageIsCompactModeKey ?? localStorageKeys.appIsCompactMode,
   );
 
   let isCompactMode = trmrk.jsonBool.false !== localStorageIsCompactMode;
@@ -109,28 +122,28 @@ export const isCompactMode = (localStorageIsCompactModeKey: string | NullOrUndef
 
 export const setIsDarkModeToLocalStorage = (
   isDarkMode: boolean,
-  localStorageIsDarkModeKey: string | NullOrUndef = null
+  localStorageIsDarkModeKey: string | NullOrUndef = null,
 ) =>
   localStorage.setItem(
     localStorageIsDarkModeKey ?? localStorageKeys.appThemeIsDarkMode,
-    isDarkMode ? jsonBool.true : jsonBool.false
+    isDarkMode ? jsonBool.true : jsonBool.false,
   );
 
 export const setIsCompactModeToLocalStorage = (
   isCompactMode: boolean,
-  localStorageIsCompactModeKey: string | NullOrUndef = null
+  localStorageIsCompactModeKey: string | NullOrUndef = null,
 ) =>
   localStorage.setItem(
     localStorageIsCompactModeKey ?? localStorageKeys.appIsCompactMode,
-    isCompactMode ? jsonBool.true : jsonBool.false
+    isCompactMode ? jsonBool.true : jsonBool.false,
   );
 
 /// According to https://stackoverflow.com/questions/7944460/detect-safari-browser
 /// the following is the best alternative
 export const isSafariFunc = () =>
   !!/^((?!chrome|android|windows).)*safari/i.test(navigator.userAgent) &&
-  navigator.userAgent.indexOf('CriOS') == -1 &&
-  navigator.userAgent.indexOf('FxiOS') == -1;
+  navigator.userAgent.indexOf("CriOS") == -1 &&
+  navigator.userAgent.indexOf("FxiOS") == -1;
 /// also tried the one bellow but did not work (returned false on iphone safari)
 // export const isSafari = !!(window as any).safari;
 
@@ -147,7 +160,8 @@ export const extractDigitsAndDot = (str: string) =>
 
 export const extractIntNumber = (str: string) => parseInt(extractDigits(str));
 
-export const extractFloatNumber = (str: string) => parseInt(extractDigitsAndDot(str));
+export const extractFloatNumber = (str: string) =>
+  parseInt(extractDigitsAndDot(str));
 
 export interface OverflowType {
   visible?: boolean | NullOrUndef;
@@ -162,19 +176,19 @@ export const getOverflowType = (overflowCssPropVal: string) => {
   const retObj = {} as OverflowType;
 
   switch (overflowCssPropVal) {
-    case 'visible':
+    case "visible":
       retObj.visible = true;
       break;
-    case 'hidden':
+    case "hidden":
       retObj.hidden = true;
       break;
-    case 'clip':
+    case "clip":
       retObj.clip = true;
       break;
-    case 'scroll':
+    case "scroll":
       retObj.scroll = true;
       break;
-    case 'auto':
+    case "auto":
       retObj.auto = true;
       break;
     default:
@@ -200,9 +214,9 @@ export const forEachChildNode = (
   callback: (
     elem: ChildNode,
     idx: number,
-    prElemChildNodesCollctn: NodeListOf<ChildNode>
+    prElemChildNodesCollctn: NodeListOf<ChildNode>,
   ) => boolean | any | unknown | void,
-  reverseOrder: boolean = false
+  reverseOrder: boolean = false,
 ) => {
   callback ??= () => true;
 
@@ -232,10 +246,10 @@ export const filterChildNodes = <TChildNode extends ChildNode = ChildNode>(
     | ((
         elem: ChildNode,
         idx: number,
-        prElemChildNodesCollctn: NodeListOf<ChildNode>
+        prElemChildNodesCollctn: NodeListOf<ChildNode>,
       ) => boolean | any | unknown | void)
     | NullOrUndef = null,
-  reverseOrder: boolean = false
+  reverseOrder: boolean = false,
 ) => {
   const retArr: TChildNode[] = [];
   callback ??= () => true;
@@ -249,22 +263,24 @@ export const filterChildNodes = <TChildNode extends ChildNode = ChildNode>(
         retArr.push(elem as TChildNode);
       }
     },
-    reverseOrder
+    reverseOrder,
   );
 
   return retArr;
 };
 
-export const filterChildElements = <TChildNode extends HTMLElement = HTMLElement>(
+export const filterChildElements = <
+  TChildNode extends HTMLElement = HTMLElement,
+>(
   prElem: HTMLElement | NodeListOf<ChildNode>,
   callback:
     | ((
         elem: HTMLElement,
         idx: number,
-        prElemChildNodesCollctn: NodeListOf<ChildNode>
+        prElemChildNodesCollctn: NodeListOf<ChildNode>,
       ) => boolean | any | unknown | void)
     | NullOrUndef = null,
-  reverseOrder: boolean = false
+  reverseOrder: boolean = false,
 ) => {
   callback ??= () => true;
 
@@ -279,7 +295,7 @@ export const filterChildElements = <TChildNode extends HTMLElement = HTMLElement
         }
       }
     },
-    reverseOrder
+    reverseOrder,
   );
 
   return retArr;
@@ -287,10 +303,10 @@ export const filterChildElements = <TChildNode extends HTMLElement = HTMLElement
 
 export const withEachNode = (
   nodesMx: (ChildNode[] | NodeListOf<ChildNode>)[],
-  callback: (node: ChildNode, idx: number, arr: ChildNode[]) => void
+  callback: (node: ChildNode, idx: number, arr: ChildNode[]) => void,
 ) => {
   const nodesMxNorm = nodesMx.map((arr) =>
-    arr instanceof NodeList ? filterChildNodes(arr) : (arr as ChildNode[])
+    arr instanceof NodeList ? filterChildNodes(arr) : (arr as ChildNode[]),
   );
 
   const nodesArr = trmrk.flatten(nodesMxNorm);
@@ -300,8 +316,12 @@ export const withEachNode = (
 export const filterChildNodesArr = <TChildNode extends ChildNode>(
   nodesMx: (ChildNode[] | NodeListOf<ChildNode>)[],
   callback:
-    | ((node: ChildNode, idx: number, arr: ChildNode[]) => boolean | any | unknown | void)
-    | NullOrUndef = null
+    | ((
+        node: ChildNode,
+        idx: number,
+        arr: ChildNode[],
+      ) => boolean | any | unknown | void)
+    | NullOrUndef = null,
 ) => {
   const retArr: TChildNode[] = [];
   callback ??= () => true;
@@ -317,24 +337,40 @@ export const filterChildNodesArr = <TChildNode extends ChildNode>(
   return retArr;
 };
 
-export const filterChildElementsArr = <TChildNode extends HTMLElement = HTMLElement>(
+export const filterChildElementsArr = <
+  TChildNode extends HTMLElement = HTMLElement,
+>(
   nodesMx: (ChildNode[] | NodeListOf<ChildNode>)[],
   callback:
-    | ((node: TChildNode, idx: number, arr: ChildNode[]) => boolean | any | unknown | void)
+    | ((
+        node: TChildNode,
+        idx: number,
+        arr: ChildNode[],
+      ) => boolean | any | unknown | void)
     | NullOrUndef = null,
-  elemTagName: string | NullOrUndef = null
+  elemTagName: string | NullOrUndef = null,
 ) => {
   callback ??= () => true;
 
-  const retArr = filterChildNodesArr<TChildNode>(nodesMx, (elem, idx, prElemChildNodesCollctn) => {
-    if (elem instanceof HTMLElement && (!elemTagName || elem.tagName === elemTagName)) {
-      const retVal = callback(elem as TChildNode, idx, prElemChildNodesCollctn);
+  const retArr = filterChildNodesArr<TChildNode>(
+    nodesMx,
+    (elem, idx, prElemChildNodesCollctn) => {
+      if (
+        elem instanceof HTMLElement &&
+        (!elemTagName || elem.tagName === elemTagName)
+      ) {
+        const retVal = callback(
+          elem as TChildNode,
+          idx,
+          prElemChildNodesCollctn,
+        );
 
-      if (retVal) {
-        retArr.push(elem as TChildNode);
+        if (retVal) {
+          retArr.push(elem as TChildNode);
+        }
       }
-    }
-  });
+    },
+  );
 
   return retArr;
 };
@@ -344,9 +380,9 @@ export const extractNestedElement = <TElement = HTMLElement>(
   predicate: (
     elem: HTMLElement,
     idx: number,
-    prElemChildNodesCollctn: NodeListOf<ChildNode>
+    prElemChildNodesCollctn: NodeListOf<ChildNode>,
   ) => boolean | any | unknown | void,
-  reverseOrder: boolean = false
+  reverseOrder: boolean = false,
 ) => {
   let retElem: TElement | null = null;
 
@@ -363,7 +399,7 @@ export const extractNestedElement = <TElement = HTMLElement>(
 
       return !retElem;
     },
-    reverseOrder
+    reverseOrder,
   );
 
   return retElem;
@@ -371,7 +407,7 @@ export const extractNestedElement = <TElement = HTMLElement>(
 
 export const getAnchestor = (
   elem: HTMLElement,
-  predicate: (prElem: HTMLElement) => boolean | NullOrUndef
+  predicate: (prElem: HTMLElement) => boolean | NullOrUndef,
 ): HTMLElement | null => {
   const prElem = elem.parentElement;
 
@@ -386,34 +422,14 @@ export const getAnchestor = (
   return null;
 };
 
-export const clearTimeouIfReqCore = (
-  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | NullOrUndef,
-  clearFunc: (timeoutId: NodeJS.Timeout) => void
-) =>
-  actWithIf(timeoutIdRef?.value, (timeoutId) => {
-    clearFunc(timeoutId);
-    timeoutIdRef!.value = null;
-  });
-
-export const clearTimeoutIfReq = (
-  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | NullOrUndef
-) => clearTimeouIfReqCore(timeoutIdRef, (id) => clearTimeout(id));
-
-export const clearIntervalIfReq = (
-  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | NullOrUndef
-) => clearTimeouIfReqCore(timeoutIdRef, (id) => clearInterval(id));
-
-export const clearTmOutIfReq = (timeoutId: NodeJS.Timeout | NullOrUndef) =>
-  actWithIf(timeoutId, (id) => clearTimeout(id));
-
-export const clearIntvIfReq = (timeoutId: NodeJS.Timeout | NullOrUndef) =>
-  actWithIf(timeoutId, (id) => clearInterval(id));
-
-export const updateDisableAttr = (elem: HTMLElement, disabledValue: boolean | NullOrUndef) => {
+export const updateDisableAttr = (
+  elem: HTMLElement,
+  disabledValue: boolean | NullOrUndef,
+) => {
   if (disabledValue) {
-    elem.setAttribute('disabled', '');
+    elem.setAttribute("disabled", "");
   } else {
-    elem.removeAttribute('disabled');
+    elem.removeAttribute("disabled");
   }
 };
 
@@ -425,7 +441,7 @@ export const customEvent = <T>(
   eventName: string,
   detail: T,
   bubbles: boolean = true,
-  composed: boolean = true
+  composed: boolean = true,
 ) =>
   new CustomEvent<T>(eventName, {
     detail,
@@ -435,14 +451,14 @@ export const customEvent = <T>(
 
 export const getDOMExceptionErrorMsg = (
   error: DOMException | null,
-  defaultErrorMsg: string | null = null
+  defaultErrorMsg: string | null = null,
 ): string => {
   let errorMsg: string;
 
   if (error) {
     errorMsg = `${error.name} - ${error.message}`;
   } else {
-    errorMsg = defaultErrorMsg ?? 'An unknown error occurred.';
+    errorMsg = defaultErrorMsg ?? "An unknown error occurred.";
   }
 
   return errorMsg;

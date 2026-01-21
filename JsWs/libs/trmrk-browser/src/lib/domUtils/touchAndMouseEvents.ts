@@ -1,5 +1,5 @@
-import { NullOrUndef } from '../../trmrk/core';
-import { Coords } from './types';
+import { NullOrUndef } from "../../trmrk/core";
+import { Coords } from "./types";
 
 /**
  * From https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
@@ -86,7 +86,7 @@ export const getTouchesCoords = (tcList: TouchList) => {
 
 export const getTouchOrMouseCoords = (
   ev: MouseEvent | TouchEvent,
-  requiredButton?: number | NullOrUndef
+  requiredButton?: number | NullOrUndef,
 ) => {
   const mouseEv = ev as MouseEvent;
   const touchEv = ev as TouchEvent;
@@ -113,13 +113,13 @@ export const getTouchOrMouseCoords = (
 };
 
 export const isSingleTouchOrClick = (
-  coords: TouchOrMouseCoords | TouchOrMouseCoords[] | null
+  coords: TouchOrMouseCoords | TouchOrMouseCoords[] | null,
 ) => !!coords && ((coords as TouchOrMouseCoords[]).length ?? 1) === 1;
 
 export const toSingleTouchOrClick = (
   coords: TouchOrMouseCoords | TouchOrMouseCoords[] | null,
   ev: MouseEvent | TouchEvent,
-  skipEvtAssign: boolean = true
+  skipEvtAssign: boolean = true,
 ) => {
   let retObj: TouchOrMouseCoords | null = null;
   const coordsArr = coords as TouchOrMouseCoords[];
@@ -142,12 +142,12 @@ export const toSingleTouchOrClick = (
 export const getSingleTouchOrClick = (
   ev: MouseEvent | TouchEvent,
   requiredButton?: number | NullOrUndef,
-  skipEvtAssign: boolean = true
+  skipEvtAssign: boolean = true,
 ) =>
   toSingleTouchOrClick(
     getTouchOrMouseCoords(ev, requiredButton),
     ev,
-    skipEvtAssign
+    skipEvtAssign,
   );
 
 export const isTouchOrLeftMouseBtnClick = (coords: TouchOrMouseCoords) =>
@@ -159,8 +159,8 @@ export const getCoords = (e: MouseEvent | TouchEvent | TouchOrMouseCoords) => {
   const mouseEvent = e as MouseEvent;
 
   if (
-    'number' === typeof mouseEvent.clientX &&
-    'number' === typeof mouseEvent.clientY
+    "number" === typeof mouseEvent.clientX &&
+    "number" === typeof mouseEvent.clientY
   ) {
     retObj = {
       clientX: mouseEvent.clientX,
@@ -179,7 +179,7 @@ export const getCoords = (e: MouseEvent | TouchEvent | TouchOrMouseCoords) => {
 };
 
 export interface IsContainedByArgs<TParent> {
-  event: MouseEvent | TouchEvent | TouchOrMouseCoords;
+  event: MouseEvent | TouchEvent | PointerEvent | TouchOrMouseCoords;
   parent: TParent;
   useComposedPath?: boolean | NullOrUndef;
   coords?: Coords | NullOrUndef;
@@ -188,15 +188,15 @@ export interface IsContainedByArgs<TParent> {
 }
 
 const normalizeIsContainedByArgs = <TParent>(
-  args: IsContainedByArgs<TParent>
+  args: IsContainedByArgs<TParent>,
 ) => {
   if (args.useComposedPath) {
-    args.composedPath ??= (args.event as TouchEvent).composedPath();
+    args.composedPath ??= (args.event as Event).composedPath();
   } else {
     args.coords ??= getCoords(args.event);
     args.elemAtPoint ??= document.elementFromPoint(
       args.coords.clientX,
-      args.coords.clientY
+      args.coords.clientY,
     );
   }
 };
@@ -205,7 +205,7 @@ export const isAnyContainedBy = (args: IsContainedByArgs<HTMLElement[]>) => {
   normalizeIsContainedByArgs(args);
 
   const retVal = !!args.parent.find((parent) =>
-    isContainedBy({ ...args, parent })
+    isContainedBy({ ...args, parent }),
   );
 
   return retVal;

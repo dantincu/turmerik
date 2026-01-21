@@ -38,12 +38,12 @@ export default function ButtonsTestPage() {
   return <div className="flex flex-wrap">
     <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={1} cssClass="my-[1px]">
-      <span className="trmrk-icon-wrapper"><Icon icon="mdi-light:home" /></span>
+      <span className="trmrk-icon-wrapper"><Icon icon="mdi:home" /></span>
       <span className="trmrk-text">My Button</span>
     </TrmrkBtn>
     <TrmrkBtn borderWidth={1} cssClass="my-[1px]">
       <span className="trmrk-text">My Button</span>
-      <span className="trmrk-icon-wrapper"><Icon icon="mdi-light:home" /></span>
+      <span className="trmrk-icon-wrapper"><Icon icon="mdi:home" /></span>
     </TrmrkBtn>
     <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-primary"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-secondary"><span className="trmrk-text">My Button</span></TrmrkBtn>

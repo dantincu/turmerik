@@ -1,5 +1,5 @@
-import trmrk from '../trmrk';
-import { NullOrUndef } from '../trmrk/core';
+import trmrk from "../trmrk";
+import { NullOrUndef } from "../trmrk/core";
 
 export const defaultLongPressTimeoutMills = 400;
 export const defaultFastAnimationDurationMillis = 100;
@@ -14,18 +14,18 @@ export const getNewUri = (
   hash?: string | NullOrUndef,
   path?: string | NullOrUndef,
   host?: string | NullOrUndef,
-  preserveQueryDelim?: boolean | NullOrUndef
+  preserveQueryDelim?: boolean | NullOrUndef,
 ) => {
   const queryStr = query?.toString();
 
   const partsArr = [host, path].filter((part) =>
-    trmrk.isNonEmptyStr(part, true)
+    trmrk.isNonEmptyStr(part, true),
   );
 
-  let newUri = partsArr.join('/');
+  let newUri = partsArr.join("/");
 
   if (preserveQueryDelim || trmrk.isNonEmptyStr(queryStr, true)) {
-    newUri = [newUri, queryStr].join('?');
+    newUri = [newUri, queryStr].join("?");
   }
 
   if (trmrk.isNonEmptyStr(hash)) {
@@ -44,18 +44,18 @@ export const getRelUri = (
   pathTransformer?:
     | ((hash?: string | NullOrUndef) => string | NullOrUndef)
     | NullOrUndef,
-  preserveQueryDelim?: boolean | NullOrUndef
+  preserveQueryDelim?: boolean | NullOrUndef,
 ) => {
   queryParamsTransformer(queryParams);
   hashTransformer ??= (hash) => hash;
 
   pathTransformer ??= (path) => {
-    if (typeof path === 'string') {
-      if (path.startsWith('/')) {
+    if (typeof path === "string") {
+      if (path.startsWith("/")) {
         path = path.substring(1);
       }
 
-      if (path.endsWith('/')) {
+      if (path.endsWith("/")) {
         path = path.substring(0, path.length - 1);
       }
     }
@@ -69,3 +69,11 @@ export const getRelUri = (
   const newUri = getNewUri(queryParams, hash, path, null, preserveQueryDelim);
   return newUri;
 };
+
+export enum Placement {
+  None = 0,
+  Top,
+  Right,
+  Bottom,
+  Left,
+}
