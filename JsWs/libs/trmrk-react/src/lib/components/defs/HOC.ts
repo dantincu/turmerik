@@ -1,8 +1,8 @@
 import { NullOrUndef } from "@/src/trmrk/core";
 import React, { JSX } from "react";
 
-export interface HigherOrderComponentArgsCore<
-  TArgs extends HigherOrderComponentArgsCore<TArgs, T, TRootHtmlElement>,
+export interface HOCArgsCore<
+  TArgs extends HOCArgsCore<TArgs, T, TRootHtmlElement>,
   T extends React.ElementType,
   TRootHtmlElement extends HTMLElement = HTMLElement,
 > {
@@ -12,33 +12,29 @@ export interface HigherOrderComponentArgsCore<
   rootElRef: React.RefObject<TRootHtmlElement | null>;
 }
 
-export interface HigherOrderComponentArgs<
+export interface HOCArgs<
   T extends React.ElementType,
   TRootHtmlElement extends HTMLElement = HTMLElement,
-> extends HigherOrderComponentArgsCore<
-  HigherOrderComponentArgs<T, TRootHtmlElement>,
-  T,
-  TRootHtmlElement
-> {}
+> extends HOCArgsCore<HOCArgs<T, TRootHtmlElement>, T, TRootHtmlElement> {}
 
 export const normalizeHoc = <
-  TArgs extends HigherOrderComponentArgsCore<TArgs, T, TRootHtmlElement>,
+  TArgs extends HOCArgsCore<TArgs, T, TRootHtmlElement>,
   T extends React.ElementType,
   TRootHtmlElement extends HTMLElement = HTMLElement,
 >(
-  hocVal: TArgs | NullOrUndef,
+  hocArgs: TArgs | NullOrUndef,
   component?:
     | ((
         args: TArgs,
       ) => (props: React.ComponentPropsWithRef<T>) => React.ReactElement)
     | NullOrUndef,
 ) => {
-  hocVal ??= {} as TArgs;
-  hocVal.rootElRef ??= React.useRef<TRootHtmlElement | null>(null);
+  hocArgs ??= {} as TArgs;
+  hocArgs.rootElRef ??= React.useRef<TRootHtmlElement | null>(null);
 
   if (component) {
-    hocVal.component ??= component;
+    hocArgs.component ??= component;
   }
 
-  return hocVal;
+  return hocArgs;
 };

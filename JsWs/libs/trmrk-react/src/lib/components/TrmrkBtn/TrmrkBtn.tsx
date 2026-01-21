@@ -7,12 +7,12 @@ import "./TrmrkBtn.scss";
 import { NullOrUndef } from "@/src/trmrk/core";
 
 import { CommponentProps } from "../defs/common";
-import { HigherOrderComponentArgs, normalizeHoc } from "../defs/HOC";
+import { HOCArgs, normalizeHoc } from "../defs/HOC";
 import { clearRefVal } from "../defs/utils";
 
 export interface TrmrkBtnProps<T extends React.ElementType = "button",
   TRootHtmlElement extends HTMLElement = HTMLElement,> extends CommponentProps {
-  hoc?: HigherOrderComponentArgs<T, TRootHtmlElement> | NullOrUndef,
+  hoc?: HOCArgs<T, TRootHtmlElement> | NullOrUndef,
   borderWidth?: number | NullOrUndef;
 }
 
@@ -20,7 +20,7 @@ export default function TrmrkBtn<T extends React.ElementType = "button",
   TRootHtmlElement extends HTMLElement = HTMLElement>(
   { cssClass, children, hoc, borderWidth }: Readonly<TrmrkBtnProps<T, TRootHtmlElement>>
 ) {
-  const hocVal = normalizeHoc(hoc, () => (props) => <button ref={hocVal.rootElRef}
+  const hocArgs = normalizeHoc(hoc, () => (props) => <button ref={hocArgs.rootElRef}
     {...props}>{props.children}</button>);
 
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
@@ -35,10 +35,10 @@ export default function TrmrkBtn<T extends React.ElementType = "button",
     }, 200);
   }
 
-  const Button = hocVal.component(hocVal) as React.ElementType;
+  const Button = hocArgs.component(hocArgs) as React.ElementType;
 
   React.useEffect(() => {
-    const btnElem = hocVal.rootElRef.current;
+    const btnElem = hocArgs.rootElRef.current;
     btnElem?.addEventListener("pointerdown", onPointerDown);
 
     return () => {
