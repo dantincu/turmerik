@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { addIcon } from '@iconify/react'; 
 
 import '../trmrk-react/globals.scss';
 
@@ -6,6 +7,7 @@ import { initialLoaderKillSwitchScript, initialLoaderStyles } from "@/src/trmrk-
 import Trmrk3PanelsAppLayout from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayout";
 
 import { ThemeProvider } from "@/src/code/components/theme-provider";
+import IconRegistration from '@/src/code/components/IconRegistration';
 
 export const metadata: Metadata = {
   title: "Turmerik React Test App",
@@ -22,7 +24,7 @@ export default function RootLayout({
       {/* suppressHydrationWarning is required because next-themes updates the <html> tag */}
       <body
         className={`antialiased`}
-      ><ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      ><IconRegistration /><ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <style dangerouslySetInnerHTML={{
           __html: initialLoaderStyles}}>
         </style>

@@ -6,5 +6,5 @@ import TrmrkBtn from "@/src/trmrk-react/components/TrmrkBtn/TrmrkBtn";
 export const ButtonsTestTopToolbarTypeName = getVarName(() => ButtonsTestTopToolbar);
 
 export default function ButtonsTestTopToolbar() {
-  return <><TrmrkBtn borderWidth={1}><div className="trmrk-icon-wrapper"><Icon icon="mdi-light:home" /></div></TrmrkBtn></>;
+  return <><TrmrkBtn borderWidth={1}><div className="trmrk-icon-wrapper"><Icon icon="mdi:home" /></div></TrmrkBtn></>;
 }

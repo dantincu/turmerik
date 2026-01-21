@@ -4,7 +4,7 @@ import React from "react";
 
 import "./TrmrkBtn.scss";
 
-import { NullOrUndef, actWithValIf } from "@/src/trmrk/core";
+import { NullOrUndef } from "@/src/trmrk/core";
 
 import { CommponentProps } from "../defs/common";
 import { HigherOrderComponentArgs, normalizeHoc } from "../defs/HOC";
@@ -38,11 +38,11 @@ export default function TrmrkBtn<T extends React.ElementType = "button",
   const Button = hocVal.component(hocVal) as React.ElementType;
 
   React.useEffect(() => {
-    const btnElem = hocVal.rootElRef.current!;
-    btnElem.addEventListener("pointerdown", onPointerDown);
+    const btnElem = hocVal.rootElRef.current;
+    btnElem?.addEventListener("pointerdown", onPointerDown);
 
     return () => {
-      btnElem.removeEventListener("pointerdown", onPointerDown);
+      btnElem?.removeEventListener("pointerdown", onPointerDown);
       clearRefVal(timeoutRef, clearTimeout);
     };
   });
