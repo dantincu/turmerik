@@ -35,3 +35,17 @@ export const clearRefVal = <TVal>(
 
   refObj.current = null;
 };
+
+export const performInitialization = (
+  alreadyInitialized: React.RefObject<boolean>,
+  initializer: () => void,
+) => {
+  const initialize = !alreadyInitialized.current;
+
+  if (initialize) {
+    alreadyInitialized.current = true;
+    initializer();
+  }
+
+  return initialize;
+};

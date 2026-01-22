@@ -138,3 +138,5 @@ export class PointerDragService extends TrmrkDisposableBase {
     }
   }
 }
+
+export const createPointerDragService = () => new PointerDragService();

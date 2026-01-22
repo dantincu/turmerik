@@ -1,6 +1,7 @@
 import { NullOrUndef, actWithValIf, MtblRefValue } from "@/src/trmrk/core";
 import { TrmrkDisposableBase } from "@/src/trmrk/TrmrkDisposableBase";
 import { clearIntervalIfReq, clearTimeoutIfReq } from "@/src/trmrk/timeout";
+import { maxSafeInteger } from "@/src/trmrk/math";
 
 import { defaultLongPressTimeoutMills } from "../core";
 import { MouseButton, isContainedBy } from "./touchAndMouseEvents";
@@ -168,6 +169,7 @@ export class MultiClickService extends TrmrkDisposableBase {
   init(args: MultiClickServiceInitArgs) {
     this.args = {
       ...args,
+      multiClicksCount: args.multiClicksCount ?? maxSafeInteger,
       multiClickPressAndHoldIntervalMillis:
         args.multiClickPressAndHoldIntervalMillis ??
         Math.round(defaultLongPressTimeoutMills / 4),
@@ -264,3 +266,5 @@ export class MultiClickService extends TrmrkDisposableBase {
     return data;
   }
 }
+
+export const createMultiClickService = () => new MultiClickService();

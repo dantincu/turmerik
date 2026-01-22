@@ -172,3 +172,5 @@ export class LongPressService extends TrmrkDisposableBase {
     return data;
   }
 }
+
+export const createLongPressService = () => new LongPressService();
