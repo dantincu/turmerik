@@ -36,7 +36,7 @@ export default function ButtonsTestPage() {
   }, []);
 
   return <div className="flex flex-wrap">
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]" onClick={e => console.log("onClick", e)}><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={1} cssClass="my-[1px]">
       <span className="trmrk-icon-wrapper"><Icon icon="mdi:home" /></span>
       <span className="trmrk-text">My Button</span>
