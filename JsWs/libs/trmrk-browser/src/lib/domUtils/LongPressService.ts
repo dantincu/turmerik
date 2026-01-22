@@ -63,11 +63,10 @@ export class LongPressService extends TrmrkDisposableBase {
 
   pointerDown(event: PointerEvent) {
     this.reset();
+    this.pointerDownEvent = event;
     const data = this.getEventData(event);
 
     if (data.isValid) {
-      this.pointerDownEvent = event;
-
       document.addEventListener("pointermove", this.pointerMove, {
         capture: true,
       });
@@ -82,6 +81,8 @@ export class LongPressService extends TrmrkDisposableBase {
           this.args!.longPressIntervalMillis!,
         );
       }
+    } else {
+      this.pointerDownEvent = null;
     }
   }
 
@@ -153,7 +154,7 @@ export class LongPressService extends TrmrkDisposableBase {
 
     if (data.isValid) {
       data.isValid = isAnyContainedBy({
-        event: event,
+        event,
         parent: [
           ...(withValIf(this.args!.altHostElems, (f) => f()) ?? []),
           data.elem,

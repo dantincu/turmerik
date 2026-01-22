@@ -17,13 +17,13 @@ export interface TrmrkLongPressableProps<
   TRootHtmlElement extends HTMLElement = HTMLElement,
 > {
   hoc: HOCArgs<T, TRootHtmlElement>,
-  pointerDraggableInitArgs: (rootEl: TRootHtmlElement) => PointerDragServiceInitArgs
+  args: (rootEl: TRootHtmlElement) => PointerDragServiceInitArgs
 }
 
 export default function TrmrkLongPressable<
   T extends React.ElementType,
   TRootHtmlElement extends HTMLElement = HTMLElement,
->({ hoc, pointerDraggableInitArgs }: Readonly<TrmrkLongPressableProps<T, TRootHtmlElement>>) {
+>({ hoc, args }: Readonly<TrmrkLongPressableProps<T, TRootHtmlElement>>) {
   const initializedRef = React.useRef(false);
   let pointerDragService: PointerDragService | null = null;
 
@@ -31,7 +31,7 @@ export default function TrmrkLongPressable<
 
   const rootElAvailable = (rootEl: TRootHtmlElement | null) => {
     performInitialization(initializedRef, () => pointerDragService = createPointerDragService())
-    actWithValIf(rootEl, rootEl => pointerDragService!.init(pointerDraggableInitArgs(rootEl)));
+    actWithValIf(rootEl, rootEl => pointerDragService!.init(args(rootEl)));
     actWithValIf(hoc.rootElAvailable, f => f(rootEl));
   }
 

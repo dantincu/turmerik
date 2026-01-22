@@ -17,13 +17,13 @@ export interface TrmrkLongPressableProps<
   TRootHtmlElement extends HTMLElement = HTMLElement,
 > {
   hoc: HOCArgs<T, TRootHtmlElement>,
-  multiClickInitArgs: (rootEl: TRootHtmlElement) => MultiClickServiceInitArgs
+  args: (rootEl: TRootHtmlElement) => MultiClickServiceInitArgs
 }
 
 export default function TrmrkLongPressable<
   T extends React.ElementType,
   TRootHtmlElement extends HTMLElement = HTMLElement,
->({ hoc, multiClickInitArgs }: Readonly<TrmrkLongPressableProps<T, TRootHtmlElement>>) {
+>({ hoc, args }: Readonly<TrmrkLongPressableProps<T, TRootHtmlElement>>) {
   const initializedRef = React.useRef(false);
   let multiClickService: MultiClickService | null = null;
 
@@ -31,7 +31,7 @@ export default function TrmrkLongPressable<
 
   const rootElAvailable = (rootEl: TRootHtmlElement | null) => {
     performInitialization(initializedRef, () => multiClickService = createMultiClickService())
-    actWithValIf(rootEl, rootEl => multiClickService!.init(multiClickInitArgs(rootEl)));
+    actWithValIf(rootEl, rootEl => multiClickService!.init(args(rootEl)));
     actWithValIf(hoc.rootElAvailable, f => f(rootEl));
   }
 

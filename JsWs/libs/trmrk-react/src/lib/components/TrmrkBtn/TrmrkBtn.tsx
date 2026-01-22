@@ -21,12 +21,12 @@ export default function TrmrkBtn<T extends React.ElementType = "button",
   TRootHtmlElement extends HTMLElement = HTMLButtonElement>(
   { cssClass, children, onClick, hoc, borderWidth }: Readonly<TrmrkBtnProps<T, TRootHtmlElement>>
 ) {
-  const hocArgs = hoc ?? {};
+  const hocArgs = {...(hoc ?? {})};
 
-  const component = hocArgs.component ?? (hocArgs => (props) => <button
+  hocArgs.component ??= (hocArgs => (props) => <button
     {...props} ref={hocArgs.rootElRef}>{props.children}</button>);
 
-  const rootElRef = hocArgs.rootElRef ?? React.useRef<TRootHtmlElement | null>(null);
+  hocArgs.rootElRef ??= React.useRef<TRootHtmlElement | null>(null);
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const onPointerDown = (e: PointerEvent) => {
@@ -39,10 +39,10 @@ export default function TrmrkBtn<T extends React.ElementType = "button",
     }, 200);
   }
 
-  const Button = component(hocArgs) as React.ElementType;
+  const Button = hocArgs.component(hocArgs) as React.ElementType;
 
   React.useEffect(() => {
-    const btnElem = rootElRef.current;
+    const btnElem = hocArgs.rootElRef!.current;
     btnElem?.addEventListener("pointerdown", onPointerDown);
     actWithValIf(hocArgs.rootElAvailable, f => f(btnElem));
 

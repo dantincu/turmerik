@@ -53,11 +53,10 @@ export class PointerDragService extends TrmrkDisposableBase {
 
   pointerDown(event: PointerEvent) {
     this.reset();
+    this.pointerDownEvent = event;
     const data = this.getEventData(event);
 
     if (data.isValid) {
-      this.pointerDownEvent = data.event as PointerEvent;
-
       document.addEventListener("pointermove", this.pointerMove, {
         capture: true,
         passive: false,
@@ -66,9 +65,12 @@ export class PointerDragService extends TrmrkDisposableBase {
       document.addEventListener("pointerup", this.pointerUp, {
         capture: true,
       });
+
+      actWithValIf(this.args!.dragStart, (f) => f(event));
+    } else {
+      this.pointerDownEvent = null;
     }
 
-    actWithValIf(this.args!.dragStart, (f) => f(event));
     return event;
   }
 

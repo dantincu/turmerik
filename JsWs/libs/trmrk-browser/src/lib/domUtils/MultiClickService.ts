@@ -75,6 +75,7 @@ export class MultiClickService extends TrmrkDisposableBase {
 
   pointerDown(event: PointerEvent) {
     this.removeEventListeners();
+    this.pointerDownEvent = event;
     const data = this.getEventData(event);
 
     if (data.isValid) {
@@ -206,6 +207,7 @@ export class MultiClickService extends TrmrkDisposableBase {
     this.lastMouseDownMillis = 0;
     this.clicksCount = 0;
     this.elapsedIntervalsCount = 0;
+    this.pointerDownEvent = null;
   }
 
   private removeEventListeners() {
