@@ -16,6 +16,8 @@ export default function ButtonsTestAppBar() {
         hostElem,
         multiClickPointerDown: (e) => console.log("multiClickPointerDown", e),
         multiClickPressAndHold: (e) => console.log("multiClickPressAndHold", e),
+        multiClickComplete: () => console.log("multiClickComplete"),
+        multiClickEnded: () => console.log("multiClickEnded")
       });
     }}></TrmrkMultiClickable>
     <h1 className="text-center grow">Buttons Test</h1></>;

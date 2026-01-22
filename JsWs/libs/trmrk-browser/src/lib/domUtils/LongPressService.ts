@@ -75,7 +75,7 @@ export class LongPressService extends TrmrkDisposableBase {
         capture: true,
       });
 
-      if (event.button === MouseButton.Left) {
+      if (event.buttons === 1) {
         this.longPressTimeout = setTimeout(
           this.longPressTimeoutElapsed,
           this.args!.longPressIntervalMillis!,
@@ -87,7 +87,7 @@ export class LongPressService extends TrmrkDisposableBase {
   }
 
   pointerUp(event: PointerEvent) {
-    const data = this.getEventData(event);
+    const data = this.getEventData(event, true);
 
     if (data.isValid) {
       actWithValIf(
@@ -141,7 +141,7 @@ export class LongPressService extends TrmrkDisposableBase {
     });
   }
 
-  private getEventData(event: PointerEvent) {
+  private getEventData(event: PointerEvent, isForMouseUp = false) {
     const data: LongPressOrRightClickEventData = {
       elem: this.args!.hostElem,
       event,
@@ -149,8 +149,14 @@ export class LongPressService extends TrmrkDisposableBase {
       isValid: true,
     };
 
-    data.isValid =
-      [MouseButton.Left, MouseButton.Right].indexOf(event.button) >= 0;
+    /* According to gemini: 
+       To check if a button is currently being held down during a move, you should use the buttons property. This is a bitmask representing all buttons currently pressed.
+        0: No button is pressed (Standard hover/move).
+        1: Left mouse button or Touch contact.
+        2: Right mouse button.
+        4: Middle mouse button.
+    */
+    data.isValid = (isForMouseUp ? [0] : [1, 2]).indexOf(event.buttons) >= 0;
 
     if (data.isValid) {
       data.isValid = isAnyContainedBy({

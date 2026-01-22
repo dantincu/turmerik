@@ -49,9 +49,11 @@ export class MultiClickService extends TrmrkDisposableBase {
   private pressAndHoldStartTimeout: MtblRefValue<NodeJS.Timeout | null> = {
     value: null,
   };
+
   private pressAndHoldInterval: MtblRefValue<NodeJS.Timeout | null> = {
     value: null,
   };
+
   private mouseUpTimeout: MtblRefValue<NodeJS.Timeout | null> = { value: null };
 
   constructor() {
@@ -123,7 +125,7 @@ export class MultiClickService extends TrmrkDisposableBase {
   }
 
   pointerUp(event: PointerEvent) {
-    const data = this.getEventData(event);
+    const data = this.getEventData(event, true);
 
     if (data.isValid) {
       const now = new Date();
@@ -253,12 +255,12 @@ export class MultiClickService extends TrmrkDisposableBase {
     );
   }
 
-  private getEventData(event: PointerEvent) {
+  private getEventData(event: PointerEvent, isForMouseUp = false) {
     const data: LongPressOrRightClickEventData = {
       elem: this.args!.hostElem,
       event,
       composedPath: null,
-      isValid: event.button === MouseButton.Left,
+      isValid: event.buttons === (isForMouseUp ? 0 : 1),
     };
 
     if (data.isValid) {

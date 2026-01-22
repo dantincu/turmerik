@@ -85,7 +85,7 @@ export class PointerDragService extends TrmrkDisposableBase {
   }
 
   pointerUp(event: PointerEvent) {
-    const data = this.getEventData(event);
+    const data = this.getEventData(event, true);
     actWithValIf(this.args!.dragEnd, (f) => f(this.getDragEvent(data)));
     this.reset();
   }
@@ -108,7 +108,7 @@ export class PointerDragService extends TrmrkDisposableBase {
     return event;
   }
 
-  private getEventData(event: PointerEvent) {
+  private getEventData(event: PointerEvent, isForMouseUp = false) {
     event.preventDefault();
     const elem = this.args!.hostElem;
 
@@ -116,7 +116,7 @@ export class PointerDragService extends TrmrkDisposableBase {
       elem: elem!,
       event,
       composedPath: null,
-      isValid: event.button === MouseButton.Left,
+      isValid: event.buttons === (isForMouseUp ? 0 : 1),
       dragStartPosition: elem
         ? {
             clientTop: elem.clientTop,
