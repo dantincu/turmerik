@@ -23,7 +23,10 @@ export default function ButtonsTestPage() {
   const [, setShowTopToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showTopToolbar);
   const [, setShowBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
   const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
+  const [, setShowLeftPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanelLoader);
+  const [, setShowMainPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showMainPanelLoader);
   const [, setShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
+  const [, setShowRightPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanelLoader);
 
   React.useEffect(() => {
     setShowAppBar(true);
@@ -32,10 +35,15 @@ export default function ButtonsTestPage() {
     setShowTopToolbar(true);
     setShowBottomToolbar(true);
     setShowLeftPanel(true);
+    setShowLeftPanelLoader(true);
+    setShowMainPanelLoader(true);
     setShowRightPanel(true);
+    setShowRightPanelLoader(true);
   }, []);
 
   return <div className="flex flex-wrap">
+    <p>asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf
+      asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf </p>
     <TrmrkBtn borderWidth={1} cssClass="my-[1px]" onClick={e => console.log("onClick", e)}><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={1} cssClass="my-[1px]">
       <span className="trmrk-icon-wrapper"><Icon icon="mdi:home" /></span>
