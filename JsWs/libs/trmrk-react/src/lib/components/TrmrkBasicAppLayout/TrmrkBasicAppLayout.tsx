@@ -3,12 +3,12 @@ import { useAtom } from "jotai";
 import { withValIf } from "@/src/trmrk/core";
 
 import "./TrmrkBasicAppLayout.scss";
-import { CommponentProps } from "../defs/common";
+import { ComponentProps } from "../defs/common";
 import TrmrkHorizStrip from "../TrmrkHorizStrip/TrmrkHorizStrip";
 import { bottomToolbarComponents, topToolbarComponents } from "./TrmrkBasicAppLayoutService";
 import { appBarComponents } from "./TrmrkBasicAppLayoutService";
 import { trmrkBasicAppLayoutAtoms } from "./TrmrkBasicAppLayoutService";
-export interface TrmrkBasicAppLayoutProps extends CommponentProps {}
+export interface TrmrkBasicAppLayoutProps extends ComponentProps {}
 
 export default function TrmrkBasicAppLayout({children, cssClass}: Readonly<TrmrkBasicAppLayoutProps>) {
   const [showAppBarValue] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);

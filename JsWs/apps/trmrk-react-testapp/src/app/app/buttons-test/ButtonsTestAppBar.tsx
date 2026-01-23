@@ -1,15 +1,14 @@
-import { Icon } from "@iconify/react";
-
 import { getVarName } from "@/src/trmrk/Reflection/core";
 import TrmrkBtn from "@/src/trmrk-react/components/TrmrkBtn/TrmrkBtn";
 import TrmrkMultiClickable from "@/src/trmrk-react/components/TrmrkMultiClickable/TrmrkMultiClickable";
+import TrmrkIcon from "@/src/trmrk-react/components/TrmrkIcon/TrmrkIcon";
 
 export const ButtonsTestAppBarTypeName = getVarName(() => ButtonsTestAppBar);
 
 export default function ButtonsTestAppBar() {
   return <>
     <TrmrkMultiClickable hoc={{
-        component: (hoc) => (props) => <TrmrkBtn borderWidth={1} {...props} hoc={hoc}><div className="trmrk-icon-wrapper"><Icon icon="mdi:home" /></div></TrmrkBtn>
+        component: (hoc) => (props) => <TrmrkBtn borderWidth={1} {...props} hoc={hoc}><TrmrkIcon icon="mdi:home" /></TrmrkBtn>
       }}
       args={hostElem => {
       return ({

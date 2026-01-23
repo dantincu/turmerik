@@ -1,6 +1,6 @@
 import { NullOrUndef } from "@/src/trmrk/core";
 
-export interface CommponentProps {
+export interface ComponentProps {
   cssClass?: string | NullOrUndef;
   children?: React.ReactNode | NullOrUndef;
 }

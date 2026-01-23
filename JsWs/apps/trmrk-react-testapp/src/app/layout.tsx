@@ -7,7 +7,7 @@ import { initialLoaderKillSwitchScript, initialLoaderStyles } from "@/src/trmrk-
 import Trmrk3PanelsAppLayout from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayout";
 
 import { ThemeProvider } from "@/src/code/components/theme-provider";
-import IconRegistration from '@/src/code/services/IconRegistration';
+import IconRegistration from '@/src/code/services/iconify/IconRegistration';
 import AppInitializer from "@/src/code/components/AppInitializer";
 
 export const metadata: Metadata = {

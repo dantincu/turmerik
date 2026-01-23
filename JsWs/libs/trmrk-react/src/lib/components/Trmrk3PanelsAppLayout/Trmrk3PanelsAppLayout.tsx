@@ -6,7 +6,7 @@ import { withValIf } from "@/src/trmrk/core";
 
 import "./Trmrk3PanelsAppLayout.scss";
 
-import { CommponentProps } from "../defs/common";
+import { ComponentProps } from "../defs/common";
 import TrmrkBasicAppLayout from "../TrmrkBasicAppLayout/TrmrkBasicAppLayout";
 import TrmrkSplitContainerCore from "../TrmrkSplitContainerCore/TrmrkSplitContainerCore";
 import TrmrkLoader from "../TrmrkLoader/TrmrkLoader";
@@ -17,7 +17,7 @@ import {
   rightPanelComponents,
 } from "./Trmrk3PanelsAppLayoutService";
 
-export interface Trmrk3PanelsAppLayoutProps extends CommponentProps {}
+export interface Trmrk3PanelsAppLayoutProps extends ComponentProps {}
 
 export default function Trmrk3PanelsAppLayout({children, cssClass}: Readonly<Trmrk3PanelsAppLayoutProps>) {
   const [showLeftPanelValue] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);

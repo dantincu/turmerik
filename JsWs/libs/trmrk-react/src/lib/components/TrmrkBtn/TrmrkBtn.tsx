@@ -6,12 +6,12 @@ import "./TrmrkBtn.scss";
 
 import { NullOrUndef, actWithValIf } from "@/src/trmrk/core";
 
-import { CommponentProps } from "../defs/common";
+import { ComponentProps } from "../defs/common";
 import { HOCArgs } from "../defs/HOC";
 import { clearRefVal } from "../../services/utils";
 
 export interface TrmrkBtnProps<T extends React.ElementType = "button",
-  TRootHtmlElement extends HTMLElement = HTMLButtonElement> extends CommponentProps {
+  TRootHtmlElement extends HTMLElement = HTMLButtonElement> extends ComponentProps {
   onClick?: ((event: PointerEvent) => void) | NullOrUndef;
   hoc?: HOCArgs<T, TRootHtmlElement> | NullOrUndef,
   borderWidth?: number | NullOrUndef;

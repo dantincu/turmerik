@@ -2,9 +2,9 @@ import { NullOrUndef } from "@/src/trmrk/core";
 
 import "./TrmrkSplitContainerCore.scss";
 
-import { CommponentProps } from "../defs/common";
+import { ComponentProps } from "../defs/common";
 
-export interface TrmrkSplitContainerProps extends CommponentProps {
+export interface TrmrkSplitContainerProps extends ComponentProps {
   panel1WidthPercent?: number | NullOrUndef;
   showPanel1?: boolean | NullOrUndef;
   showPanel2?: boolean | NullOrUndef;
