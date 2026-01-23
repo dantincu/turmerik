@@ -133,13 +133,11 @@ export default function TrmrkPopup(
     <div className={['trmrk-popup', cssClassName, messageFadeOut ? 'trmrk-fade' : ''].join(' ')}>
       <TrmrkLongPressable hoc={{
             component: (hoc) => (props) => <TrmrkBtn {...props} hoc={hoc}><TrmrkIcon icon="mdi:close" /></TrmrkBtn>
-          }} args={hostElem => {
-            return ({
+          }} args={hostElem => ({
               hostElem,
               longPressOrRightClick: (e) => closeBtnLongPressOrRightClick(),
               shortPressOrLeftClick: (e) => closeBtnClick()
-            });
-          }}></TrmrkLongPressable>
+            })}></TrmrkLongPressable>
       { children }
       { arrowCssClass && <svg className="trmrk-arrow arrowCssClass" viewBox="0 0 20 10" style={ arrowStyle ?? undefined }>
         <path className="trmrk-arrow-body" strokeWidth="1" d="M 0 10 L 10 0 L 20 10" />

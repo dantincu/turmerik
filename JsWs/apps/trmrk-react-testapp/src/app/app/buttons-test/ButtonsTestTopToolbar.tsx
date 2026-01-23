@@ -9,11 +9,9 @@ export default function ButtonsTestTopToolbar() {
   return <><TrmrkLongPressable hoc={{
       component: (hoc) => (props) => <TrmrkBtn borderWidth={1} {...props} hoc={hoc}><TrmrkIcon icon="mdi:home" /></TrmrkBtn>
     }}
-    args={hostElem => {
-    return ({
+    args={hostElem => ({
       hostElem,
       longPressOrRightClick: (e) => console.log("longPressOrRightClick", e),
       shortPressOrLeftClick: (e) => console.log("shortPressOrLeftClick", e)
-    });
-  }}></TrmrkLongPressable></>;
+    })}></TrmrkLongPressable></>;
 }
