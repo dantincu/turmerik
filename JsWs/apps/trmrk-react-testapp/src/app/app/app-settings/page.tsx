@@ -20,6 +20,7 @@ export default function AppSettingsPage() {
   const [, setShowTopToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showTopToolbar);
   const [, setShowBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
   const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
+  const [, setShowMainPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showMainPanelLoader);
   const [, setShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
 
   React.useEffect(() => {
@@ -28,6 +29,7 @@ export default function AppSettingsPage() {
     setShowTopToolbar(false);
     setShowBottomToolbar(false);
     setShowLeftPanel(false);
+    setShowMainPanelLoader(true);
     setShowRightPanel(false);
   }, []);
 

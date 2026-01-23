@@ -1,5 +1,4 @@
-import type { Metadata } from "next";
-import { addIcon } from '@iconify/react'; 
+import type { Metadata } from "next"; 
 
 import '../trmrk-react/globals.scss';
 
@@ -7,7 +6,8 @@ import { initialLoaderKillSwitchScript, initialLoaderStyles } from "@/src/trmrk-
 import Trmrk3PanelsAppLayout from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayout";
 
 import { ThemeProvider } from "@/src/code/components/theme-provider";
-import IconRegistration from '@/src/code/components/IconRegistration';
+import IconRegistration from '@/src/code/services/IconRegistration';
+import AppInitializer from "@/src/code/components/AppInitializer";
 
 export const metadata: Metadata = {
   title: "Turmerik React Test App",
@@ -38,8 +38,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: initialLoaderKillSwitchScript,
           }}
-        />
-          <Trmrk3PanelsAppLayout>{children}</Trmrk3PanelsAppLayout>
+        /><AppInitializer><Trmrk3PanelsAppLayout>{children}</Trmrk3PanelsAppLayout></AppInitializer>
         </ThemeProvider>
       </body>
     </html>

@@ -1,6 +1,6 @@
 import { NullOrUndef } from "@/src/trmrk/core";
 
-import "./TrmrkSplitContainer.scss";
+import "./TrmrkSplitContainerCore.scss";
 
 import { CommponentProps } from "../defs/common";
 
@@ -12,7 +12,7 @@ export interface TrmrkSplitContainerProps extends CommponentProps {
   panel2Content?: (() => React.ReactNode) | NullOrUndef;
 }
 
-export default function TrmrkSplitContainer({
+export default function TrmrkSplitContainerCore({
   cssClass,
   panel1WidthPercent,
   showPanel1,

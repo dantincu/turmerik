@@ -8,7 +8,7 @@ import "./Trmrk3PanelsAppLayout.scss";
 
 import { CommponentProps } from "../defs/common";
 import TrmrkBasicAppLayout from "../TrmrkBasicAppLayout/TrmrkBasicAppLayout";
-import TrmrkSplitContainer from "../TrmrkSplitContainer/TrmrkSplitContainer";
+import TrmrkSplitContainerCore from "../TrmrkSplitContainerCore/TrmrkSplitContainerCore";
 import TrmrkLoader from "../TrmrkLoader/TrmrkLoader";
 
 import {
@@ -30,21 +30,21 @@ export default function Trmrk3PanelsAppLayout({children, cssClass}: Readonly<Trm
 
   return (
     <TrmrkBasicAppLayout cssClass={cssClass}>
-      <TrmrkSplitContainer showPanel1={showLeftPanelValue} showPanel2={true} panel1WidthPercent={33.333} panel1Content={() =>
+      <TrmrkSplitContainerCore showPanel1={showLeftPanelValue} showPanel2={true} panel1WidthPercent={33.333} panel1Content={() =>
         showLeftPanelValue && <>
-          <div className="trmrk-panel-body">{
-            withValIf(leftPanelComponents.map[leftPanelComponentKeyValue!], f => f()) }</div>
+          <div className="trmrk-panel-body-container"><div className="trmrk-panel-body">{
+            withValIf(leftPanelComponents.map[leftPanelComponentKeyValue!], f => f()) }</div></div>
           { showLeftPanelLoaderValue && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</>
         } panel2Content={() =>
-          <TrmrkSplitContainer showPanel1={true} showPanel2={showRightPanelValue} panel1WidthPercent={50} panel1Content={() => <>
-              <div className="trmrk-panel-body">{ children }</div>
+          <TrmrkSplitContainerCore showPanel1={true} showPanel2={showRightPanelValue} panel1WidthPercent={50} panel1Content={() => <>
+              <div className="trmrk-panel-body-container"><div className="trmrk-panel-body">{ children }</div></div>
               { showMainPanelLoaderValue && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }
             panel2Content={() => showRightPanelValue && <>
-              <div className="trmrk-panel-body">{
-                withValIf(rightPanelComponents.map[rightPanelComponentKeyValue!], f => f()) }</div>
+              <div className="trmrk-panel-body-container"><div className="trmrk-panel-body">{
+                withValIf(rightPanelComponents.map[rightPanelComponentKeyValue!], f => f()) }</div></div>
               { showRightPanelLoaderValue && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }>
-          </TrmrkSplitContainer>}>
-      </TrmrkSplitContainer>
+          </TrmrkSplitContainerCore>}>
+      </TrmrkSplitContainerCore>
     </TrmrkBasicAppLayout>
   );
 }
