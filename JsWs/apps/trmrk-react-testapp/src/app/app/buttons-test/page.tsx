@@ -10,10 +10,12 @@ import { appBarComponents, topToolbarComponents, trmrkBasicAppLayoutAtoms } from
 import TrmrkBtn from "@/src/trmrk-react/components/TrmrkBtn/TrmrkBtn";
 import TrmrkPopup from "@/src/trmrk-react/components/TrmrkPopup/TrmrkPopup";
 import TrmrkIcon from "@/src/trmrk-react/components/TrmrkIcon/TrmrkIcon";
+import { Placement } from '@/src/trmrk-browser/core';
+import { appOverlappingContents } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
+import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
 
 import ButtonsTestAppBar, { ButtonsTestAppBarTypeName } from './ButtonsTestAppBar';
 import ButtonsTestTopToolbar, { ButtonsTestTopToolbarTypeName } from './ButtonsTestTopToolbar';
-import { Placement } from '@/src/trmrk-browser/core';
 
 appBarComponents.map[ButtonsTestAppBarTypeName] = () => (<ButtonsTestAppBar />);
 topToolbarComponents.map[ButtonsTestTopToolbarTypeName] = () => (<ButtonsTestTopToolbar />);
@@ -31,6 +33,7 @@ interface UserMessage {
 }
 
 export default function ButtonsTestPage() {
+  const componentIdRef = React.useRef(defaultComponentIdService.value.getNextId());
   const [, setShowAppBar] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);
   const [, setAppBarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.appBarComponentKey);
   const [, setTopToolbarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarComponentKey);
@@ -64,6 +67,8 @@ export default function ButtonsTestPage() {
     // setShowMainPanelLoader(true);
     // setShowRightPanel(true);
     setShowRightPanelLoader(true);
+
+    appOverlappingContents.value.register(componentIdRef.current, () => <div className="absolute top-[0px]">asdfasdfasdf</div>);
   }, []);
 
   return <div className="flex flex-wrap">

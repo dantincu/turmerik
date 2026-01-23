@@ -1,3 +1,4 @@
+import React from "react";
 import { useAtom } from "jotai";
 
 import { withValIf } from "@/src/trmrk/core";
@@ -7,10 +8,13 @@ import { ComponentProps } from "../defs/common";
 import TrmrkHorizStrip from "../TrmrkHorizStrip/TrmrkHorizStrip";
 import { bottomToolbarComponents, topToolbarComponents } from "./TrmrkBasicAppLayoutService";
 import { appBarComponents } from "./TrmrkBasicAppLayoutService";
-import { trmrkBasicAppLayoutAtoms } from "./TrmrkBasicAppLayoutService";
+import { trmrkBasicAppLayoutAtoms, appOverlappingContents } from "./TrmrkBasicAppLayoutService";
+
 export interface TrmrkBasicAppLayoutProps extends ComponentProps {}
 
 export default function TrmrkBasicAppLayout({children, cssClass}: Readonly<TrmrkBasicAppLayoutProps>) {
+  const [ overlappingContentKeys ] = useAtom(appOverlappingContents.value.currentKeysAtom);
+
   const [showAppBarValue] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);
   const [showAppBarOnlyValue] = useAtom(trmrkBasicAppLayoutAtoms.showAppBarOnly);
   const [appBarComponentKeyValue] = useAtom(trmrkBasicAppLayoutAtoms.appBarComponentKey);
@@ -39,6 +43,11 @@ export default function TrmrkBasicAppLayout({children, cssClass}: Readonly<Trmrk
           </TrmrkHorizStrip>
         </div>
       }
+      <div className="trmrk-overlapping-contents">
+        { overlappingContentKeys.map(key => <React.Fragment key={key}>
+          { appOverlappingContents.value.keyedMap.map[key].component() }
+        </React.Fragment>) }
+      </div>
     </div>
   );
 }

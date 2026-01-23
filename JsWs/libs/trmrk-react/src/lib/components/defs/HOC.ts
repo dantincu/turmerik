@@ -1,5 +1,3 @@
-import React from "react";
-
 import { NullOrUndef } from "@/src/trmrk/core";
 
 export interface HOCArgsCore<

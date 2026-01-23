@@ -1,6 +1,9 @@
 import { atom } from "jotai";
 
+import { RefLazyValue } from "@/src/trmrk/core";
+
 import { ComponentsMap } from "../defs/common";
+import { createIntKeyedComponentsMapManager } from "../../services/IntKeyedComponentsMapManager";
 
 export const trmrkBasicAppLayoutAtoms = {
   showAppBar: atom(false),
@@ -23,3 +26,7 @@ export const topToolbarComponents: ComponentsMap = {
 export const bottomToolbarComponents: ComponentsMap = {
   map: {},
 };
+
+export const appOverlappingContents = new RefLazyValue(() =>
+  createIntKeyedComponentsMapManager(),
+);

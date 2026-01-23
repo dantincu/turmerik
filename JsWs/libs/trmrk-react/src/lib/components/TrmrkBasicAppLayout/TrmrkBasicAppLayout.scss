@@ -19,6 +19,12 @@
   max-height: 100%;
   position: relative;
   flex: 1 1 100%;
+
+  .trmrk-overlapping-contents {
+    height: 0;
+    max-height: 0;
+    overflow: visible;
+  }
 }
 
 .trmrk-app-header, .trmrk-app-footer {
