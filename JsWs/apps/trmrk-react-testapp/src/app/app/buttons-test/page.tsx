@@ -13,6 +13,7 @@ import TrmrkIcon from "@/src/trmrk-react/components/TrmrkIcon/TrmrkIcon";
 
 import ButtonsTestAppBar, { ButtonsTestAppBarTypeName } from './ButtonsTestAppBar';
 import ButtonsTestTopToolbar, { ButtonsTestTopToolbarTypeName } from './ButtonsTestTopToolbar';
+import { Placement } from '@/src/trmrk-browser/core';
 
 appBarComponents.map[ButtonsTestAppBarTypeName] = () => (<ButtonsTestAppBar />);
 topToolbarComponents.map[ButtonsTestTopToolbarTypeName] = () => (<ButtonsTestTopToolbar />);
@@ -93,7 +94,7 @@ export default function ButtonsTestPage() {
     <TrmrkBtn borderWidth={2} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
     { messages.map(msg => <React.Fragment key={msg.idx + 1}>
       <TrmrkBtn borderWidth={1} cssClass="my-[1px]" onClick={() => showMessage(msg)}><span className="trmrk-text">My Button {msg.idx}</span></TrmrkBtn>
-      <TrmrkPopup show={msg.show} msgLevel={msg.idx % 5} autoCloseMillis={ (msg.idx + 1) * 1000 }>{msg.text}</TrmrkPopup>
+      <TrmrkPopup show={msg.show} msgLevel={msg.idx % 5} autoCloseMillis={ (msg.idx + 1) * 1000 } arrowPlacement={Placement.Top}>{msg.text}</TrmrkPopup>
     </React.Fragment>) }
   </div>;
 }
