@@ -1,9 +1,9 @@
 @mixin scrollable-light() {
-  scrollbar-color: var(--trmrk-scrollable-thumb_color_light) var(--trmrk-scrollable-track_color_light);
+  scrollbar-color: var(--trmrk-tool-bar_back-color-emph_light) var(--trmrk-tool-bar_back-color_light);
 }
 
 @mixin scrollable-dark() {
-  scrollbar-color: var(--trmrk-scrollable-thumb_color_dark) var(--trmrk-scrollable-track_color_dark);
+  scrollbar-color: var(--trmrk-tool-bar_back-color-emph_dark) var(--trmrk-tool-bar_back-color_dark);
 }
 
 @mixin trmrk-wrap-content {

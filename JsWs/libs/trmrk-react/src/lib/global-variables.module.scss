@@ -31,16 +31,6 @@
   --trmrk-warn-color-theme-dark: #DB0;
   --trmrk-warn-back-color: #FD0;
 
-  --trmrk-scrollable-track_color_light: #eee;
-  --trmrk-scrollable-thumb_color_light: #ccc;
-  --trmrk-scrollable-track-hover_color_light: #ddd;
-  --trmrk-scrollable-thumb-hover_color_light: #bbb;
-
-  --trmrk-scrollable-track_color_dark: #222;
-  --trmrk-scrollable-thumb_color_dark: #444;
-  --trmrk-scrollable-track-hover_color_dark: #333;
-  --trmrk-scrollable-thumb-hover_color_dark: #555;
-
   --trmrk-user-message-success_back-color_light: #40f040;
   --trmrk-user-message-success_border-color_light: #10d010;
 
@@ -70,8 +60,10 @@
 
 :root {
   --trmrk-tool-bar_back-color_light: #ffe000;
+  --trmrk-tool-bar_back-color-emph_light: #e0a000;
   --trmrk-tool-bar_fore-color_light: #000;
 
   --trmrk-tool-bar_back-color_dark: #200800;
+  --trmrk-tool-bar_back-color-emph_dark: #602000;
   --trmrk-tool-bar_fore-color_dark: #fff;
 }

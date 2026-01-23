@@ -1,6 +1,7 @@
 import type { Metadata } from "next"; 
 
 import '../trmrk-react/globals.scss';
+import "../code/components/app-globals.scss";
 
 import { initialLoaderKillSwitchScript, initialLoaderStyles } from "@/src/trmrk-react/initial-loader";
 import Trmrk3PanelsAppLayout from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayout";
