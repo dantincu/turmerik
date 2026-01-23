@@ -9,7 +9,6 @@ import { trmrk3PanelsAppLayoutAtoms } from "@/src/trmrk-react/components/Trmrk3P
 import { appBarComponents, topToolbarComponents, trmrkBasicAppLayoutAtoms } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 import TrmrkBtn from "@/src/trmrk-react/components/TrmrkBtn/TrmrkBtn";
 import TrmrkPopup from "@/src/trmrk-react/components/TrmrkPopup/TrmrkPopup";
-import TrmrkPopupContent from "@/src/trmrk-react/components/TrmrkPopup/TrmrkPopupContent";
 import TrmrkIcon from "@/src/trmrk-react/components/TrmrkIcon/TrmrkIcon";
 
 import ButtonsTestAppBar, { ButtonsTestAppBarTypeName } from './ButtonsTestAppBar';
@@ -94,7 +93,7 @@ export default function ButtonsTestPage() {
     <TrmrkBtn borderWidth={2} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
     { messages.map(msg => <React.Fragment key={msg.idx + 1}>
       <TrmrkBtn borderWidth={1} cssClass="my-[1px]" onClick={() => showMessage(msg)}><span className="trmrk-text">My Button {msg.idx}</span></TrmrkBtn>
-      <TrmrkPopup show={msg.show} msgLevel={msg.idx % 5} autoCloseMillis={ (msg.idx + 1) * 1000 }><TrmrkPopupContent>{msg.text}</TrmrkPopupContent></TrmrkPopup>
+      <TrmrkPopup show={msg.show} msgLevel={msg.idx % 5} autoCloseMillis={ (msg.idx + 1) * 1000 }>{msg.text}</TrmrkPopup>
     </React.Fragment>) }
   </div>;
 }
