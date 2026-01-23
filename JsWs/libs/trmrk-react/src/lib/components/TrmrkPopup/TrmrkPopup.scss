@@ -16,17 +16,21 @@
 
 .trmrk-popup {
   position: relative;
-  padding: 5px 5px 5px 0;
   border-radius: 10px;
+  padding-right: 10px;
+  border: 1px solid;
   max-width: 100vw;
   display: flex;
+  align-items: center;
 
   &.trmrk-fade {
     animation: trmrk-popup-opacFadeOut 1s forwards;
   }
 
   .trmrk-close-icon-btn {
-    float: right;
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
   }
 
   .trmrk-arrow {

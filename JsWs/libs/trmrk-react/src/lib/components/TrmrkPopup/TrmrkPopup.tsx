@@ -132,7 +132,7 @@ export default function TrmrkPopup(
   return showEl && <div className={["trmrk-popup-container", cssClass ?? ''].join(" ")} ref={rootElRef}>
     <div className={['trmrk-popup', cssClassName, messageFadeOut ? 'trmrk-fade' : ''].join(' ')}>
       <TrmrkLongPressable hoc={{
-            component: (hoc) => (props) => <TrmrkBtn {...props} hoc={hoc}><TrmrkIcon icon="mdi:close" /></TrmrkBtn>
+            component: (hoc) => (props) => <TrmrkBtn {...({...props, cssClass: [props.cssClass, 'trmrk-close-icon-btn'].join(' ')})} hoc={hoc}><TrmrkIcon icon="mdi:close" /></TrmrkBtn>
           }} args={hostElem => ({
               hostElem,
               longPressOrRightClick: (e) => closeBtnLongPressOrRightClick(),
