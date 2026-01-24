@@ -1,4 +1,4 @@
-import React, { CSSProperties } from "react";
+import React, { CSSProperties, JSX } from "react";
 import { Icon } from "@iconify/react";
 
 import { UserMessageLevel, NullOrUndef, actWithValIf } from '@/src/trmrk/core';
@@ -21,13 +21,26 @@ export interface TrmrkPopupProps extends ComponentProps {
   autoCloseMillis?: number | NullOrUndef;
 }
 
+const CloseIcon = React.memo(({
+    closeBtnLongPressOrRightClick,
+    closeBtnClick
+  }: {
+    closeBtnLongPressOrRightClick: () => void,
+    closeBtnClick: () => void
+  }) => <TrmrkLongPressable hoc={{
+    component: (hoc) => (props) => <TrmrkBtn {...({...props, cssClass: [props.cssClass, 'trmrk-close-icon-btn'].join(' ')})} hoc={hoc}>
+      <TrmrkIcon icon="mdi:close" /></TrmrkBtn>
+  }} args={hostElem => ({
+      hostElem,
+      longPressOrRightClick: (e) => closeBtnLongPressOrRightClick(),
+      shortPressOrLeftClick: (e) => closeBtnClick()
+    })}></TrmrkLongPressable>);
+
 export default function TrmrkPopup(
   { cssClass, children, msgLevel, show, arrowPlacement = Placement.None, arrowStyle, closed, autoCloseMillis }: Readonly<TrmrkPopupProps>
 ) {
-  const autoCloseMillisVal = autoCloseMillis ?? 5000;
-
-  const shouldRunCleanup = React.useRef(true);
   const rootElRef = React.useRef<HTMLDivElement | null>(null);
+  const autoCloseMillisVal = React.useMemo(() => autoCloseMillis ?? 5000, [autoCloseMillis]);
   const showValRef = React.useRef(0);
   const timeoutId = React.useRef<NodeJS.Timeout | null>(null);
 
@@ -77,67 +90,59 @@ export default function TrmrkPopup(
     return cssClass;
   }, [arrowPlacement]);
 
-  const closeBtnClick = () => {
-    actWithValIf(closed, f => f(true));
+  const closeBtnClick = React.useCallback(() => {
     setMessageFadeOut(false);
     setShowEl(false);
-    shouldRunCleanup.current = true;
-  }
+    clearFadeTimeout();
+    actWithValIf(closed, f => f(true));
+  }, []);
 
-  const closeBtnLongPressOrRightClick = () => {
+  const closeBtnLongPressOrRightClick = React.useCallback(() => {
     setAutoCloseEl(!autoCloseEl);
-  }
+  }, [autoCloseEl]);
 
-  const setFadeTimeout = () => {
+  const setFadeTimeout = React.useCallback(() => {
     timeoutId.current = setTimeout(() => {
       setMessageFadeOut(true);
-      shouldRunCleanup.current = false;
       
       timeoutId.current = setTimeout(() => {
         setMessageFadeOut(false);
         setShowEl(false);
-        shouldRunCleanup.current = true;
         actWithValIf(closed, f => f(false));
       }, defaultSlowAnimationDurationMillis);
     }, autoCloseMillisVal);
-  }
+  }, []);
 
-  const clearFadeTimeout = () => {
+  const clearFadeTimeout = React.useCallback(() => {
     clearRefVal(timeoutId, clearTimeout);
-  }
+  }, []);
+
+  
 
   React.useEffect(() => {
     if (show !== showValRef.current) {
       showValRef.current = show ?? 0;
       const shouldShowEl = showValRef.current > 0;
-      shouldRunCleanup.current = !shouldShowEl;
       setShowEl(shouldShowEl);
+      clearFadeTimeout();
 
       if (shouldShowEl) {
         if (autoCloseEl) {
           setFadeTimeout();
-        } else {
-          shouldRunCleanup.current = true;
         }
       }
     }
-
-    return () => {
-      if (shouldRunCleanup.current) {
-        clearFadeTimeout();
-      }
-    };
   }, [show, messageFadeOut, showEl, autoCloseEl])
+
+  React.useEffect(() => {
+    return () => {
+      clearFadeTimeout();
+    }
+  }, []);
 
   return showEl && <div className={["trmrk-popup-container", cssClass ?? ''].join(" ")} ref={rootElRef}>
     <div className={['trmrk-popup', cssClassName, messageFadeOut ? 'trmrk-fade' : ''].join(' ')}>
-      <TrmrkLongPressable hoc={{
-            component: (hoc) => (props) => <TrmrkBtn {...({...props, cssClass: [props.cssClass, 'trmrk-close-icon-btn'].join(' ')})} hoc={hoc}><TrmrkIcon icon="mdi:close" /></TrmrkBtn>
-          }} args={hostElem => ({
-              hostElem,
-              longPressOrRightClick: (e) => closeBtnLongPressOrRightClick(),
-              shortPressOrLeftClick: (e) => closeBtnClick()
-            })}></TrmrkLongPressable>
+      <CloseIcon closeBtnLongPressOrRightClick={closeBtnLongPressOrRightClick} closeBtnClick={closeBtnClick} />
       { children }
       <div className="trmrk-basement">{ arrowCssClass && <svg className={["trmrk-arrow", arrowCssClass].join(" ")} viewBox="0 0 20 10" style={ arrowStyle ?? undefined }>
         <path className="trmrk-arrow-body" strokeWidth="1" d="M 0 10 L 10 0 L 20 10" />
