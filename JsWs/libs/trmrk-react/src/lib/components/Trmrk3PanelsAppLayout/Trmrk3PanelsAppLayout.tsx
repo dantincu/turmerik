@@ -33,7 +33,7 @@ export default function Trmrk3PanelsAppLayout({children, cssClass}: Readonly<Trm
       <TrmrkSplitContainerCore showPanel1={showLeftPanelValue} showPanel2={true} panel1WidthPercent={33.333} panel1Content={() =>
         showLeftPanelValue && <>
           <div className="trmrk-panel-body-container"><div className="trmrk-panel-body">{
-            withValIf(leftPanelComponents.map[leftPanelComponentKeyValue!], f => f()) }</div></div>
+            withValIf(leftPanelComponents.value.keyedMap.map[leftPanelComponentKeyValue!], f => f.component()) }</div></div>
           { showLeftPanelLoaderValue && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</>
         } panel2Content={() =>
           <TrmrkSplitContainerCore showPanel1={true} showPanel2={showRightPanelValue} panel1WidthPercent={50} panel1Content={() => <>
@@ -41,7 +41,7 @@ export default function Trmrk3PanelsAppLayout({children, cssClass}: Readonly<Trm
               { showMainPanelLoaderValue && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }
             panel2Content={() => showRightPanelValue && <>
               <div className="trmrk-panel-body-container"><div className="trmrk-panel-body">{
-                withValIf(rightPanelComponents.map[rightPanelComponentKeyValue!], f => f()) }</div></div>
+                withValIf(rightPanelComponents.value.keyedMap.map[rightPanelComponentKeyValue!], f => f.component()) }</div></div>
               { showRightPanelLoaderValue && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }>
           </TrmrkSplitContainerCore>}>
       </TrmrkSplitContainerCore>

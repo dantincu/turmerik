@@ -3,34 +3,53 @@
 import React from 'react';
 import { useAtom } from 'jotai';
 
+import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
+
 import './page.scss';
 
 import ThemeToggle from '@/src/code/components/ThemeToggle';
 
 import { trmrk3PanelsAppLayoutAtoms } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
-import { appBarComponents, trmrkBasicAppLayoutAtoms } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
+import { appBarContents, trmrkBasicAppLayoutAtoms } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
-import AppSettingsBar, { AppSettingsBarTypeName } from './AppSettingsBar';
-
-appBarComponents.map[AppSettingsBarTypeName] = () => (<AppSettingsBar />);
+const AppSettingsBar = () => {
+  return <h1 className="text-center grow">App Settings</h1>;
+}
 
 export default function AppSettingsPage() {
   const [, setShowAppBar] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);
   const [, setAppBarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.appBarComponentKey);
+  const [, setTopToolbarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarComponentKey);
+  const [, setBottomToolbarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarComponentKey);
   const [, setShowTopToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showTopToolbar);
   const [, setShowBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
   const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
+  const [, setShowLeftPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanelLoader);
   const [, setShowMainPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showMainPanelLoader);
   const [, setShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
+  const [, setShowRightPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanelLoader);
 
   React.useEffect(() => {
+    const appBarContentsId = appBarContents.value.register(
+      defaultComponentIdService.value.getNextId(),
+      () => (<AppSettingsBar />));
+
     setShowAppBar(true);
-    setAppBarComponentKey(AppSettingsBarTypeName);
-    setShowTopToolbar(false);
-    setShowBottomToolbar(false);
+    setShowTopToolbar(true);
+    setShowBottomToolbar(true);
     setShowLeftPanel(false);
-    setShowMainPanelLoader(true);
+    setShowLeftPanelLoader(false);
+    setShowMainPanelLoader(false);
     setShowRightPanel(false);
+    setShowRightPanelLoader(false);
+    
+    setAppBarComponentKey(appBarContentsId);
+    setTopToolbarComponentKey(null);
+    setBottomToolbarComponentKey(null);
+
+    return () => {
+      appBarContents.value.unregister(appBarContentsId);
+    }
   }, []);
 
   return <ThemeToggle />;

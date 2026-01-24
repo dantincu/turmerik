@@ -1,6 +1,6 @@
 import { atom, getDefaultStore } from "jotai";
 
-import { NullOrUndef, RefLazyValue } from "@/src/trmrk/core";
+import { NullOrUndef } from "@/src/trmrk/core";
 
 import { IntKeyedComponentMap } from "../components/defs/common";
 import { JotaiStore } from "./types";
@@ -27,6 +27,8 @@ export class IntKeyedComponentsMapManager {
     this.store.set(this.currentKeysAtom, (prev) =>
       prev.indexOf(key) < 0 ? [...prev, key] : prev,
     );
+
+    return key;
   }
 
   public unregister(key: number) {

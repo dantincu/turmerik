@@ -6,19 +6,55 @@ import { useAtom } from 'jotai';
 import './page.scss';
 
 import { trmrk3PanelsAppLayoutAtoms } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
-import { appBarComponents, topToolbarComponents, trmrkBasicAppLayoutAtoms } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
+
+import {
+  appBarContents,
+  topToolbarContents,
+  bottomToolbarContents,
+  trmrkBasicAppLayoutAtoms
+} from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
+
 import TrmrkBtn from "@/src/trmrk-react/components/TrmrkBtn/TrmrkBtn";
 import TrmrkPopup from "@/src/trmrk-react/components/TrmrkPopup/TrmrkPopup";
 import TrmrkIcon from "@/src/trmrk-react/components/TrmrkIcon/TrmrkIcon";
 import { Placement } from '@/src/trmrk-browser/core';
 import { appOverlappingContents } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
+import TrmrkAppBarContents from "@/src/trmrk-react/components/TrmrkAppBarContents/TrmrkAppBarContents";
+import TrmrkTopToolBarContents from "@/src/trmrk-react/components/TrmrkTopToolBarContents/TrmrkTopToolBarContents";
+import TrmrkBottomToolBarContents from "@/src/trmrk-react/components/TrmrkBottomToolBarContents/TrmrkBottomToolBarContents";
+import TrmrkMultiClickable from "@/src/trmrk-react/components/TrmrkMultiClickable/TrmrkMultiClickable";
+import TrmrkLongPressable from "@/src/trmrk-react/components/TrmrkLongPressable/TrmrkLongPressable";
 
-import ButtonsTestAppBar, { ButtonsTestAppBarTypeName } from './ButtonsTestAppBar';
-import ButtonsTestTopToolbar, { ButtonsTestTopToolbarTypeName } from './ButtonsTestTopToolbar';
+const AppBar = () => {
+  return <TrmrkAppBarContents>
+    <TrmrkMultiClickable hoc={{
+        component: (hoc) => (props) => <TrmrkBtn borderWidth={1} {...props} hoc={hoc}><TrmrkIcon icon="mdi:home" /></TrmrkBtn>
+      }}
+      args={hostElem => {
+      return ({
+        hostElem,
+        multiClickPointerDown: (e) => console.log("multiClickPointerDown", e),
+        multiClickPressAndHold: (e) => console.log("multiClickPressAndHold", e),
+        multiClickComplete: () => console.log("multiClickComplete"),
+        multiClickEnded: () => console.log("multiClickEnded")
+      });
+    }}></TrmrkMultiClickable>
+    <h1 className="text-center grow">Buttons Test</h1></TrmrkAppBarContents>;
+}
 
-appBarComponents.map[ButtonsTestAppBarTypeName] = () => (<ButtonsTestAppBar />);
-topToolbarComponents.map[ButtonsTestTopToolbarTypeName] = () => (<ButtonsTestTopToolbar />);
+const TopToolbar = () => {
+  return <TrmrkTopToolBarContents><TrmrkLongPressable hoc={{
+      component: (hoc) => (props) => <TrmrkBtn borderWidth={1} {...props} hoc={hoc}><TrmrkIcon icon="mdi:home" /></TrmrkBtn>
+    }}
+    args={hostElem => ({
+      hostElem,
+      longPressOrRightClick: (e) => console.log("longPressOrRightClick", e),
+      shortPressOrLeftClick: (e) => console.log("shortPressOrLeftClick", e)
+    })}></TrmrkLongPressable></TrmrkTopToolBarContents>;
+}
+
+const BottomToolbar = () => <TrmrkBottomToolBarContents></TrmrkBottomToolBarContents>;
 
 const messagesArr: UserMessage[] = Array.from({ length: 100 }).map((_, i) => ({
   idx: i,
@@ -56,10 +92,10 @@ const MessageButton = React.memo(({ msg, dispatch }: {
   </React.Fragment>));
 
 export default function ButtonsTestPage() {
-  const componentIdRef = React.useRef(defaultComponentIdService.value.getNextId());
   const [, setShowAppBar] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);
   const [, setAppBarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.appBarComponentKey);
   const [, setTopToolbarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarComponentKey);
+  const [, setBottomToolbarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarComponentKey);
   const [, setShowTopToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showTopToolbar);
   const [, setShowBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
   const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
@@ -71,19 +107,36 @@ export default function ButtonsTestPage() {
   const [messages, dispatch] = React.useReducer(messagesReducer, messagesArr);
 
   React.useEffect(() => {
+    const appBarContentsId = appBarContents.value.register(
+      defaultComponentIdService.value.getNextId(),
+      () => (<AppBar />));
+
+    const topToolbarContentsId = topToolbarContents.value.register(
+      defaultComponentIdService.value.getNextId(),
+      () => (<TopToolbar />));
+
+    const bottomToolbarContentsId = bottomToolbarContents.value.register(
+      defaultComponentIdService.value.getNextId(),
+      () => (<BottomToolbar />));
+
     setShowAppBar(true);
-    setAppBarComponentKey(ButtonsTestAppBarTypeName);
-    setTopToolbarComponentKey(ButtonsTestTopToolbarTypeName);
     setShowTopToolbar(true);
     setShowBottomToolbar(true);
-    // setShowLeftPanel(true);
+    setShowLeftPanel(false);
     setShowLeftPanelLoader(true);
-    // setShowMainPanelLoader(true);
-    // setShowRightPanel(true);
+    setShowMainPanelLoader(false);
+    setShowRightPanel(false);
     setShowRightPanelLoader(true);
+    
+    setAppBarComponentKey(appBarContentsId);
+    setTopToolbarComponentKey(topToolbarContentsId);
+    setBottomToolbarComponentKey(bottomToolbarContentsId);
 
-    appOverlappingContents.value.register(componentIdRef.current, () => <div className="absolute bottom-[0px]">asdfasdfasdf</div>);
-    return () => console.warn("PARENT UNMOUNTED - THIS IS THE PROBLEM");
+    return () => {
+      appBarContents.value.unregister(appBarContentsId);
+      topToolbarContents.value.unregister(topToolbarContentsId);
+      bottomToolbarContents.value.unregister(bottomToolbarContentsId);
+    }
   }, []);
 
   return <div className="flex flex-wrap">
