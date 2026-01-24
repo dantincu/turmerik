@@ -49,7 +49,7 @@ export default function ButtonsTestPage() {
 
   const showMessage = (msg: UserMessage) => {
     const messagesArr = messages.map(message => message.idx === msg.idx ? ({
-      ...msg,
+      ...message,
       show: msg.show + 1
     }) : message);
 
@@ -68,7 +68,7 @@ export default function ButtonsTestPage() {
     // setShowRightPanel(true);
     setShowRightPanelLoader(true);
 
-    appOverlappingContents.value.register(componentIdRef.current, () => <div className="absolute top-[0px]">asdfasdfasdf</div>);
+    appOverlappingContents.value.register(componentIdRef.current, () => <div className="absolute bottom-[0px]">asdfasdfasdf</div>);
   }, []);
 
   return <div className="flex flex-wrap">

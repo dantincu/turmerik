@@ -23,8 +23,8 @@ export default function TrmrkBtn<T extends React.ElementType = "button",
 ) {
   const hocArgs = {...(hoc ?? {})};
 
-  hocArgs.component ??= (hocArgs => (props) => <button
-    {...props} ref={hocArgs.rootElRef}>{props.children}</button>);
+  const component = React.useMemo(() => hocArgs.component ?? ((hocArgs: HOCArgs<T, TRootHtmlElement>) => (props: React.ComponentPropsWithRef<T>) => <button
+    {...props} ref={hocArgs.rootElRef}>{props.children}</button>), [hocArgs.component]);
 
   hocArgs.rootElRef ??= React.useRef<TRootHtmlElement | null>(null);
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
@@ -39,7 +39,7 @@ export default function TrmrkBtn<T extends React.ElementType = "button",
     }, 200);
   }
 
-  const Button = hocArgs.component(hocArgs) as React.ElementType;
+  const Button = React.useMemo(() => component(hocArgs) as React.ElementType, [component]);
 
   React.useEffect(() => {
     const btnElem = hocArgs.rootElRef!.current;
@@ -49,9 +49,10 @@ export default function TrmrkBtn<T extends React.ElementType = "button",
     return () => {
       btnElem?.removeEventListener("pointerdown", onPointerDown);
       clearRefVal(timeoutRef, clearTimeout);
+      btnElem?.classList.remove('trmrk-btn-pressed');
       actWithValIf(hocArgs.rootElUnavailable, f => f(btnElem));
     };
-  });
+  }, []);
 
   return (
     <Button className={['trmrk-btn', ((borderWidth ?? null) !== null ? `trmrk-border trmrk-border-${borderWidth}px` : ''), cssClass ?? ''].join(' ')}
