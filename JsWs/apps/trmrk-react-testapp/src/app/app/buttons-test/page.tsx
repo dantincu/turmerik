@@ -26,8 +26,7 @@ import TrmrkMultiClickable from "@/src/trmrk-react/components/TrmrkMultiClickabl
 import TrmrkLongPressable from "@/src/trmrk-react/components/TrmrkLongPressable/TrmrkLongPressable";
 
 const AppBar = () => {
-  return <TrmrkAppBarContents>
-    <TrmrkMultiClickable hoc={{
+  return <TrmrkAppBarContents leadingChildren={() => <TrmrkMultiClickable hoc={{
         node: (hoc) => (props) => <TrmrkBtn borderWidth={1} {...props} hoc={hoc}><TrmrkIcon icon="mdi:home" /></TrmrkBtn>
       }}
       args={hostElem => {
@@ -38,8 +37,7 @@ const AppBar = () => {
         multiClickComplete: () => console.log("multiClickComplete"),
         multiClickEnded: () => console.log("multiClickEnded")
       });
-    }}></TrmrkMultiClickable>
-    <h1 className="text-center grow">Buttons Test</h1></TrmrkAppBarContents>;
+    }}></TrmrkMultiClickable>}><h1>Buttons Test</h1></TrmrkAppBarContents>;
 }
 
 const TopToolbar = () => {

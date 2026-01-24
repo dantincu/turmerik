@@ -13,6 +13,7 @@ export const trmrkBasicAppLayoutAtoms = {
   topToolbarContentsKey: atom<number | null>(null),
   showBottomToolbar: atom(false),
   bottomToolbarContentsKey: atom<number | null>(null),
+  showToolbars: atom(true),
 };
 
 export const appBarContents = new RefLazyValue(() =>

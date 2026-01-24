@@ -17,34 +17,35 @@ export default function TrmrkBasicAppLayout({children, cssClass}: Readonly<Trmrk
   const [ overlappingContentKeys ] = useAtom(appOverlappingContents.value.currentKeysAtom);
 
   const [cssClassValue] = useAtom(trmrkBasicAppLayoutAtoms.cssClass);
-  const [showAppBarValue] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);
-  const [showAppBarOnlyValue] = useAtom(trmrkBasicAppLayoutAtoms.showAppBarOnly);
-  const [appBarContentsKeyValue] = useAtom(trmrkBasicAppLayoutAtoms.appBarContentsKey);
+  const [showAppBar] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);
+  const [showAppBarOnly] = useAtom(trmrkBasicAppLayoutAtoms.showAppBarOnly);
+  const [appBarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.appBarContentsKey);
 
-  const [showTopToolbarValue] = useAtom(trmrkBasicAppLayoutAtoms.showTopToolbar);
-  const [topToolbarContentsKeyValue] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarContentsKey);
+  const [showTopToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showTopToolbar);
+  const [topToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarContentsKey);
 
-  const [showBottomToolbarValue] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
-  const [bottomToolbarContentsKeyValue] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarContentsKey);
+  const [showBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
+  const [bottomToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarContentsKey);
+  const [showToolbars] = useAtom(trmrkBasicAppLayoutAtoms.showToolbars);
 
   return (
     <div className={['trmrk-app-layout', cssClass ?? '', cssClassValue ?? ''].join(' ')}>
       <div className="trmrk-app-header">
-        {showAppBarValue && <TrmrkHorizStrip>
-            { appBarContentsKeyValue && withValIf(
-              appBarContents.value.keyedMap.map[appBarContentsKeyValue], f => f.node()) }
+        {showAppBar && <TrmrkHorizStrip>
+            { appBarContentsKey && withValIf(
+              appBarContents.value.keyedMap.map[appBarContentsKey], f => f.node()) }
           </TrmrkHorizStrip>}
-        {showTopToolbarValue && !showAppBarOnlyValue && <TrmrkHorizStrip>
-            { topToolbarContentsKeyValue && withValIf(
-              topToolbarContents.value.keyedMap.map[topToolbarContentsKeyValue], f => f.node()) }
+        {showToolbars && showTopToolbar && !showAppBarOnly && <TrmrkHorizStrip>
+            { topToolbarContentsKey && withValIf(
+              topToolbarContents.value.keyedMap.map[topToolbarContentsKey], f => f.node()) }
           </TrmrkHorizStrip>}
       </div>
       <div className="trmrk-app-body">
         {children}
       </div>
-      { showBottomToolbarValue && !showAppBarOnlyValue && <div className="trmrk-app-footer">
-          <TrmrkHorizStrip>{ bottomToolbarContentsKeyValue && withValIf(
-            bottomToolbarContents.value.keyedMap.map[bottomToolbarContentsKeyValue], f => f.node()) }
+      { showToolbars && showBottomToolbar && !showAppBarOnly && <div className="trmrk-app-footer">
+          <TrmrkHorizStrip>{ bottomToolbarContentsKey && withValIf(
+            bottomToolbarContents.value.keyedMap.map[bottomToolbarContentsKey], f => f.node()) }
           </TrmrkHorizStrip>
         </div>
       }
