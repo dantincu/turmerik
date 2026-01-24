@@ -132,7 +132,7 @@ export default function TrmrkPopup(
         }
       }
     }
-  }, [show, messageFadeOut, showEl, autoCloseEl])
+  }, [show, autoCloseEl])
 
   React.useEffect(() => {
     return () => {
