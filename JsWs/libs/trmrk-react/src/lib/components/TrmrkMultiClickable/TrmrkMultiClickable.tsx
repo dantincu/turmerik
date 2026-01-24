@@ -42,6 +42,6 @@ export default function TrmrkLongPressable<
     actWithValIf(hoc.rootElUnavailable, f => f(rootEl));
   }
 
-  const Component = hoc.component!({ rootElRef, rootElAvailable, rootElUnavailable }) as React.ElementType;
+  const Component = hoc.node!({ rootElRef, rootElAvailable, rootElUnavailable }) as React.ElementType;
   return (<Component></Component>);
 }

@@ -8,11 +8,11 @@ export const trmrkBasicAppLayoutAtoms = {
   cssClass: atom<string | null>(null),
   showAppBar: atom(false),
   showAppBarOnly: atom(false),
-  appBarComponentKey: atom<number | null>(null),
+  appBarContentsKey: atom<number | null>(null),
   showTopToolbar: atom(false),
-  topToolbarComponentKey: atom<number | null>(null),
+  topToolbarContentsKey: atom<number | null>(null),
   showBottomToolbar: atom(false),
-  bottomToolbarComponentKey: atom<number | null>(null),
+  bottomToolbarContentsKey: atom<number | null>(null),
 };
 
 export const appBarContents = new RefLazyValue(() =>

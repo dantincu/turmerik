@@ -29,7 +29,7 @@ import TrmrkLongPressable from "@/src/trmrk-react/components/TrmrkLongPressable/
 const AppBar = () => {
   return <TrmrkAppBarContents>
     <TrmrkMultiClickable hoc={{
-        component: (hoc) => (props) => <TrmrkBtn borderWidth={1} {...props} hoc={hoc}><TrmrkIcon icon="mdi:home" /></TrmrkBtn>
+        node: (hoc) => (props) => <TrmrkBtn borderWidth={1} {...props} hoc={hoc}><TrmrkIcon icon="mdi:home" /></TrmrkBtn>
       }}
       args={hostElem => {
       return ({
@@ -45,7 +45,7 @@ const AppBar = () => {
 
 const TopToolbar = () => {
   return <TrmrkTopToolBarContents><TrmrkLongPressable hoc={{
-      component: (hoc) => (props) => <TrmrkBtn borderWidth={1} {...props} hoc={hoc}><TrmrkIcon icon="mdi:home" /></TrmrkBtn>
+      node: (hoc) => (props) => <TrmrkBtn borderWidth={1} {...props} hoc={hoc}><TrmrkIcon icon="mdi:home" /></TrmrkBtn>
     }}
     args={hostElem => ({
       hostElem,
@@ -93,9 +93,9 @@ const MessageButton = React.memo(({ msg, dispatch }: {
 
 export default function ButtonsTestPage() {
   const [, setShowAppBar] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);
-  const [, setAppBarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.appBarComponentKey);
-  const [, setTopToolbarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarComponentKey);
-  const [, setBottomToolbarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarComponentKey);
+  const [, setAppBarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.appBarContentsKey);
+  const [, setTopToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarContentsKey);
+  const [, setBottomToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarContentsKey);
   const [, setShowTopToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showTopToolbar);
   const [, setShowBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
   const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
@@ -127,10 +127,10 @@ export default function ButtonsTestPage() {
     setShowMainPanelLoader(false);
     setShowRightPanel(false);
     setShowRightPanelLoader(true);
-    
-    setAppBarComponentKey(appBarContentsId);
-    setTopToolbarComponentKey(topToolbarContentsId);
-    setBottomToolbarComponentKey(bottomToolbarContentsId);
+
+    setAppBarContentsKey(appBarContentsId);
+    setTopToolbarContentsKey(topToolbarContentsId);
+    setBottomToolbarContentsKey(bottomToolbarContentsId);
 
     return () => {
       appBarContents.value.unregister(appBarContentsId);

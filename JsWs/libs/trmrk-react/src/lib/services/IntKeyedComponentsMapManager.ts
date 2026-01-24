@@ -2,13 +2,13 @@ import { atom, getDefaultStore } from "jotai";
 
 import { NullOrUndef } from "@/src/trmrk/core";
 
-import { IntKeyedComponentMap } from "../components/defs/common";
+import { IntKeyedReactNodesMap } from "../components/defs/common";
 import { JotaiStore } from "./types";
 
 export class IntKeyedComponentsMapManager {
   public readonly currentKeysAtom = atom<number[]>([]);
 
-  public readonly keyedMap: IntKeyedComponentMap = {
+  public readonly keyedMap: IntKeyedReactNodesMap = {
     map: {},
   };
 
@@ -21,7 +21,7 @@ export class IntKeyedComponentsMapManager {
   public register(key: number, component: () => React.ReactNode) {
     this.keyedMap.map[key] = {
       key,
-      component,
+      node: component,
     };
 
     this.store.set(this.currentKeysAtom, (prev) =>

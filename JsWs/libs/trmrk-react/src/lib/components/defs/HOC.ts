@@ -5,10 +5,10 @@ export interface HOCArgsCore<
   T extends React.ElementType,
   TRootHtmlElement extends HTMLElement = HTMLElement,
 > {
-  component?:
+  node?:
     | ((
         args: TArgs,
-      ) => (props: React.ComponentPropsWithRef<T>) => React.ReactElement)
+      ) => (props: React.ComponentPropsWithRef<T>) => React.ReactNode)
     | NullOrUndef;
   rootElRef?: React.RefObject<TRootHtmlElement | null> | NullOrUndef;
   rootElAvailable?: ((rootEl: TRootHtmlElement | null) => void) | NullOrUndef;

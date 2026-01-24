@@ -23,10 +23,10 @@ export default function TrmrkBtn<T extends React.ElementType = "button",
 ) {
   const rootElRef = hoc?.rootElRef ?? React.useRef<TRootHtmlElement | null>(null);
 
-  const component = React.useMemo(() => hoc?.component ?? ((hocArgs: HOCArgs<T, TRootHtmlElement>) => (props: React.ComponentPropsWithRef<T>) => <button
-    {...props} ref={hocArgs.rootElRef}>{props.children}</button>), [hoc?.component, hoc?.rootElRef]);
+  const component = React.useMemo(() => hoc?.node ?? ((hocArgs: HOCArgs<T, TRootHtmlElement>) => (props: React.ComponentPropsWithRef<T>) => <button
+    {...props} ref={hocArgs.rootElRef}>{props.children}</button>), [hoc?.node, hoc?.rootElRef]);
 
-  const Button = React.useMemo(() => component({...(hoc ?? {}), component, rootElRef}) as React.ElementType, [hoc?.component, hoc?.rootElRef]);
+  const Button = React.useMemo(() => component({...(hoc ?? {}), node: component, rootElRef}) as React.ElementType, [hoc?.node, hoc?.rootElRef]);
 
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 

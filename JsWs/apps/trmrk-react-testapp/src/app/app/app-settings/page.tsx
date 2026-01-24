@@ -18,9 +18,9 @@ const AppSettingsBar = () => {
 
 export default function AppSettingsPage() {
   const [, setShowAppBar] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);
-  const [, setAppBarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.appBarComponentKey);
-  const [, setTopToolbarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarComponentKey);
-  const [, setBottomToolbarComponentKey] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarComponentKey);
+  const [, setAppBarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.appBarContentsKey);
+  const [, setTopToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarContentsKey);
+  const [, setBottomToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarContentsKey);
   const [, setShowTopToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showTopToolbar);
   const [, setShowBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
   const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
@@ -43,9 +43,9 @@ export default function AppSettingsPage() {
     setShowRightPanel(false);
     setShowRightPanelLoader(false);
     
-    setAppBarComponentKey(appBarContentsId);
-    setTopToolbarComponentKey(null);
-    setBottomToolbarComponentKey(null);
+    setAppBarContentsKey(appBarContentsId);
+    setTopToolbarContentsKey(null);
+    setBottomToolbarContentsKey(null);
 
     return () => {
       appBarContents.value.unregister(appBarContentsId);

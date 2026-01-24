@@ -28,7 +28,7 @@ const CloseIcon = React.memo(({
     closeBtnLongPressOrRightClick: () => void,
     closeBtnClick: () => void
   }) => <TrmrkLongPressable hoc={{
-    component: (hoc) => (props) => <TrmrkBtn {...({...props, cssClass: [props.cssClass, 'trmrk-close-icon-btn'].join(' ')})} hoc={hoc}>
+    node: (hoc) => (props) => <TrmrkBtn {...({...props, cssClass: [props.cssClass, 'trmrk-close-icon-btn'].join(' ')})} hoc={hoc}>
       <TrmrkIcon icon="mdi:close" /></TrmrkBtn>
   }} args={hostElem => ({
       hostElem,

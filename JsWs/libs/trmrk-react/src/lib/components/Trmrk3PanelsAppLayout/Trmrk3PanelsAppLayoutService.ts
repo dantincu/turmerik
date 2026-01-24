@@ -7,11 +7,11 @@ import { createIntKeyedComponentsMapManager } from "../../services/IntKeyedCompo
 export const trmrk3PanelsAppLayoutAtoms = {
   showLeftPanel: atom(false),
   showLeftPanelLoader: atom(false),
-  leftPanelComponentKey: atom<number | null>(null),
+  leftPanelContentsKey: atom<number | null>(null),
   showMainPanelLoader: atom(false),
   showRightPanel: atom(false),
   showRightPanelLoader: atom(false),
-  rightPanelComponentKey: atom<number | null>(null),
+  rightPanelContentsKey: atom<number | null>(null),
 };
 
 export const leftPanelComponents = new RefLazyValue(() =>
