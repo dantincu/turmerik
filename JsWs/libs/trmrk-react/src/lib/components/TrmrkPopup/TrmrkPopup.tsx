@@ -25,16 +25,9 @@ const CloseIcon = React.memo(({
     closeBtnLongPressOrRightClick,
     closeBtnClick
   }: {
-    closeBtnLongPressOrRightClick: () => void,
+    closeBtnLongPressOrRightClick: (event: React.MouseEvent) => void,
     closeBtnClick: () => void
-  }) => <TrmrkLongPressable hoc={{
-    node: (hoc) => (props) => <TrmrkBtn {...({...props, cssClass: [props.cssClass, 'trmrk-close-icon-btn'].join(' ')})} hoc={hoc}>
-      <TrmrkIcon icon="mdi:close" /></TrmrkBtn>
-  }} args={hostElem => ({
-      hostElem,
-      longPressOrRightClick: (e) => closeBtnLongPressOrRightClick(),
-      shortPressOrLeftClick: (e) => closeBtnClick()
-    })}></TrmrkLongPressable>);
+  }) => <TrmrkBtn cssClass='trmrk-close-icon-btn' onClick={closeBtnClick} onContextMenu={closeBtnLongPressOrRightClick}><TrmrkIcon icon="mdi:close" /></TrmrkBtn>);
 
 export default function TrmrkPopup(
   { cssClass, children, msgLevel, show, arrowPlacement = Placement.None, arrowStyle, closed, autoCloseMillis }: Readonly<TrmrkPopupProps>
@@ -97,7 +90,8 @@ export default function TrmrkPopup(
     actWithValIf(closed, f => f(true));
   }, []);
 
-  const closeBtnLongPressOrRightClick = React.useCallback(() => {
+  const closeBtnLongPressOrRightClick = React.useCallback((event: React.MouseEvent) => {
+    event.preventDefault();
     setAutoCloseEl(!autoCloseEl);
   }, [autoCloseEl]);
 
