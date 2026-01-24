@@ -32,6 +32,29 @@ interface UserMessage {
   text: string;
 }
 
+type Action = { type: 'SHOW_MESSAGE'; idx: number };
+
+function messagesReducer(state: UserMessage[], action: Action): UserMessage[] {
+  switch (action.type) {
+    case 'SHOW_MESSAGE':
+      return state.map((msg) =>
+        msg.idx === action.idx 
+          ? { ...msg, show: msg.show + 1 } 
+          : msg
+      );
+    default:
+      return state;
+  }
+}
+
+const MessageButton = React.memo(({ msg, dispatch }: {
+    msg: UserMessage,
+    dispatch: React.Dispatch<any>
+  }) => (<React.Fragment>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px]" onClick={() => dispatch({ type: 'SHOW_MESSAGE', idx: msg.idx })}><span className="trmrk-text">My Button {msg.idx}</span></TrmrkBtn>
+    <TrmrkPopup show={msg.show} msgLevel={msg.idx % 4} autoCloseMillis={ (msg.idx + 1) * 1000 } arrowPlacement={Placement.Top}>{msg.text}</TrmrkPopup>
+  </React.Fragment>));
+
 export default function ButtonsTestPage() {
   const componentIdRef = React.useRef(defaultComponentIdService.value.getNextId());
   const [, setShowAppBar] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);
@@ -45,16 +68,7 @@ export default function ButtonsTestPage() {
   const [, setShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
   const [, setShowRightPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanelLoader);
 
-  const [ messages, setMessages ] = React.useState(messagesArr.map(message => ({...message})));
-
-  const showMessage = (msg: UserMessage) => {
-    const messagesArr = messages.map(message => message.idx === msg.idx ? ({
-      ...message,
-      show: msg.show + 1
-    }) : message);
-
-    setMessages(messagesArr);
-  }
+  const [messages, dispatch] = React.useReducer(messagesReducer, messagesArr);
 
   React.useEffect(() => {
     setShowAppBar(true);
@@ -69,6 +83,7 @@ export default function ButtonsTestPage() {
     setShowRightPanelLoader(true);
 
     appOverlappingContents.value.register(componentIdRef.current, () => <div className="absolute bottom-[0px]">asdfasdfasdf</div>);
+    return () => console.warn("PARENT UNMOUNTED - THIS IS THE PROBLEM");
   }, []);
 
   return <div className="flex flex-wrap">
@@ -97,9 +112,6 @@ export default function ButtonsTestPage() {
     <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-reject"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={0} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={2} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    { messages.map(msg => <React.Fragment key={msg.idx + 1}>
-      <TrmrkBtn borderWidth={1} cssClass="my-[1px]" onClick={() => showMessage(msg)}><span className="trmrk-text">My Button {msg.idx}</span></TrmrkBtn>
-      <TrmrkPopup show={msg.show} msgLevel={msg.idx % 5} autoCloseMillis={ (msg.idx + 1) * 1000 } arrowPlacement={Placement.Top}>{msg.text}</TrmrkPopup>
-    </React.Fragment>) }
+    { messages.map(msg => <MessageButton msg={msg} dispatch={dispatch} key={msg.idx}></MessageButton>) }
   </div>;
 }

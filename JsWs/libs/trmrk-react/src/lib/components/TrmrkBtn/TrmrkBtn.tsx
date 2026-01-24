@@ -21,12 +21,13 @@ export default function TrmrkBtn<T extends React.ElementType = "button",
   TRootHtmlElement extends HTMLElement = HTMLButtonElement>(
   { cssClass, children, onClick, hoc, borderWidth }: Readonly<TrmrkBtnProps<T, TRootHtmlElement>>
 ) {
-  const hocArgs = {...(hoc ?? {})};
+  const rootElRef = hoc?.rootElRef ?? React.useRef<TRootHtmlElement | null>(null);
 
-  const component = React.useMemo(() => hocArgs.component ?? ((hocArgs: HOCArgs<T, TRootHtmlElement>) => (props: React.ComponentPropsWithRef<T>) => <button
-    {...props} ref={hocArgs.rootElRef}>{props.children}</button>), [hocArgs.component]);
+  const component = React.useMemo(() => hoc?.component ?? ((hocArgs: HOCArgs<T, TRootHtmlElement>) => (props: React.ComponentPropsWithRef<T>) => <button
+    {...props} ref={hocArgs.rootElRef}>{props.children}</button>), [hoc?.component, hoc?.rootElRef]);
 
-  hocArgs.rootElRef ??= React.useRef<TRootHtmlElement | null>(null);
+  const Button = React.useMemo(() => component({...(hoc ?? {}), component, rootElRef}) as React.ElementType, [hoc?.component, hoc?.rootElRef]);
+
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const onPointerDown = (e: PointerEvent) => {
@@ -39,18 +40,16 @@ export default function TrmrkBtn<T extends React.ElementType = "button",
     }, 200);
   }
 
-  const Button = React.useMemo(() => component(hocArgs) as React.ElementType, [component]);
-
   React.useEffect(() => {
-    const btnElem = hocArgs.rootElRef!.current;
+    const btnElem = rootElRef!.current;
     btnElem?.addEventListener("pointerdown", onPointerDown);
-    actWithValIf(hocArgs.rootElAvailable, f => f(btnElem));
+    actWithValIf(hoc?.rootElAvailable, f => f(btnElem));
 
     return () => {
       btnElem?.removeEventListener("pointerdown", onPointerDown);
       clearRefVal(timeoutRef, clearTimeout);
       btnElem?.classList.remove('trmrk-btn-pressed');
-      actWithValIf(hocArgs.rootElUnavailable, f => f(btnElem));
+      actWithValIf(hoc?.rootElUnavailable, f => f(btnElem));
     };
   }, []);
 
