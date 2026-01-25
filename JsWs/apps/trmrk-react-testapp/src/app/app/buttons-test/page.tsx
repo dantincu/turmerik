@@ -49,6 +49,7 @@ const TopToolbar = () => {
     showSecondaryCustomActionBtn={true}
     showUndoBtn={true}
     showRedoBtn={true}
+    showRefreshBtn={true}
     showOptionsBtn={true}><TrmrkLongPressable hoc={{
       node: (hoc) => (props) => <TrmrkBtn {...props} hoc={hoc}><TrmrkIcon icon="mdi:dice" /></TrmrkBtn>
     }}
@@ -97,7 +98,7 @@ const MessageButton = React.memo(({ msg, dispatch }: {
       {msg.text}</TrmrkPopover>
   </React.Fragment>));
 
-const MiddlePanelContents = React.memo(() => {
+const MiddlePanelContents = () => {
   const [messages, dispatch] = React.useReducer(messagesReducer, messagesArr);
 
   return <div className="flex flex-wrap">
@@ -135,7 +136,7 @@ const MiddlePanelContents = React.memo(() => {
     <TrmrkPopover show={1} msgLevel={UserMessageLevel.Success} autoCloseMillis={2000} arrowPlacement={Placement.Top}>asdfasdf</TrmrkPopover>
     { messages.map(msg => <MessageButton msg={msg} dispatch={dispatch} key={msg.idx}></MessageButton>) }
   </div>;
-});
+};
 
 export default function ButtonsTestPage() {
   const [, setShowAppBar] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);
@@ -160,19 +161,19 @@ export default function ButtonsTestPage() {
   React.useEffect(() => {
     const appBarContentsId = appBarContents.value.register(
       defaultComponentIdService.value.getNextId(),
-      () => (<AppBar />));
+      AppBar);
 
     const topToolbarContentsId = topToolbarContents.value.register(
       defaultComponentIdService.value.getNextId(),
-      () => (<TopToolbar />));
+      TopToolbar);
 
     const bottomToolbarContentsId = bottomToolbarContents.value.register(
       defaultComponentIdService.value.getNextId(),
-      () => (<BottomToolbar />));
+      BottomToolbar);
 
     const middlePanelContentsId = middlePanelContents.value.register(
       defaultComponentIdService.value.getNextId(),
-      () => <MiddlePanelContents />
+      MiddlePanelContents
     );
 
     setShowAppBar(true);

@@ -15,6 +15,7 @@ export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showHomeBtn?: boolean | NullOrUndef;
   showUndoBtn?: boolean | NullOrUndef;
   showRedoBtn?: boolean | NullOrUndef;
+  showRefreshBtn?: boolean | NullOrUndef;
   showPrimaryCustomActionBtn?: boolean | NullOrUndef;
   showSecondaryCustomActionBtn?: boolean | NullOrUndef;
   showOptionsBtn?: boolean | NullOrUndef
@@ -27,6 +28,7 @@ export default function TrmrkTopToolBarContents({
   showHomeBtn,
   showUndoBtn,
   showRedoBtn,
+  showRefreshBtn,
   showPrimaryCustomActionBtn,
   showSecondaryCustomActionBtn,
   showOptionsBtn
@@ -40,8 +42,6 @@ export default function TrmrkTopToolBarContents({
   const [ focusedPanel, setFocusedPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
   const [ isSinglePanelMode, setIsSinglePanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isSinglePanelMode);
   const [ allowsMultiPanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowsMultiPanelMode);
-
-  console.log("focusedPanel", focusedPanel);
 
   const showResizePanelsBtn = React.useMemo(
     () => [showLeftPanel, showMiddlePanel, showRightPanel].filter(show => show).length > 0,
@@ -168,6 +168,36 @@ export default function TrmrkTopToolBarContents({
     }
   }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
 
+  const AllowToggleLeftPanelBtn = React.useMemo(() => () => <TrmrkBtn
+      cssClass={focusedPanel === TrmrkAppLayoutPanel.Left ? "trmrk-btn-filled-opposite" : ""}
+      borderWidth={ showLeftPanel ? 1 : null }
+      onClick={toggleLeftPanelClicked}
+      onContextMenu={toggleLeftPanelContextMenu}>
+    <TrmrkIcon icon={ `material-symbols:left-panel-${showLeftPanel ? "close" : "open" }` } /></TrmrkBtn>, [
+      focusedPanel,
+      showLeftPanel
+    ]);
+    
+  const AllowToggleMiddlePanelBtn = React.useMemo(() => () => <TrmrkBtn
+      cssClass={focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-btn-filled-opposite" : ""}
+      borderWidth={ showMiddlePanel ? 1 : null }
+      onClick={toggleMiddlePanelClicked}
+      onContextMenu={toggleMiddlePanelContextMenu}>
+    <TrmrkIcon icon={ `material-symbols:left-panel-${showMiddlePanel ? "close" : "open" }-outline` } /></TrmrkBtn>,[
+      focusedPanel,
+      showMiddlePanel
+    ]);
+
+  const AllowToggleRightPanelBtn = React.useMemo(() => () => <TrmrkBtn
+      cssClass={focusedPanel === TrmrkAppLayoutPanel.Right ? "trmrk-btn-filled-opposite" : ""}
+      borderWidth={ showRightPanel ? 1 : null }
+      onClick={toggleRightPanelClicked}
+      onContextMenu={toggleRightPanelContextMenu}>
+    <TrmrkIcon icon={ `material-symbols:right-panel-${showRightPanel ? "close" : "open" }` } /></TrmrkBtn>,[
+      focusedPanel,
+      showRightPanel
+    ]);
+
   return <><div className="trmrk-toolbar-content flex grow">
       <div className="flex grow">
         { (showBackBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:arrow-back" /></TrmrkBtn> }
@@ -175,32 +205,17 @@ export default function TrmrkTopToolBarContents({
         { (showHomeBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:home" /></TrmrkBtn> }
         { (showUndoBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:undo" /></TrmrkBtn> }
         { (showRedoBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:redo" /></TrmrkBtn> }
+        { (showRefreshBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:refresh" /></TrmrkBtn> }
         { (showPrimaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-outline" /></TrmrkBtn> }
         { (showSecondaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-bold" /></TrmrkBtn> }
         { (showOptionsBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
-        { allowToggleLeftPanel && <TrmrkBtn
-            cssClass={focusedPanel === TrmrkAppLayoutPanel.Left ? "trmrk-btn-filled-opposite" : ""}
-            borderWidth={ showLeftPanel ? 1 : null }
-            onClick={toggleLeftPanelClicked}
-            onContextMenu={toggleLeftPanelContextMenu}>
-          <TrmrkIcon icon={ `material-symbols:left-panel-${showLeftPanel ? "close" : "open" }` } /></TrmrkBtn> }
-        { allowToggleMiddlePanel && <TrmrkBtn
-            cssClass={focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-btn-filled-opposite" : ""}
-            borderWidth={ showMiddlePanel ? 1 : null }
-            onClick={toggleMiddlePanelClicked}
-            onContextMenu={toggleMiddlePanelContextMenu}>
-          <TrmrkIcon icon={ `material-symbols:left-panel-${showMiddlePanel ? "close" : "open" }-outline` } /></TrmrkBtn> }
-        { allowToggleRightPanel && <TrmrkBtn
-            cssClass={focusedPanel === TrmrkAppLayoutPanel.Right ? "trmrk-btn-filled-opposite" : ""}
-            borderWidth={ showRightPanel ? 1 : null }
-            onClick={toggleRightPanelClicked}
-            onContextMenu={toggleRightPanelContextMenu}>
-          <TrmrkIcon icon={ `material-symbols:right-panel-${showRightPanel ? "close" : "open" }` } /></TrmrkBtn> }
-        { allowsMultiPanelMode && <TrmrkBtn
-            onClick={toggleMultiPanelModeClicked}>
+        { allowToggleLeftPanel && <AllowToggleLeftPanelBtn></AllowToggleLeftPanelBtn> }
+        { allowToggleMiddlePanel && <AllowToggleMiddlePanelBtn></AllowToggleMiddlePanelBtn> }
+        { allowToggleRightPanel && <AllowToggleRightPanelBtn></AllowToggleRightPanelBtn> }
+        { allowsMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
           <TrmrkIcon icon={`material-symbols:view-column${isSinglePanelMode ? "" : "-outline"}-sharp`} /></TrmrkBtn> }
-        { showResizePanelsBtn && <TrmrkBtn
-            ><TrmrkIcon icon="material-symbols:resize" /></TrmrkBtn> }
+        { showResizePanelsBtn && <TrmrkBtn><TrmrkIcon icon="material-symbols:resize" />
+          </TrmrkBtn> }
         {children}
       </div>
     </div></>;

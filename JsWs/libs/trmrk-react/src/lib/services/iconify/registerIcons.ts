@@ -6,6 +6,7 @@ import arrowBack from "@iconify-icons/mdi/arrow-back";
 import arrowUp from "@iconify-icons/mdi/arrow-up";
 import dotsHorizontal from "@iconify-icons/mdi/dots-horizontal";
 import dotsVertical from "@iconify-icons/mdi/dots-vertical";
+
 import undo from "@iconify-icons/material-symbols/undo";
 import redo from "@iconify-icons/material-symbols/redo";
 import resize from "@iconify-icons/material-symbols/resize";
@@ -19,6 +20,8 @@ import rightPanelOpenOutline from "@iconify-icons/material-symbols/right-panel-o
 import rightPanelCloseOutline from "@iconify-icons/material-symbols/right-panel-close-outline";
 import viewColumnSharp from "@iconify-icons/material-symbols/view-column-sharp";
 import viewColumnOutlineSharp from "@iconify-icons/material-symbols/view-column-outline-sharp";
+import refresh from "@iconify-icons/material-symbols/refresh";
+
 import commandOutline from "@iconify-icons/solar/command-outline";
 import commandBold from "@iconify-icons/solar/command-bold";
 
@@ -50,6 +53,7 @@ export const registerIconifyIcons = () => {
     ["right-panel-close-outline"]: rightPanelCloseOutline,
     ["view-column-sharp"]: viewColumnSharp,
     ["view-column-outline-sharp"]: viewColumnOutlineSharp,
+    refresh,
   });
 
   registerIconifyIconsCore("solar", {
