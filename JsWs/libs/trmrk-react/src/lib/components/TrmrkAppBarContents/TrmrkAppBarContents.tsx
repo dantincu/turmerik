@@ -8,7 +8,6 @@ import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
 import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
 import { trmrkBasicAppLayoutAtoms } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
-
 export interface TrmrkAppBarContentsProps extends ComponentProps {
   leadingChildren?: (() => React.ReactNode) | NullOrUndef
 }
@@ -22,7 +21,8 @@ export default function TrmrkAppBarContents({ children, leadingChildren }: Trmrk
 
   const LeadingChildren = React.useMemo(() => leadingChildren ?? (() => null), [leadingChildren]);
 
-  return <><LeadingChildren></LeadingChildren><div className="text-center grow">{children}</div><TrmrkBtn onClick={toggleToolbarsClicked}>
-        <TrmrkIcon icon={ showToolbars ? "mdi:chevron-double-up" : "mdi:chevron-double-down" }></TrmrkIcon>
+  return <><LeadingChildren></LeadingChildren><div className="text-center grow">{children}</div>
+      <TrmrkBtn onClick={toggleToolbarsClicked} cssClass="trmrk-btn-filled-system mr-[2px]">
+        <TrmrkIcon icon={ `mdi:chevron-double-${showToolbars ? 'up' : 'down'}` }></TrmrkIcon>
       </TrmrkBtn></>;
 }

@@ -5,7 +5,7 @@ import { useAtom } from "jotai";
 
 import TrmrkLoader from "../TrmrkLoader/TrmrkLoader";
 
-import { appInitializedAtom } from "./TrmrkAppInitializerService";
+import { appInitializerAtoms } from "./TrmrkAppInitializerService";
 
 export default function TrmrkAppInitializer({
   children,
@@ -14,13 +14,18 @@ export default function TrmrkAppInitializer({
   children: React.ReactNode;
   initialize: () => Promise<void>
 }>) {
-  const [appInitialized, setAppInitializedAtom] = useAtom(appInitializedAtom);
+  const [, setInitStarted] = useAtom(appInitializerAtoms.initStarted);
+  const [, setInitEnded] = useAtom(appInitializerAtoms.initEnded);
+  const [initIsOk, setInitIsOk] = useAtom(appInitializerAtoms.initIsOk);
 
   React.useEffect(() => {
-    initialize().then(() => {
-      setAppInitializedAtom(true);
-    });
-  });
+    setInitStarted(true);
 
-  return appInitialized ? children : <TrmrkLoader></TrmrkLoader>;
+    initialize().then(() => {
+      setInitEnded(true);
+      setInitIsOk(true);
+    });
+  }, []);
+
+  return initIsOk ? children : <TrmrkLoader></TrmrkLoader>;
 }

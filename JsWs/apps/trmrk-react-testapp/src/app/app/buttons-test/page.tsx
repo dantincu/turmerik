@@ -15,7 +15,7 @@ import {
 } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 import TrmrkBtn from "@/src/trmrk-react/components/TrmrkBtn/TrmrkBtn";
-import TrmrkPopup from "@/src/trmrk-react/components/TrmrkPopup/TrmrkPopup";
+import TrmrkPopover from "@/src/trmrk-react/components/TrmrkPopover/TrmrkPopover";
 import TrmrkIcon from "@/src/trmrk-react/components/TrmrkIcon/TrmrkIcon";
 import { Placement } from '@/src/trmrk-browser/core';
 import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
@@ -24,10 +24,12 @@ import TrmrkTopToolBarContents from "@/src/trmrk-react/components/TrmrkTopToolBa
 import TrmrkBottomToolBarContents from "@/src/trmrk-react/components/TrmrkBottomToolBarContents/TrmrkBottomToolBarContents";
 import TrmrkMultiClickable from "@/src/trmrk-react/components/TrmrkMultiClickable/TrmrkMultiClickable";
 import TrmrkLongPressable from "@/src/trmrk-react/components/TrmrkLongPressable/TrmrkLongPressable";
+import { middlePanelContents } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
+import { UserMessageLevel } from '@/src/trmrk/core';
 
 const AppBar = () => {
   return <TrmrkAppBarContents leadingChildren={() => <TrmrkMultiClickable hoc={{
-        node: (hoc) => (props) => <TrmrkBtn borderWidth={1} {...props} hoc={hoc}><TrmrkIcon icon="mdi:home" /></TrmrkBtn>
+        node: (hoc) => (props) => <TrmrkBtn {...props} hoc={hoc}><TrmrkIcon icon="mdi:dice" /></TrmrkBtn>
       }}
       args={hostElem => {
       return ({
@@ -37,12 +39,18 @@ const AppBar = () => {
         multiClickComplete: () => console.log("multiClickComplete"),
         multiClickEnded: () => console.log("multiClickEnded")
       });
-    }}></TrmrkMultiClickable>}><h1>Buttons Test</h1></TrmrkAppBarContents>;
+    }}></TrmrkMultiClickable>}><span className="leading-[40px] text-[15px] font-bold">Buttons Test</span></TrmrkAppBarContents>;
 }
 
 const TopToolbar = () => {
-  return <TrmrkTopToolBarContents><TrmrkLongPressable hoc={{
-      node: (hoc) => (props) => <TrmrkBtn borderWidth={1} {...props} hoc={hoc}><TrmrkIcon icon="mdi:home" /></TrmrkBtn>
+  return <TrmrkTopToolBarContents
+    showGoToParentBtn={true}
+    showPrimaryCustomActionBtn={true}
+    showSecondaryCustomActionBtn={true}
+    showUndoBtn={true}
+    showRedoBtn={true}
+    showOptionsBtn={true}><TrmrkLongPressable hoc={{
+      node: (hoc) => (props) => <TrmrkBtn {...props} hoc={hoc}><TrmrkIcon icon="mdi:dice" /></TrmrkBtn>
     }}
     args={hostElem => ({
       hostElem,
@@ -85,56 +93,12 @@ const MessageButton = React.memo(({ msg, dispatch }: {
     dispatch: React.Dispatch<any>
   }) => (<React.Fragment>
     <TrmrkBtn borderWidth={1} cssClass="my-[1px]" onClick={() => dispatch({ type: 'SHOW_MESSAGE', idx: msg.idx })}><span className="trmrk-text">My Button {msg.idx}</span></TrmrkBtn>
-    <TrmrkPopup show={msg.show} msgLevel={msg.idx % 4} autoCloseMillis={ (msg.idx + 1) * 1000 } arrowPlacement={Placement.Top}>{msg.text}</TrmrkPopup>
+    <TrmrkPopover show={msg.show} msgLevel={msg.idx % 4} autoCloseMillis={ (msg.idx + 1) * 1000 } arrowPlacement={Placement.Top}>
+      {msg.text}</TrmrkPopover>
   </React.Fragment>));
 
-export default function ButtonsTestPage() {
-  const [, setShowAppBar] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);
-  const [, setAppBarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.appBarContentsKey);
-  const [, setTopToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarContentsKey);
-  const [, setBottomToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarContentsKey);
-  const [, setShowTopToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showTopToolbar);
-  const [, setShowBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
-  const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
-  const [, setShowLeftPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanelLoader);
-  const [, setShowMainPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showMainPanelLoader);
-  const [, setShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
-  const [, setShowRightPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanelLoader);
-
+const MiddlePanelContents = React.memo(() => {
   const [messages, dispatch] = React.useReducer(messagesReducer, messagesArr);
-
-  React.useEffect(() => {
-    const appBarContentsId = appBarContents.value.register(
-      defaultComponentIdService.value.getNextId(),
-      () => (<AppBar />));
-
-    const topToolbarContentsId = topToolbarContents.value.register(
-      defaultComponentIdService.value.getNextId(),
-      () => (<TopToolbar />));
-
-    const bottomToolbarContentsId = bottomToolbarContents.value.register(
-      defaultComponentIdService.value.getNextId(),
-      () => (<BottomToolbar />));
-
-    setShowAppBar(true);
-    setShowTopToolbar(true);
-    setShowBottomToolbar(true);
-    setShowLeftPanel(false);
-    setShowLeftPanelLoader(true);
-    setShowMainPanelLoader(false);
-    setShowRightPanel(false);
-    setShowRightPanelLoader(true);
-
-    setAppBarContentsKey(appBarContentsId);
-    setTopToolbarContentsKey(topToolbarContentsId);
-    setBottomToolbarContentsKey(bottomToolbarContentsId);
-
-    return () => {
-      appBarContents.value.unregister(appBarContentsId);
-      topToolbarContents.value.unregister(topToolbarContentsId);
-      bottomToolbarContents.value.unregister(bottomToolbarContentsId);
-    }
-  }, []);
 
   return <div className="flex flex-wrap">
     <p>asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf
@@ -152,16 +116,92 @@ export default function ButtonsTestPage() {
     <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-secondary"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-accept"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-reject"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-warn"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-system"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-primary"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-secondary"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-accept"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-reject"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-warn"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-system"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-primary"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-secondary"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-accept"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-reject"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-warn"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-system"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={0} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={2} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkPopover show={1} msgLevel={UserMessageLevel.Success} autoCloseMillis={2000} arrowPlacement={Placement.Top}>asdfasdf</TrmrkPopover>
     { messages.map(msg => <MessageButton msg={msg} dispatch={dispatch} key={msg.idx}></MessageButton>) }
   </div>;
+});
+
+export default function ButtonsTestPage() {
+  const [, setShowAppBar] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);
+  const [, setAppBarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.appBarContentsKey);
+  const [, setTopToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarContentsKey);
+  const [, setBottomToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarContentsKey);
+  const [, setShowTopToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showTopToolbar);
+  const [, setShowBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
+  const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
+  const [, setAllowToggleLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleLeftPanel);
+  const [, setShowLeftPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanelLoader);
+  const [, setLeftPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanelContentsKey);
+  const [, setShowMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
+  const [, setShowMiddlePanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanelLoader);
+  const [, setAllowToggleMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleMiddlePanel);
+  const [, setMiddlePanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanelContentsKey);
+  const [, setShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
+  const [, setShowRightPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanelLoader);
+  const [, setRightPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanelContentsKey);
+  const [, setAllowToggleRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleRightPanel);
+
+  React.useEffect(() => {
+    const appBarContentsId = appBarContents.value.register(
+      defaultComponentIdService.value.getNextId(),
+      () => (<AppBar />));
+
+    const topToolbarContentsId = topToolbarContents.value.register(
+      defaultComponentIdService.value.getNextId(),
+      () => (<TopToolbar />));
+
+    const bottomToolbarContentsId = bottomToolbarContents.value.register(
+      defaultComponentIdService.value.getNextId(),
+      () => (<BottomToolbar />));
+
+    const middlePanelContentsId = middlePanelContents.value.register(
+      defaultComponentIdService.value.getNextId(),
+      () => <MiddlePanelContents />
+    );
+
+    setShowAppBar(true);
+    setShowTopToolbar(true);
+    setShowBottomToolbar(true);
+    setShowLeftPanel(true);
+    setShowLeftPanelLoader(false);
+    setAllowToggleLeftPanel(true);
+    setShowMiddlePanel(true);
+    setShowMiddlePanelLoader(false);
+    setAllowToggleMiddlePanel(true);
+    setShowRightPanel(true);
+    setShowRightPanelLoader(false);
+    setAllowToggleRightPanel(true);
+    
+    setAppBarContentsKey(appBarContentsId);
+    setTopToolbarContentsKey(topToolbarContentsId);
+    setBottomToolbarContentsKey(bottomToolbarContentsId);
+    setLeftPanelContentsKey(null);
+    setMiddlePanelContentsKey(middlePanelContentsId);
+    setRightPanelContentsKey(null);
+
+    return () => {
+      appBarContents.value.unregister(appBarContentsId);
+      topToolbarContents.value.unregister(topToolbarContentsId);
+      bottomToolbarContents.value.unregister(bottomToolbarContentsId);
+      middlePanelContents.value.unregister(middlePanelContentsId);
+    }
+  }, []);
+
+  return null;
 }
