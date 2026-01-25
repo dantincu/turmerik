@@ -34,15 +34,15 @@ export default function Trmrk3PanelsAppLayout({ cssClass, children }: Readonly<T
   const [rightPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanelContentsKey);
   const [focusedPanel, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
 
-  const leftPanelClicked = React.useCallback(() => {
+  const leftPanelPointerDown = React.useCallback(() => {
     setFocusedPanel(TrmrkAppLayoutPanel.Left);
   }, [focusedPanel]);
 
-  const middlePanelClicked = React.useCallback(() => {
+  const middlePanelPointerDown = React.useCallback(() => {
     setFocusedPanel(TrmrkAppLayoutPanel.Middle);
   }, [focusedPanel]);
 
-  const righttPanelClicked = React.useCallback(() => {
+  const rightPanelPointerDown = React.useCallback(() => {
     setFocusedPanel(TrmrkAppLayoutPanel.Right);
   }, [focusedPanel]);
 
@@ -55,7 +55,9 @@ export default function Trmrk3PanelsAppLayout({ cssClass, children }: Readonly<T
         panel1WidthPercent={33.333}
         panel1Content={() =>
           showLeftPanel && <>
-            <div className="trmrk-panel-body-container" onClickCapture={leftPanelClicked}><div className="trmrk-panel-body">{
+            <div className="trmrk-panel-body-container"
+              onMouseDownCapture={leftPanelPointerDown}
+              onTouchStartCapture={leftPanelPointerDown}><div className="trmrk-panel-body">{
               leftPanelContentsKey && withValIf(
                 leftPanelContents.value.keyedMap.map[leftPanelContentsKey], f => f.node()) }</div></div>
             { showLeftPanelLoader && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }
@@ -66,11 +68,15 @@ export default function Trmrk3PanelsAppLayout({ cssClass, children }: Readonly<T
             showPanel1={showMiddlePanel}
             showPanel2={showRightPanel}
             panel1WidthPercent={50}
-            panel1Content={() => <><div className="trmrk-panel-body-container" onClickCapture={middlePanelClicked}><div className="trmrk-panel-body">{ 
+            panel1Content={() => <><div className="trmrk-panel-body-container"
+              onMouseDownCapture={middlePanelPointerDown}
+              onTouchStartCapture={middlePanelPointerDown}><div className="trmrk-panel-body">{ 
               middlePanelContentsKey && withValIf(middlePanelContents.value.keyedMap.map[middlePanelContentsKey], f => f.node() ) }</div></div>
               { showMiddlePanelLoader && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }
             panel2Content={() => showRightPanel && <>
-              <div className="trmrk-panel-body-container" onClickCapture={righttPanelClicked}><div className="trmrk-panel-body">{
+              <div className="trmrk-panel-body-container"
+                onMouseDownCapture={rightPanelPointerDown}
+                onTouchStartCapture={rightPanelPointerDown}><div className="trmrk-panel-body">{
                 rightPanelContentsKey && withValIf(
                   rightPanelContents.value.keyedMap.map[rightPanelContentsKey], f => f.node()) }</div></div>
               { showRightPanelLoader && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }>

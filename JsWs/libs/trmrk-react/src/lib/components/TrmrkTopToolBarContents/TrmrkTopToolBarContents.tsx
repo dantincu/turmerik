@@ -41,6 +41,8 @@ export default function TrmrkTopToolBarContents({
   const [ isSinglePanelMode, setIsSinglePanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isSinglePanelMode);
   const [ allowsMultiPanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowsMultiPanelMode);
 
+  console.log("focusedPanel", focusedPanel);
+
   const showResizePanelsBtn = React.useMemo(
     () => [showLeftPanel, showMiddlePanel, showRightPanel].filter(show => show).length > 0,
     [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode])
@@ -49,62 +51,122 @@ export default function TrmrkTopToolBarContents({
     const willShowLeftPanel = !showLeftPanel;
     setShowLeftPanel(willShowLeftPanel);
 
-    if (isSinglePanelMode) {
-      if (willShowLeftPanel) {
+    if (willShowLeftPanel) {
+      setFocusedPanel(TrmrkAppLayoutPanel.Left);
+
+      if (isSinglePanelMode) {
         setShowMiddlePanel(false);
         setShowRightPanel(false);
       }
+    } else {
+      if (showMiddlePanel) {
+        if (focusedPanel === TrmrkAppLayoutPanel.Left) {
+          setFocusedPanel(TrmrkAppLayoutPanel.Middle);
+        }
+      } else if (showRightPanel) {
+        if (focusedPanel === TrmrkAppLayoutPanel.Left) {
+          setFocusedPanel(TrmrkAppLayoutPanel.Right);
+        }
+      } else {
+          setShowMiddlePanel(true);
+          setFocusedPanel(TrmrkAppLayoutPanel.Middle);
+      }
     }
-  }, [showLeftPanel, isSinglePanelMode]);
+  }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
 
   const toggleMiddlePanelClicked = React.useCallback(() => {
     const willShowMiddlePanel = !showMiddlePanel;
     setShowMiddlePanel(!showMiddlePanel);
 
-    if (isSinglePanelMode) {
-      if (willShowMiddlePanel) {
+    if (willShowMiddlePanel) {
+      setFocusedPanel(TrmrkAppLayoutPanel.Middle);
+
+      if (isSinglePanelMode) {
         setShowLeftPanel(false);
         setShowRightPanel(false);
       }
+    } else if (showRightPanel) {
+      setFocusedPanel(TrmrkAppLayoutPanel.Right);
+    } else if (showLeftPanel) {
+      setFocusedPanel(TrmrkAppLayoutPanel.Left);
+    } else {
+      setShowRightPanel(true);
+      setFocusedPanel(TrmrkAppLayoutPanel.Right);
     }
-  }, [showMiddlePanel, isSinglePanelMode]);
+  }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
 
   const toggleRightPanelClicked = React.useCallback(() => {
     const willShowRightPanel = !showRightPanel;
     setShowRightPanel(!showRightPanel);
 
-    if (isSinglePanelMode) {
-      if (willShowRightPanel) {
+    if (willShowRightPanel) {
+      setFocusedPanel(TrmrkAppLayoutPanel.Right);
+
+      if (isSinglePanelMode) {
         setShowLeftPanel(false);
         setShowMiddlePanel(false);
       }
+    } else {
+      if (showMiddlePanel) {
+        if (focusedPanel === TrmrkAppLayoutPanel.Left) {
+          setFocusedPanel(TrmrkAppLayoutPanel.Middle);
+        }
+      } else if (showLeftPanel) {
+        if (focusedPanel === TrmrkAppLayoutPanel.Right) {
+          setFocusedPanel(TrmrkAppLayoutPanel.Left);
+        }
+      } else {
+          setShowMiddlePanel(true);
+          setFocusedPanel(TrmrkAppLayoutPanel.Middle);
+      }
     }
-  }, [showRightPanel, isSinglePanelMode]);
+  }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
 
   const toggleLeftPanelContextMenu = React.useCallback((event: React.MouseEvent) => {
     event.preventDefault();
-    setIsSinglePanelMode(false);
-    setShowLeftPanel(true);
-    setFocusedPanel(TrmrkAppLayoutPanel.Left);
+
+    if (showLeftPanel) {
+      setFocusedPanel(TrmrkAppLayoutPanel.Left);
+    }
   }, [showLeftPanel, isSinglePanelMode, focusedPanel]);
 
   const toggleMiddlePanelContextMenu = React.useCallback((event: React.MouseEvent) => {
     event.preventDefault();
-    setIsSinglePanelMode(false);
-    setShowMiddlePanel(true);
-    setFocusedPanel(TrmrkAppLayoutPanel.Middle);
+
+    if (showMiddlePanel) {
+      setFocusedPanel(TrmrkAppLayoutPanel.Middle);
+    }
   }, [showMiddlePanel, isSinglePanelMode, focusedPanel]);
 
   const toggleRightPanelContextMenu = React.useCallback((event: React.MouseEvent) => {
     event.preventDefault();
-    setIsSinglePanelMode(false);
-    setShowRightPanel(true);
-    setFocusedPanel(TrmrkAppLayoutPanel.Right);
+
+    if (showRightPanel) {
+      setFocusedPanel(TrmrkAppLayoutPanel.Right);
+    }
   }, [showRightPanel, isSinglePanelMode, focusedPanel]);
 
   const toggleMultiPanelModeClicked = React.useCallback(() => {
-    setIsSinglePanelMode(!isSinglePanelMode);
-  }, [isSinglePanelMode, allowsMultiPanelMode]);
+    const willBeSinglePanelMode = !isSinglePanelMode;
+    setIsSinglePanelMode(willBeSinglePanelMode);
+
+    if (willBeSinglePanelMode) {
+      switch(focusedPanel) {
+        case TrmrkAppLayoutPanel.Left:
+          setShowMiddlePanel(false);
+          setShowRightPanel(false);
+          break;
+        case TrmrkAppLayoutPanel.Middle:
+          setShowLeftPanel(false);
+          setShowRightPanel(false);
+          break;
+        case TrmrkAppLayoutPanel.Right:
+          setShowLeftPanel(false);
+          setShowMiddlePanel(false);
+          break;
+      }
+    }
+  }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
 
   return <><div className="trmrk-toolbar-content flex grow">
       <div className="flex grow">
@@ -116,15 +178,29 @@ export default function TrmrkTopToolBarContents({
         { (showPrimaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-outline" /></TrmrkBtn> }
         { (showSecondaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-bold" /></TrmrkBtn> }
         { (showOptionsBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
-        { allowToggleLeftPanel && <TrmrkBtn borderWidth={ showLeftPanel ? 1 : null } onClick={toggleLeftPanelClicked} onContextMenu={toggleLeftPanelContextMenu}>
+        { allowToggleLeftPanel && <TrmrkBtn
+            cssClass={focusedPanel === TrmrkAppLayoutPanel.Left ? "trmrk-btn-filled-opposite" : ""}
+            borderWidth={ showLeftPanel ? 1 : null }
+            onClick={toggleLeftPanelClicked}
+            onContextMenu={toggleLeftPanelContextMenu}>
           <TrmrkIcon icon={ `material-symbols:left-panel-${showLeftPanel ? "close" : "open" }` } /></TrmrkBtn> }
-        { allowToggleMiddlePanel && <TrmrkBtn borderWidth={ showMiddlePanel ? 1 : null } onClick={toggleMiddlePanelClicked} onContextMenu={toggleMiddlePanelContextMenu}>
+        { allowToggleMiddlePanel && <TrmrkBtn
+            cssClass={focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-btn-filled-opposite" : ""}
+            borderWidth={ showMiddlePanel ? 1 : null }
+            onClick={toggleMiddlePanelClicked}
+            onContextMenu={toggleMiddlePanelContextMenu}>
           <TrmrkIcon icon={ `material-symbols:left-panel-${showMiddlePanel ? "close" : "open" }-outline` } /></TrmrkBtn> }
-        { allowToggleRightPanel && <TrmrkBtn borderWidth={ showRightPanel ? 1 : null } onClick={toggleRightPanelClicked} onContextMenu={toggleRightPanelContextMenu}>
+        { allowToggleRightPanel && <TrmrkBtn
+            cssClass={focusedPanel === TrmrkAppLayoutPanel.Right ? "trmrk-btn-filled-opposite" : ""}
+            borderWidth={ showRightPanel ? 1 : null }
+            onClick={toggleRightPanelClicked}
+            onContextMenu={toggleRightPanelContextMenu}>
           <TrmrkIcon icon={ `material-symbols:right-panel-${showRightPanel ? "close" : "open" }` } /></TrmrkBtn> }
-        { allowsMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
+        { allowsMultiPanelMode && <TrmrkBtn
+            onClick={toggleMultiPanelModeClicked}>
           <TrmrkIcon icon={`material-symbols:view-column${isSinglePanelMode ? "" : "-outline"}-sharp`} /></TrmrkBtn> }
-        { showResizePanelsBtn && <TrmrkBtn><TrmrkIcon icon="material-symbols:resize" /></TrmrkBtn> }
+        { showResizePanelsBtn && <TrmrkBtn
+            ><TrmrkIcon icon="material-symbols:resize" /></TrmrkBtn> }
         {children}
       </div>
     </div></>;
