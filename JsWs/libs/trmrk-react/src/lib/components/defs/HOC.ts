@@ -6,7 +6,6 @@ export interface HOCArgsCore<TArgs extends HOCArgsCore<TArgs, T, P>, T, P> {
     ref: React.ForwardedRef<T>,
   ) => React.ReactNode;
   props: React.PropsWithoutRef<P> & React.RefAttributes<T>;
-  cleanup?: ((args: TArgs) => void) | NullOrUndef;
 }
 
 export interface HOCArgs<T, P> extends HOCArgsCore<HOCArgs<T, P>, T, P> {}

@@ -32,7 +32,6 @@ export default function TrmrkLongPressable<T, P>({ hoc, args }: Readonly<TrmrkLo
       pointerDragService?.dispose();
       pointerDragService = null;
       initializedRef.current = false;
-      actWithValIf(hoc.cleanup, f => f(hoc));
     }
   }, []);
   

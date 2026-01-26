@@ -13,7 +13,7 @@ export interface TrmrkBtnProps extends React.ComponentPropsWithRef<'button'>, Co
   borderWidth?: number | NullOrUndef;
 }
 
-export default function TrmrkBtn({ className, ref, children, borderWidth, onPointerDown, onCleanup, ...props }: TrmrkBtnProps) {
+const TrmrkBtn = React.memo(React.forwardRef<HTMLButtonElement, TrmrkBtnProps>(({ className, children, borderWidth, onPointerDown, ...props }, ref) => {
   const rootElRef = React.useRef<HTMLButtonElement | null>(null);
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
@@ -40,7 +40,6 @@ export default function TrmrkBtn({ className, ref, children, borderWidth, onPoin
     return () => {
       clearRefVal(timeoutRef, clearTimeout);
       btnElem?.classList.remove('trmrk-btn-pressed');
-      actWithValIf(onCleanup, f => f());
     };
   }, []);
 
@@ -53,4 +52,6 @@ export default function TrmrkBtn({ className, ref, children, borderWidth, onPoin
       onPointerDown={handleOnPointerDown}
     >{children}<div className="trmrk-btn-overlay"></div></button>
   );
-}
+}));
+
+export default TrmrkBtn;

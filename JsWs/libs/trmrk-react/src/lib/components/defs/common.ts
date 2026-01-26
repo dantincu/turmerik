@@ -3,7 +3,6 @@ import { NullOrUndef } from "@/src/trmrk/core";
 export interface ComponentProps {
   className?: string | undefined;
   children?: React.ReactNode | NullOrUndef;
-  onCleanup?: (() => void) | NullOrUndef;
 }
 
 export interface KeyedReactNode<TKey> {

@@ -32,7 +32,6 @@ export default function TrmrkLongPressable<T, P>({ hoc, args }: Readonly<TrmrkLo
       multiClickService?.dispose();
       multiClickService = null;
       initializedRef.current = false;
-      actWithValIf(hoc.cleanup, f => f(hoc));
     }
   }, []);
   

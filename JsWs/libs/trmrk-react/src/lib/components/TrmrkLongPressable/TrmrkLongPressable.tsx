@@ -34,7 +34,6 @@ export default function TrmrkLongPressable<
       longPressService?.dispose();
       longPressService = null;
       initializedRef.current = false;
-      actWithValIf(hoc.cleanup, f => f(hoc));
     }
   }, []);
   
