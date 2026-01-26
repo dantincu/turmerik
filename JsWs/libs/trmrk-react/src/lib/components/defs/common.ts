@@ -1,13 +1,14 @@
 import { NullOrUndef } from "@/src/trmrk/core";
 
 export interface ComponentProps {
-  cssClass?: string | NullOrUndef;
+  className?: string | undefined;
   children?: React.ReactNode | NullOrUndef;
+  onCleanup?: (() => void) | NullOrUndef;
 }
 
 export interface KeyedReactNode<TKey> {
   key: TKey;
-  node: () => React.ReactNode;
+  node: React.ReactNode;
 }
 
 export interface IntKeyedReactNode extends KeyedReactNode<number> {}

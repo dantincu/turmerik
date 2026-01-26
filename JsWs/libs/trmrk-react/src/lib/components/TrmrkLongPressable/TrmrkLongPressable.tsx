@@ -27,8 +27,6 @@ export default function TrmrkLongPressable<
   const initializedRef = React.useRef(false);
   let longPressService: LongPressService | null = null;
 
-  const rootElRef = hoc.rootElRef ?? React.useRef<TRootHtmlElement | null>(null);
-
   const rootElAvailable = (rootEl: TRootHtmlElement | null) => {
     performInitialization(initializedRef, () => longPressService = createLongPressService())
     actWithValIf(rootEl, rootEl => longPressService!.init(args(rootEl)));
@@ -42,6 +40,6 @@ export default function TrmrkLongPressable<
     actWithValIf(hoc.rootElUnavailable, f => f(rootEl));
   }
   
-  const Component = hoc.node!({ rootElRef, rootElAvailable, rootElUnavailable }) as React.ElementType;
+  const Component = hoc.node!({ rootElAvailable, rootElUnavailable }) as React.ElementType;
   return (<Component></Component>);
 }

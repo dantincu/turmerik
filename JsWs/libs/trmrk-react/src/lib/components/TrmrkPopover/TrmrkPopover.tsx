@@ -25,10 +25,10 @@ const CloseIcon = React.memo(({
   }: {
     closeBtnLongPressOrRightClick: (event: React.MouseEvent) => void,
     closeBtnClick: () => void
-  }) => <TrmrkBtn cssClass='trmrk-close-icon-btn' onClick={closeBtnClick} onContextMenu={closeBtnLongPressOrRightClick}><TrmrkIcon icon="mdi:close" /></TrmrkBtn>);
+  }) => <TrmrkBtn className='trmrk-close-icon-btn' onClick={closeBtnClick} onContextMenu={closeBtnLongPressOrRightClick}><TrmrkIcon icon="mdi:close" /></TrmrkBtn>);
 
 export default function TrmrkPopover(
-  { cssClass, children, msgLevel, show, arrowPlacement = Placement.None, arrowStyle, closed, autoCloseMillis }: Readonly<TrmrkPopoverProps>
+  { className: cssClass, children, msgLevel, show, arrowPlacement = Placement.None, arrowStyle, closed, autoCloseMillis }: Readonly<TrmrkPopoverProps>
 ) {
   const rootElRef = React.useRef<HTMLDivElement | null>(null);
   const autoCloseMillisVal = React.useMemo(() => autoCloseMillis ?? 5000, [autoCloseMillis]);

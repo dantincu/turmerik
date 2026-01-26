@@ -169,7 +169,7 @@ export default function TrmrkTopToolBarContents({
   }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
 
   const AllowToggleLeftPanelBtn = React.useMemo(() => () => <TrmrkBtn
-      cssClass={focusedPanel === TrmrkAppLayoutPanel.Left ? "trmrk-btn-filled-opposite" : ""}
+      className={focusedPanel === TrmrkAppLayoutPanel.Left ? "trmrk-btn-filled-opposite" : ""}
       borderWidth={ showLeftPanel ? 1 : null }
       onClick={toggleLeftPanelClicked}
       onContextMenu={toggleLeftPanelContextMenu}>
@@ -179,7 +179,7 @@ export default function TrmrkTopToolBarContents({
     ]);
     
   const AllowToggleMiddlePanelBtn = React.useMemo(() => () => <TrmrkBtn
-      cssClass={focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-btn-filled-opposite" : ""}
+      className={focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-btn-filled-opposite" : ""}
       borderWidth={ showMiddlePanel ? 1 : null }
       onClick={toggleMiddlePanelClicked}
       onContextMenu={toggleMiddlePanelContextMenu}>
@@ -189,7 +189,7 @@ export default function TrmrkTopToolBarContents({
     ]);
 
   const AllowToggleRightPanelBtn = React.useMemo(() => () => <TrmrkBtn
-      cssClass={focusedPanel === TrmrkAppLayoutPanel.Right ? "trmrk-btn-filled-opposite" : ""}
+      className={focusedPanel === TrmrkAppLayoutPanel.Right ? "trmrk-btn-filled-opposite" : ""}
       borderWidth={ showRightPanel ? 1 : null }
       onClick={toggleRightPanelClicked}
       onContextMenu={toggleRightPanelContextMenu}>

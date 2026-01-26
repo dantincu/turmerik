@@ -18,7 +18,7 @@ export class IntKeyedComponentsMapManager {
     this.store = store ?? getDefaultStore();
   }
 
-  public register(key: number, component: () => React.ReactNode) {
+  public register(key: number, component: React.ReactNode) {
     this.keyedMap.map[key] = {
       key,
       node: component,

@@ -29,7 +29,7 @@ import { UserMessageLevel } from '@/src/trmrk/core';
 
 const AppBar = () => {
   return <TrmrkAppBarContents leadingChildren={() => <TrmrkMultiClickable hoc={{
-        node: (hoc) => (props) => <TrmrkBtn {...props} hoc={hoc}><TrmrkIcon icon="mdi:dice" /></TrmrkBtn>
+        node: (hoc) => (props) => <TrmrkBtn {...props} ref={el => hoc.rootElAvailable!(el)}><TrmrkIcon icon="mdi:dice" /></TrmrkBtn>
       }}
       args={hostElem => {
       return ({
@@ -51,7 +51,7 @@ const TopToolbar = () => {
     showRedoBtn={true}
     showRefreshBtn={true}
     showOptionsBtn={true}><TrmrkLongPressable hoc={{
-      node: (hoc) => (props) => <TrmrkBtn {...props} hoc={hoc}><TrmrkIcon icon="mdi:dice" /></TrmrkBtn>
+      node: (hoc) => (props) => <TrmrkBtn {...props} ref={el => hoc.rootElAvailable!(el)}><TrmrkIcon icon="mdi:dice" /></TrmrkBtn>
     }}
     args={hostElem => ({
       hostElem,
@@ -93,7 +93,7 @@ const MessageButton = React.memo(({ msg, dispatch }: {
     msg: UserMessage,
     dispatch: React.Dispatch<any>
   }) => (<React.Fragment>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]" onClick={() => dispatch({ type: 'SHOW_MESSAGE', idx: msg.idx })}><span className="trmrk-text">My Button {msg.idx}</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} className="my-[1px]" onClick={() => dispatch({ type: 'SHOW_MESSAGE', idx: msg.idx })}><span className="trmrk-text">My Button {msg.idx}</span></TrmrkBtn>
     <TrmrkPopover show={msg.show} msgLevel={msg.idx % 4} autoCloseMillis={ (msg.idx + 1) * 1000 } arrowPlacement={Placement.Top}>
       {msg.text}</TrmrkPopover>
   </React.Fragment>));
@@ -104,35 +104,35 @@ const MiddlePanelContents = () => {
   return <div className="flex flex-wrap">
     <p>asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf
       asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf </p>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]" onClick={e => console.log("onClick", e)}><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]">
+    <TrmrkBtn borderWidth={1} className="my-[1px]" onClick={e => console.log("onClick", e)}><span className="trmrk-text">My Button 123</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} className="my-[1px]">
       <span className="trmrk-icon-wrapper"><TrmrkIcon icon="mdi:home" /></span>
       <span className="trmrk-text">My Button</span>
     </TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px]">
+    <TrmrkBtn borderWidth={1} className="my-[1px]">
       <span className="trmrk-text">My Button</span>
       <span className="trmrk-icon-wrapper"><TrmrkIcon icon="mdi:home" /></span>
     </TrmrkBtn>
-    <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-primary"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-secondary"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-accept"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-reject"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-warn"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={2} cssClass="my-[1px] trmrk-btn-filled-system"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-primary"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-secondary"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-accept"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-reject"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-warn"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} cssClass="my-[1px] trmrk-btn-filled-system"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-primary"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-secondary"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-accept"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-reject"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-warn"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={0} cssClass="my-[1px] trmrk-btn-filled-system"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={0} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={2} cssClass="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={2} className="my-[1px] trmrk-btn-filled-primary"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={2} className="my-[1px] trmrk-btn-filled-secondary"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={2} className="my-[1px] trmrk-btn-filled-accept"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={2} className="my-[1px] trmrk-btn-filled-reject"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={2} className="my-[1px] trmrk-btn-filled-warn"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={2} className="my-[1px] trmrk-btn-filled-system"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} className="my-[1px] trmrk-btn-filled-primary"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} className="my-[1px] trmrk-btn-filled-secondary"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} className="my-[1px] trmrk-btn-filled-accept"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} className="my-[1px] trmrk-btn-filled-reject"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} className="my-[1px] trmrk-btn-filled-warn"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={1} className="my-[1px] trmrk-btn-filled-system"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={0} className="my-[1px] trmrk-btn-filled-primary"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={0} className="my-[1px] trmrk-btn-filled-secondary"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={0} className="my-[1px] trmrk-btn-filled-accept"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={0} className="my-[1px] trmrk-btn-filled-reject"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={0} className="my-[1px] trmrk-btn-filled-warn"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={0} className="my-[1px] trmrk-btn-filled-system"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={0} className="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
+    <TrmrkBtn borderWidth={2} className="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkPopover show={1} msgLevel={UserMessageLevel.Success} autoCloseMillis={2000} arrowPlacement={Placement.Top}>asdfasdf</TrmrkPopover>
     { messages.map(msg => <MessageButton msg={msg} dispatch={dispatch} key={msg.idx}></MessageButton>) }
   </div>;
@@ -161,19 +161,19 @@ export default function ButtonsTestPage() {
   React.useEffect(() => {
     const appBarContentsId = appBarContents.value.register(
       defaultComponentIdService.value.getNextId(),
-      AppBar);
+      <AppBar />);
 
     const topToolbarContentsId = topToolbarContents.value.register(
       defaultComponentIdService.value.getNextId(),
-      TopToolbar);
+      <TopToolbar />);
 
     const bottomToolbarContentsId = bottomToolbarContents.value.register(
       defaultComponentIdService.value.getNextId(),
-      BottomToolbar);
+      <BottomToolbar />);
 
     const middlePanelContentsId = middlePanelContents.value.register(
       defaultComponentIdService.value.getNextId(),
-      MiddlePanelContents
+      <MiddlePanelContents />
     );
 
     setShowAppBar(true);

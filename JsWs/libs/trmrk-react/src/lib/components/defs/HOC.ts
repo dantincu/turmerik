@@ -10,7 +10,6 @@ export interface HOCArgsCore<
         args: TArgs,
       ) => (props: React.ComponentPropsWithRef<T>) => React.ReactNode)
     | NullOrUndef;
-  rootElRef?: React.RefObject<TRootHtmlElement | null> | NullOrUndef;
   rootElAvailable?: ((rootEl: TRootHtmlElement | null) => void) | NullOrUndef;
   rootElUnavailable?: ((rootEl: TRootHtmlElement | null) => void) | NullOrUndef;
 }

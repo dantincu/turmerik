@@ -13,7 +13,7 @@ import { trmrkBasicAppLayoutAtoms, appOverlappingContents } from "./TrmrkBasicAp
 
 export interface TrmrkBasicAppLayoutProps extends ComponentProps {}
 
-export default function TrmrkBasicAppLayout({children, cssClass}: Readonly<TrmrkBasicAppLayoutProps>) {
+export default function TrmrkBasicAppLayout({children, className: cssClass}: Readonly<TrmrkBasicAppLayoutProps>) {
   const [ overlappingContentKeys ] = useAtom(appOverlappingContents.value.currentKeysAtom);
 
   const [cssClassValue] = useAtom(trmrkBasicAppLayoutAtoms.cssClass);
@@ -32,26 +32,24 @@ export default function TrmrkBasicAppLayout({children, cssClass}: Readonly<Trmrk
     <div className={['trmrk-app-layout', cssClass ?? '', cssClassValue ?? ''].join(' ')}>
       { (showAppBar || (showToolbars && showTopToolbar)) && <div className="trmrk-app-header">
         {showAppBar && <TrmrkHorizStrip>
-            { appBarContentsKey && withValIf(
-              appBarContents.value.keyedMap.map[appBarContentsKey], f => f.node()) }
+            { appBarContentsKey && appBarContents.value.keyedMap.map[appBarContentsKey]?.node }
           </TrmrkHorizStrip>}
         {showToolbars && showTopToolbar && !showAppBarOnly && <TrmrkHorizStrip>
             { topToolbarContentsKey && withValIf(
-              topToolbarContents.value.keyedMap.map[topToolbarContentsKey], f => f.node()) }
+              topToolbarContents.value.keyedMap.map[topToolbarContentsKey], f => f.node) }
           </TrmrkHorizStrip>}
       </div> }
       <div className="trmrk-app-body">
         {children}
       </div>
       { showToolbars && showBottomToolbar && !showAppBarOnly && <div className="trmrk-app-footer">
-          <TrmrkHorizStrip>{ bottomToolbarContentsKey && withValIf(
-            bottomToolbarContents.value.keyedMap.map[bottomToolbarContentsKey], f => f.node()) }
+          <TrmrkHorizStrip>{ bottomToolbarContentsKey && bottomToolbarContents.value.keyedMap.map[bottomToolbarContentsKey]?.node }
           </TrmrkHorizStrip>
         </div>
       }
       <div className="trmrk-overlapping-contents">
         { overlappingContentKeys.map(key => <React.Fragment key={key}>
-          { appOverlappingContents.value.keyedMap.map[key].node() }
+          { appOverlappingContents.value.keyedMap.map[key].node }
         </React.Fragment>) }
       </div>
     </div>

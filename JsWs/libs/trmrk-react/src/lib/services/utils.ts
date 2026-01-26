@@ -36,6 +36,17 @@ export const clearRefVal = <TVal>(
   refObj.current = null;
 };
 
+export const updateRef = <TVal>(
+  refObj: React.RefObject<TVal> | ((val: TVal) => void),
+  val: TVal,
+) => {
+  if ("function" === typeof refObj) {
+    refObj(val);
+  } else {
+    refObj.current = val;
+  }
+};
+
 export const performInitialization = (
   alreadyInitialized: React.RefObject<boolean>,
   initializer: () => void,

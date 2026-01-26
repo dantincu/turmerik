@@ -8,7 +8,7 @@ export interface TrmrkIconProps extends ComponentProps {
 }
 
 export default function TrmrkIcon(
-  { cssClass, icon }: TrmrkIconProps
+  { className: cssClass, icon }: TrmrkIconProps
 ) {
   return <div className={["trmrk-icon-wrapper", cssClass ?? ''].join(" ")}><Icon icon={icon} /></div>;
 }
