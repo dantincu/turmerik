@@ -10,36 +10,35 @@ import { actWithValIf } from "@/src/trmrk/core";
 
 import { HOCArgs } from "../defs/HOC";
 
-import { performInitialization } from "../../services/utils";
+import { performInitialization, updateRef } from "../../services/utils";
 
-export interface TrmrkLongPressableProps<
-  T extends React.ElementType,
-  TRootHtmlElement extends HTMLElement = HTMLElement,
-> {
-  hoc: HOCArgs<T, TRootHtmlElement>,
-  args: (rootEl: TRootHtmlElement) => LongPressServiceInitArgs
+export interface TrmrkLongPressableProps<T, P> {
+  hoc: HOCArgs<T, P>,
+  args: (rootEl: T) => LongPressServiceInitArgs
 }
 
 export default function TrmrkLongPressable<
-  T extends React.ElementType,
-  TRootHtmlElement extends HTMLElement = HTMLElement,
->({ hoc, args }: Readonly<TrmrkLongPressableProps<T, TRootHtmlElement>>) {
+  T, P,
+>({ hoc, args }: Readonly<TrmrkLongPressableProps<T, P>>) {
   const initializedRef = React.useRef(false);
   let longPressService: LongPressService | null = null;
 
-  const rootElAvailable = (rootEl: TRootHtmlElement | null) => {
+  const rootElAvailable = (el: T) => {
     performInitialization(initializedRef, () => longPressService = createLongPressService())
-    actWithValIf(rootEl, rootEl => longPressService!.init(args(rootEl)));
-    actWithValIf(hoc.rootElAvailable, f => f(rootEl));
+    actWithValIf(el, rootEl => longPressService!.init(args(rootEl)));
+    actWithValIf(hoc.props.ref, r => updateRef(r, el));
   }
 
-  const rootElUnavailable = (rootEl: TRootHtmlElement | null) => {
-    initializedRef.current = false;
-    longPressService?.dispose();
-    longPressService = null;
-    actWithValIf(hoc.rootElUnavailable, f => f(rootEl));
-  }
+  const Component = React.forwardRef(hoc.node);
+
+  React.useEffect(() => {
+    return () => {
+      longPressService?.dispose();
+      longPressService = null;
+      initializedRef.current = false;
+      actWithValIf(hoc.cleanup, f => f(hoc));
+    }
+  }, []);
   
-  const Component = hoc.node!({ rootElAvailable, rootElUnavailable }) as React.ElementType;
-  return (<Component></Component>);
+  return (<Component {...hoc.props} ref={rootElAvailable}></Component>);
 }

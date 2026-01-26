@@ -10,36 +10,33 @@ import { actWithValIf } from "@/src/trmrk/core";
 
 import { HOCArgs } from "../defs/HOC";
 
-import { performInitialization } from "../../services/utils";
+import { performInitialization, updateRef } from "../../services/utils";
 
-export interface TrmrkLongPressableProps<
-  T extends React.ElementType,
-  TRootHtmlElement extends HTMLElement = HTMLElement,
-> {
-  hoc: HOCArgs<T, TRootHtmlElement>,
-  args: (rootEl: TRootHtmlElement) => PointerDragServiceInitArgs
+export interface TrmrkLongPressableProps<T, P> {
+  hoc: HOCArgs<T, P>,
+  args: (rootEl: T) => PointerDragServiceInitArgs
 }
 
-export default function TrmrkLongPressable<
-  T extends React.ElementType,
-  TRootHtmlElement extends HTMLElement = HTMLElement,
->({ hoc, args }: Readonly<TrmrkLongPressableProps<T, TRootHtmlElement>>) {
+export default function TrmrkLongPressable<T, P>({ hoc, args }: Readonly<TrmrkLongPressableProps<T, P>>) {
   const initializedRef = React.useRef(false);
   let pointerDragService: PointerDragService | null = null;
 
-  const rootElAvailable = (rootEl: TRootHtmlElement | null) => {
+  const rootElAvailable = (el: T) => {
     performInitialization(initializedRef, () => pointerDragService = createPointerDragService())
-    actWithValIf(rootEl, rootEl => pointerDragService!.init(args(rootEl)));
-    actWithValIf(hoc.rootElAvailable, f => f(rootEl));
+    actWithValIf(el, rootEl => pointerDragService!.init(args(rootEl)));
+    actWithValIf(hoc.props.ref, r => updateRef(r, el));
   }
 
-  const rootElUnavailable = (rootEl: TRootHtmlElement | null) => {
-    initializedRef.current = false;
-    pointerDragService?.dispose();
-    pointerDragService = null;
-    actWithValIf(hoc.rootElUnavailable, f => f(rootEl));
-  }
+  const Component = React.forwardRef(hoc.node);
 
-  const Component = hoc.node!({ rootElAvailable, rootElUnavailable }) as React.ElementType;
-  return (<Component></Component>);
+  React.useEffect(() => {
+    return () => {
+      pointerDragService?.dispose();
+      pointerDragService = null;
+      initializedRef.current = false;
+      actWithValIf(hoc.cleanup, f => f(hoc));
+    }
+  }, []);
+  
+  return (<Component {...hoc.props} ref={rootElAvailable}></Component>);
 }

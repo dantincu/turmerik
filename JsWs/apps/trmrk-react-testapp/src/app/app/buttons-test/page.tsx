@@ -29,11 +29,12 @@ import { UserMessageLevel } from '@/src/trmrk/core';
 
 const AppBar = () => {
   return <TrmrkAppBarContents leadingChildren={() => <TrmrkMultiClickable hoc={{
-        node: (hoc) => (props) => <TrmrkBtn {...props} ref={el => hoc.rootElAvailable!(el)}><TrmrkIcon icon="mdi:dice" /></TrmrkBtn>
+        node: (props, ref) => <TrmrkBtn {...props} ref={ref as React.Ref<HTMLButtonElement>}><TrmrkIcon icon="mdi:dice" /></TrmrkBtn>,
+        props: {}
       }}
       args={hostElem => {
       return ({
-        hostElem,
+        hostElem: hostElem as HTMLElement,
         multiClickPointerDown: (e) => console.log("multiClickPointerDown", e),
         multiClickPressAndHold: (e) => console.log("multiClickPressAndHold", e),
         multiClickComplete: () => console.log("multiClickComplete"),
@@ -51,10 +52,11 @@ const TopToolbar = () => {
     showRedoBtn={true}
     showRefreshBtn={true}
     showOptionsBtn={true}><TrmrkLongPressable hoc={{
-      node: (hoc) => (props) => <TrmrkBtn {...props} ref={el => hoc.rootElAvailable!(el)}><TrmrkIcon icon="mdi:dice" /></TrmrkBtn>
+      node: (props, ref) => <TrmrkBtn {...props} ref={ref as React.Ref<HTMLButtonElement>}><TrmrkIcon icon="mdi:dice" /></TrmrkBtn>,
+      props: {}
     }}
     args={hostElem => ({
-      hostElem,
+        hostElem: hostElem as HTMLElement,
       longPressOrRightClick: (e) => console.log("longPressOrRightClick", e),
       shortPressOrLeftClick: (e) => console.log("shortPressOrLeftClick", e)
     })}></TrmrkLongPressable></TrmrkTopToolBarContents>;

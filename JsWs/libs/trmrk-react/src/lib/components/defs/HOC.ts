@@ -1,20 +1,12 @@
 import { NullOrUndef } from "@/src/trmrk/core";
 
-export interface HOCArgsCore<
-  TArgs extends HOCArgsCore<TArgs, T, TRootHtmlElement>,
-  T extends React.ElementType,
-  TRootHtmlElement extends HTMLElement = HTMLElement,
-> {
-  node?:
-    | ((
-        args: TArgs,
-      ) => (props: React.ComponentPropsWithRef<T>) => React.ReactNode)
-    | NullOrUndef;
-  rootElAvailable?: ((rootEl: TRootHtmlElement | null) => void) | NullOrUndef;
-  rootElUnavailable?: ((rootEl: TRootHtmlElement | null) => void) | NullOrUndef;
+export interface HOCArgsCore<TArgs extends HOCArgsCore<TArgs, T, P>, T, P> {
+  node: (
+    props: React.PropsWithoutRef<P>,
+    ref: React.ForwardedRef<T>,
+  ) => React.ReactNode;
+  props: React.PropsWithoutRef<P> & React.RefAttributes<T>;
+  cleanup?: ((args: TArgs) => void) | NullOrUndef;
 }
 
-export interface HOCArgs<
-  T extends React.ElementType,
-  TRootHtmlElement extends HTMLElement = HTMLElement,
-> extends HOCArgsCore<HOCArgs<T, TRootHtmlElement>, T, TRootHtmlElement> {}
+export interface HOCArgs<T, P> extends HOCArgsCore<HOCArgs<T, P>, T, P> {}
