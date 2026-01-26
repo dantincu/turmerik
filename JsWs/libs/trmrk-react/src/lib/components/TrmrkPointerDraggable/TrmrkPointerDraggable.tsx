@@ -21,13 +21,11 @@ export default function TrmrkLongPressable<T, P>({ hoc, args }: Readonly<TrmrkLo
   const initializedRef = React.useRef(false);
   let pointerDragService: PointerDragService | null = null;
 
-  const rootElAvailable = (el: T) => {
-    performInitialization(initializedRef, () => pointerDragService = createPointerDragService())
+  const Component = React.forwardRef<T, P>((props, ref) => hoc.node(props, (el) => {
+    performInitialization(initializedRef, () => pointerDragService = createPointerDragService());
     actWithValIf(el, rootEl => pointerDragService!.init(args(rootEl)));
-    actWithValIf(hoc.props.ref, r => updateRef(r, el));
-  }
-
-  const Component = React.forwardRef(hoc.node);
+    actWithValIf(ref, r => updateRef(r, el));
+  }));
 
   React.useEffect(() => {
     return () => {
@@ -38,5 +36,5 @@ export default function TrmrkLongPressable<T, P>({ hoc, args }: Readonly<TrmrkLo
     }
   }, []);
   
-  return (<Component {...hoc.props} ref={rootElAvailable}></Component>);
+  return (<Component {...hoc.props}></Component>);
 }

@@ -23,13 +23,11 @@ export default function TrmrkLongPressable<
   const initializedRef = React.useRef(false);
   let longPressService: LongPressService | null = null;
 
-  const rootElAvailable = (el: T) => {
-    performInitialization(initializedRef, () => longPressService = createLongPressService())
+  const Component = React.forwardRef<T, P>((props, ref) => hoc.node(props, (el) => {
+    performInitialization(initializedRef, () => longPressService = createLongPressService());
     actWithValIf(el, rootEl => longPressService!.init(args(rootEl)));
-    actWithValIf(hoc.props.ref, r => updateRef(r, el));
-  }
-
-  const Component = React.forwardRef(hoc.node);
+    actWithValIf(ref, r => updateRef(r, el));
+  }));
 
   React.useEffect(() => {
     return () => {
@@ -40,5 +38,5 @@ export default function TrmrkLongPressable<
     }
   }, []);
   
-  return (<Component {...hoc.props} ref={rootElAvailable}></Component>);
+  return (<Component {...hoc.props}></Component>);
 }
