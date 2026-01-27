@@ -6,10 +6,10 @@ import { createIntKeyedComponentsMapManager } from "../../services/IntKeyedCompo
 
 export const trmrkBasicAppLayoutAtoms = {
   cssClass: atom<string | null>(null),
-  showAppBar: atom(false),
+  showAppBar: atom(true),
   showAppBarOnly: atom(false),
   appBarContentsKey: atom<number | null>(null),
-  showTopToolbar: atom(false),
+  showTopToolbar: atom(true),
   topToolbarContentsKey: atom<number | null>(null),
   showBottomToolbar: atom(false),
   bottomToolbarContentsKey: atom<number | null>(null),

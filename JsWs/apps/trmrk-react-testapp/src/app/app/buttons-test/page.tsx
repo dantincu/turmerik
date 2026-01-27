@@ -141,11 +141,9 @@ const MiddlePanelContents = () => {
 };
 
 export default function ButtonsTestPage() {
-  const [, setShowAppBar] = useAtom(trmrkBasicAppLayoutAtoms.showAppBar);
   const [, setAppBarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.appBarContentsKey);
   const [, setTopToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarContentsKey);
   const [, setBottomToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarContentsKey);
-  const [, setShowTopToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showTopToolbar);
   const [, setShowBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
   const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
   const [, setAllowToggleLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleLeftPanel);
@@ -159,6 +157,7 @@ export default function ButtonsTestPage() {
   const [, setShowRightPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanelLoader);
   const [, setRightPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanelContentsKey);
   const [, setAllowToggleRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleRightPanel);
+  const [, setAllowsMultiPanelMode] = useAtom(trmrk3PanelsAppLayoutAtoms.allowsMultiPanelMode);
 
   React.useEffect(() => {
     const appBarContentsId = appBarContents.value.register(
@@ -178,8 +177,8 @@ export default function ButtonsTestPage() {
       <MiddlePanelContents />
     );
 
-    setShowAppBar(true);
-    setShowTopToolbar(true);
+    // setShowAppBar(true);
+    // setShowTopToolbar(true);
     setShowBottomToolbar(true);
     setShowLeftPanel(true);
     setShowLeftPanelLoader(false);
@@ -190,6 +189,7 @@ export default function ButtonsTestPage() {
     setShowRightPanel(true);
     setShowRightPanelLoader(false);
     setAllowToggleRightPanel(true);
+    setAllowsMultiPanelMode(true);
     
     setAppBarContentsKey(appBarContentsId);
     setTopToolbarContentsKey(topToolbarContentsId);

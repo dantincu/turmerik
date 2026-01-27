@@ -26,7 +26,7 @@ export const trmrk3PanelsAppLayoutAtoms = {
   allowToggleRightPanel: atom(false),
   focusedPanel: atom(TrmrkAppLayoutPanel.Middle),
   isSinglePanelMode: atom(true),
-  allowsMultiPanelMode: atom(true),
+  allowsMultiPanelMode: atom(false),
 };
 
 export const leftPanelContents = new RefLazyValue(() =>

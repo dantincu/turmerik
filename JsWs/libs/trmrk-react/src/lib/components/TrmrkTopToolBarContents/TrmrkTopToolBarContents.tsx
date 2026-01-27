@@ -21,59 +21,150 @@ export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showOptionsBtn?: boolean | NullOrUndef
 }
 
-const AllowToggleLeftPanelBtn = React.memo((
-  {
-    focusedPanel,
-    showLeftPanel,
-    toggleLeftPanelClicked,
-    toggleLeftPanelContextMenu
-  }: {
-    focusedPanel: TrmrkAppLayoutPanel,
-    showLeftPanel: boolean,
-    toggleLeftPanelClicked: () => void,
-    toggleLeftPanelContextMenu: (e: React.MouseEvent) => void
-  }) => <TrmrkBtn
-    className={focusedPanel === TrmrkAppLayoutPanel.Left ? "trmrk-btn-filled-opposite" : ""}
-    borderWidth={ showLeftPanel ? 1 : null }
-    onClick={toggleLeftPanelClicked}
-    onContextMenu={toggleLeftPanelContextMenu}>
-  <TrmrkIcon icon={ `material-symbols:left-panel-${showLeftPanel ? "close" : "open" }` } /></TrmrkBtn>);
-  
-const AllowToggleMiddlePanelBtn = React.memo((
-  {
-    focusedPanel,
-    showMiddlePanel,
-    toggleMiddlePanelClicked,
-    toggleMiddlePanelContextMenu
-  }: {
-    focusedPanel: TrmrkAppLayoutPanel,
-    showMiddlePanel: boolean,
-    toggleMiddlePanelClicked: () => void,
-    toggleMiddlePanelContextMenu: (e: React.MouseEvent) => void
-  }) => <TrmrkBtn
-    className={focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-btn-filled-opposite" : ""}
-    borderWidth={ showMiddlePanel ? 1 : null }
-    onClick={toggleMiddlePanelClicked}
-    onContextMenu={toggleMiddlePanelContextMenu}>
-  <TrmrkIcon icon={ `material-symbols:left-panel-${showMiddlePanel ? "close" : "open" }-outline` } /></TrmrkBtn>);
+const AllowToggleLeftPanelBtn = React.memo(() => {
+    const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
+    const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
+    const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
+    const [ focusedPanel, setFocusedPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
+    const [ isSinglePanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isSinglePanelMode);
 
-const AllowToggleRightPanelBtn = React.memo((
-  {
-    focusedPanel,
-    showRightPanel,
-    toggleRightPanelClicked,
-    toggleRightPanelContextMenu
-  }: {
-    focusedPanel: TrmrkAppLayoutPanel,
-    showRightPanel: boolean,
-    toggleRightPanelClicked: () => void,
-    toggleRightPanelContextMenu: (e: React.MouseEvent) => void
-  }) => <TrmrkBtn
-    className={focusedPanel === TrmrkAppLayoutPanel.Right ? "trmrk-btn-filled-opposite" : ""}
-    borderWidth={ showRightPanel ? 1 : null }
-    onClick={toggleRightPanelClicked}
-    onContextMenu={toggleRightPanelContextMenu}>
-  <TrmrkIcon icon={ `material-symbols:right-panel-${showRightPanel ? "close" : "open" }` } /></TrmrkBtn>);
+    const toggleLeftPanelClicked = React.useCallback(() => {
+      const willShowLeftPanel = !showLeftPanel;
+      setShowLeftPanel(willShowLeftPanel);
+
+      if (willShowLeftPanel) {
+        setFocusedPanel(TrmrkAppLayoutPanel.Left);
+
+        if (isSinglePanelMode) {
+          setShowMiddlePanel(false);
+          setShowRightPanel(false);
+        }
+      } else {
+        if (showMiddlePanel) {
+          if (focusedPanel === TrmrkAppLayoutPanel.Left) {
+            setFocusedPanel(TrmrkAppLayoutPanel.Middle);
+          }
+        } else if (showRightPanel) {
+          if (focusedPanel === TrmrkAppLayoutPanel.Left) {
+            setFocusedPanel(TrmrkAppLayoutPanel.Right);
+          }
+        } else {
+            setShowMiddlePanel(true);
+            setFocusedPanel(TrmrkAppLayoutPanel.Middle);
+        }
+      }
+    }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
+
+    const toggleLeftPanelContextMenu = React.useCallback((event: React.MouseEvent) => {
+      event.preventDefault();
+
+      if (showLeftPanel) {
+        setFocusedPanel(TrmrkAppLayoutPanel.Left);
+      }
+    }, [showLeftPanel, isSinglePanelMode, focusedPanel]);
+
+    return <TrmrkBtn
+      className={focusedPanel === TrmrkAppLayoutPanel.Left ? "trmrk-btn-filled-opposite" : ""}
+      borderWidth={showLeftPanel ? 1 : null}
+      onClick={toggleLeftPanelClicked}
+      onContextMenu={toggleLeftPanelContextMenu}>
+        <TrmrkIcon icon={ `material-symbols:left-panel-${showLeftPanel ? "close" : "open" }` } />
+      </TrmrkBtn>
+  });
+  
+const AllowToggleMiddlePanelBtn = React.memo(() => {
+    const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
+    const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
+    const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
+    const [ focusedPanel, setFocusedPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
+    const [ isSinglePanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isSinglePanelMode);
+
+    const toggleMiddlePanelClicked = React.useCallback(() => {
+      const willShowMiddlePanel = !showMiddlePanel;
+      setShowMiddlePanel(!showMiddlePanel);
+
+      if (willShowMiddlePanel) {
+        setFocusedPanel(TrmrkAppLayoutPanel.Middle);
+
+        if (isSinglePanelMode) {
+          setShowLeftPanel(false);
+          setShowRightPanel(false);
+        }
+      } else if (showRightPanel) {
+        setFocusedPanel(TrmrkAppLayoutPanel.Right);
+      } else if (showLeftPanel) {
+        setFocusedPanel(TrmrkAppLayoutPanel.Left);
+      } else {
+        setShowRightPanel(true);
+        setFocusedPanel(TrmrkAppLayoutPanel.Right);
+      }
+    }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
+
+    const toggleMiddlePanelContextMenu = React.useCallback((event: React.MouseEvent) => {
+      event.preventDefault();
+
+      if (showMiddlePanel) {
+        setFocusedPanel(TrmrkAppLayoutPanel.Middle);
+      }
+    }, [showMiddlePanel, isSinglePanelMode, focusedPanel]);
+
+    return <TrmrkBtn
+      className={focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-btn-filled-opposite" : ""}
+      borderWidth={ showMiddlePanel ? 1 : null }
+      onClick={toggleMiddlePanelClicked}
+      onContextMenu={toggleMiddlePanelContextMenu}>
+    <TrmrkIcon icon={ `material-symbols:left-panel-${showMiddlePanel ? "close" : "open" }-outline` } /></TrmrkBtn>;
+  });
+
+const AllowToggleRightPanelBtn = React.memo(() => {
+    const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
+    const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
+    const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
+    const [ focusedPanel, setFocusedPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
+    const [ isSinglePanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isSinglePanelMode);
+
+    const toggleRightPanelClicked = React.useCallback(() => {
+      const willShowRightPanel = !showRightPanel;
+      setShowRightPanel(!showRightPanel);
+
+      if (willShowRightPanel) {
+        setFocusedPanel(TrmrkAppLayoutPanel.Right);
+
+        if (isSinglePanelMode) {
+          setShowLeftPanel(false);
+          setShowMiddlePanel(false);
+        }
+      } else {
+        if (showMiddlePanel) {
+          if (focusedPanel === TrmrkAppLayoutPanel.Left) {
+            setFocusedPanel(TrmrkAppLayoutPanel.Middle);
+          }
+        } else if (showLeftPanel) {
+          if (focusedPanel === TrmrkAppLayoutPanel.Right) {
+            setFocusedPanel(TrmrkAppLayoutPanel.Left);
+          }
+        } else {
+            setShowMiddlePanel(true);
+            setFocusedPanel(TrmrkAppLayoutPanel.Middle);
+        }
+      }
+    }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
+
+    const toggleRightPanelContextMenu = React.useCallback((event: React.MouseEvent) => {
+      event.preventDefault();
+
+      if (showRightPanel) {
+        setFocusedPanel(TrmrkAppLayoutPanel.Right);
+      }
+    }, [showRightPanel, isSinglePanelMode, focusedPanel]);
+
+    return <TrmrkBtn
+      className={focusedPanel === TrmrkAppLayoutPanel.Right ? "trmrk-btn-filled-opposite" : ""}
+      borderWidth={ showRightPanel ? 1 : null }
+      onClick={toggleRightPanelClicked}
+      onContextMenu={toggleRightPanelContextMenu}>
+    <TrmrkIcon icon={ `material-symbols:right-panel-${showRightPanel ? "close" : "open" }` } /></TrmrkBtn>
+  });
 
 export default function TrmrkTopToolBarContents({
   children,
@@ -100,105 +191,6 @@ export default function TrmrkTopToolBarContents({
   const showResizePanelsBtn = React.useMemo(
     () => [showLeftPanel, showMiddlePanel, showRightPanel].filter(show => show).length > 0,
     [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode])
-
-  const toggleLeftPanelClicked = React.useCallback(() => {
-    const willShowLeftPanel = !showLeftPanel;
-    setShowLeftPanel(willShowLeftPanel);
-
-    if (willShowLeftPanel) {
-      setFocusedPanel(TrmrkAppLayoutPanel.Left);
-
-      if (isSinglePanelMode) {
-        setShowMiddlePanel(false);
-        setShowRightPanel(false);
-      }
-    } else {
-      if (showMiddlePanel) {
-        if (focusedPanel === TrmrkAppLayoutPanel.Left) {
-          setFocusedPanel(TrmrkAppLayoutPanel.Middle);
-        }
-      } else if (showRightPanel) {
-        if (focusedPanel === TrmrkAppLayoutPanel.Left) {
-          setFocusedPanel(TrmrkAppLayoutPanel.Right);
-        }
-      } else {
-          setShowMiddlePanel(true);
-          setFocusedPanel(TrmrkAppLayoutPanel.Middle);
-      }
-    }
-  }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
-
-  const toggleMiddlePanelClicked = React.useCallback(() => {
-    const willShowMiddlePanel = !showMiddlePanel;
-    setShowMiddlePanel(!showMiddlePanel);
-
-    if (willShowMiddlePanel) {
-      setFocusedPanel(TrmrkAppLayoutPanel.Middle);
-
-      if (isSinglePanelMode) {
-        setShowLeftPanel(false);
-        setShowRightPanel(false);
-      }
-    } else if (showRightPanel) {
-      setFocusedPanel(TrmrkAppLayoutPanel.Right);
-    } else if (showLeftPanel) {
-      setFocusedPanel(TrmrkAppLayoutPanel.Left);
-    } else {
-      setShowRightPanel(true);
-      setFocusedPanel(TrmrkAppLayoutPanel.Right);
-    }
-  }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
-
-  const toggleRightPanelClicked = React.useCallback(() => {
-    const willShowRightPanel = !showRightPanel;
-    setShowRightPanel(!showRightPanel);
-
-    if (willShowRightPanel) {
-      setFocusedPanel(TrmrkAppLayoutPanel.Right);
-
-      if (isSinglePanelMode) {
-        setShowLeftPanel(false);
-        setShowMiddlePanel(false);
-      }
-    } else {
-      if (showMiddlePanel) {
-        if (focusedPanel === TrmrkAppLayoutPanel.Left) {
-          setFocusedPanel(TrmrkAppLayoutPanel.Middle);
-        }
-      } else if (showLeftPanel) {
-        if (focusedPanel === TrmrkAppLayoutPanel.Right) {
-          setFocusedPanel(TrmrkAppLayoutPanel.Left);
-        }
-      } else {
-          setShowMiddlePanel(true);
-          setFocusedPanel(TrmrkAppLayoutPanel.Middle);
-      }
-    }
-  }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
-
-  const toggleLeftPanelContextMenu = React.useCallback((event: React.MouseEvent) => {
-    event.preventDefault();
-
-    if (showLeftPanel) {
-      setFocusedPanel(TrmrkAppLayoutPanel.Left);
-    }
-  }, [showLeftPanel, isSinglePanelMode, focusedPanel]);
-
-  const toggleMiddlePanelContextMenu = React.useCallback((event: React.MouseEvent) => {
-    event.preventDefault();
-
-    if (showMiddlePanel) {
-      setFocusedPanel(TrmrkAppLayoutPanel.Middle);
-    }
-  }, [showMiddlePanel, isSinglePanelMode, focusedPanel]);
-
-  const toggleRightPanelContextMenu = React.useCallback((event: React.MouseEvent) => {
-    event.preventDefault();
-
-    if (showRightPanel) {
-      setFocusedPanel(TrmrkAppLayoutPanel.Right);
-    }
-  }, [showRightPanel, isSinglePanelMode, focusedPanel]);
 
   const toggleMultiPanelModeClicked = React.useCallback(() => {
     const willBeSinglePanelMode = !isSinglePanelMode;
@@ -233,24 +225,9 @@ export default function TrmrkTopToolBarContents({
         { (showPrimaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-outline" /></TrmrkBtn> }
         { (showSecondaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-bold" /></TrmrkBtn> }
         { (showOptionsBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
-        { allowToggleLeftPanel && <AllowToggleLeftPanelBtn {...{
-            focusedPanel,
-            showLeftPanel,
-            toggleLeftPanelClicked,
-            toggleLeftPanelContextMenu
-          }}></AllowToggleLeftPanelBtn> }
-        { allowToggleMiddlePanel && <AllowToggleMiddlePanelBtn {...{
-            focusedPanel,
-            showMiddlePanel,
-            toggleMiddlePanelClicked,
-            toggleMiddlePanelContextMenu
-          }}></AllowToggleMiddlePanelBtn> }
-        { allowToggleRightPanel && <AllowToggleRightPanelBtn {...{
-            focusedPanel,
-            showRightPanel,
-            toggleRightPanelClicked,
-            toggleRightPanelContextMenu
-          }}></AllowToggleRightPanelBtn> }
+        { allowToggleLeftPanel && <AllowToggleLeftPanelBtn></AllowToggleLeftPanelBtn> }
+        { allowToggleMiddlePanel && <AllowToggleMiddlePanelBtn></AllowToggleMiddlePanelBtn> }
+        { allowToggleRightPanel && <AllowToggleRightPanelBtn></AllowToggleRightPanelBtn> }
         { allowsMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
           <TrmrkIcon icon={`material-symbols:view-column${isSinglePanelMode ? "" : "-outline"}-sharp`} /></TrmrkBtn> }
         { showResizePanelsBtn && <TrmrkBtn><TrmrkIcon icon="material-symbols:resize" />

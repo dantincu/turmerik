@@ -4,9 +4,9 @@ import React from "react";
 
 import "./TrmrkBtn.scss";
 
-import { NullOrUndef, actWithValIf } from "@/src/trmrk/core";
+import { NullOrUndef } from "@/src/trmrk/core";
 
-import { clearRefVal, updateRef } from "../../services/utils";
+import { effectCallback, handleOnPointerDownFunc, refElAvailableFunc } from "./TrmrkBtnService";
 import { ComponentProps } from "../defs/common";
 
 export interface TrmrkBtnProps extends React.ComponentPropsWithRef<'button'>, ComponentProps {
@@ -17,31 +17,13 @@ const TrmrkBtn = React.memo(React.forwardRef<HTMLButtonElement, TrmrkBtnProps>((
   const rootElRef = React.useRef<HTMLButtonElement | null>(null);
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
-  const handleOnPointerDown = React.useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
-    const btnElem = e.currentTarget;
-    btnElem.classList.add('trmrk-btn-pressed');
+  const handleOnPointerDown = React.useCallback(
+    (e: React.PointerEvent<HTMLButtonElement>) => handleOnPointerDownFunc(e, timeoutRef, onPointerDown), []);
 
-    timeoutRef.current = setTimeout(() => {
-      btnElem.classList.remove('trmrk-btn-pressed');
-      timeoutRef.current = null;
-    }, 200);
+  const refElAvailable = React.useCallback(
+    (el: HTMLButtonElement | null) => refElAvailableFunc(el, rootElRef, ref), []);
 
-    actWithValIf(onPointerDown, f => f(e));
-  }, []);
-
-  const refElAvailable = React.useCallback((el: HTMLButtonElement | null) => {
-    rootElRef.current = el;
-    actWithValIf(ref, r => updateRef(r, el));
-  }, []);
-
-  React.useEffect(() => {
-    const btnElem = rootElRef!.current;
-
-    return () => {
-      clearRefVal(timeoutRef, clearTimeout);
-      btnElem?.classList.remove('trmrk-btn-pressed');
-    };
-  }, []);
+  React.useEffect(() => effectCallback(rootElRef, timeoutRef), []);
 
   return (
     <button {...props} ref={refElAvailable} className={[
