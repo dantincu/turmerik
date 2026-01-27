@@ -21,7 +21,7 @@ export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showOptionsBtn?: boolean | NullOrUndef
 }
 
-const AllowToggleLeftPanelBtn = React.memo(() => {
+const ToggleLeftPanelBtn = React.memo(() => {
     const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
     const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
     const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
@@ -72,7 +72,7 @@ const AllowToggleLeftPanelBtn = React.memo(() => {
       </TrmrkBtn>
   });
   
-const AllowToggleMiddlePanelBtn = React.memo(() => {
+const ToggleMiddlePanelBtn = React.memo(() => {
     const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
     const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
     const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
@@ -116,7 +116,7 @@ const AllowToggleMiddlePanelBtn = React.memo(() => {
     <TrmrkIcon icon={ `material-symbols:left-panel-${showMiddlePanel ? "close" : "open" }-outline` } /></TrmrkBtn>;
   });
 
-const AllowToggleRightPanelBtn = React.memo(() => {
+const ToggleRightPanelBtn = React.memo(() => {
     const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
     const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
     const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
@@ -136,7 +136,7 @@ const AllowToggleRightPanelBtn = React.memo(() => {
         }
       } else {
         if (showMiddlePanel) {
-          if (focusedPanel === TrmrkAppLayoutPanel.Left) {
+          if (focusedPanel === TrmrkAppLayoutPanel.Right) {
             setFocusedPanel(TrmrkAppLayoutPanel.Middle);
           }
         } else if (showLeftPanel) {
@@ -184,7 +184,7 @@ export default function TrmrkTopToolBarContents({
   const [ allowToggleMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleMiddlePanel);
   const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
   const [ allowToggleRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleRightPanel);
-  const [ focusedPanel, setFocusedPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
+  const [ focusedPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
   const [ isSinglePanelMode, setIsSinglePanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isSinglePanelMode);
   const [ allowsMultiPanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowsMultiPanelMode);
 
@@ -225,9 +225,9 @@ export default function TrmrkTopToolBarContents({
         { (showPrimaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-outline" /></TrmrkBtn> }
         { (showSecondaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-bold" /></TrmrkBtn> }
         { (showOptionsBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
-        { allowToggleLeftPanel && <AllowToggleLeftPanelBtn></AllowToggleLeftPanelBtn> }
-        { allowToggleMiddlePanel && <AllowToggleMiddlePanelBtn></AllowToggleMiddlePanelBtn> }
-        { allowToggleRightPanel && <AllowToggleRightPanelBtn></AllowToggleRightPanelBtn> }
+        { allowToggleLeftPanel && <ToggleLeftPanelBtn></ToggleLeftPanelBtn> }
+        { allowToggleMiddlePanel && <ToggleMiddlePanelBtn></ToggleMiddlePanelBtn> }
+        { allowToggleRightPanel && <ToggleRightPanelBtn></ToggleRightPanelBtn> }
         { allowsMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
           <TrmrkIcon icon={`material-symbols:view-column${isSinglePanelMode ? "" : "-outline"}-sharp`} /></TrmrkBtn> }
         { showResizePanelsBtn && <TrmrkBtn><TrmrkIcon icon="material-symbols:resize" />

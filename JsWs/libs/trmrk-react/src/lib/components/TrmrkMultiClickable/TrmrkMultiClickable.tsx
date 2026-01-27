@@ -10,7 +10,7 @@ import { actWithValIf } from "@/src/trmrk/core";
 
 import { HOCArgs } from "../defs/HOC";
 
-import { performInitialization, updateRef } from "../../services/utils";
+import { updateRef } from "../../services/utils";
 
 export interface TrmrkLongPressableProps<T, P> {
   hoc: HOCArgs<T, P>,
@@ -22,7 +22,8 @@ export default function TrmrkLongPressable<T, P>({ hoc, args }: Readonly<TrmrkLo
   let multiClickService: MultiClickService | null = null;
 
   const Component = React.forwardRef<T, P>((props, ref) => hoc.node(props, (el) => {
-    performInitialization(initializedRef, () => multiClickService = createMultiClickService());
+    multiClickService?.dispose();
+    multiClickService = createMultiClickService();
     actWithValIf(el, rootEl => multiClickService!.init(args(rootEl)));
     actWithValIf(ref, r => updateRef(r, el));
   }));
