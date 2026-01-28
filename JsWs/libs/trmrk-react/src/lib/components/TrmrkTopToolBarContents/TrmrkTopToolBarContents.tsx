@@ -23,6 +23,7 @@ export interface TrmrkTopToolBarContentsProps extends ComponentProps {
 }
 
 const toolbarHorizPaddingPx = 6;
+const toolbarAdditionalOffset = 84;
 
 const ContentsShiftLeftBtn = React.memo(() => {
   const [ toolbarContainerWidth ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContainerWidth);
@@ -272,12 +273,15 @@ export default function TrmrkTopToolBarContents({
 
       setToolbarContainerWidth(toolbarContainerElWidth);
       setToolbarContentsWidth(toolbarContentsElWidth);
-      const widthDiff = toolbarContentsElWidth - toolbarContainerElWidth + toolbarHorizPaddingPx;
-      const newToolbarContentsMaxOffset = Math.max(0, widthDiff);
-      setToolbarContentsMaxOffset(newToolbarContentsMaxOffset);
-      setShowToolbarContentsScrollBtns(newToolbarContentsMaxOffset > 0);
 
-      if (newToolbarContentsMaxOffset === 0) {
+      let newToolbarContentsMaxOffset = toolbarContentsElWidth - toolbarContainerElWidth + toolbarHorizPaddingPx + toolbarAdditionalOffset;
+      newToolbarContentsMaxOffset = Math.max(0, newToolbarContentsMaxOffset);
+      const newShowToolbarContentsScrollBtns = newToolbarContentsMaxOffset > toolbarAdditionalOffset;
+      
+      setToolbarContentsMaxOffset(newToolbarContentsMaxOffset);
+      setShowToolbarContentsScrollBtns(newShowToolbarContentsScrollBtns);
+
+      if (!newShowToolbarContentsScrollBtns) {
         setToolbarContentsOffset(0);
       }
     }
