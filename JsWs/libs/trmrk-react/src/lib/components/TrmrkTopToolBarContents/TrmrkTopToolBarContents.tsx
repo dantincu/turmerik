@@ -8,6 +8,7 @@ import { ComponentProps } from "../defs/common";
 import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
 import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
 import { trmrk3PanelsAppLayoutAtoms, TrmrkAppLayoutPanel } from "../Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
+import { trmrkTopToolBarContentsAtoms } from "./TrmrkTopToolBarContentsService";
 
 export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showBackBtn?: boolean | NullOrUndef;
@@ -20,6 +21,40 @@ export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showSecondaryCustomActionBtn?: boolean | NullOrUndef;
   showOptionsBtn?: boolean | NullOrUndef
 }
+
+const toolbarHorizPaddingPx = 6;
+
+const ContentsShiftLeftBtn = React.memo(() => {
+  const [ toolbarContainerWidth ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContainerWidth);
+  const [ toolbarContentsMaxOffset ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsMaxOffset);
+  const [ toolbarContentsOffset, setToolbarContentsOffset ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsOffset);
+  const [ showToolbarContentsScrollBtns ] = useAtom(trmrkTopToolBarContentsAtoms.showToolbarContentsScrollBtns);
+
+  const btnClicked = React.useCallback(() => {
+    const newToolbarContentsOffset = Math.max(0, toolbarContentsOffset - toolbarContainerWidth / 2);
+    setToolbarContentsOffset(newToolbarContentsOffset);
+  }, [toolbarContentsMaxOffset, toolbarContentsOffset, toolbarContainerWidth]);
+
+  return <TrmrkBtn onClick={btnClicked} className={[
+    "trmrk-btn-filled-system trmrk-contents-shift-left",
+    showToolbarContentsScrollBtns ? "" : "trmrk-hidden"].join(" ")}><TrmrkIcon icon="mdi:chevron-left" /></TrmrkBtn>
+});
+
+const ContentsShiftRightBtn = React.memo(() => {
+  const [ toolbarContainerWidth ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContainerWidth);
+  const [ toolbarContentsMaxOffset ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsMaxOffset);
+  const [ toolbarContentsOffset, setToolbarContentsOffset ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsOffset);
+  const [ showToolbarContentsScrollBtns ] = useAtom(trmrkTopToolBarContentsAtoms.showToolbarContentsScrollBtns);
+
+  const btnClicked = React.useCallback(() => {
+    const newToolbarContentsOffset = Math.min(toolbarContentsMaxOffset, toolbarContentsOffset + toolbarContainerWidth / 2);
+    setToolbarContentsOffset(newToolbarContentsOffset);
+  }, [toolbarContentsOffset, toolbarContainerWidth]);
+
+  return <TrmrkBtn onClick={btnClicked} className={[
+    "trmrk-btn-filled-system trmrk-contents-shift-right",
+    showToolbarContentsScrollBtns ? "" : "trmrk-hidden"].join(" ")}><TrmrkIcon icon="mdi:chevron-right" /></TrmrkBtn>
+});
 
 const ToggleLeftPanelBtn = React.memo(() => {
     const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
@@ -178,6 +213,9 @@ export default function TrmrkTopToolBarContents({
   showSecondaryCustomActionBtn,
   showOptionsBtn
 }: Readonly<TrmrkTopToolBarContentsProps>) {
+  const toolbarContainerElRef = React.useRef<HTMLDivElement | null>(null);
+  const toolbarContentsElRef = React.useRef<HTMLDivElement | null>(null);
+
   const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
   const [ allowToggleLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleLeftPanel);
   const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
@@ -187,6 +225,16 @@ export default function TrmrkTopToolBarContents({
   const [ focusedPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
   const [ isSinglePanelMode, setIsSinglePanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isSinglePanelMode);
   const [ allowsMultiPanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowsMultiPanelMode);
+  const [ , setToolbarContainerWidth ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContainerWidth);
+  const [ , setToolbarContentsWidth ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsWidth);
+  const [ toolbarContentsMaxOffset, setToolbarContentsMaxOffset ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsMaxOffset);
+  const [ toolbarContentsOffset, setToolbarContentsOffset ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsOffset);
+  const [ , setShowToolbarContentsScrollBtns ] = useAtom(trmrkTopToolBarContentsAtoms.showToolbarContentsScrollBtns);
+
+  const toolbarContentsOffsetValue = React.useMemo(
+    () => -1 * Math.max(0, Math.min(toolbarContentsMaxOffset, toolbarContentsOffset)), [
+      toolbarContentsMaxOffset,
+      toolbarContentsOffset]);
 
   const showResizePanelsBtn = React.useMemo(
     () => [showLeftPanel, showMiddlePanel, showRightPanel].filter(show => show).length > 0,
@@ -214,25 +262,80 @@ export default function TrmrkTopToolBarContents({
     }
   }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
 
-  return <><div className="trmrk-toolbar-content flex grow">
-      <div className="flex grow">
-        { (showBackBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:arrow-back" /></TrmrkBtn> }
-        { (showGoToParentBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:arrow-up" /></TrmrkBtn> }
-        { (showHomeBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:home" /></TrmrkBtn> }
-        { (showUndoBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:undo" /></TrmrkBtn> }
-        { (showRedoBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:redo" /></TrmrkBtn> }
-        { (showRefreshBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:refresh" /></TrmrkBtn> }
-        { (showPrimaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-outline" /></TrmrkBtn> }
-        { (showSecondaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-bold" /></TrmrkBtn> }
-        { (showOptionsBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
-        { allowToggleLeftPanel && <ToggleLeftPanelBtn></ToggleLeftPanelBtn> }
-        { allowToggleMiddlePanel && <ToggleMiddlePanelBtn></ToggleMiddlePanelBtn> }
-        { allowToggleRightPanel && <ToggleRightPanelBtn></ToggleRightPanelBtn> }
-        { allowsMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
-          <TrmrkIcon icon={`material-symbols:view-column${isSinglePanelMode ? "" : "-outline"}-sharp`} /></TrmrkBtn> }
-        { showResizePanelsBtn && <TrmrkBtn><TrmrkIcon icon="material-symbols:resize" />
-          </TrmrkBtn> }
-        {children}
+  const updateToolbarContentsScrolBtnsVisibility = React.useCallback(() => {
+    const toolbarContainerEl = toolbarContainerElRef.current;
+    const toolbarContentsEl = toolbarContentsElRef.current;
+
+    if (toolbarContainerEl && toolbarContentsEl) {
+      const toolbarContainerElWidth = toolbarContainerEl.offsetWidth;
+      const toolbarContentsElWidth = toolbarContentsEl.offsetWidth;
+
+      setToolbarContainerWidth(toolbarContainerElWidth);
+      setToolbarContentsWidth(toolbarContentsElWidth);
+      const widthDiff = toolbarContentsElWidth - toolbarContainerElWidth + toolbarHorizPaddingPx;
+      const newToolbarContentsMaxOffset = Math.max(0, widthDiff);
+      setToolbarContentsMaxOffset(newToolbarContentsMaxOffset);
+      setShowToolbarContentsScrollBtns(newToolbarContentsMaxOffset > 0);
+
+      if (newToolbarContentsMaxOffset === 0) {
+        setToolbarContentsOffset(0);
+      }
+    }
+  }, []);
+
+  const toolbarContainerElResizeObserver = new ResizeObserver(updateToolbarContentsScrolBtnsVisibility);
+  const toolbarContentsElResizeObserver = new ResizeObserver(updateToolbarContentsScrolBtnsVisibility);
+
+  const toolbarContainerElAvailable = React.useCallback((el: HTMLDivElement | null) => {
+    toolbarContainerElRef.current = el;
+
+    if (el) {
+      toolbarContainerElResizeObserver.observe(el);
+      updateToolbarContentsScrolBtnsVisibility();
+    }
+  }, []);
+
+  const toolbarContentsElAvailable = React.useCallback((el: HTMLDivElement | null) => {
+    toolbarContentsElRef.current = el;
+
+    if (el) {
+      toolbarContentsElResizeObserver.observe(el);
+      updateToolbarContentsScrolBtnsVisibility();
+    }
+  }, []);
+
+  React.useEffect(() => {
+    return () => {
+      toolbarContainerElResizeObserver.disconnect();
+      toolbarContentsElResizeObserver.disconnect();
+      toolbarContainerElRef.current = null;
+      toolbarContentsElRef.current = null;
+    }
+  }, []);
+
+  return <div className="trmrk-toolbar-container" ref={toolbarContainerElAvailable}>
+      <ContentsShiftLeftBtn />
+      <div className="trmrk-toolbar-contents-wrapper">
+        <div className="trmrk-toolbar-contents" style={{ left: `${toolbarContentsOffsetValue}px` }} ref={toolbarContentsElAvailable}>
+          { (showBackBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:arrow-back" /></TrmrkBtn> }
+          { (showGoToParentBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:arrow-up" /></TrmrkBtn> }
+          { (showHomeBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:home" /></TrmrkBtn> }
+          { (showUndoBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:undo" /></TrmrkBtn> }
+          { (showRedoBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:redo" /></TrmrkBtn> }
+          { (showRefreshBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:refresh" /></TrmrkBtn> }
+          { (showPrimaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-outline" /></TrmrkBtn> }
+          { (showSecondaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-bold" /></TrmrkBtn> }
+          { (showOptionsBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
+          { allowToggleLeftPanel && <ToggleLeftPanelBtn></ToggleLeftPanelBtn> }
+          { allowToggleMiddlePanel && <ToggleMiddlePanelBtn></ToggleMiddlePanelBtn> }
+          { allowToggleRightPanel && <ToggleRightPanelBtn></ToggleRightPanelBtn> }
+          { allowsMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
+            <TrmrkIcon icon={`material-symbols:view-column${isSinglePanelMode ? "" : "-outline"}-sharp`} /></TrmrkBtn> }
+          { showResizePanelsBtn && <TrmrkBtn><TrmrkIcon icon="material-symbols:resize" />
+            </TrmrkBtn> }
+          {children}
+        </div>
       </div>
-    </div></>;
+      <ContentsShiftRightBtn />
+    </div>;
 }

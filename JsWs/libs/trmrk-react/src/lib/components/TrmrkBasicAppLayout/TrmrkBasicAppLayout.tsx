@@ -31,10 +31,10 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
   return (
     <div className={['trmrk-app-layout', cssClass ?? '', cssClassValue ?? ''].join(' ')}>
       { (showAppBar || (showToolbars && showTopToolbar)) && <div className="trmrk-app-header">
-        {showAppBar && <TrmrkHorizStrip>
+        {showAppBar && <TrmrkHorizStrip className="trmrk-app-bar">
             { appBarContentsKey && appBarContents.value.keyedMap.map[appBarContentsKey]?.node }
           </TrmrkHorizStrip>}
-        {showToolbars && showTopToolbar && !showAppBarOnly && <TrmrkHorizStrip>
+        {showToolbars && showTopToolbar && !showAppBarOnly && <TrmrkHorizStrip className="trmrk-top-toolbar">
             { topToolbarContentsKey && withValIf(
               topToolbarContents.value.keyedMap.map[topToolbarContentsKey], f => f.node) }
           </TrmrkHorizStrip>}

@@ -7,10 +7,10 @@ import { ComponentProps } from "../defs/common";
 export interface TrmrkHorizStripProps extends ComponentProps {}
 
 export default function TrmrkHorizStrip(
-  { className: cssClass, children }: Readonly<TrmrkHorizStripProps>
+  { className, children }: Readonly<TrmrkHorizStripProps>
 ) {
   return (
-    <div className={['trmrk-horiz-strip', cssClass ?? ''].join(' ')}>
+    <div className={['trmrk-horiz-strip', className ?? ''].join(' ')}>
       {children}
     </div>
   );

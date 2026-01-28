@@ -1,5 +1,9 @@
 import home from "@iconify-icons/mdi/home";
 import close from "@iconify-icons/mdi/close";
+import chevronLeft from "@iconify-icons/mdi/chevron-left";
+import chevronRight from "@iconify-icons/mdi/chevron-right";
+import chevronUp from "@iconify-icons/mdi/chevron-up";
+import chevronDown from "@iconify-icons/mdi/chevron-down";
 import chevronDoubleDown from "@iconify-icons/mdi/chevron-double-down";
 import chevronDoubleUp from "@iconify-icons/mdi/chevron-double-up";
 import arrowBack from "@iconify-icons/mdi/arrow-back";
@@ -31,6 +35,10 @@ export const registerIconifyIcons = () => {
   registerIconifyIconsCore("mdi", {
     home,
     close,
+    ["chevron-left"]: chevronLeft,
+    ["chevron-right"]: chevronRight,
+    ["chevron-up"]: chevronUp,
+    ["chevron-down"]: chevronDown,
     ["chevron-double-down"]: chevronDoubleDown,
     ["chevron-double-up"]: chevronDoubleUp,
     ["arrow-back"]: arrowBack,

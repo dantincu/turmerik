@@ -92,17 +92,27 @@
   .trmrk-btn {
     .trmrk-btn-overlay {
       border-color: #0004;
+    }
 
-      &:hover {
-        background-color: #0002;
-        border-color: #0006;
+    &:disabled {
+      .trmrk-btn-overlay {
+        background-color: #FFF2;
       }
     }
 
-    &.trmrk-btn-pressed {
+    &:not(:disabled) {
       .trmrk-btn-overlay {
-        background-color: #0004;
-        border-color: #0008;
+        &:hover {
+          background-color: #0002;
+          border-color: #0006;
+        }
+      }
+
+      &.trmrk-btn-pressed {
+        .trmrk-btn-overlay {
+          background-color: #0004;
+          border-color: #0008;
+        }
       }
     }
 
@@ -111,6 +121,11 @@
       color: var(--trmrk-tool-bar_fore-color_dark);
     }
 
+    &.trmrk-btn-filled-primary,
+    &.trmrk-btn-filled-secondary,
+    &.trmrk-btn-filled-accept,
+    &.trmrk-btn-filled-reject,
+    &.trmrk-btn-filled-system,
     &.trmrk-btn-filled-opposite {
       .trmrk-btn-overlay {
         border-color: #FFF2;
@@ -139,17 +154,27 @@
   .trmrk-btn {
     .trmrk-btn-overlay {
       border-color: #FFF2;
+    }
 
-      &:hover {
-        background-color: #FFF2;
-        border-color: #FFF4;
+    &:disabled {
+      .trmrk-btn-overlay {
+        background-color: #0002;
       }
     }
 
-    &.trmrk-btn-pressed {
+    &:not(:disabled) {
       .trmrk-btn-overlay {
-        background-color: #FFF4;
-        border-color: #FFF6;
+        &:hover {
+          background-color: #FFF2;
+          border-color: #FFF4;
+        }
+      }
+
+      &.trmrk-btn-pressed {
+        .trmrk-btn-overlay {
+          background-color: #FFF4;
+          border-color: #FFF6;
+        }
       }
     }
 
