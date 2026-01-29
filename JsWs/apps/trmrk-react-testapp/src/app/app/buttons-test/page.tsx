@@ -146,18 +146,14 @@ export default function ButtonsTestPage() {
   const [, setBottomToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarContentsKey);
   const [, setShowBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
   const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
-  const [, setAllowToggleLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleLeftPanel);
-  const [, setShowLeftPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanelLoader);
+  const [, setAllowShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowLeftPanel);
   const [, setLeftPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanelContentsKey);
   const [, setShowMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
-  const [, setShowMiddlePanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanelLoader);
-  const [, setAllowToggleMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleMiddlePanel);
+  const [, setAllowShowMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowMiddlePanel);
   const [, setMiddlePanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanelContentsKey);
   const [, setShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
-  const [, setShowRightPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanelLoader);
+  const [, setAllowShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowRightPanel);
   const [, setRightPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanelContentsKey);
-  const [, setAllowToggleRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleRightPanel);
-  const [, setAllowsMultiPanelMode] = useAtom(trmrk3PanelsAppLayoutAtoms.allowsMultiPanelMode);
 
   React.useEffect(() => {
     const appBarContentsId = appBarContents.value.register(
@@ -177,19 +173,13 @@ export default function ButtonsTestPage() {
       <MiddlePanelContents />
     );
 
-    // setShowAppBar(true);
-    // setShowTopToolbar(true);
     setShowBottomToolbar(true);
     setShowLeftPanel(true);
-    setShowLeftPanelLoader(false);
-    setAllowToggleLeftPanel(true);
+    setAllowShowLeftPanel(true);
     setShowMiddlePanel(true);
-    setShowMiddlePanelLoader(false);
-    setAllowToggleMiddlePanel(true);
+    setAllowShowMiddlePanel(true);
     setShowRightPanel(true);
-    setShowRightPanelLoader(false);
-    setAllowToggleRightPanel(true);
-    setAllowsMultiPanelMode(true);
+    setAllowShowRightPanel(true);
     
     setAppBarContentsKey(appBarContentsId);
     setTopToolbarContentsKey(topToolbarContentsId);

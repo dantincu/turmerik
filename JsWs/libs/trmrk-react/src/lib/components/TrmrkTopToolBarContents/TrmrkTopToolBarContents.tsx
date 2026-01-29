@@ -218,10 +218,13 @@ export default function TrmrkTopToolBarContents({
   const toolbarContentsElRef = React.useRef<HTMLDivElement | null>(null);
 
   const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
+  const [ allowShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowLeftPanel);
   const [ allowToggleLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleLeftPanel);
   const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
+  const [ allowShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowMiddlePanel);
   const [ allowToggleMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleMiddlePanel);
   const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
+  const [ allowShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowRightPanel);
   const [ allowToggleRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleRightPanel);
   const [ focusedPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
   const [ isSinglePanelMode, setIsSinglePanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isSinglePanelMode);
@@ -239,7 +242,23 @@ export default function TrmrkTopToolBarContents({
 
   const showResizePanelsBtn = React.useMemo(
     () => [showLeftPanel, showMiddlePanel, showRightPanel].filter(show => show).length > 0,
-    [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode])
+    [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode]);
+
+  const showToggleLeftPanelBtn = React.useMemo(
+    () => allowToggleLeftPanel && allowShowLeftPanel && (allowShowMiddlePanel || allowShowRightPanel),
+    [allowToggleLeftPanel, allowShowLeftPanel, allowShowMiddlePanel, allowShowRightPanel]);
+
+  const showToggleMiddlePanelBtn = React.useMemo(
+    () => allowToggleMiddlePanel && allowShowMiddlePanel && (allowShowLeftPanel || allowShowRightPanel),
+    [allowToggleMiddlePanel, allowShowMiddlePanel, allowShowLeftPanel, allowShowRightPanel]);
+
+  const showToggleRightPanelBtn = React.useMemo(
+    () => allowToggleRightPanel && allowShowRightPanel && (allowShowMiddlePanel || allowShowLeftPanel),
+    [allowToggleRightPanel, allowShowRightPanel, allowShowMiddlePanel, allowShowLeftPanel]);
+
+  const showToggleMultiPanelMode = React.useMemo(
+    () => allowsMultiPanelMode && (showToggleLeftPanelBtn || showToggleMiddlePanelBtn || showToggleRightPanelBtn),
+    [allowsMultiPanelMode, showToggleLeftPanelBtn, showToggleMiddlePanelBtn, showToggleRightPanelBtn])
 
   const toggleMultiPanelModeClicked = React.useCallback(() => {
     const willBeSinglePanelMode = !isSinglePanelMode;
@@ -277,7 +296,7 @@ export default function TrmrkTopToolBarContents({
       let newToolbarContentsMaxOffset = toolbarContentsElWidth - toolbarContainerElWidth + toolbarHorizPaddingPx + toolbarAdditionalOffset;
       newToolbarContentsMaxOffset = Math.max(0, newToolbarContentsMaxOffset);
       const newShowToolbarContentsScrollBtns = newToolbarContentsMaxOffset > toolbarAdditionalOffset;
-      
+
       setToolbarContentsMaxOffset(newToolbarContentsMaxOffset);
       setShowToolbarContentsScrollBtns(newShowToolbarContentsScrollBtns);
 
@@ -330,10 +349,10 @@ export default function TrmrkTopToolBarContents({
           { (showPrimaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-outline" /></TrmrkBtn> }
           { (showSecondaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-bold" /></TrmrkBtn> }
           { (showOptionsBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
-          { allowToggleLeftPanel && <ToggleLeftPanelBtn></ToggleLeftPanelBtn> }
-          { allowToggleMiddlePanel && <ToggleMiddlePanelBtn></ToggleMiddlePanelBtn> }
-          { allowToggleRightPanel && <ToggleRightPanelBtn></ToggleRightPanelBtn> }
-          { allowsMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
+          { showToggleLeftPanelBtn && <ToggleLeftPanelBtn></ToggleLeftPanelBtn> }
+          { showToggleMiddlePanelBtn && <ToggleMiddlePanelBtn></ToggleMiddlePanelBtn> }
+          { showToggleRightPanelBtn && <ToggleRightPanelBtn></ToggleRightPanelBtn> }
+          { showToggleMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
             <TrmrkIcon icon={`material-symbols:view-column${isSinglePanelMode ? "" : "-outline"}-sharp`} /></TrmrkBtn> }
           { showResizePanelsBtn && <TrmrkBtn><TrmrkIcon icon="material-symbols:resize" />
             </TrmrkBtn> }

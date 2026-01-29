@@ -1,4 +1,4 @@
-import { atom } from "jotai";
+import { atom, useAtom } from "jotai";
 
 import { RefLazyValue } from "@/src/trmrk/core";
 
@@ -13,20 +13,23 @@ export enum TrmrkAppLayoutPanel {
 
 export const trmrk3PanelsAppLayoutAtoms = {
   showLeftPanel: atom(false),
+  allowShowLeftPanel: atom(false),
   showLeftPanelLoader: atom(false),
   leftPanelContentsKey: atom<number | null>(null),
-  allowToggleLeftPanel: atom(false),
+  allowToggleLeftPanel: atom(true),
   showMiddlePanel: atom(true),
+  allowShowMiddlePanel: atom(true),
   showMiddlePanelLoader: atom(false),
   middlePanelContentsKey: atom<number | null>(null),
-  allowToggleMiddlePanel: atom(false),
+  allowToggleMiddlePanel: atom(true),
   showRightPanel: atom(false),
+  allowShowRightPanel: atom(false),
   showRightPanelLoader: atom(false),
   rightPanelContentsKey: atom<number | null>(null),
-  allowToggleRightPanel: atom(false),
+  allowToggleRightPanel: atom(true),
   focusedPanel: atom(TrmrkAppLayoutPanel.Middle),
   isSinglePanelMode: atom(true),
-  allowsMultiPanelMode: atom(false),
+  allowsMultiPanelMode: atom(true),
 };
 
 export const leftPanelContents = new RefLazyValue(() =>
