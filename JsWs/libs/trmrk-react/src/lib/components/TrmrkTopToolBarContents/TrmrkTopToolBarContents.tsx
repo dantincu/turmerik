@@ -257,6 +257,19 @@ const ToggleRightPanelBtn = React.memo(() => {
     <TrmrkIcon icon={ `material-symbols:right-panel-${showRightPanel ? "close" : "open" }` } /></TrmrkBtn>
   });
 
+const ResizePanelsBtn = React.memo(() => {
+    const [ isResizingPanels, setIsResizingPanels ] = useAtom(trmrk3PanelsAppLayoutAtoms.isResizingPanels);
+
+    const btnClicked = React.useCallback(() => {
+      const willBeResizingPanels = !isResizingPanels;
+      setIsResizingPanels(willBeResizingPanels);
+    }, [isResizingPanels]);
+
+    return <TrmrkBtn onClick={btnClicked}
+        className={[isResizingPanels ? "trmrk-btn-filled-opposite" : ""].join(" ")}>
+      <TrmrkIcon icon="material-symbols:resize" /></TrmrkBtn>
+});
+
 export default function TrmrkTopToolBarContents({
   children,
   showBackBtn,
@@ -383,6 +396,8 @@ export default function TrmrkTopToolBarContents({
     }
   }, []);
 
+  console.log("isMultiPanelMode", isMultiPanelMode);
+
   return <div className="trmrk-toolbar-container" ref={toolbarContainerElAvailable}>
       <ContentsShiftLeftBtn />
       <div className="trmrk-toolbar-contents-wrapper">
@@ -404,8 +419,7 @@ export default function TrmrkTopToolBarContents({
           { showToggleRightPanelBtn && <ToggleRightPanelBtn></ToggleRightPanelBtn> }
           { showToggleMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
             <TrmrkIcon icon={`material-symbols:view-column${isMultiPanelMode ? "-outline" : ""}-sharp`} /></TrmrkBtn> }
-          { showResizePanelsBtn && <TrmrkBtn><TrmrkIcon icon="material-symbols:resize" />
-            </TrmrkBtn> }
+          { showResizePanelsBtn && <ResizePanelsBtn></ResizePanelsBtn> }
           { (showOptionsBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
           <TrmrkBtn><TrmrkIcon icon="material-symbols:tab-group" /></TrmrkBtn>
           <TrmrkBtn><TrmrkIcon icon="mdi:close" /></TrmrkBtn>

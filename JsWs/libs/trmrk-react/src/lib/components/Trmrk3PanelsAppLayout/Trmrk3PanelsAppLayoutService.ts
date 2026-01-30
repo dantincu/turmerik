@@ -1,9 +1,26 @@
-import { atom, useAtom, PrimitiveAtom } from "jotai";
+import { atom, PrimitiveAtom } from "jotai";
 
-import { RefLazyValue } from "@/src/trmrk/core";
+import { NullOrUndef, RefLazyValue, actWithValIf } from "@/src/trmrk/core";
+import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
 
-import { TrmrkUseAtom, trmrkUseAtom } from "../../services/jotai/core";
-import { createIntKeyedComponentsMapManager } from "../../services/IntKeyedComponentsMapManager";
+import {
+  TrmrkUseAtom,
+  trmrkUseAtom,
+  UseSetAtom,
+} from "../../services/jotai/core";
+
+import {
+  createIntKeyedComponentsMapManager,
+  IntKeyedComponentsMapManager,
+} from "../../services/IntKeyedComponentsMapManager";
+
+import {
+  appBarContents,
+  bottomToolbarContents,
+  topToolbarContents,
+  ToolbarAtoms,
+  useToolbarContentKeys,
+} from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 export enum TrmrkAppLayoutPanel {
   None = 0,
@@ -32,6 +49,7 @@ export const trmrk3PanelsAppLayoutAtoms = {
   rightPanel: createPanelAtoms(),
   focusedPanel: atom(TrmrkAppLayoutPanel.Middle),
   isMultiPanelMode: atom(false),
+  isResizingPanels: atom(false),
 };
 
 export const leftPanelContents = new RefLazyValue(() =>
@@ -70,8 +88,139 @@ export const useShowPanelLoaderAtoms = (): PanelAtoms<boolean> => ({
   rightPanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.showLoader),
 });
 
-export const useContentsKeyPanelAtoms = (): PanelAtoms<number | null> => ({
+export const usePanelContentsKeyAtoms = (): PanelAtoms<number | null> => ({
   leftPanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.contentsKey),
   middlePanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.contentsKey),
   rightPanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.contentsKey),
 });
+
+export interface InitLayoutPartArgs {
+  allowShow?: boolean | NullOrUndef;
+  show?: boolean | NullOrUndef;
+  contents?: React.ReactNode | NullOrUndef;
+}
+
+export interface InitLayoutArgs {
+  allowShowPanelAtoms: PanelAtoms<boolean>;
+  panelContentKeyAtoms: PanelAtoms<number | null>;
+  showToolbarAtoms: ToolbarAtoms<boolean>;
+  toolbarContentKeyAtoms: ToolbarAtoms<number | null>;
+  appBar?: InitLayoutPartArgs | NullOrUndef;
+  topToolbar?: InitLayoutPartArgs | NullOrUndef;
+  bottomToolbar?: InitLayoutPartArgs | NullOrUndef;
+  leftPanel?: InitLayoutPartArgs | NullOrUndef;
+  middlePanel?: InitLayoutPartArgs | NullOrUndef;
+  rightPanel?: InitLayoutPartArgs | NullOrUndef;
+  focusedPanel?: TrmrkAppLayoutPanel | NullOrUndef;
+  setFocusedPanel: UseSetAtom<TrmrkAppLayoutPanel>;
+}
+
+export interface InitLayoutResult {
+  appBarContentsId?: number | NullOrUndef;
+  topToolbarContentsId?: number | NullOrUndef;
+  bottomToolbarContentsId?: number | NullOrUndef;
+  leftPanelContentsId?: number | NullOrUndef;
+  middlePanelContentsId?: number | NullOrUndef;
+  rightPanelContentsId?: number | NullOrUndef;
+}
+
+export const initLayoutPart = (
+  args: InitLayoutPartArgs | NullOrUndef,
+  allowShowAtom: TrmrkUseAtom<boolean> | NullOrUndef,
+  contentsKeyManager: RefLazyValue<IntKeyedComponentsMapManager>,
+  contentsKeyAtom: TrmrkUseAtom<number | null>,
+) => {
+  args ??= {};
+  const show = args.show ?? (args.contents ?? null) !== null;
+
+  if (allowShowAtom) {
+    const allowShow = args.allowShow ?? show;
+    allowShowAtom.set(allowShow);
+  }
+
+  const contentsId = show
+    ? contentsKeyManager.value.register(
+        defaultComponentIdService.value.getNextId(),
+        args.contents,
+      )
+    : null;
+
+  contentsKeyAtom.set(contentsId);
+  return contentsId;
+};
+
+export const initLayout = (args: InitLayoutArgs) => {
+  const retObj: InitLayoutResult = {
+    appBarContentsId: initLayoutPart(
+      args.appBar,
+      null,
+      appBarContents,
+      args.toolbarContentKeyAtoms.appBar,
+    ),
+    topToolbarContentsId: initLayoutPart(
+      args.topToolbar,
+      null,
+      topToolbarContents,
+      args.toolbarContentKeyAtoms.topToolbar,
+    ),
+    bottomToolbarContentsId: initLayoutPart(
+      args.bottomToolbar,
+      null,
+      bottomToolbarContents,
+      args.toolbarContentKeyAtoms.bottomToolbar,
+    ),
+    leftPanelContentsId: initLayoutPart(
+      args.leftPanel,
+      args.allowShowPanelAtoms.leftPanel,
+      leftPanelContents,
+      args.panelContentKeyAtoms.leftPanel,
+    ),
+    middlePanelContentsId: initLayoutPart(
+      args.middlePanel,
+      args.allowShowPanelAtoms.middlePanel,
+      middlePanelContents,
+      args.panelContentKeyAtoms.middlePanel,
+    ),
+    rightPanelContentsId: initLayoutPart(
+      args.rightPanel,
+      args.allowShowPanelAtoms.rightPanel,
+      rightPanelContents,
+      args.panelContentKeyAtoms.rightPanel,
+    ),
+  };
+
+  let focusedPanel = args.focusedPanel ?? getDefaultPanelToFocus(retObj);
+  args.setFocusedPanel(focusedPanel);
+
+  return retObj;
+};
+
+export const getDefaultPanelToFocus = (retObj: InitLayoutResult) => {
+  let focusedPanel: TrmrkAppLayoutPanel;
+
+  if ((retObj.middlePanelContentsId ?? null) !== null) {
+    focusedPanel = TrmrkAppLayoutPanel.Middle;
+  } else if ((retObj.rightPanelContentsId ?? null) !== null) {
+    focusedPanel = TrmrkAppLayoutPanel.Right;
+  } else if ((retObj.leftPanelContentsId ?? null) !== null) {
+    focusedPanel = TrmrkAppLayoutPanel.Left;
+  } else {
+    focusedPanel = TrmrkAppLayoutPanel.Middle;
+  }
+
+  return focusedPanel;
+};
+
+export const cleanupLayout = (result: InitLayoutResult) => {
+  actWithValIf(result.appBarContentsId, (id) => {
+    appBarContents.value.unregister(id);
+  });
+
+  actWithValIf(result.topToolbarContentsId, (id) => {
+    topToolbarContents.value.unregister(id);
+  });
+
+  actWithValIf(result.bottomToolbarContentsId, (id) => {
+    bottomToolbarContents.value.unregister(id);
+  });
+};

@@ -16,7 +16,7 @@ import {
   rightPanelContents,
   TrmrkAppLayoutPanel,
   useAllowShowPanelAtoms,
-  useContentsKeyPanelAtoms,
+  usePanelContentsKeyAtoms,
   useShowPanelAtoms,
   useShowPanelLoaderAtoms
 } from "./Trmrk3PanelsAppLayoutService";
@@ -25,7 +25,7 @@ export interface Trmrk3PanelsAppLayoutProps extends ComponentProps {}
 
 export default function Trmrk3PanelsAppLayout({ className: cssClass, children }: Readonly<Trmrk3PanelsAppLayoutProps>) {
   const allowShowPanelAtoms = useAllowShowPanelAtoms();
-  const contentsKeyPanelAtoms = useContentsKeyPanelAtoms();
+  const contentsKeyPanelAtoms = usePanelContentsKeyAtoms();
   const showPanelAtoms = useShowPanelAtoms();
   const showPanelLoaderAtoms = useShowPanelLoaderAtoms();
 

@@ -7,31 +7,22 @@ import './page.scss';
 
 import {
   trmrk3PanelsAppLayoutAtoms,
-  TrmrkAppLayoutPanel,
   useAllowShowPanelAtoms,
-  useContentsKeyPanelAtoms,
-  useShowPanelAtoms,
+  usePanelContentsKeyAtoms,
+  initLayout,
+  cleanupLayout
 } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 
-import {
-  appBarContents,
-  topToolbarContents,
-  bottomToolbarContents,
-  useShowToolbars,
-  useToolbarContentKeys,
-} from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
+import {useShowToolbars, useToolbarContentKeys } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 import TrmrkBtn from "@/src/trmrk-react/components/TrmrkBtn/TrmrkBtn";
 import TrmrkPopover from "@/src/trmrk-react/components/TrmrkPopover/TrmrkPopover";
 import TrmrkIcon from "@/src/trmrk-react/components/TrmrkIcon/TrmrkIcon";
 import { Placement } from '@/src/trmrk-browser/core';
-import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
 import TrmrkAppBarContents from "@/src/trmrk-react/components/TrmrkAppBarContents/TrmrkAppBarContents";
 import TrmrkTopToolBarContents from "@/src/trmrk-react/components/TrmrkTopToolBarContents/TrmrkTopToolBarContents";
-import TrmrkBottomToolBarContents from "@/src/trmrk-react/components/TrmrkBottomToolBarContents/TrmrkBottomToolBarContents";
 import TrmrkMultiClickable from "@/src/trmrk-react/components/TrmrkMultiClickable/TrmrkMultiClickable";
 import TrmrkLongPressable from "@/src/trmrk-react/components/TrmrkLongPressable/TrmrkLongPressable";
-import { middlePanelContents } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 import { UserMessageLevel } from '@/src/trmrk/core';
 
 const AppBar = () => {
@@ -71,8 +62,6 @@ const TopToolbar = () => {
       shortPressOrLeftClick: (e) => console.log("shortPressOrLeftClick", e)
     })}></TrmrkLongPressable></TrmrkTopToolBarContents>;
 }
-
-const BottomToolbar = () => <TrmrkBottomToolBarContents></TrmrkBottomToolBarContents>;
 
 const messagesArr: UserMessage[] = Array.from({ length: 100 }).map((_, i) => ({
   idx: i,
@@ -152,51 +141,37 @@ const MiddlePanelContents = () => {
 
 export default function ButtonsTestPage() {
   const allowShowPanelAtoms = useAllowShowPanelAtoms();
-  const showPanelAtoms = useShowPanelAtoms();
-  const contentsKeyPanelAtoms = useContentsKeyPanelAtoms();
-  const showToolbarsAtoms = useShowToolbars();
-  const toolbarContentKeysAtoms = useToolbarContentKeys();
+  const panelContentKeyAtoms = usePanelContentsKeyAtoms();
+  const showToolbarAtoms = useShowToolbars();
+  const toolbarContentKeyAtoms = useToolbarContentKeys();
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
 
   React.useEffect(() => {
-    const appBarContentsId = appBarContents.value.register(
-      defaultComponentIdService.value.getNextId(),
-      <AppBar />);
-
-    const topToolbarContentsId = topToolbarContents.value.register(
-      defaultComponentIdService.value.getNextId(),
-      <TopToolbar />);
-
-    const bottomToolbarContentsId = bottomToolbarContents.value.register(
-      defaultComponentIdService.value.getNextId(),
-      <BottomToolbar />);
-
-    const middlePanelContentsId = middlePanelContents.value.register(
-      defaultComponentIdService.value.getNextId(),
-      <MiddlePanelContents />
-    );
-
-    showToolbarsAtoms.bottomToolbar.set(true);
-    allowShowPanelAtoms.leftPanel.set(true);
-    allowShowPanelAtoms.middlePanel.set(true);
-    allowShowPanelAtoms.rightPanel.set(true);
-    showPanelAtoms.leftPanel.set(true);
-    showPanelAtoms.middlePanel.set(true);
-    showPanelAtoms.rightPanel.set(true);
-    setFocusedPanel(TrmrkAppLayoutPanel.Middle);
-    
-    toolbarContentKeysAtoms.appBar.set(appBarContentsId);
-    toolbarContentKeysAtoms.topToolbar.set(topToolbarContentsId);
-    toolbarContentKeysAtoms.bottomToolbar.set(bottomToolbarContentsId);
-    contentsKeyPanelAtoms.leftPanel.set(null);
-    contentsKeyPanelAtoms.middlePanel.set(middlePanelContentsId);
-    contentsKeyPanelAtoms.rightPanel.set(null);
+    const layoutInitResult = initLayout({
+      allowShowPanelAtoms,
+      panelContentKeyAtoms,
+      showToolbarAtoms,
+      toolbarContentKeyAtoms,
+      appBar: {
+        contents: <AppBar />,
+      },
+      topToolbar: {
+        contents: <TopToolbar />,
+      },
+      leftPanel: {
+        show: true
+      },
+      middlePanel: {
+        contents: <MiddlePanelContents />
+      },
+      rightPanel: {
+        show: true
+      },
+      setFocusedPanel
+    });
 
     return () => {
-      appBarContents.value.unregister(appBarContentsId);
-      topToolbarContents.value.unregister(topToolbarContentsId);
-      bottomToolbarContents.value.unregister(bottomToolbarContentsId);
-      middlePanelContents.value.unregister(middlePanelContentsId);
+      cleanupLayout(layoutInitResult);
     }
   }, []);
 
