@@ -4,7 +4,7 @@ import { useAtom, SetStateAction } from "jotai";
 import { NullOrUndef } from "@/src/trmrk/core";
 
 import "./TrmrkTopToolBarContents.scss";
-import { SetAtom } from "../../services/types";
+import { UseSetAtom } from "../../services/jotai/core";
 import { ComponentProps } from "../defs/common";
 import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
 import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
@@ -80,15 +80,15 @@ const togglePanelClicked = (
     secondaryAltPanel: TrmrkAppLayoutPanel,
     isMultiPanelMode: boolean,
     focusedPanel: TrmrkAppLayoutPanel,
-    setFocusedPanel: SetAtom<[SetStateAction<TrmrkAppLayoutPanel>], void>,
+    setFocusedPanel: UseSetAtom<TrmrkAppLayoutPanel>,
     showPanel: boolean,
-    setShowPanel: SetAtom<[SetStateAction<boolean>], void>
+    setShowPanel: UseSetAtom<boolean>
     allowShowPrimaryAltPanel: boolean,
     showPrimaryAltPanel: boolean,
-    setShowPrimaryAltPanel: SetAtom<[SetStateAction<boolean>], void>,
+    setShowPrimaryAltPanel: UseSetAtom<boolean>,
     allowShowSecondaryAltPanel: boolean,
     showSecondaryAltPanel: boolean,
-    setShowSecondaryAltPanel: SetAtom<[SetStateAction<boolean>], void>,
+    setShowSecondaryAltPanel: UseSetAtom<boolean>,
   }
 ) => {
   const willShowPanel = !(showPanel || focusedPanel === panel);

@@ -3,7 +3,7 @@ import { atom, getDefaultStore } from "jotai";
 import { NullOrUndef } from "@/src/trmrk/core";
 
 import { IntKeyedReactNodesMap } from "../components/defs/common";
-import { JotaiStore } from "./types";
+import { JotaiStore } from "./jotai/core";
 
 export class IntKeyedComponentsMapManager {
   public readonly currentKeysAtom = atom<number[]>([]);

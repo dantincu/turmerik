@@ -3,10 +3,7 @@
 import React from "react";
 import { useAtom } from "jotai";
 
-import { withValIf } from "@/src/trmrk/core";
-
 import "./Trmrk3PanelsAppLayout.scss";
-
 import { ComponentProps } from "../defs/common";
 import TrmrkBasicAppLayout from "../TrmrkBasicAppLayout/TrmrkBasicAppLayout";
 import TrmrkSplitContainerCore from "../TrmrkSplitContainerCore/TrmrkSplitContainerCore";
@@ -17,37 +14,34 @@ import {
   leftPanelContents,
   middlePanelContents,
   rightPanelContents,
-  TrmrkAppLayoutPanel
+  TrmrkAppLayoutPanel,
+  useAllowShowPanelAtoms,
+  useContentsKeyPanelAtoms,
+  useShowPanelAtoms,
+  useShowPanelLoaderAtoms
 } from "./Trmrk3PanelsAppLayoutService";
 
 export interface Trmrk3PanelsAppLayoutProps extends ComponentProps {}
 
 export default function Trmrk3PanelsAppLayout({ className: cssClass, children }: Readonly<Trmrk3PanelsAppLayoutProps>) {
-  const [showLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.show);
-  const [allowShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.allowShow);
-  const [showLeftPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.showLoader);
-  const [leftPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.contentsKey);
-  const [showMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.show);
-  const [allowShowMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.allowShow);
-  const [showMiddlePanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.showLoader);
-  const [middlePanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.contentsKey);
-  const [showRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.show);
-  const [allowShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.allowShow);
-  const [showRightPanelLoader] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.showLoader);
-  const [rightPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.contentsKey);
+  const allowShowPanelAtoms = useAllowShowPanelAtoms();
+  const contentsKeyPanelAtoms = useContentsKeyPanelAtoms();
+  const showPanelAtoms = useShowPanelAtoms();
+  const showPanelLoaderAtoms = useShowPanelLoaderAtoms();
+
   const [focusedPanel, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
 
   const showLeftPanelValue = React.useMemo(
-    () => allowShowLeftPanel && (showLeftPanel || focusedPanel === TrmrkAppLayoutPanel.Left),
-    [allowShowLeftPanel, showLeftPanel, focusedPanel])
+    () => allowShowPanelAtoms.leftPanel.value && (showPanelAtoms.leftPanel.value || focusedPanel === TrmrkAppLayoutPanel.Left),
+    [allowShowPanelAtoms.leftPanel.value, showPanelAtoms.leftPanel.value, focusedPanel])
 
   const showMiddlePanelValue = React.useMemo(
-    () => allowShowMiddlePanel && (showMiddlePanel || focusedPanel === TrmrkAppLayoutPanel.Middle),
-    [allowShowMiddlePanel, showMiddlePanel, focusedPanel]);
+    () => allowShowPanelAtoms.middlePanel.value && (showPanelAtoms.middlePanel.value || focusedPanel === TrmrkAppLayoutPanel.Middle),
+    [allowShowPanelAtoms.middlePanel.value, showPanelAtoms.middlePanel.value, focusedPanel]);
 
   const showRightPanelValue = React.useMemo(
-    () => allowShowRightPanel && (showRightPanel || focusedPanel === TrmrkAppLayoutPanel.Right),
-    [allowShowRightPanel, showRightPanel, focusedPanel]);
+    () => allowShowPanelAtoms.rightPanel.value && (showPanelAtoms.rightPanel.value || focusedPanel === TrmrkAppLayoutPanel.Right),
+    [allowShowPanelAtoms.rightPanel.value, showPanelAtoms.rightPanel.value, focusedPanel]);
 
   const leftPanelPointerDown = React.useCallback(() => {
     setFocusedPanel(TrmrkAppLayoutPanel.Left);
@@ -73,8 +67,8 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
             <div className="trmrk-panel-body-container"
               onMouseDownCapture={leftPanelPointerDown}
               onTouchStartCapture={leftPanelPointerDown}><div className="trmrk-panel-body">{
-              leftPanelContentsKey && leftPanelContents.value.keyedMap.map[leftPanelContentsKey]?.node }</div></div>
-            { showLeftPanelLoader && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }
+              contentsKeyPanelAtoms.leftPanel.value && leftPanelContents.value.keyedMap.map[contentsKeyPanelAtoms.leftPanel.value]?.node }</div></div>
+            { showPanelLoaderAtoms.leftPanel.value && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }
         panel2Content={
           <TrmrkSplitContainerCore
             panel1CssClass={[ focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-is-focused" : "" ].join(" ")}
@@ -85,14 +79,14 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
             panel1Content={showMiddlePanelValue && <><div className="trmrk-panel-body-container"
               onMouseDownCapture={middlePanelPointerDown}
               onTouchStartCapture={middlePanelPointerDown}><div className="trmrk-panel-body">{ 
-              middlePanelContentsKey && middlePanelContents.value.keyedMap.map[middlePanelContentsKey]?.node }</div></div>
-              { showMiddlePanelLoader && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }
+              contentsKeyPanelAtoms.middlePanel.value && middlePanelContents.value.keyedMap.map[contentsKeyPanelAtoms.middlePanel.value]?.node }</div></div>
+              { showPanelLoaderAtoms.middlePanel.value && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }
             panel2Content={showRightPanelValue && <>
               <div className="trmrk-panel-body-container"
                 onMouseDownCapture={rightPanelPointerDown}
                 onTouchStartCapture={rightPanelPointerDown}><div className="trmrk-panel-body">{
-                rightPanelContentsKey && rightPanelContents.value.keyedMap.map[rightPanelContentsKey]?.node }</div></div>
-              { showRightPanelLoader && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }>
+                contentsKeyPanelAtoms.rightPanel.value && rightPanelContents.value.keyedMap.map[contentsKeyPanelAtoms.rightPanel.value]?.node }</div></div>
+              { showPanelLoaderAtoms.rightPanel.value && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }>
           </TrmrkSplitContainerCore>}>
       </TrmrkSplitContainerCore>
       { children }
