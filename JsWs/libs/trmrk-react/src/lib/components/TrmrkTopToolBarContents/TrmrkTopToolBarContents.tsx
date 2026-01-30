@@ -1,9 +1,10 @@
 import React from "react";
-import { useAtom } from "jotai";
+import { useAtom, SetStateAction } from "jotai";
 
 import { NullOrUndef } from "@/src/trmrk/core";
 
 import "./TrmrkTopToolBarContents.scss";
+import { SetAtom } from "../../services/types";
 import { ComponentProps } from "../defs/common";
 import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
 import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
@@ -57,39 +58,95 @@ const ContentsShiftRightBtn = React.memo(() => {
     showToolbarContentsScrollBtns ? "" : "trmrk-hidden"].join(" ")}><TrmrkIcon icon="mdi:chevron-right" /></TrmrkBtn>
 });
 
+const togglePanelClicked = (
+  {
+    panel,
+    primaryAltPanel,
+    secondaryAltPanel,
+    isMultiPanelMode,
+    focusedPanel,
+    setFocusedPanel,
+    showPanel,
+    setShowPanel,
+    allowShowPrimaryAltPanel,
+    showPrimaryAltPanel,
+    setShowPrimaryAltPanel,
+    allowShowSecondaryAltPanel,
+    showSecondaryAltPanel,
+    setShowSecondaryAltPanel,
+  }: {
+    panel: TrmrkAppLayoutPanel,
+    primaryAltPanel: TrmrkAppLayoutPanel,
+    secondaryAltPanel: TrmrkAppLayoutPanel,
+    isMultiPanelMode: boolean,
+    focusedPanel: TrmrkAppLayoutPanel,
+    setFocusedPanel: SetAtom<[SetStateAction<TrmrkAppLayoutPanel>], void>,
+    showPanel: boolean,
+    setShowPanel: SetAtom<[SetStateAction<boolean>], void>
+    allowShowPrimaryAltPanel: boolean,
+    showPrimaryAltPanel: boolean,
+    setShowPrimaryAltPanel: SetAtom<[SetStateAction<boolean>], void>,
+    allowShowSecondaryAltPanel: boolean,
+    showSecondaryAltPanel: boolean,
+    setShowSecondaryAltPanel: SetAtom<[SetStateAction<boolean>], void>,
+  }
+) => {
+  const willShowPanel = !(showPanel || focusedPanel === panel);
+
+  if (isMultiPanelMode) {
+    setShowPanel(willShowPanel);
+  }
+
+  if (willShowPanel) {
+    setFocusedPanel(panel);
+  } else {
+    if (allowShowPrimaryAltPanel && showPrimaryAltPanel) {
+      setFocusedPanel(primaryAltPanel);
+    } else if (allowShowSecondaryAltPanel && showSecondaryAltPanel) {
+      setFocusedPanel(secondaryAltPanel);
+    } else if (allowShowPrimaryAltPanel) {
+      setFocusedPanel(primaryAltPanel);
+
+      if (isMultiPanelMode) {
+          setShowPrimaryAltPanel(true);
+      }
+    } else {
+      setFocusedPanel(secondaryAltPanel)
+
+      if (isMultiPanelMode) {
+        setShowSecondaryAltPanel(true);
+      }
+    }
+  }
+};
+
 const ToggleLeftPanelBtn = React.memo(() => {
-    const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
-    const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
-    const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
+    const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.show);
+    const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.show);
+    const [ allowShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.allowShow);
+    const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.show);
+    const [ allowShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.allowShow);
     const [ focusedPanel, setFocusedPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
-    const [ isSinglePanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isSinglePanelMode);
+    const [ isMultiPanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode);
 
     const toggleLeftPanelClicked = React.useCallback(() => {
-      const willShowLeftPanel = !showLeftPanel;
-      setShowLeftPanel(willShowLeftPanel);
-
-      if (willShowLeftPanel) {
-        setFocusedPanel(TrmrkAppLayoutPanel.Left);
-
-        if (isSinglePanelMode) {
-          setShowMiddlePanel(false);
-          setShowRightPanel(false);
-        }
-      } else {
-        if (showMiddlePanel) {
-          if (focusedPanel === TrmrkAppLayoutPanel.Left) {
-            setFocusedPanel(TrmrkAppLayoutPanel.Middle);
-          }
-        } else if (showRightPanel) {
-          if (focusedPanel === TrmrkAppLayoutPanel.Left) {
-            setFocusedPanel(TrmrkAppLayoutPanel.Right);
-          }
-        } else {
-            setShowMiddlePanel(true);
-            setFocusedPanel(TrmrkAppLayoutPanel.Middle);
-        }
-      }
-    }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
+      togglePanelClicked({
+        panel: TrmrkAppLayoutPanel.Left,
+        primaryAltPanel: TrmrkAppLayoutPanel.Middle,
+        secondaryAltPanel: TrmrkAppLayoutPanel.Right,
+        isMultiPanelMode,
+        focusedPanel,
+        setFocusedPanel,
+        showPanel: showLeftPanel,
+        setShowPanel: setShowLeftPanel,
+        allowShowPrimaryAltPanel: allowShowMiddlePanel,
+        showPrimaryAltPanel: showMiddlePanel,
+        setShowPrimaryAltPanel: setShowMiddlePanel,
+        allowShowSecondaryAltPanel: allowShowRightPanel,
+        showSecondaryAltPanel: showRightPanel,
+        setShowSecondaryAltPanel: setShowRightPanel
+      });
+    }, [showLeftPanel, showMiddlePanel, allowShowMiddlePanel, showRightPanel, allowShowRightPanel, isMultiPanelMode, focusedPanel]);
 
     const toggleLeftPanelContextMenu = React.useCallback((event: React.MouseEvent) => {
       event.preventDefault();
@@ -97,7 +154,7 @@ const ToggleLeftPanelBtn = React.memo(() => {
       if (showLeftPanel) {
         setFocusedPanel(TrmrkAppLayoutPanel.Left);
       }
-    }, [showLeftPanel, isSinglePanelMode, focusedPanel]);
+    }, [showLeftPanel, focusedPanel]);
 
     return <TrmrkBtn
       className={focusedPanel === TrmrkAppLayoutPanel.Left ? "trmrk-btn-filled-opposite" : ""}
@@ -109,32 +166,32 @@ const ToggleLeftPanelBtn = React.memo(() => {
   });
   
 const ToggleMiddlePanelBtn = React.memo(() => {
-    const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
-    const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
-    const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
+    const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.show);
+    const [ allowShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.show);
+    const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.show);
+    const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.show);
+    const [ allowShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.allowShow);
     const [ focusedPanel, setFocusedPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
-    const [ isSinglePanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isSinglePanelMode);
+    const [ isMultiPanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode);
 
     const toggleMiddlePanelClicked = React.useCallback(() => {
-      const willShowMiddlePanel = !showMiddlePanel;
-      setShowMiddlePanel(!showMiddlePanel);
-
-      if (willShowMiddlePanel) {
-        setFocusedPanel(TrmrkAppLayoutPanel.Middle);
-
-        if (isSinglePanelMode) {
-          setShowLeftPanel(false);
-          setShowRightPanel(false);
-        }
-      } else if (showRightPanel) {
-        setFocusedPanel(TrmrkAppLayoutPanel.Right);
-      } else if (showLeftPanel) {
-        setFocusedPanel(TrmrkAppLayoutPanel.Left);
-      } else {
-        setShowRightPanel(true);
-        setFocusedPanel(TrmrkAppLayoutPanel.Right);
-      }
-    }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
+    togglePanelClicked({
+      panel: TrmrkAppLayoutPanel.Middle,
+      primaryAltPanel: TrmrkAppLayoutPanel.Left,
+      secondaryAltPanel: TrmrkAppLayoutPanel.Right,
+      isMultiPanelMode,
+      focusedPanel,
+      setFocusedPanel,
+      showPanel: showMiddlePanel,
+      setShowPanel: setShowMiddlePanel,
+      allowShowPrimaryAltPanel: allowShowRightPanel,
+      showPrimaryAltPanel: showRightPanel,
+      setShowPrimaryAltPanel: setShowRightPanel,
+      allowShowSecondaryAltPanel: allowShowLeftPanel,
+      showSecondaryAltPanel: showLeftPanel,
+      setShowSecondaryAltPanel: setShowLeftPanel
+    });
+    }, [showLeftPanel, allowShowLeftPanel, showMiddlePanel, showRightPanel, allowShowRightPanel, isMultiPanelMode, focusedPanel]);
 
     const toggleMiddlePanelContextMenu = React.useCallback((event: React.MouseEvent) => {
       event.preventDefault();
@@ -142,7 +199,7 @@ const ToggleMiddlePanelBtn = React.memo(() => {
       if (showMiddlePanel) {
         setFocusedPanel(TrmrkAppLayoutPanel.Middle);
       }
-    }, [showMiddlePanel, isSinglePanelMode, focusedPanel]);
+    }, [showMiddlePanel, isMultiPanelMode, focusedPanel]);
 
     return <TrmrkBtn
       className={focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-btn-filled-opposite" : ""}
@@ -153,38 +210,32 @@ const ToggleMiddlePanelBtn = React.memo(() => {
   });
 
 const ToggleRightPanelBtn = React.memo(() => {
-    const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
-    const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
-    const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
+    const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.show);
+    const [ allowShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.show);
+    const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.show);
+    const [ allowShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.allowShow);
+    const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.show);
     const [ focusedPanel, setFocusedPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
-    const [ isSinglePanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isSinglePanelMode);
+    const [ isMultiPanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode);
 
     const toggleRightPanelClicked = React.useCallback(() => {
-      const willShowRightPanel = !showRightPanel;
-      setShowRightPanel(!showRightPanel);
-
-      if (willShowRightPanel) {
-        setFocusedPanel(TrmrkAppLayoutPanel.Right);
-
-        if (isSinglePanelMode) {
-          setShowLeftPanel(false);
-          setShowMiddlePanel(false);
-        }
-      } else {
-        if (showMiddlePanel) {
-          if (focusedPanel === TrmrkAppLayoutPanel.Right) {
-            setFocusedPanel(TrmrkAppLayoutPanel.Middle);
-          }
-        } else if (showLeftPanel) {
-          if (focusedPanel === TrmrkAppLayoutPanel.Right) {
-            setFocusedPanel(TrmrkAppLayoutPanel.Left);
-          }
-        } else {
-            setShowMiddlePanel(true);
-            setFocusedPanel(TrmrkAppLayoutPanel.Middle);
-        }
-      }
-    }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
+    togglePanelClicked({
+      panel: TrmrkAppLayoutPanel.Right,
+      primaryAltPanel: TrmrkAppLayoutPanel.Middle,
+      secondaryAltPanel: TrmrkAppLayoutPanel.Left,
+      isMultiPanelMode,
+      focusedPanel,
+      setFocusedPanel,
+      showPanel: showRightPanel,
+      setShowPanel: setShowRightPanel,
+      allowShowPrimaryAltPanel: allowShowMiddlePanel,
+      showPrimaryAltPanel: showMiddlePanel,
+      setShowPrimaryAltPanel: setShowMiddlePanel,
+      allowShowSecondaryAltPanel: allowShowLeftPanel,
+      showSecondaryAltPanel: showLeftPanel,
+      setShowSecondaryAltPanel: setShowLeftPanel
+    });
+    }, [showLeftPanel, allowShowLeftPanel, showMiddlePanel, allowShowMiddlePanel, showRightPanel, isMultiPanelMode, focusedPanel]);
 
     const toggleRightPanelContextMenu = React.useCallback((event: React.MouseEvent) => {
       event.preventDefault();
@@ -192,7 +243,7 @@ const ToggleRightPanelBtn = React.memo(() => {
       if (showRightPanel) {
         setFocusedPanel(TrmrkAppLayoutPanel.Right);
       }
-    }, [showRightPanel, isSinglePanelMode, focusedPanel]);
+    }, [showRightPanel, isMultiPanelMode, focusedPanel]);
 
     return <TrmrkBtn
       className={focusedPanel === TrmrkAppLayoutPanel.Right ? "trmrk-btn-filled-opposite" : ""}
@@ -217,18 +268,14 @@ export default function TrmrkTopToolBarContents({
   const toolbarContainerElRef = React.useRef<HTMLDivElement | null>(null);
   const toolbarContentsElRef = React.useRef<HTMLDivElement | null>(null);
 
-  const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
-  const [ allowShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowLeftPanel);
-  const [ allowToggleLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleLeftPanel);
-  const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
-  const [ allowShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowMiddlePanel);
-  const [ allowToggleMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleMiddlePanel);
-  const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
-  const [ allowShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowRightPanel);
-  const [ allowToggleRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowToggleRightPanel);
+  const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.show);
+  const [ allowShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.allowShow);
+  const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.show);
+  const [ allowShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.allowShow);
+  const [ showRightPanel, setShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.show);
+  const [ allowShowRightPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.allowShow);
   const [ focusedPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
-  const [ isSinglePanelMode, setIsSinglePanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isSinglePanelMode);
-  const [ allowsMultiPanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.allowsMultiPanelMode);
+  const [ isMultiPanelMode, setIsMultiPanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode);
   const [ , setToolbarContainerWidth ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContainerWidth);
   const [ , setToolbarContentsWidth ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsWidth);
   const [ toolbarContentsMaxOffset, setToolbarContentsMaxOffset ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsMaxOffset);
@@ -241,46 +288,38 @@ export default function TrmrkTopToolBarContents({
       toolbarContentsOffset]);
 
   const showResizePanelsBtn = React.useMemo(
-    () => [showLeftPanel, showMiddlePanel, showRightPanel].filter(show => show).length > 0,
-    [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode]);
+    () => [
+      (allowShowLeftPanel && showLeftPanel),
+      (allowShowMiddlePanel && showMiddlePanel),
+      (allowShowRightPanel && showRightPanel)].filter(show => show).length > 1,
+    [showLeftPanel, showMiddlePanel, showRightPanel, isMultiPanelMode]);
 
   const showToggleLeftPanelBtn = React.useMemo(
-    () => allowToggleLeftPanel && allowShowLeftPanel && (allowShowMiddlePanel || allowShowRightPanel),
-    [allowToggleLeftPanel, allowShowLeftPanel, allowShowMiddlePanel, allowShowRightPanel]);
+    () => allowShowLeftPanel && (allowShowMiddlePanel || allowShowRightPanel),
+    [allowShowLeftPanel, allowShowMiddlePanel, allowShowRightPanel]);
 
   const showToggleMiddlePanelBtn = React.useMemo(
-    () => allowToggleMiddlePanel && allowShowMiddlePanel && (allowShowLeftPanel || allowShowRightPanel),
-    [allowToggleMiddlePanel, allowShowMiddlePanel, allowShowLeftPanel, allowShowRightPanel]);
+    () => allowShowMiddlePanel && allowShowRightPanel,
+    [allowShowMiddlePanel, allowShowRightPanel]);
 
   const showToggleRightPanelBtn = React.useMemo(
-    () => allowToggleRightPanel && allowShowRightPanel && (allowShowMiddlePanel || allowShowLeftPanel),
-    [allowToggleRightPanel, allowShowRightPanel, allowShowMiddlePanel, allowShowLeftPanel]);
+    () => allowShowRightPanel && allowShowMiddlePanel,
+    [allowShowRightPanel, allowShowMiddlePanel]);
 
   const showToggleMultiPanelMode = React.useMemo(
-    () => allowsMultiPanelMode && (showToggleLeftPanelBtn || showToggleMiddlePanelBtn || showToggleRightPanelBtn),
-    [allowsMultiPanelMode, showToggleLeftPanelBtn, showToggleMiddlePanelBtn, showToggleRightPanelBtn])
+    () => showToggleLeftPanelBtn || showToggleMiddlePanelBtn || showToggleRightPanelBtn,
+    [showToggleLeftPanelBtn, showToggleMiddlePanelBtn, showToggleRightPanelBtn])
 
   const toggleMultiPanelModeClicked = React.useCallback(() => {
-    const willBeSinglePanelMode = !isSinglePanelMode;
-    setIsSinglePanelMode(willBeSinglePanelMode);
+    const willBeMultiPanelMode = !isMultiPanelMode;
+    setIsMultiPanelMode(willBeMultiPanelMode);
 
-    if (willBeSinglePanelMode) {
-      switch(focusedPanel) {
-        case TrmrkAppLayoutPanel.Left:
-          setShowMiddlePanel(false);
-          setShowRightPanel(false);
-          break;
-        case TrmrkAppLayoutPanel.Middle:
-          setShowLeftPanel(false);
-          setShowRightPanel(false);
-          break;
-        case TrmrkAppLayoutPanel.Right:
-          setShowLeftPanel(false);
-          setShowMiddlePanel(false);
-          break;
-      }
+    if (!willBeMultiPanelMode) {
+      setShowLeftPanel(false);
+      setShowMiddlePanel(false);
+      setShowRightPanel(false);
     }
-  }, [showLeftPanel, showMiddlePanel, showRightPanel, isSinglePanelMode, focusedPanel]);
+  }, [showLeftPanel, showMiddlePanel, showRightPanel, isMultiPanelMode, focusedPanel]);
 
   const updateToolbarContentsScrolBtnsVisibility = React.useCallback(() => {
     const toolbarContainerEl = toolbarContainerElRef.current;
@@ -348,12 +387,12 @@ export default function TrmrkTopToolBarContents({
           { (showRefreshBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:refresh" /></TrmrkBtn> }
           { (showPrimaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-outline" /></TrmrkBtn> }
           { (showSecondaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-bold" /></TrmrkBtn> }
-          { (showOptionsBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
+          { (showOptionsBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
           { showToggleLeftPanelBtn && <ToggleLeftPanelBtn></ToggleLeftPanelBtn> }
           { showToggleMiddlePanelBtn && <ToggleMiddlePanelBtn></ToggleMiddlePanelBtn> }
           { showToggleRightPanelBtn && <ToggleRightPanelBtn></ToggleRightPanelBtn> }
           { showToggleMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
-            <TrmrkIcon icon={`material-symbols:view-column${isSinglePanelMode ? "" : "-outline"}-sharp`} /></TrmrkBtn> }
+            <TrmrkIcon icon={`material-symbols:view-column${isMultiPanelMode ? "-outline" : ""}-sharp`} /></TrmrkBtn> }
           { showResizePanelsBtn && <TrmrkBtn><TrmrkIcon icon="material-symbols:resize" />
             </TrmrkBtn> }
           {children}

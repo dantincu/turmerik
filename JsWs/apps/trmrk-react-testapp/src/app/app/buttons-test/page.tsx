@@ -5,7 +5,7 @@ import { useAtom } from 'jotai';
 
 import './page.scss';
 
-import { trmrk3PanelsAppLayoutAtoms } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
+import { trmrk3PanelsAppLayoutAtoms, TrmrkAppLayoutPanel } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 
 import {
   appBarContents,
@@ -145,15 +145,16 @@ export default function ButtonsTestPage() {
   const [, setTopToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarContentsKey);
   const [, setBottomToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarContentsKey);
   const [, setShowBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
-  const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
-  const [, setAllowShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowLeftPanel);
-  const [, setLeftPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanelContentsKey);
-  const [, setShowMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
-  const [, setAllowShowMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowMiddlePanel);
-  const [, setMiddlePanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanelContentsKey);
-  const [, setShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
-  const [, setAllowShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowRightPanel);
-  const [, setRightPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanelContentsKey);
+  const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.show);
+  const [, setAllowShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.allowShow);
+  const [, setLeftPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.contentsKey);
+  const [, setShowMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.show);
+  const [, setAllowShowMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.allowShow);
+  const [, setMiddlePanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.contentsKey);
+  const [, setShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.show);
+  const [, setAllowShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.allowShow);
+  const [, setRightPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.contentsKey);
+  const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
 
   React.useEffect(() => {
     const appBarContentsId = appBarContents.value.register(
@@ -180,6 +181,7 @@ export default function ButtonsTestPage() {
     setAllowShowMiddlePanel(true);
     setShowRightPanel(true);
     setAllowShowRightPanel(true);
+    setFocusedPanel(TrmrkAppLayoutPanel.Middle);
     
     setAppBarContentsKey(appBarContentsId);
     setTopToolbarContentsKey(topToolbarContentsId);

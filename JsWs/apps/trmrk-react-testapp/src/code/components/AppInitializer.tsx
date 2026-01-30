@@ -10,10 +10,10 @@ export default function AppInitializer({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [ _, setIsSinglePanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isSinglePanelMode)
+  const [ _, setIsSinglePanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode)
 
   return <TrmrkAppInitializer initialize={() => new Promise<void>((resolve) => {
-    setIsSinglePanelMode(false);
+    setIsSinglePanelMode(true);
 
     setTimeout(() => {
       resolve();

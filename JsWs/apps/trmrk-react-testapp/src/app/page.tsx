@@ -20,15 +20,18 @@ const TopToolbar = () => {
   return <TrmrkTopToolBarContents showHomeBtn={false}></TrmrkTopToolBarContents>;
 }
 
-export default function Home() {
+export default function Landing() {
   const [, setAppBarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.appBarContentsKey);
   const [, setTopToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarContentsKey);
   const [, setBottomToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarContentsKey);
   const [, setShowBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
+  const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.show);
   const [, setAllowShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.allowShow);
   const [, setLeftPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.contentsKey);
+  const [, setShowMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.show);
   const [, setAllowShowMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.allowShow);
   const [, setMiddlePanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.contentsKey);
+  const [, setShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.show);
   const [, setAllowShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.allowShow);
   const [, setRightPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.contentsKey);
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
@@ -44,7 +47,7 @@ export default function Home() {
 
     const middlePanelContentsId = middlePanelContents.value.register(
       defaultComponentIdService.value.getNextId(),
-      <h2>Home</h2>
+      <h2>Welcome to Turmerik Notes app</h2>
     );
 
     setShowBottomToolbar(false);

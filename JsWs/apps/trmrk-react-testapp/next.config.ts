@@ -7,11 +7,11 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      {
+      /* {
         source: "/",
         destination: "/app",
         permanent: true, // This sends a 308 status code (SEO friendly)
-      },
+      } */
       /* {
         source: "/blog/:slug", // Wildcard matching
         destination: "/news/:slug",

@@ -11,15 +11,15 @@ import ThemeToggle from '@/src/code/components/ThemeToggle';
 import TrmrkAppBarContents from "@/src/trmrk-react/components/TrmrkAppBarContents/TrmrkAppBarContents";
 import TrmrkTopToolBarContents from "@/src/trmrk-react/components/TrmrkTopToolBarContents/TrmrkTopToolBarContents";
 
-import { trmrk3PanelsAppLayoutAtoms } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
+import { trmrk3PanelsAppLayoutAtoms, TrmrkAppLayoutPanel } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 import { appBarContents, topToolbarContents, trmrkBasicAppLayoutAtoms } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 import { middlePanelContents } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 
-const AppSettingsBar = () => {
+const AppBar = () => {
   return <TrmrkAppBarContents><h1 className="text-center grow">App Settings</h1></TrmrkAppBarContents>;
 }
 
-const AppSettingsTopToolbar = () => {
+const TopToolbar = () => {
   return <TrmrkTopToolBarContents></TrmrkTopToolBarContents>;
 }
 
@@ -28,24 +28,22 @@ export default function AppSettingsPage() {
   const [, setTopToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.topToolbarContentsKey);
   const [, setBottomToolbarContentsKey] = useAtom(trmrkBasicAppLayoutAtoms.bottomToolbarContentsKey);
   const [, setShowBottomToolbar] = useAtom(trmrkBasicAppLayoutAtoms.showBottomToolbar);
-  const [, setShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showLeftPanel);
-  const [, setAllowShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowLeftPanel);
-  const [, setLeftPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanelContentsKey);
-  const [, setShowMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showMiddlePanel);
-  const [, setAllowShowMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowMiddlePanel);
-  const [, setMiddlePanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanelContentsKey);
-  const [, setShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.showRightPanel);
-  const [, setAllowShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.allowShowRightPanel);
-  const [, setRightPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanelContentsKey);
+  const [, setAllowShowLeftPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.allowShow);
+  const [, setLeftPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.contentsKey);
+  const [, setAllowShowMiddlePanel] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.allowShow);
+  const [, setMiddlePanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.contentsKey);
+  const [, setAllowShowRightPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.allowShow);
+  const [, setRightPanelContentsKey] = useAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.contentsKey);
+  const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
 
   React.useEffect(() => {
     const appBarContentsId = appBarContents.value.register(
       defaultComponentIdService.value.getNextId(),
-      <AppSettingsBar />);
+      <AppBar />);
 
     const topToolbarContentsId = topToolbarContents.value.register(
       defaultComponentIdService.value.getNextId(),
-      <AppSettingsTopToolbar />);
+      <TopToolbar />);
 
     const middlePanelContentsId = middlePanelContents.value.register(
       defaultComponentIdService.value.getNextId(),
@@ -53,12 +51,10 @@ export default function AppSettingsPage() {
     );
 
     setShowBottomToolbar(false);
-    setShowLeftPanel(false);
     setAllowShowLeftPanel(false);
-    setShowMiddlePanel(true);
     setAllowShowMiddlePanel(true);
-    setShowRightPanel(false);
     setAllowShowRightPanel(false);
+    setFocusedPanel(TrmrkAppLayoutPanel.Middle);
     
     setAppBarContentsKey(appBarContentsId);
     setTopToolbarContentsKey(topToolbarContentsId);

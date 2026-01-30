@@ -1,4 +1,4 @@
-import { atom, useAtom } from "jotai";
+import { atom, useAtom, PrimitiveAtom } from "jotai";
 
 import { RefLazyValue } from "@/src/trmrk/core";
 
@@ -11,25 +11,27 @@ export enum TrmrkAppLayoutPanel {
   Right,
 }
 
+export interface TrmrkPanelAtoms {
+  show: PrimitiveAtom<boolean>;
+  allowShow: PrimitiveAtom<boolean>;
+  showLoader: PrimitiveAtom<boolean>;
+  contentsKey: PrimitiveAtom<number | null>;
+}
+
+const createPanelAtoms = () =>
+  ({
+    show: atom(false),
+    allowShow: atom(false),
+    showLoader: atom(false),
+    contentsKey: atom(null),
+  }) as TrmrkPanelAtoms;
+
 export const trmrk3PanelsAppLayoutAtoms = {
-  showLeftPanel: atom(false),
-  allowShowLeftPanel: atom(false),
-  showLeftPanelLoader: atom(false),
-  leftPanelContentsKey: atom<number | null>(null),
-  allowToggleLeftPanel: atom(true),
-  showMiddlePanel: atom(true),
-  allowShowMiddlePanel: atom(true),
-  showMiddlePanelLoader: atom(false),
-  middlePanelContentsKey: atom<number | null>(null),
-  allowToggleMiddlePanel: atom(true),
-  showRightPanel: atom(false),
-  allowShowRightPanel: atom(false),
-  showRightPanelLoader: atom(false),
-  rightPanelContentsKey: atom<number | null>(null),
-  allowToggleRightPanel: atom(true),
+  leftPanel: createPanelAtoms(),
+  middlePanel: createPanelAtoms(),
+  rightPanel: createPanelAtoms(),
   focusedPanel: atom(TrmrkAppLayoutPanel.Middle),
-  isSinglePanelMode: atom(true),
-  allowsMultiPanelMode: atom(true),
+  isMultiPanelMode: atom(false),
 };
 
 export const leftPanelContents = new RefLazyValue(() =>
