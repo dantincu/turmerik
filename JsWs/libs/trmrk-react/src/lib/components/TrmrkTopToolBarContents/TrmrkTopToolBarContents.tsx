@@ -17,6 +17,10 @@ export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showHomeBtn?: boolean | NullOrUndef;
   showUndoBtn?: boolean | NullOrUndef;
   showRedoBtn?: boolean | NullOrUndef;
+  showEditBtn?: boolean | NullOrUndef;
+  showEditDoneBtn?: boolean | NullOrUndef;
+  showSaveBtn?: boolean | NullOrUndef;
+  saveBtnEnabled?: boolean | NullOrUndef;
   showRefreshBtn?: boolean | NullOrUndef;
   showPrimaryCustomActionBtn?: boolean | NullOrUndef;
   showSecondaryCustomActionBtn?: boolean | NullOrUndef;
@@ -260,6 +264,10 @@ export default function TrmrkTopToolBarContents({
   showHomeBtn,
   showUndoBtn,
   showRedoBtn,
+  showEditBtn,
+  showEditDoneBtn,
+  showSaveBtn,
+  saveBtnEnabled,
   showRefreshBtn,
   showPrimaryCustomActionBtn,
   showSecondaryCustomActionBtn,
@@ -384,10 +392,13 @@ export default function TrmrkTopToolBarContents({
           { (showHomeBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:home" /></TrmrkBtn> }
           { (showUndoBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:undo" /></TrmrkBtn> }
           { (showRedoBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:redo" /></TrmrkBtn> }
+          { (showEditBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:edit" /></TrmrkBtn> }
+          { (showEditDoneBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:done" /></TrmrkBtn> }
+          { (showSaveBtn ?? false) && <TrmrkBtn disabled={saveBtnEnabled === false}><TrmrkIcon icon="mdi:content-save" /></TrmrkBtn> }
           { (showRefreshBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:refresh" /></TrmrkBtn> }
           { (showPrimaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-outline" /></TrmrkBtn> }
           { (showSecondaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-bold" /></TrmrkBtn> }
-          { (showOptionsBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
+          {children}
           { showToggleLeftPanelBtn && <ToggleLeftPanelBtn></ToggleLeftPanelBtn> }
           { showToggleMiddlePanelBtn && <ToggleMiddlePanelBtn></ToggleMiddlePanelBtn> }
           { showToggleRightPanelBtn && <ToggleRightPanelBtn></ToggleRightPanelBtn> }
@@ -395,7 +406,9 @@ export default function TrmrkTopToolBarContents({
             <TrmrkIcon icon={`material-symbols:view-column${isMultiPanelMode ? "-outline" : ""}-sharp`} /></TrmrkBtn> }
           { showResizePanelsBtn && <TrmrkBtn><TrmrkIcon icon="material-symbols:resize" />
             </TrmrkBtn> }
-          {children}
+          { (showOptionsBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
+          <TrmrkBtn><TrmrkIcon icon="material-symbols:tab-group" /></TrmrkBtn>
+          <TrmrkBtn><TrmrkIcon icon="mdi:close" /></TrmrkBtn>
         </div>
       </div>
       <ContentsShiftRightBtn />

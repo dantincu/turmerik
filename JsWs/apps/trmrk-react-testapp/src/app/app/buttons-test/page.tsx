@@ -17,7 +17,6 @@ import {
   appBarContents,
   topToolbarContents,
   bottomToolbarContents,
-  trmrkBasicAppLayoutAtoms,
   useShowToolbars,
   useToolbarContentKeys,
 } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
@@ -58,6 +57,9 @@ const TopToolbar = () => {
     showSecondaryCustomActionBtn={true}
     showUndoBtn={true}
     showRedoBtn={true}
+    showEditBtn={true}
+    showEditDoneBtn={true}
+    showSaveBtn={true}
     showRefreshBtn={true}
     showOptionsBtn={true}><TrmrkLongPressable hoc={{
       node: (props, ref) => <TrmrkBtn {...props} ref={ref as React.Ref<HTMLButtonElement>}><TrmrkIcon icon="mdi:dice" /></TrmrkBtn>,
