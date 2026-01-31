@@ -1,0 +1,23 @@
+a.trmrk-link,
+a.trmrk-link:visited,
+a.trmrk-link:hover,
+a.trmrk-link:active
+a.trmrk-link:link {
+  text-decoration: none !important;           /* removes underline */
+  text-decoration-line: none !important;      /* explicitly disables line */
+  text-decoration-color: #0000 !important; /* hides any invisible line */
+  border-bottom: none !important;             /* just in case */
+  box-shadow: none !important;
+}
+
+.light {
+  .trmrk-hyper-link {
+    color: #22F;
+  }
+}
+
+.dark {
+  .trmrk-hyper-link {
+    color: #AAF;
+  }
+}

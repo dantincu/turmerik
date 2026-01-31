@@ -15,6 +15,7 @@ import {
 } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 
 import { useShowToolbars, useToolbarContentKeys } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
+import TrmrkLink from "@/src/trmrk-react/components/TrmrkLink/TrmrkLink";
 
 const AppBar = () => {
   return <TrmrkAppBarContents><h1 className="text-center grow">Turmerik Notes</h1></TrmrkAppBarContents>;
@@ -44,7 +45,7 @@ export default function Landing() {
         contents: <TopToolbar />,
       },
       middlePanel: {
-        contents: <h2>Welcome to Turmerik Notes app</h2>
+        contents: <><h2>Welcome to Turmerik Notes app</h2><TrmrkLink href="/app">app</TrmrkLink></>
       },
       setFocusedPanel
     });

@@ -10,6 +10,7 @@ import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
 import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
 import { trmrk3PanelsAppLayoutAtoms, TrmrkAppLayoutPanel } from "../Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 import { trmrkTopToolBarContentsAtoms } from "./TrmrkTopToolBarContentsService";
+import TrmrkLink from "../TrmrkLink/TrmrkLink";
 
 export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showBackBtn?: boolean | NullOrUndef;
@@ -417,7 +418,7 @@ export default function TrmrkTopToolBarContents({
         <div className="trmrk-toolbar-contents" style={{ left: `${toolbarContentsOffsetValue}px` }} ref={toolbarContentsElAvailable}>
           { (showBackBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:arrow-back" /></TrmrkBtn> }
           { (showGoToParentBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:arrow-up" /></TrmrkBtn> }
-          { (showHomeBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:home" /></TrmrkBtn> }
+          { (showHomeBtn ?? true) && <TrmrkLink href="/app" isHyperLink={false}><TrmrkBtn><TrmrkIcon icon="mdi:home" /></TrmrkBtn></TrmrkLink> }
           { (showUndoBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:undo" /></TrmrkBtn> }
           { (showRedoBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:redo" /></TrmrkBtn> }
           { (showEditBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:edit" /></TrmrkBtn> }

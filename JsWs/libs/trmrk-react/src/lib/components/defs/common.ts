@@ -1,5 +1,9 @@
 import { NullOrUndef } from "@/src/trmrk/core";
 
+export type HtmlElementProps<THTMLElement extends HTMLElement = HTMLElement> =
+  React.PropsWithoutRef<React.AnchorHTMLAttributes<THTMLElement>> &
+    React.RefAttributes<THTMLElement>;
+
 export interface ComponentProps {
   className?: string | undefined;
   children?: React.ReactNode | NullOrUndef;
