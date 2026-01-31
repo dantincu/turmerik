@@ -8,16 +8,17 @@ import { createIntKeyedComponentsMapManager } from "../../services/IntKeyedCompo
 export interface TrmrkToolbarAtoms {
   show: PrimitiveAtom<boolean>;
   contentsKey: PrimitiveAtom<number | null>;
+  overridingContentsKey: PrimitiveAtom<number | null>;
 }
 
 const createToolbarAtoms = (show: boolean): TrmrkToolbarAtoms => ({
   show: atom(show),
   contentsKey: atom<number | null>(null),
+  overridingContentsKey: atom<number | null>(null),
 });
 
 export const trmrkBasicAppLayoutAtoms = {
   cssClass: atom<string | null>(null),
-  showAppBarOnly: atom(false),
   showToolbars: atom(true),
   appBar: createToolbarAtoms(true),
   topToolbar: createToolbarAtoms(true),
@@ -28,11 +29,23 @@ export const appBarContents = new RefLazyValue(() =>
   createIntKeyedComponentsMapManager(),
 );
 
+export const overridingAppBarContents = new RefLazyValue(() =>
+  createIntKeyedComponentsMapManager(),
+);
+
 export const topToolbarContents = new RefLazyValue(() =>
   createIntKeyedComponentsMapManager(),
 );
 
+export const overridingTopToolbarContents = new RefLazyValue(() =>
+  createIntKeyedComponentsMapManager(),
+);
+
 export const bottomToolbarContents = new RefLazyValue(() =>
+  createIntKeyedComponentsMapManager(),
+);
+
+export const overridingBottomToolbarContents = new RefLazyValue(() =>
   createIntKeyedComponentsMapManager(),
 );
 
@@ -57,5 +70,17 @@ export const useToolbarContentKeys = (): ToolbarAtoms<number | null> => ({
   topToolbar: trmrkUseAtom(trmrkBasicAppLayoutAtoms.topToolbar.contentsKey),
   bottomToolbar: trmrkUseAtom(
     trmrkBasicAppLayoutAtoms.bottomToolbar.contentsKey,
+  ),
+});
+
+export const useToolbarOverridingContentKeys = (): ToolbarAtoms<
+  number | null
+> => ({
+  appBar: trmrkUseAtom(trmrkBasicAppLayoutAtoms.appBar.overridingContentsKey),
+  topToolbar: trmrkUseAtom(
+    trmrkBasicAppLayoutAtoms.topToolbar.overridingContentsKey,
+  ),
+  bottomToolbar: trmrkUseAtom(
+    trmrkBasicAppLayoutAtoms.bottomToolbar.overridingContentsKey,
   ),
 });

@@ -39,7 +39,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: initialLoaderKillSwitchScript,
           }}
-        /><AppInitializer><Trmrk3PanelsAppLayout>{children}</Trmrk3PanelsAppLayout></AppInitializer>
+        /><AppInitializer>
+          <Trmrk3PanelsAppLayout>{children}</Trmrk3PanelsAppLayout>
+          </AppInitializer>
         </ThemeProvider>
       </body>
     </html>

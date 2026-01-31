@@ -3,6 +3,10 @@
 @use "./global-variables.module.scss" as trmrk-vars;
 @use "./global-mixins.module.scss" as trmrk-mixins;
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @theme {
   /* This tells v4 to use the .dark class selector strategy */
   --dark-mode: selector; 

@@ -238,22 +238,22 @@ const ToggleRightPanelBtn = React.memo(() => {
     const [ isMultiPanelMode ] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode);
 
     const toggleRightPanelClicked = React.useCallback(() => {
-    togglePanelClicked({
-      panel: TrmrkAppLayoutPanel.Right,
-      primaryAltPanel: TrmrkAppLayoutPanel.Middle,
-      secondaryAltPanel: TrmrkAppLayoutPanel.Left,
-      isMultiPanelMode,
-      focusedPanel,
-      setFocusedPanel,
-      showPanel: showRightPanel,
-      setShowPanel: setShowRightPanel,
-      allowShowPrimaryAltPanel: allowShowMiddlePanel,
-      showPrimaryAltPanel: showMiddlePanel,
-      setShowPrimaryAltPanel: setShowMiddlePanel,
-      allowShowSecondaryAltPanel: allowShowLeftPanel,
-      showSecondaryAltPanel: showLeftPanel,
-      setShowSecondaryAltPanel: setShowLeftPanel
-    });
+      togglePanelClicked({
+        panel: TrmrkAppLayoutPanel.Right,
+        primaryAltPanel: TrmrkAppLayoutPanel.Middle,
+        secondaryAltPanel: TrmrkAppLayoutPanel.Left,
+        isMultiPanelMode,
+        focusedPanel,
+        setFocusedPanel,
+        showPanel: showRightPanel,
+        setShowPanel: setShowRightPanel,
+        allowShowPrimaryAltPanel: allowShowMiddlePanel,
+        showPrimaryAltPanel: showMiddlePanel,
+        setShowPrimaryAltPanel: setShowMiddlePanel,
+        allowShowSecondaryAltPanel: allowShowLeftPanel,
+        showSecondaryAltPanel: showLeftPanel,
+        setShowSecondaryAltPanel: setShowLeftPanel
+      });
     }, [showLeftPanel, allowShowLeftPanel, showMiddlePanel, allowShowMiddlePanel, showRightPanel, isMultiPanelMode, focusedPanel]);
 
     const toggleRightPanelContextMenu = React.useCallback((event: React.MouseEvent) => {
@@ -329,7 +329,7 @@ export default function TrmrkTopToolBarContents({
       (allowShowLeftPanel && showLeftPanel),
       (allowShowMiddlePanel && showMiddlePanel),
       (allowShowRightPanel && showRightPanel)].filter(show => show).length > 1,
-    [showLeftPanel, showMiddlePanel, showRightPanel, isMultiPanelMode]);
+    [allowShowLeftPanel, showLeftPanel, allowShowMiddlePanel, showMiddlePanel, allowShowRightPanel, showRightPanel]);
 
   const showToggleLeftPanelBtn = React.useMemo(
     () => allowShowLeftPanel && (allowShowMiddlePanel || allowShowRightPanel),

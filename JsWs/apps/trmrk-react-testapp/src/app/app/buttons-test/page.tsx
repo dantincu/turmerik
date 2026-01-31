@@ -8,12 +8,13 @@ import './page.scss';
 import {
   trmrk3PanelsAppLayoutAtoms,
   useAllowShowPanelAtoms,
+  useShowPanelAtoms,
   usePanelContentsKeyAtoms,
   initLayout,
   cleanupLayout
 } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 
-import {useShowToolbars, useToolbarContentKeys } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
+import {useShowToolbars, useToolbarContentKeys, useToolbarOverridingContentKeys } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 import TrmrkBtn from "@/src/trmrk-react/components/TrmrkBtn/TrmrkBtn";
 import TrmrkPopover from "@/src/trmrk-react/components/TrmrkPopover/TrmrkPopover";
@@ -142,10 +143,13 @@ const MiddlePanelContents = () => {
 
 export default function ButtonsTestPage() {
   const allowShowPanelAtoms = useAllowShowPanelAtoms();
+  const showPanelAtoms = useShowPanelAtoms();
   const panelContentKeyAtoms = usePanelContentsKeyAtoms();
   const showToolbarAtoms = useShowToolbars();
   const toolbarContentKeyAtoms = useToolbarContentKeys();
+  const overridingToolbarContentKeyAtoms = useToolbarOverridingContentKeys();
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
+  const [, setIsResizingPanels] = useAtom(trmrk3PanelsAppLayoutAtoms.isResizingPanels);
 
   React.useEffect(() => {
     const layoutInitResult = initLayout({
@@ -153,6 +157,7 @@ export default function ButtonsTestPage() {
       panelContentKeyAtoms,
       showToolbarAtoms,
       toolbarContentKeyAtoms,
+      overridingToolbarContentKeyAtoms,
       appBar: {
         contents: <AppBar />,
       },
@@ -160,16 +165,21 @@ export default function ButtonsTestPage() {
         contents: <TopToolbar />,
       },
       leftPanel: {
-        show: true
+        allowShow: true
       },
       middlePanel: {
         contents: <MiddlePanelContents />
       },
       rightPanel: {
-        show: true
+        allowShow: true
       },
       setFocusedPanel
     });
+
+    showPanelAtoms.leftPanel.set(true);
+    showPanelAtoms.middlePanel.set(true);
+    showPanelAtoms.rightPanel.set(true);
+    setIsResizingPanels(true);
 
     return () => {
       cleanupLayout(layoutInitResult);

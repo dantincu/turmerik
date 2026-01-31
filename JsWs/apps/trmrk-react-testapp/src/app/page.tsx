@@ -14,7 +14,7 @@ import {
   cleanupLayout
 } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 
-import { useShowToolbars, useToolbarContentKeys } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
+import { useShowToolbars, useToolbarContentKeys, useToolbarOverridingContentKeys } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 import TrmrkLink from "@/src/trmrk-react/components/TrmrkLink/TrmrkLink";
 
 const AppBar = () => {
@@ -30,6 +30,7 @@ export default function Landing() {
   const panelContentKeyAtoms = usePanelContentsKeyAtoms();
   const showToolbarAtoms = useShowToolbars();
   const toolbarContentKeyAtoms = useToolbarContentKeys();
+  const overridingToolbarContentKeyAtoms = useToolbarOverridingContentKeys();
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
 
   React.useEffect(() => {
@@ -38,6 +39,7 @@ export default function Landing() {
       panelContentKeyAtoms,
       showToolbarAtoms,
       toolbarContentKeyAtoms,
+      overridingToolbarContentKeyAtoms,
       appBar: {
         contents: <AppBar />,
       },

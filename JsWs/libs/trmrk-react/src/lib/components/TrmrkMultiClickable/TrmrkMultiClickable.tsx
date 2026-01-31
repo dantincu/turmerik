@@ -17,7 +17,7 @@ export interface TrmrkLongPressableProps<T, P> {
   args: (rootEl: T) => MultiClickServiceInitArgs
 }
 
-export default function TrmrkLongPressable<T, P>({ hoc, args }: Readonly<TrmrkLongPressableProps<T, P>>) {
+export default function TrmrkMultiClickable<T, P>({ hoc, args }: Readonly<TrmrkLongPressableProps<T, P>>) {
   const initializedRef = React.useRef(false);
   let multiClickService: MultiClickService | null = null;
 
