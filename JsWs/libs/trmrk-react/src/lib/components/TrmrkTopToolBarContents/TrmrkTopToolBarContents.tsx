@@ -28,7 +28,14 @@ export interface TrmrkTopToolBarContentsProps extends ComponentProps {
 }
 
 const toolbarHorizPaddingPx = 6;
-const toolbarAdditionalOffset = 84;
+const totalButtonWidthPx = 42;
+const toolbarAdditionalOffsetPx = totalButtonWidthPx * 2;
+
+const getContentsShiftPx = ({
+  toolbarContainerWidth
+}: {
+  toolbarContainerWidth: number
+}) => toolbarContainerWidth - toolbarAdditionalOffsetPx - toolbarHorizPaddingPx - totalButtonWidthPx;
 
 const ContentsShiftLeftBtn = React.memo(() => {
   const [ toolbarContainerWidth ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContainerWidth);
@@ -37,7 +44,10 @@ const ContentsShiftLeftBtn = React.memo(() => {
   const [ showToolbarContentsScrollBtns ] = useAtom(trmrkTopToolBarContentsAtoms.showToolbarContentsScrollBtns);
 
   const btnClicked = React.useCallback(() => {
-    const newToolbarContentsOffset = Math.max(0, toolbarContentsOffset - toolbarContainerWidth / 2);
+    const newToolbarContentsOffset = Math.max(0, toolbarContentsOffset - getContentsShiftPx({
+      toolbarContainerWidth
+    }));
+
     setToolbarContentsOffset(newToolbarContentsOffset);
   }, [toolbarContentsMaxOffset, toolbarContentsOffset, toolbarContainerWidth]);
 
@@ -53,7 +63,10 @@ const ContentsShiftRightBtn = React.memo(() => {
   const [ showToolbarContentsScrollBtns ] = useAtom(trmrkTopToolBarContentsAtoms.showToolbarContentsScrollBtns);
 
   const btnClicked = React.useCallback(() => {
-    const newToolbarContentsOffset = Math.min(toolbarContentsMaxOffset, toolbarContentsOffset + toolbarContainerWidth / 2);
+    const newToolbarContentsOffset = Math.min(toolbarContentsMaxOffset, toolbarContentsOffset + getContentsShiftPx({
+      toolbarContainerWidth
+    }));
+
     setToolbarContentsOffset(newToolbarContentsOffset);
   }, [toolbarContentsOffset, toolbarContainerWidth]);
 
@@ -353,9 +366,9 @@ export default function TrmrkTopToolBarContents({
       setToolbarContainerWidth(toolbarContainerElWidth);
       setToolbarContentsWidth(toolbarContentsElWidth);
 
-      let newToolbarContentsMaxOffset = toolbarContentsElWidth - toolbarContainerElWidth + toolbarHorizPaddingPx + toolbarAdditionalOffset;
+      let newToolbarContentsMaxOffset = toolbarContentsElWidth - toolbarContainerElWidth + toolbarHorizPaddingPx + toolbarAdditionalOffsetPx;
       newToolbarContentsMaxOffset = Math.max(0, newToolbarContentsMaxOffset);
-      const newShowToolbarContentsScrollBtns = newToolbarContentsMaxOffset > toolbarAdditionalOffset;
+      const newShowToolbarContentsScrollBtns = newToolbarContentsMaxOffset > toolbarAdditionalOffsetPx;
 
       setToolbarContentsMaxOffset(newToolbarContentsMaxOffset);
       setShowToolbarContentsScrollBtns(newShowToolbarContentsScrollBtns);
@@ -419,8 +432,8 @@ export default function TrmrkTopToolBarContents({
           { showToggleMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
             <TrmrkIcon icon={`material-symbols:view-column${isMultiPanelMode ? "-outline" : ""}-sharp`} /></TrmrkBtn> }
           { showResizePanelsBtn && <ResizePanelsBtn></ResizePanelsBtn> }
-          <TrmrkBtn><TrmrkIcon icon="material-symbols:select-window" /></TrmrkBtn>
-          <TrmrkBtn><TrmrkIcon icon="mdi:bell-notification" /></TrmrkBtn>
+          <TrmrkBtn className="trmrk-btn-filled-primary"><TrmrkIcon icon="material-symbols:select-window" /></TrmrkBtn>
+          <TrmrkBtn className="trmrk-btn-filled-reject"><TrmrkIcon icon="mdi:bell-notification" /></TrmrkBtn>
           <TrmrkBtn><TrmrkIcon icon="material-symbols:tab-group" /></TrmrkBtn>
           <TrmrkBtn><TrmrkIcon icon="mdi:close" /></TrmrkBtn>
         </div>
