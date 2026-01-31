@@ -13,6 +13,8 @@ import dotsVertical from "@iconify-icons/mdi/dots-vertical";
 import contentSave from "@iconify-icons/mdi/content-save";
 import edit from "@iconify-icons/mdi/edit";
 import done from "@iconify-icons/mdi/done";
+import notifications from "@iconify-icons/mdi/notifications";
+import bellNotification from "@iconify-icons/mdi/bell-notification";
 
 import undo from "@iconify-icons/material-symbols/undo";
 import redo from "@iconify-icons/material-symbols/redo";
@@ -29,6 +31,7 @@ import viewColumnSharp from "@iconify-icons/material-symbols/view-column-sharp";
 import viewColumnOutlineSharp from "@iconify-icons/material-symbols/view-column-outline-sharp";
 import refresh from "@iconify-icons/material-symbols/refresh";
 import tabGroup from "@iconify-icons/material-symbols/tab-group";
+import selectWindow from "@iconify-icons/material-symbols/select-window";
 
 import commandOutline from "@iconify-icons/solar/command-outline";
 import commandBold from "@iconify-icons/solar/command-bold";
@@ -52,6 +55,8 @@ export const registerIconifyIcons = () => {
     ["content-save"]: contentSave,
     edit,
     done,
+    notifications,
+    ["bell-notification"]: bellNotification,
   });
 
   registerIconifyIconsCore("material-symbols", {
@@ -70,6 +75,7 @@ export const registerIconifyIcons = () => {
     ["view-column-outline-sharp"]: viewColumnOutlineSharp,
     refresh,
     ["tab-group"]: tabGroup,
+    ["select-window"]: selectWindow,
   });
 
   registerIconifyIconsCore("solar", {

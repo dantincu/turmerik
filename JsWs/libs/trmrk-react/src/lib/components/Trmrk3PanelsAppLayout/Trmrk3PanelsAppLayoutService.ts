@@ -19,7 +19,6 @@ import {
   bottomToolbarContents,
   topToolbarContents,
   ToolbarAtoms,
-  useToolbarContentKeys,
 } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 export enum TrmrkAppLayoutPanel {
@@ -222,5 +221,17 @@ export const cleanupLayout = (result: InitLayoutResult) => {
 
   actWithValIf(result.bottomToolbarContentsId, (id) => {
     bottomToolbarContents.value.unregister(id);
+  });
+
+  actWithValIf(result.leftPanelContentsId, (id) => {
+    leftPanelContents.value.unregister(id);
+  });
+
+  actWithValIf(result.middlePanelContentsId, (id) => {
+    middlePanelContents.value.unregister(id);
+  });
+
+  actWithValIf(result.rightPanelContentsId, (id) => {
+    rightPanelContents.value.unregister(id);
   });
 };

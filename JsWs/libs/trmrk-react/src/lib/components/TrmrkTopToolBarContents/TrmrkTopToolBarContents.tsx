@@ -396,8 +396,6 @@ export default function TrmrkTopToolBarContents({
     }
   }, []);
 
-  console.log("isMultiPanelMode", isMultiPanelMode);
-
   return <div className="trmrk-toolbar-container" ref={toolbarContainerElAvailable}>
       <ContentsShiftLeftBtn />
       <div className="trmrk-toolbar-contents-wrapper">
@@ -414,13 +412,15 @@ export default function TrmrkTopToolBarContents({
           { (showPrimaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-outline" /></TrmrkBtn> }
           { (showSecondaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-bold" /></TrmrkBtn> }
           {children}
+          { (showOptionsBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
           { showToggleLeftPanelBtn && <ToggleLeftPanelBtn></ToggleLeftPanelBtn> }
           { showToggleMiddlePanelBtn && <ToggleMiddlePanelBtn></ToggleMiddlePanelBtn> }
           { showToggleRightPanelBtn && <ToggleRightPanelBtn></ToggleRightPanelBtn> }
           { showToggleMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
             <TrmrkIcon icon={`material-symbols:view-column${isMultiPanelMode ? "-outline" : ""}-sharp`} /></TrmrkBtn> }
           { showResizePanelsBtn && <ResizePanelsBtn></ResizePanelsBtn> }
-          { (showOptionsBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
+          <TrmrkBtn><TrmrkIcon icon="material-symbols:select-window" /></TrmrkBtn>
+          <TrmrkBtn><TrmrkIcon icon="mdi:bell-notification" /></TrmrkBtn>
           <TrmrkBtn><TrmrkIcon icon="material-symbols:tab-group" /></TrmrkBtn>
           <TrmrkBtn><TrmrkIcon icon="mdi:close" /></TrmrkBtn>
         </div>
