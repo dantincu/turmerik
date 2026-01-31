@@ -21,16 +21,19 @@ export interface TrmrkPopoverProps extends ComponentProps {
 
 const CloseIcon = React.memo(({
     closeBtnLongPressOrRightClick,
-    closeBtnClick
+    closeBtnClick,
+    ref,
   }: {
     closeBtnLongPressOrRightClick: (event: React.MouseEvent) => void,
     closeBtnClick: () => void
-  }) => <TrmrkBtn className='trmrk-close-icon-btn' onClick={closeBtnClick} onContextMenu={closeBtnLongPressOrRightClick}><TrmrkIcon icon="mdi:close" /></TrmrkBtn>);
+    ref: React.Ref<HTMLButtonElement>
+  }) => <TrmrkBtn ref={ref} className='trmrk-close-icon-btn' onClick={closeBtnClick} onContextMenu={closeBtnLongPressOrRightClick}><TrmrkIcon icon="mdi:close" /></TrmrkBtn>);
 
 export default function TrmrkPopover(
   { className: cssClass, children, msgLevel, show, arrowPlacement = Placement.None, arrowStyle, closed, autoCloseMillis }: Readonly<TrmrkPopoverProps>
 ) {
   const rootElRef = React.useRef<HTMLDivElement | null>(null);
+  const closeBtnElRef = React.useRef<HTMLButtonElement | null>(null);
   const autoCloseMillisVal = React.useMemo(() => autoCloseMillis ?? 5000, [autoCloseMillis]);
   const showValRef = React.useRef(0);
   const timeoutId = React.useRef<NodeJS.Timeout | null>(null);
@@ -111,6 +114,20 @@ export default function TrmrkPopover(
     clearRefVal(timeoutId, clearTimeout);
   }, []);
 
+  const containerPointerDown = React.useCallback((event: React.PointerEvent) => {
+    const closeBtnEl = closeBtnElRef.current;
+
+    if (closeBtnEl) {
+      const target = event.target as HTMLElement;
+
+      if (!closeBtnEl.contains(target)){
+        setAutoCloseEl(false);
+        clearAutoCloseTimeout();
+        setMessageFadeOut(false);
+      }
+    }
+  }, [autoCloseEl]);
+
   React.useEffect(() => {
     if (show !== showValRef.current) {
       showValRef.current = show ?? 0;
@@ -133,13 +150,14 @@ export default function TrmrkPopover(
     }
   }, []);
 
-  return showEl && <div className={["trmrk-popover-container", cssClass ?? '', cssClassName, messageFadeOut ? 'trmrk-fade' : ''].join(" ")} ref={rootElRef}>
+  return showEl && <div className={["trmrk-popover-container", cssClass ?? '', cssClassName, messageFadeOut ? 'trmrk-fade' : ''].join(" ")}
+      ref={rootElRef} onPointerDownCapture={containerPointerDown}>
     <div className="trmrk-basement">{ arrowCssClass && <svg className={["trmrk-arrow", arrowCssClass].join(" ")} viewBox="0 0 20 10" style={ arrowStyle ?? undefined }>
       <path className="trmrk-arrow-body" strokeWidth="1" d="M 0 10 L 10 0 L 20 10" />
       <path className="trmrk-arrow-border" strokeWidth="1" d="M 0 10 L 10 0 L 20 10" fill="none" />
     </svg> }</div>
     <div className={['trmrk-popover'].join(' ')}>
-      <CloseIcon closeBtnLongPressOrRightClick={closeBtnLongPressOrRightClick} closeBtnClick={closeBtnClick} />
+      <CloseIcon closeBtnLongPressOrRightClick={closeBtnLongPressOrRightClick} closeBtnClick={closeBtnClick} ref={closeBtnElRef} />
       { children }
     </div>
   </div>;
