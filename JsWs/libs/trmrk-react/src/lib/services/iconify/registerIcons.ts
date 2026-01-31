@@ -15,6 +15,7 @@ import edit from "@iconify-icons/mdi/edit";
 import done from "@iconify-icons/mdi/done";
 import notifications from "@iconify-icons/mdi/notifications";
 import bellNotification from "@iconify-icons/mdi/bell-notification";
+import notificationClearAll from "@iconify-icons/mdi/notification-clear-all";
 
 import undo from "@iconify-icons/material-symbols/undo";
 import redo from "@iconify-icons/material-symbols/redo";
@@ -57,6 +58,7 @@ export const registerIconifyIcons = () => {
     done,
     notifications,
     ["bell-notification"]: bellNotification,
+    ["notification-clear-all"]: notificationClearAll,
   });
 
   registerIconifyIconsCore("material-symbols", {

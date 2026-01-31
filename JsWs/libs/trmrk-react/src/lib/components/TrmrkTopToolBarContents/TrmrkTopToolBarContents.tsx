@@ -22,6 +22,7 @@ export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showSaveBtn?: boolean | NullOrUndef;
   saveBtnEnabled?: boolean | NullOrUndef;
   showRefreshBtn?: boolean | NullOrUndef;
+  showClearCacheBtn?: boolean | NullOrUndef;
   showPrimaryCustomActionBtn?: boolean | NullOrUndef;
   showSecondaryCustomActionBtn?: boolean | NullOrUndef;
   showOptionsBtn?: boolean | NullOrUndef
@@ -295,6 +296,7 @@ export default function TrmrkTopToolBarContents({
   showSaveBtn,
   saveBtnEnabled,
   showRefreshBtn,
+  showClearCacheBtn,
   showPrimaryCustomActionBtn,
   showSecondaryCustomActionBtn,
   showOptionsBtn
@@ -422,6 +424,7 @@ export default function TrmrkTopToolBarContents({
           { (showEditDoneBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:done" /></TrmrkBtn> }
           { (showSaveBtn ?? false) && <TrmrkBtn disabled={saveBtnEnabled === false}><TrmrkIcon icon="mdi:content-save" /></TrmrkBtn> }
           { (showRefreshBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:refresh" /></TrmrkBtn> }
+          { (showClearCacheBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:notification-clear-all" /></TrmrkBtn> }
           { (showPrimaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-outline" /></TrmrkBtn> }
           { (showSecondaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-bold" /></TrmrkBtn> }
           {children}

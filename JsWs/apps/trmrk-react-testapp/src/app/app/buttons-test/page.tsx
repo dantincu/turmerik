@@ -52,6 +52,7 @@ const TopToolbar = () => {
     showEditDoneBtn={true}
     showSaveBtn={true}
     showRefreshBtn={true}
+    showClearCacheBtn={true}
     showOptionsBtn={true}><TrmrkLongPressable hoc={{
       node: (props, ref) => <TrmrkBtn {...props} ref={ref as React.Ref<HTMLButtonElement>}><TrmrkIcon icon="mdi:dice" /></TrmrkBtn>,
       props: {}
