@@ -1,1 +1,0 @@
-./trmrk-react/tailwind-classes-core.ts

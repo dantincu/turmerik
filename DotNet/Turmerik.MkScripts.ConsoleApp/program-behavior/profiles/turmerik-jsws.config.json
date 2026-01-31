@@ -19,6 +19,7 @@
               [ "..\\..\\libs\\trmrk-browser" ],
               [ "..\\..\\libs\\trmrk-svelte" ],
               [ "..\\..\\libs\\trmrk-react" ],
+              [ "..\\..\\libs\\trmrk-react-KEEP" ],
               [ "..\\..\\libs\\trmrk-filemanager-nglib" ],
               [ "..\\..\\libs\\trmrk-mailbox-nglib" ],
               [ "..\\..\\libs\\trmrk-mkscripts-jsws-sync-behavior" ],

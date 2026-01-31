@@ -1,7 +1,7 @@
 // tailwind.config.ts
 import type { Config } from "tailwindcss";
 
-import { tailwindClassesCore } from "./src/tailwind-classes-core.ts";
+import { tailwindClassesCore } from "./src/trmrk-react-KEEP/tailwind-classes-core.ts";
 
 /** @type {import('tailwindcss').Config} */
 const config: Config = {
@@ -9,7 +9,7 @@ const config: Config = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx,mdx}", // This covers everything inside src
   ],
-  safelist: tailwindClassesCore,
+  safelist: [tailwindClassesCore],
   theme: {
     extend: {},
   },

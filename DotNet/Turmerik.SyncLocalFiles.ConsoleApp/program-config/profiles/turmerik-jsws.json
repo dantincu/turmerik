@@ -37,6 +37,10 @@
       "DirPath": "libs\\trmrk-react\\src\\lib"
     },
     {
+      "Name": "trmrk-react-KEEP",
+      "DirPath": "libs\\trmrk-react-KEEP\\src\\lib"
+    },
+    {
       "Name": "trmrk-filemanager-nglib",
       "DirPath": "libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib\\src\\lib"
     },
@@ -279,6 +283,9 @@
         },
         "trmrk-react": {
           "DirPath": "trmrk-react"
+        },
+        "trmrk-react-KEEP": {
+          "DirPath": "trmrk-react-KEEP"
         }
       }
     },
@@ -438,6 +445,9 @@
         },
         "trmrk-react": {
           "DirPath": "trmrk-react"
+        },
+        "trmrk-react-KEEP": {
+          "DirPath": "trmrk-react-KEEP"
         }
       }
     },
@@ -477,6 +487,9 @@
         },
         "trmrk-react": {
           "DirPath": "trmrk-react"
+        },
+        "trmrk-react-KEEP": {
+          "DirPath": "trmrk-react-KEEP"
         },
         "trmrk-notes-reactlib": {
           "DirPath": "trmrk-notes-reactlib"

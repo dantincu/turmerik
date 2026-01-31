@@ -1,4 +1,4 @@
-import { Kvp } from "../trmrk/core";
+import { Kvp, NullOrUndef } from "../trmrk/core";
 import { IdxesFilter } from "../trmrk/TextParsing/IdxesFilter";
 
 import {
@@ -19,6 +19,7 @@ const srcFoldersArr: { [key: string]: string } = {
   "trmrk-browser": "libs\\trmrk-browser\\src\\lib",
   "trmrk-svelte": "libs\\trmrk-svelte\\src\\lib",
   "trmrk-react": "libs\\trmrk-react\\src\\lib",
+  "trmrk-react-KEEP": "libs\\trmrk-react-KEEP\\src\\lib",
   "trmrk-filemanager-nglib":
     "libs\\trmrk-filemanager-nglib\\projects\\trmrk-filemanager-nglib\\src\\lib",
   "trmrk-mailbox-nglib":
@@ -40,7 +41,11 @@ const srcFoldersArr: { [key: string]: string } = {
 };
 
 const destnLocationsArr: {
-  [key: string]: { dirPath: string; syncedLibs: string[] };
+  [key: string]: {
+    dirPath: string;
+    syncedLibs: string[];
+    keptLibs?: string[] | NullOrUndef;
+  };
 } = {
   "trmrk-angular": {
     dirPath: "libs\\trmrk-angular\\projects\\trmrk-angular\\src",
@@ -121,7 +126,13 @@ const destnLocationsArr: {
   },
   "trmrk-notes-reactlib": {
     dirPath: "libs\\trmrk-notes-reactlib\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
+    syncedLibs: [
+      "trmrk",
+      "trmrk-axios",
+      "trmrk-browser",
+      "trmrk-react",
+      "trmrk-react-KEEP",
+    ],
   },
   "trmrk-testing-nglib": {
     dirPath: "libs\\trmrk-testing-nglib\\projects\\trmrk-testing-nglib\\src",
@@ -191,12 +202,19 @@ const destnLocationsArr: {
       "trmrk-axios",
       "trmrk-browser",
       "trmrk-react",
+      "trmrk-react-KEEP",
       "trmrk-notes-reactlib",
     ],
   },
   "trmrk-react-testapp": {
     dirPath: "apps\\trmrk-react-testapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
+    syncedLibs: [
+      "trmrk",
+      "trmrk-axios",
+      "trmrk-browser",
+      "trmrk-react",
+      "trmrk-react-KEEP",
+    ],
   },
 };
 
@@ -219,7 +237,7 @@ scr.call_fst_pull = [scr.call_sync, scr.fst_pull, scr.pf].join(" ");
 scr.call_fst_push = [scr.call_sync, scr.fst_push, scr.pf].join(" ");
 
 scr.call_fst_push_ppgp = [scr.call_sync, scr.fst_push, scr.ppgp, scr.pf].join(
-  " "
+  " ",
 );
 
 const getJsWsSyncSrcSections = () =>
@@ -331,7 +349,13 @@ const getJsWsSyncDestnSections = () =>
         Files: [
           {
             FileRelPath: ".gitignore",
-            TextContent: destnLocation.syncedLibs.join("\n"),
+            TextContent: destnLocation.syncedLibs
+              .filter(
+                (lib) =>
+                  !destnLocation.keptLibs ||
+                  destnLocation.keptLibs.indexOf(lib) < 0,
+              )
+              .join("\n"),
           },
         ],
       },
