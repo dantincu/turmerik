@@ -133,6 +133,7 @@ const destnLocationsArr: {
       "trmrk-react",
       "trmrk-react-KEEP",
     ],
+    keptLibs: ["trmrk-react-KEEP"],
   },
   "trmrk-testing-nglib": {
     dirPath: "libs\\trmrk-testing-nglib\\projects\\trmrk-testing-nglib\\src",
@@ -205,6 +206,7 @@ const destnLocationsArr: {
       "trmrk-react-KEEP",
       "trmrk-notes-reactlib",
     ],
+    keptLibs: ["trmrk-react-KEEP"],
   },
   "trmrk-react-testapp": {
     dirPath: "apps\\trmrk-react-testapp\\src",
@@ -215,6 +217,7 @@ const destnLocationsArr: {
       "trmrk-react",
       "trmrk-react-KEEP",
     ],
+    keptLibs: ["trmrk-react-KEEP"],
   },
 };
 
