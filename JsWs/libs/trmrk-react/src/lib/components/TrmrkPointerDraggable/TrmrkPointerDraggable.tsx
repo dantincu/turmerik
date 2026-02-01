@@ -29,9 +29,8 @@ export default function TrmrkPointerDraggable<T, P>({ hoc, args }: Readonly<Trmr
       pointerDragService = createPointerDragService();
       pointerDragService.init(args);
     }
-    
+
     pointerDragService.setHostElem(el as HTMLElement | null);
-    
   }));
 
   React.useEffect(() => {

@@ -10,7 +10,6 @@ import { pointerIsTouchOrLeftMouseBtn } from "@/src/trmrk-browser/domUtils/touch
 
 import "./Trmrk3PanelsAppLayout.scss";
 import { ComponentProps } from "../defs/common";
-import { HOCArgs } from "../defs/HOC";
 import TrmrkBasicAppLayout from "../TrmrkBasicAppLayout/TrmrkBasicAppLayout";
 import { overridingBottomToolbarContents, useToolbarOverridingContentKeys } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 import TrmrkSplitContainerCore from "../TrmrkSplitContainerCore/TrmrkSplitContainerCore";
@@ -32,7 +31,7 @@ import {
   trmrk3PanelsAppLayoutConstants
 } from "./Trmrk3PanelsAppLayoutService";
 
-const ResizePanelsBottomToolbarContents = React.memo(({
+const ResizePanelsBottomToolbarContents = ({
   showLeftPanelValue,
   showMiddlePanelValue,
   showRightPanelValue,
@@ -48,6 +47,31 @@ const ResizePanelsBottomToolbarContents = React.memo(({
   const [leftPanelWidthRatio, setLeftPanelWidthRatio] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanelWidthRatio);
   const [middlePanelWidthRatio, setMiddlePanelWidthRatio] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanelWidthRatio);
 
+  const leftPanelWidthRatioRef = React.useRef(leftPanelWidthRatio);
+  const leftPanelPointerDownWidthRatioRef = React.useRef(leftPanelWidthRatio);
+  const middlePanelWidthRatioRef = React.useRef(middlePanelWidthRatio);
+  const middlePanelPointerDownWidthRatioRef = React.useRef(middlePanelWidthRatio);
+
+  const eventDataAvailable = React.useCallback((data: DragEventData, isForMouseUp: boolean) => {
+      data.isValid ||= pointerIsTouchOrLeftMouseBtn(data.event as PointerEvent, isForMouseUp);
+    }, []);
+
+  const resizeLeftPanelBtnDragStart = React.useCallback((_: PointerEvent) => {
+    const leftPanelContainerEl = leftPanelContainerElRef.current;
+
+    if (leftPanelContainerEl) {
+      leftPanelPointerDownWidthRatioRef.current = leftPanelWidthRatioRef.current;
+    }
+  }, []);
+
+  const resizeMiddlePanelBtnDragStart = React.useCallback((_: PointerEvent) => {
+    const middlePanelContainerEl = middlePanelContainerElRef.current;
+
+    if (middlePanelContainerEl) {
+      middlePanelPointerDownWidthRatioRef.current = middlePanelWidthRatioRef.current;
+    }
+  }, []);
+  
   const resizeLeftPanelBtnDrag = React.useCallback((event: PointerDragEvent) => {
     const leftPanelContainerEl = leftPanelContainerElRef.current;
 
@@ -55,11 +79,11 @@ const ResizePanelsBottomToolbarContents = React.memo(({
       const containerWidthPx = leftPanelContainerEl.offsetWidth;
       const diffPx = event.event.screenX - event.pointerDownEvent.screenX;
       const diffPercent = (diffPx * 100.0) / containerWidthPx;
-      const newLeftPanelWidthRatio = (leftPanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultLeftPanelWidthRatio) + diffPercent;
+      const newLeftPanelWidthRatio = (leftPanelPointerDownWidthRatioRef.current ?? trmrk3PanelsAppLayoutConstants.defaultLeftPanelWidthRatio) + diffPercent;
       setLeftPanelWidthRatio(newLeftPanelWidthRatio);
     }
-  }, [leftPanelWidthRatio]);
-
+  }, []);
+  
   const resizeMiddlePanelBtnDrag = React.useCallback((event: PointerDragEvent) => {
     const middlePanelContainerEl = middlePanelContainerElRef.current;
 
@@ -67,27 +91,51 @@ const ResizePanelsBottomToolbarContents = React.memo(({
       const containerWidthPx = middlePanelContainerEl.offsetWidth;
       const diffPx = event.event.screenX - event.pointerDownEvent.screenX;
       const diffPercent = (diffPx * 100.0) / containerWidthPx;
-      const newLeftPanelWidthRatio = (middlePanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultMiddlePanelWidthRatio) + diffPercent;
-      setMiddlePanelWidthRatio(newLeftPanelWidthRatio);
+      const newMiddlePanelWidthRatio = (middlePanelPointerDownWidthRatioRef.current ?? trmrk3PanelsAppLayoutConstants.defaultMiddlePanelWidthRatio) + diffPercent;
+      setMiddlePanelWidthRatio(newMiddlePanelWidthRatio);
     }
   }, []);
+
+  const leftPanelResizeDraggableNode = React.useCallback((
+    props: {}, ref: React.ForwardedRef<HTMLButtonElement>) => <TrmrkBtn
+      {...props} ref={ref as React.Ref<HTMLButtonElement>} className="right-[-25px]">
+        <TrmrkIcon icon="mdi:drag-vertical-variant" /></TrmrkBtn>, []);
+
+  const middlePanelResizeDraggableNode = React.useCallback((
+    props: {}, ref: React.ForwardedRef<HTMLButtonElement>) => <TrmrkBtn
+      {...props} ref={ref as React.Ref<HTMLButtonElement>} className="right-[-25px]">
+        <TrmrkIcon icon="mdi:drag-vertical-variant" /></TrmrkBtn>, []);
+
+  const leftPanelResizeDraggableHOCArgs = React.useMemo(() => ({
+    node: leftPanelResizeDraggableNode,
+    props: {}}), []);
+
+  const middlePanelResizeDraggableHOCArgs = React.useMemo(() => ({
+    node: middlePanelResizeDraggableNode,
+    props: {}}), []);
+
+  const leftPanelResizeDraggableSvcArgs = React.useMemo(() => ({
+      drag: resizeLeftPanelBtnDrag,
+      dragStart: resizeLeftPanelBtnDragStart,
+      eventDataAvailable
+    }), [leftPanelWidthRatio]);
+
+  const middlePanelResizeDraggableSvcArgs = React.useMemo(() => ({
+      drag: resizeMiddlePanelBtnDrag,
+      dragStart: resizeMiddlePanelBtnDragStart,
+      eventDataAvailable
+    }), [middlePanelWidthRatio]);
+
+  React.useEffect(() => {
+    leftPanelWidthRatioRef.current = leftPanelWidthRatio;
+    middlePanelWidthRatioRef.current = middlePanelWidthRatio;
+  }, [leftPanelWidthRatio, middlePanelWidthRatio])
 
   return <>
     { showLeftPanelValue && <div className="flex justify-end" style={{
         width: `calc(${leftPanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultLeftPanelWidthRatio}%)`
       }}>
-        <TrmrkPointerDraggable hoc={{
-          node: (props, ref) => {
-            return <TrmrkBtn
-              {...props} ref={ref as React.Ref<HTMLButtonElement>} className="right-[-25px]">
-                <TrmrkIcon icon="mdi:drag-vertical-variant" /></TrmrkBtn>;
-          },
-          props: {}}} args={{
-            drag: resizeLeftPanelBtnDrag,
-            eventDataAvailable: (data: DragEventData, isForMouseUp: boolean) => {
-              data.isValid ||= pointerIsTouchOrLeftMouseBtn(data.event as PointerEvent, isForMouseUp);
-            }
-          }}></TrmrkPointerDraggable>
+        <TrmrkPointerDraggable hoc={leftPanelResizeDraggableHOCArgs} args={leftPanelResizeDraggableSvcArgs}></TrmrkPointerDraggable>
     </div> }
     { (showMiddlePanelValue && showRightPanelValue) && <div className="flex" style={{
         width: showLeftPanelValue ? `calc(${100 - (leftPanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultLeftPanelWidthRatio)}%)` : "100%"
@@ -95,20 +143,11 @@ const ResizePanelsBottomToolbarContents = React.memo(({
       <div className="flex justify-end" style={{
           width: `calc(${middlePanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultMiddlePanelWidthRatio}% + ${showLeftPanelValue ? "4px" : "0px"})`
         }}>
-          <TrmrkPointerDraggable hoc={{
-          node: (props, ref) => <TrmrkBtn {...props} ref={ref as React.Ref<HTMLButtonElement>} className="right-[-25px]">
-            <TrmrkIcon icon="mdi:drag-vertical-variant" /></TrmrkBtn>,
-          props: {}
-        }} args={{
-          drag: resizeMiddlePanelBtnDrag,
-          eventDataAvailable: (data, isForMouseUp) => {
-            data.isValid ||= pointerIsTouchOrLeftMouseBtn(data.event as PointerEvent, isForMouseUp);
-          }
-        }}></TrmrkPointerDraggable>
+        <TrmrkPointerDraggable hoc={middlePanelResizeDraggableHOCArgs} args={middlePanelResizeDraggableSvcArgs}></TrmrkPointerDraggable>
       </div>
     </div> }
   </>;
-});
+};
 
 export interface Trmrk3PanelsAppLayoutProps extends ComponentProps {}
 
