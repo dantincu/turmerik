@@ -28,8 +28,45 @@ import {
   usePanelContentsKeyAtoms,
   useShowPanelAtoms,
   useShowPanelLoaderAtoms,
-  trmrk3PanelsAppLayoutConstants
+  trmrk3PanelsAppLayoutConstants,
+  trmrk3PanelsAppLayoutVars
 } from "./Trmrk3PanelsAppLayoutService";
+
+const updateLeftPanelContainerElWidth = (
+  leftPanelContainerElRef: React.RefObject<HTMLDivElement | null>
+) => {
+  const leftPanelContainerEl = leftPanelContainerElRef.current;
+
+  if (leftPanelContainerEl) {
+    const panel1 = leftPanelContainerEl.querySelector(":scope > .trmrk-split-panel1") as HTMLElement;
+
+    if (panel1) {
+      panel1.style.flexBasis = `${trmrk3PanelsAppLayoutVars.leftPanelWidthRatio}%`;
+      panel1.style.minWidth = `${trmrk3PanelsAppLayoutVars.leftPanelWidthRatio}%`;
+    }
+  }
+};
+
+const updateMiddlePanelContainerElWidth = (
+  middlePanelContainerElRef: React.RefObject<HTMLDivElement | null>,
+  showMiddleAndRightPanel: boolean
+) => {
+  const middlePanelContainerEl = middlePanelContainerElRef.current;
+
+  if (middlePanelContainerEl) {
+    const panel1 = middlePanelContainerEl.querySelector(":scope > .trmrk-split-panel1") as HTMLElement;
+
+    if (panel1) {
+      if (showMiddleAndRightPanel) {
+        panel1.style.flexBasis = `${trmrk3PanelsAppLayoutVars.middlePanelWidthRatio}%`;
+        panel1.style.minWidth = `${trmrk3PanelsAppLayoutVars.middlePanelWidthRatio}%`;
+      } else {
+        panel1.style.flexBasis = "";
+        panel1.style.minWidth = "";
+      }
+    }
+  }
+};
 
 const ResizePanelsBottomToolbarContents = ({
   showLeftPanelValue,
@@ -44,13 +81,54 @@ const ResizePanelsBottomToolbarContents = ({
   leftPanelContainerElRef: React.RefObject<HTMLDivElement | null>,
   middlePanelContainerElRef: React.RefObject<HTMLDivElement | null>
 }) => {
-  const [leftPanelWidthRatio, setLeftPanelWidthRatio] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanelWidthRatio);
-  const [middlePanelWidthRatio, setMiddlePanelWidthRatio] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanelWidthRatio);
+  const resizeLeftPanelStripElRef = React.useRef<HTMLDivElement | null>(null);
+  const resizeMiddlePanelStripContainerElRef = React.useRef<HTMLDivElement | null>(null);
+  const resizeMiddlePanelStripElRef = React.useRef<HTMLDivElement | null>(null);
 
-  const leftPanelWidthRatioRef = React.useRef(leftPanelWidthRatio);
-  const leftPanelPointerDownWidthRatioRef = React.useRef(leftPanelWidthRatio);
-  const middlePanelWidthRatioRef = React.useRef(middlePanelWidthRatio);
-  const middlePanelPointerDownWidthRatioRef = React.useRef(middlePanelWidthRatio);
+  const leftPanelPointerDownWidthRatioRef = React.useRef(trmrk3PanelsAppLayoutVars.leftPanelWidthRatio);
+  const middlePanelPointerDownWidthRatioRef = React.useRef(trmrk3PanelsAppLayoutVars.middlePanelWidthRatio);
+
+  const resizeLeftPanelStripElAvailable = React.useCallback((el: HTMLDivElement) => {
+    resizeLeftPanelStripElRef.current = el;
+    onLeftPanelWidthRatioChanged();
+  }, []);
+
+  const resizeMiddlePanelStripContainerElAvailable = React.useCallback((el: HTMLDivElement) => {
+    resizeMiddlePanelStripContainerElRef.current = el;
+    onLeftPanelWidthRatioChanged();
+  }, []);
+
+  const resizeMiddlePanelStripElAvailable = React.useCallback((el: HTMLDivElement) => {
+    resizeMiddlePanelStripElRef.current = el;
+    onMiddlePanelWidthRatioChanged();
+  }, []);
+
+  const onLeftPanelWidthRatioChanged = React.useCallback(() => {
+    const resizeLeftPanelStripEl = resizeLeftPanelStripElRef.current;
+    const resizeMiddlePanelStripContainerEl = resizeMiddlePanelStripContainerElRef.current;
+
+    if (resizeLeftPanelStripEl) {
+      resizeLeftPanelStripEl.style.width = `${trmrk3PanelsAppLayoutVars.leftPanelWidthRatio}%`;
+    }
+
+    if (resizeMiddlePanelStripContainerEl) {
+      resizeMiddlePanelStripContainerEl.style.width = showLeftPanelValue ? `${100 - trmrk3PanelsAppLayoutVars.leftPanelWidthRatio}%` : "100%";
+    }
+    
+    updateLeftPanelContainerElWidth(leftPanelContainerElRef);
+  }, [showLeftPanelValue]);
+
+  const onMiddlePanelWidthRatioChanged = React.useCallback(() => {
+    const resizeMiddlePanelStripEl = resizeMiddlePanelStripElRef.current;
+
+    if (resizeMiddlePanelStripEl) {
+      resizeMiddlePanelStripEl.style.width = showLeftPanelValue ?
+        `calc(${trmrk3PanelsAppLayoutVars.middlePanelWidthRatio}% + 4px)` :
+        `${trmrk3PanelsAppLayoutVars.middlePanelWidthRatio}%`;
+    }
+    
+    updateMiddlePanelContainerElWidth(middlePanelContainerElRef, showRightPanelValue);
+  }, [showLeftPanelValue, showRightPanelValue]);
 
   const eventDataAvailable = React.useCallback((data: DragEventData, isForMouseUp: boolean) => {
       data.isValid ||= pointerIsTouchOrLeftMouseBtn(data.event as PointerEvent, isForMouseUp);
@@ -60,7 +138,7 @@ const ResizePanelsBottomToolbarContents = ({
     const leftPanelContainerEl = leftPanelContainerElRef.current;
 
     if (leftPanelContainerEl) {
-      leftPanelPointerDownWidthRatioRef.current = leftPanelWidthRatioRef.current;
+      leftPanelPointerDownWidthRatioRef.current = trmrk3PanelsAppLayoutVars.leftPanelWidthRatio;
     }
   }, []);
 
@@ -68,7 +146,7 @@ const ResizePanelsBottomToolbarContents = ({
     const middlePanelContainerEl = middlePanelContainerElRef.current;
 
     if (middlePanelContainerEl) {
-      middlePanelPointerDownWidthRatioRef.current = middlePanelWidthRatioRef.current;
+      middlePanelPointerDownWidthRatioRef.current = trmrk3PanelsAppLayoutVars.middlePanelWidthRatio;
     }
   }, []);
   
@@ -79,8 +157,9 @@ const ResizePanelsBottomToolbarContents = ({
       const containerWidthPx = leftPanelContainerEl.offsetWidth;
       const diffPx = event.event.screenX - event.pointerDownEvent.screenX;
       const diffPercent = (diffPx * 100.0) / containerWidthPx;
-      const newLeftPanelWidthRatio = (leftPanelPointerDownWidthRatioRef.current ?? trmrk3PanelsAppLayoutConstants.defaultLeftPanelWidthRatio) + diffPercent;
-      setLeftPanelWidthRatio(newLeftPanelWidthRatio);
+      const newLeftPanelWidthRatio = leftPanelPointerDownWidthRatioRef.current + diffPercent;
+      trmrk3PanelsAppLayoutVars.leftPanelWidthRatio = newLeftPanelWidthRatio;
+      onLeftPanelWidthRatioChanged();
     }
   }, []);
   
@@ -91,8 +170,9 @@ const ResizePanelsBottomToolbarContents = ({
       const containerWidthPx = middlePanelContainerEl.offsetWidth;
       const diffPx = event.event.screenX - event.pointerDownEvent.screenX;
       const diffPercent = (diffPx * 100.0) / containerWidthPx;
-      const newMiddlePanelWidthRatio = (middlePanelPointerDownWidthRatioRef.current ?? trmrk3PanelsAppLayoutConstants.defaultMiddlePanelWidthRatio) + diffPercent;
-      setMiddlePanelWidthRatio(newMiddlePanelWidthRatio);
+      const newMiddlePanelWidthRatio = middlePanelPointerDownWidthRatioRef.current + diffPercent;
+      trmrk3PanelsAppLayoutVars.middlePanelWidthRatio = newMiddlePanelWidthRatio;
+      onMiddlePanelWidthRatioChanged();
     }
   }, []);
 
@@ -118,31 +198,25 @@ const ResizePanelsBottomToolbarContents = ({
       drag: resizeLeftPanelBtnDrag,
       dragStart: resizeLeftPanelBtnDragStart,
       eventDataAvailable
-    }), [leftPanelWidthRatio]);
+    }), []);
 
   const middlePanelResizeDraggableSvcArgs = React.useMemo(() => ({
       drag: resizeMiddlePanelBtnDrag,
       dragStart: resizeMiddlePanelBtnDragStart,
       eventDataAvailable
-    }), [middlePanelWidthRatio]);
+    }), []);
 
   React.useEffect(() => {
-    leftPanelWidthRatioRef.current = leftPanelWidthRatio;
-    middlePanelWidthRatioRef.current = middlePanelWidthRatio;
-  }, [leftPanelWidthRatio, middlePanelWidthRatio])
+    onLeftPanelWidthRatioChanged();
+    onMiddlePanelWidthRatioChanged();
+  }, [showLeftPanelValue, showRightPanelValue]);
 
   return <>
-    { showLeftPanelValue && <div className="flex justify-end" style={{
-        width: `calc(${leftPanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultLeftPanelWidthRatio}%)`
-      }}>
+    { showLeftPanelValue && <div className="flex justify-end" ref={resizeLeftPanelStripElAvailable}>
         <TrmrkPointerDraggable hoc={leftPanelResizeDraggableHOCArgs} args={leftPanelResizeDraggableSvcArgs}></TrmrkPointerDraggable>
     </div> }
-    { (showMiddlePanelValue && showRightPanelValue) && <div className="flex" style={{
-        width: showLeftPanelValue ? `calc(${100 - (leftPanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultLeftPanelWidthRatio)}%)` : "100%"
-      }}>
-      <div className="flex justify-end" style={{
-          width: `calc(${middlePanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultMiddlePanelWidthRatio}% + ${showLeftPanelValue ? "4px" : "0px"})`
-        }}>
+    { (showMiddlePanelValue && showRightPanelValue) && <div className="flex" ref={resizeMiddlePanelStripContainerElAvailable}>
+      <div className="flex justify-end" ref={resizeMiddlePanelStripElAvailable}>
         <TrmrkPointerDraggable hoc={middlePanelResizeDraggableHOCArgs} args={middlePanelResizeDraggableSvcArgs}></TrmrkPointerDraggable>
       </div>
     </div> }
@@ -163,8 +237,6 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
 
   const [focusedPanel, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
   const [isResizingPanels, setIsResizingPanels] = useAtom(trmrk3PanelsAppLayoutAtoms.isResizingPanels);
-  const [leftPanelWidthRatio] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanelWidthRatio);
-  const [middlePanelWidthRatio] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanelWidthRatio);
   const [isMultiPanelMode] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode);
 
   const showLeftPanelValue = React.useMemo(
@@ -191,6 +263,16 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
     setFocusedPanel(TrmrkAppLayoutPanel.Right);
   }, [focusedPanel]);
 
+  const leftPanelContainerElAvailable = React.useCallback((el: HTMLDivElement) => {
+    leftPanelContainerElRef.current = el;
+    updateLeftPanelContainerElWidth(leftPanelContainerElRef);
+  }, []);
+
+  const middlePanelContainerElAvailable = React.useCallback((el: HTMLDivElement) => {
+    middlePanelContainerElRef.current = el;
+    updateMiddlePanelContainerElWidth(middlePanelContainerElRef, showRightPanelValue);
+  }, [showRightPanelValue]);
+
   React.useEffect(() => {
     const allowResizingPanels = [
       showLeftPanelValue,
@@ -213,7 +295,12 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
       setIsResizingPanels(false);
     }
 
+    updateLeftPanelContainerElWidth(leftPanelContainerElRef);
+    updateMiddlePanelContainerElWidth(middlePanelContainerElRef, showRightPanelValue);
+
     return () => {
+      updateLeftPanelContainerElWidth(leftPanelContainerElRef);
+      updateMiddlePanelContainerElWidth(middlePanelContainerElRef, showRightPanelValue);
       actWithValIf(bottomToolbarContentsId, id => overridingBottomToolbarContents.value.unregister(id));
     };
   }, [
@@ -225,11 +312,10 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
 
   return (
     <TrmrkBasicAppLayout className={cssClass}>
-      <TrmrkSplitContainerCore ref={leftPanelContainerElRef}
+      <TrmrkSplitContainerCore ref={leftPanelContainerElAvailable}
         panel1CssClass={[ focusedPanel === TrmrkAppLayoutPanel.Left ? "trmrk-is-focused" : "" ].join(" ")}
         showPanel1={showLeftPanelValue}
         showPanel2={showMiddlePanelValue || showRightPanelValue}
-        panel1WidthPercent={leftPanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultLeftPanelWidthRatio}
         panel1Content={
           showLeftPanelValue && <>
             <div className="trmrk-panel-body-container"
@@ -238,12 +324,11 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
               contentsKeyPanelAtoms.leftPanel.value && leftPanelContents.value.keyedMap.map[contentsKeyPanelAtoms.leftPanel.value]?.node }</div></div>
             { showPanelLoaderAtoms.leftPanel.value && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }
         panel2Content={
-          <TrmrkSplitContainerCore ref={middlePanelContainerElRef}
+          <TrmrkSplitContainerCore ref={middlePanelContainerElAvailable}
             panel1CssClass={[ focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-is-focused" : "" ].join(" ")}
             panel2CssClass={[ focusedPanel === TrmrkAppLayoutPanel.Right ? "trmrk-is-focused" : "" ].join(" ")}
             showPanel1={showMiddlePanelValue}
             showPanel2={showRightPanelValue}
-            panel1WidthPercent={middlePanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultMiddlePanelWidthRatio}
             panel1Content={showMiddlePanelValue && <><div className="trmrk-panel-body-container"
               onMouseDownCapture={middlePanelPointerDown}
               onTouchStartCapture={middlePanelPointerDown}><div className="trmrk-panel-body">{ 

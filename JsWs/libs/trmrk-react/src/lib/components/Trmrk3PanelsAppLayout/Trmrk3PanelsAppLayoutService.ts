@@ -50,6 +50,13 @@ export const trmrk3PanelsAppLayoutConstants = {
   defaultMiddlePanelWidthRatio: 50.0,
 };
 
+export const trmrk3PanelsAppLayoutVars = {
+  leftPanelWidthRatio:
+    trmrk3PanelsAppLayoutConstants.defaultLeftPanelWidthRatio,
+  middlePanelWidthRatio:
+    trmrk3PanelsAppLayoutConstants.defaultMiddlePanelWidthRatio,
+};
+
 export const trmrk3PanelsAppLayoutAtoms = {
   leftPanel: createPanelAtoms(),
   middlePanel: createPanelAtoms(),
@@ -57,8 +64,6 @@ export const trmrk3PanelsAppLayoutAtoms = {
   focusedPanel: atom(TrmrkAppLayoutPanel.Middle),
   isMultiPanelMode: atom(false),
   isResizingPanels: atom(false),
-  leftPanelWidthRatio: atom<number | null>(null),
-  middlePanelWidthRatio: atom<number | null>(null),
 };
 
 export const leftPanelContents = new RefLazyValue(() =>
