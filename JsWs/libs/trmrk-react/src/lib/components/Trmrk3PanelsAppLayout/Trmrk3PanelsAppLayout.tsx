@@ -5,6 +5,8 @@ import { useAtom } from "jotai";
 
 import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
 import { actWithValIf } from "@/src/trmrk/core";
+import { getVarName } from "@/src/trmrk/Reflection/core";
+import { joinNames } from "@/src/trmrk/name-generators";
 import { PointerDragEvent, DragEventData } from "@/src/trmrk-browser/domUtils/PointerDragService";
 import { pointerIsTouchOrLeftMouseBtn } from "@/src/trmrk-browser/domUtils/touchAndMouseEvents";
 
@@ -67,6 +69,10 @@ const updateMiddlePanelContainerElWidth = (
     }
   }
 };
+
+export const RegisteredResizePanelsBottomToolbarContentsTypeName = joinNames([
+  getVarName(() => Trmrk3PanelsAppLayout),
+  getVarName(() => ResizePanelsBottomToolbarContents)]);
 
 const ResizePanelsBottomToolbarContents = ({
   showLeftPanelValue,
@@ -228,6 +234,8 @@ export interface Trmrk3PanelsAppLayoutProps extends ComponentProps {}
 export default function Trmrk3PanelsAppLayout({ className: cssClass, children }: Readonly<Trmrk3PanelsAppLayoutProps>) {
   const leftPanelContainerElRef = React.useRef<HTMLDivElement | null>(null);
   const middlePanelContainerElRef = React.useRef<HTMLDivElement | null>(null);
+  const currentBottomToolbarContentsIdRef = React.useRef<number | null>(null);
+  const currentBottomToolbarContentsTypeNameRef = React.useRef<string | null>(null);
 
   const allowShowPanelAtoms = useAllowShowPanelAtoms();
   const contentsKeyPanelAtoms = usePanelContentsKeyAtoms();
@@ -286,10 +294,19 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
         showMiddlePanelValue={showMiddlePanelValue}
         showRightPanelValue={showRightPanelValue}
         leftPanelContainerElRef={leftPanelContainerElRef}
-        middlePanelContainerElRef={middlePanelContainerElRef} />
+        middlePanelContainerElRef={middlePanelContainerElRef} />,
+        RegisteredResizePanelsBottomToolbarContentsTypeName
     ) : null;
 
-    toolbarOverridingContentKeys.bottomToolbar.set(bottomToolbarContentsId);
+    const currentBottomToolbarContentsId = currentBottomToolbarContentsIdRef.current;
+    let shouldSetBottomToolbarContentsId = (bottomToolbarContentsId ?? null) !== null;
+
+    shouldSetBottomToolbarContentsId ||= ((currentBottomToolbarContentsId ?? null) !== null &&
+      currentBottomToolbarContentsTypeNameRef.current === RegisteredResizePanelsBottomToolbarContentsTypeName);
+
+    if (shouldSetBottomToolbarContentsId) {
+      toolbarOverridingContentKeys.bottomToolbar.set(bottomToolbarContentsId);
+    }
 
     if (isResizingPanels && !allowResizingPanels) {
       setIsResizingPanels(false);
@@ -307,8 +324,18 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
     isResizingPanels,
     showLeftPanelValue,
     showMiddlePanelValue,
-    showRightPanelValue
+    showRightPanelValue,
   ]);
+
+  React.useEffect(() => {
+    const currentBottomToolbarContentsId = currentBottomToolbarContentsIdRef.current = toolbarOverridingContentKeys.bottomToolbar.value;
+
+    if ((currentBottomToolbarContentsId ?? null) !== null) {
+      currentBottomToolbarContentsTypeNameRef.current = overridingBottomToolbarContents.value.keyedMap.map[currentBottomToolbarContentsId!]?.typeName ?? null;
+    } else {
+      currentBottomToolbarContentsTypeNameRef.current = null;
+    }
+  }, [toolbarOverridingContentKeys.bottomToolbar.value]);
 
   return (
     <TrmrkBasicAppLayout className={cssClass}>

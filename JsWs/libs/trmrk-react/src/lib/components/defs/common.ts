@@ -11,6 +11,7 @@ export interface ComponentProps {
 
 export interface KeyedReactNode<TKey> {
   key: TKey;
+  typeName?: string | NullOrUndef;
   node: React.ReactNode;
 }
 

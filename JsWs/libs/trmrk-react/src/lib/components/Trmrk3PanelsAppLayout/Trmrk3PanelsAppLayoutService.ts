@@ -111,6 +111,7 @@ export const usePanelContentsKeyAtoms = (): PanelAtoms<number | null> => ({
 export interface InitLayoutPartArgs {
   allowShow?: boolean | NullOrUndef;
   contents?: React.ReactNode | NullOrUndef;
+  typeName?: string | NullOrUndef;
 }
 
 export interface InitLayoutArgs {
@@ -161,6 +162,7 @@ export const initLayoutPart = (
     ? contentsKeyManager.value.register(
         defaultComponentIdService.value.getNextId(),
         args.contents,
+        args.typeName,
       )
     : null;
 

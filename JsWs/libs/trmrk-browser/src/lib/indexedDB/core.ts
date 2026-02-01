@@ -1,5 +1,6 @@
-import { AnyOrUnknown, NullOrUndef } from '../../trmrk/core';
-import { getDOMExceptionErrorMsg } from '../../trmrk-browser/domUtils/core';
+import { AnyOrUnknown, NullOrUndef } from "../../trmrk/core";
+import { joinNames } from "../../trmrk/name-generators";
+import { getDOMExceptionErrorMsg } from "../../trmrk-browser/domUtils/core";
 
 export interface DbStoreDefinitionCore {
   name: string;
@@ -20,20 +21,25 @@ export interface CachedItemCore {
 }
 
 export const sortCachedItems = <TCachedItem extends CachedItemCore>(
-  cachedItemsArr: TCachedItem[]
+  cachedItemsArr: TCachedItem[],
 ) => {
-  cachedItemsArr.sort((a, b) => (a.clientFetchTmStmpMillis >= b.clientFetchTmStmpMillis ? -1 : 0));
+  cachedItemsArr.sort((a, b) =>
+    a.clientFetchTmStmpMillis >= b.clientFetchTmStmpMillis ? -1 : 0,
+  );
   return cachedItemsArr;
 };
 
 export const getIDbRequestOpenErrorMsg = (error: DOMException | null): string =>
-  getDOMExceptionErrorMsg(error, 'Unknown error occurred while opening IndexedDB.');
+  getDOMExceptionErrorMsg(
+    error,
+    "Unknown error occurred while opening IndexedDB.",
+  );
 
 export const createDbStoreIfNotExists = (
   db: IDBDatabase,
   storeName: string,
   optionsFactory?: (() => IDBObjectStoreParameters) | NullOrUndef,
-  callback?: (store: IDBObjectStore) => AnyOrUnknown
+  callback?: (store: IDBObjectStore) => AnyOrUnknown,
 ) => {
   let dbStore: IDBObjectStore | null = null;
 
@@ -53,7 +59,7 @@ export const createIndexIfNotExists = (
   dbStore: IDBObjectStore,
   indexName: string,
   keyPath: string | string[],
-  optionsFactory?: (() => IDBIndexParameters) | NullOrUndef
+  optionsFactory?: (() => IDBIndexParameters) | NullOrUndef,
 ) => {
   let index: IDBIndex = null!;
 
@@ -67,11 +73,7 @@ export const createIndexIfNotExists = (
   return index;
 };
 
-export const getDbObjName = (parts: (string | NullOrUndef)[]) =>
-  parts
-    .filter((part) => (part ?? null) !== null)
-    .map((part) => `[${part}]`)
-    .join('');
+export const getDbObjName = joinNames;
 
 export interface DbResponse<T> {
   value: T;
