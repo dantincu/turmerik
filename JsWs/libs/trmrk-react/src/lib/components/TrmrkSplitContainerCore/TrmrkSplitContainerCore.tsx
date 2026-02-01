@@ -1,3 +1,5 @@
+import React from "react";
+
 import { NullOrUndef } from "@/src/trmrk/core";
 
 import "./TrmrkSplitContainerCore.scss";
@@ -14,8 +16,8 @@ export interface TrmrkSplitContainerProps extends ComponentProps {
   panel2CssClass?: string | NullOrUndef;
 }
 
-export default function TrmrkSplitContainerCore({
-  className: cssClass,
+const TrmrkSplitContainerCore = React.forwardRef<HTMLDivElement, TrmrkSplitContainerProps>(({
+  className,
   panel1WidthPercent,
   showPanel1,
   showPanel2,
@@ -23,9 +25,9 @@ export default function TrmrkSplitContainerCore({
   panel2Content,
   panel1CssClass,
   panel2CssClass
-}: TrmrkSplitContainerProps) {
+}, ref) => {
   return (
-    <div className={['trmrk-split-container', showPanel1 && showPanel2 ? "trmrk-has-both-panels" : "", cssClass ?? ''].join(' ')}>
+    <div ref={ref} className={['trmrk-split-container', showPanel1 && showPanel2 ? "trmrk-has-both-panels" : "", className ?? ''].join(' ')}>
       {showPanel1 && panel1Content && <div className={["trmrk-split-panel1", panel1CssClass ?? ''].join(" ")}
         style={ showPanel2 && panel2Content && (panel1WidthPercent ?? null) !== null ? {
           flexBasis: `${panel1WidthPercent}%`,
@@ -34,4 +36,6 @@ export default function TrmrkSplitContainerCore({
       {showPanel2 && panel2Content && <div className={["trmrk-split-panel2", panel2CssClass ?? ''].join(" ")}>{panel2Content}</div>}
     </div>
   );
-}
+});
+
+export default TrmrkSplitContainerCore;

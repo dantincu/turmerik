@@ -223,3 +223,8 @@ export const isContainedBy = (args: IsContainedByArgs<HTMLElement>) => {
 
   return retVal;
 };
+
+export const pointerIsTouchOrLeftMouseBtn = (
+  event: PointerEvent | MouseEvent,
+  isForMouseUp = false,
+) => event.buttons === (isForMouseUp ? 0 : 1);

@@ -12,27 +12,36 @@ import { HOCArgs } from "../defs/HOC";
 
 import { updateRef } from "../../services/utils";
 
-export interface TrmrkLongPressableProps<T, P> {
+export interface TrmrkPointerDraggableProps<T, P> {
   hoc: HOCArgs<T, P>,
-  args: (rootEl: T) => PointerDragServiceInitArgs
+  args: PointerDragServiceInitArgs
 }
 
-export default function TrmrkLongPressable<T, P>({ hoc, args }: Readonly<TrmrkLongPressableProps<T, P>>) {
-  const initializedRef = React.useRef(false);
+export default function TrmrkPointerDraggable<T, P>({ hoc, args }: Readonly<TrmrkPointerDraggableProps<T, P>>) {
+  const elRef = React.useRef<T | null>(null);
   let pointerDragService: PointerDragService | null = null;
 
   const Component = React.forwardRef<T, P>((props, ref) => hoc.node(props, (el) => {
-    pointerDragService?.dispose();
-    pointerDragService = createPointerDragService();
-    actWithValIf(el, rootEl => pointerDragService!.init(args(rootEl)));
+    elRef.current = el;
     actWithValIf(ref, r => updateRef(r, el));
+
+    if (!pointerDragService) {
+      pointerDragService = createPointerDragService();
+      pointerDragService.init(args);
+    }
+    
+    pointerDragService.setHostElem(el as HTMLElement | null);
+    
   }));
 
   React.useEffect(() => {
+    pointerDragService = createPointerDragService();
+    pointerDragService.init(args);
+    pointerDragService.setHostElem(elRef.current as HTMLElement | null);
+
     return () => {
       pointerDragService?.dispose();
       pointerDragService = null;
-      initializedRef.current = false;
     }
   }, []);
   

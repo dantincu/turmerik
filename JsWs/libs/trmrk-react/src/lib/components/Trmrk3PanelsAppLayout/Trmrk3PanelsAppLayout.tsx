@@ -5,9 +5,12 @@ import { useAtom } from "jotai";
 
 import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
 import { actWithValIf } from "@/src/trmrk/core";
+import { PointerDragEvent, DragEventData } from "@/src/trmrk-browser/domUtils/PointerDragService";
+import { pointerIsTouchOrLeftMouseBtn } from "@/src/trmrk-browser/domUtils/touchAndMouseEvents";
 
 import "./Trmrk3PanelsAppLayout.scss";
 import { ComponentProps } from "../defs/common";
+import { HOCArgs } from "../defs/HOC";
 import TrmrkBasicAppLayout from "../TrmrkBasicAppLayout/TrmrkBasicAppLayout";
 import { overridingBottomToolbarContents, useToolbarOverridingContentKeys } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 import TrmrkSplitContainerCore from "../TrmrkSplitContainerCore/TrmrkSplitContainerCore";
@@ -32,43 +35,76 @@ import {
 const ResizePanelsBottomToolbarContents = React.memo(({
   showLeftPanelValue,
   showMiddlePanelValue,
-  showRightPanelValue
+  showRightPanelValue,
+  leftPanelContainerElRef,
+  middlePanelContainerElRef
 }: {
   showLeftPanelValue: boolean,
   showMiddlePanelValue: boolean,
-  showRightPanelValue: boolean
+  showRightPanelValue: boolean,
+  leftPanelContainerElRef: React.RefObject<HTMLDivElement | null>,
+  middlePanelContainerElRef: React.RefObject<HTMLDivElement | null>
 }) => {
-  const resizeLeftPanelContainerElRef = React.useRef<HTMLDivElement>(null);
-  const resizeMiddlePanelContainerElRef = React.useRef<HTMLDivElement>(null);
-
   const [leftPanelWidthRatio, setLeftPanelWidthRatio] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanelWidthRatio);
   const [middlePanelWidthRatio, setMiddlePanelWidthRatio] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanelWidthRatio);
 
+  const resizeLeftPanelBtnDrag = React.useCallback((event: PointerDragEvent) => {
+    const leftPanelContainerEl = leftPanelContainerElRef.current;
+
+    if (leftPanelContainerEl) {
+      const containerWidthPx = leftPanelContainerEl.offsetWidth;
+      const diffPx = event.event.screenX - event.pointerDownEvent.screenX;
+      const diffPercent = (diffPx * 100.0) / containerWidthPx;
+      const newLeftPanelWidthRatio = (leftPanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultLeftPanelWidthRatio) + diffPercent;
+      setLeftPanelWidthRatio(newLeftPanelWidthRatio);
+    }
+  }, [leftPanelWidthRatio]);
+
+  const resizeMiddlePanelBtnDrag = React.useCallback((event: PointerDragEvent) => {
+    const middlePanelContainerEl = middlePanelContainerElRef.current;
+
+    if (middlePanelContainerEl) {
+      const containerWidthPx = middlePanelContainerEl.offsetWidth;
+      const diffPx = event.event.screenX - event.pointerDownEvent.screenX;
+      const diffPercent = (diffPx * 100.0) / containerWidthPx;
+      const newLeftPanelWidthRatio = (middlePanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultMiddlePanelWidthRatio) + diffPercent;
+      setMiddlePanelWidthRatio(newLeftPanelWidthRatio);
+    }
+  }, []);
+
   return <>
-    { showLeftPanelValue && <div className="flex justify-end" ref={resizeLeftPanelContainerElRef} style={{
+    { showLeftPanelValue && <div className="flex justify-end" style={{
         width: `calc(${leftPanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultLeftPanelWidthRatio}%)`
       }}>
         <TrmrkPointerDraggable hoc={{
-          node: (props, ref) => <TrmrkBtn {...props} ref={ref as React.Ref<HTMLButtonElement>} style={{ right: "-25px" }}>
-            <TrmrkIcon icon="mdi:drag-vertical-variant" /></TrmrkBtn>,
-          props: {}
-        }} args={(hostElem: HTMLButtonElement) => ({
-          hostElem
-        })}></TrmrkPointerDraggable>
+          node: (props, ref) => {
+            return <TrmrkBtn
+              {...props} ref={ref as React.Ref<HTMLButtonElement>} className="right-[-25px]">
+                <TrmrkIcon icon="mdi:drag-vertical-variant" /></TrmrkBtn>;
+          },
+          props: {}}} args={{
+            drag: resizeLeftPanelBtnDrag,
+            eventDataAvailable: (data: DragEventData, isForMouseUp: boolean) => {
+              data.isValid ||= pointerIsTouchOrLeftMouseBtn(data.event as PointerEvent, isForMouseUp);
+            }
+          }}></TrmrkPointerDraggable>
     </div> }
-    { (showMiddlePanelValue && showRightPanelValue) && <div className="flex" ref={resizeMiddlePanelContainerElRef} style={{
+    { (showMiddlePanelValue && showRightPanelValue) && <div className="flex" style={{
         width: showLeftPanelValue ? `calc(${100 - (leftPanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultLeftPanelWidthRatio)}%)` : "100%"
       }}>
       <div className="flex justify-end" style={{
           width: `calc(${middlePanelWidthRatio ?? trmrk3PanelsAppLayoutConstants.defaultMiddlePanelWidthRatio}% + ${showLeftPanelValue ? "4px" : "0px"})`
         }}>
           <TrmrkPointerDraggable hoc={{
-          node: (props, ref) => <TrmrkBtn {...props} ref={ref as React.Ref<HTMLButtonElement>} style={{ right: "-25px" }}>
+          node: (props, ref) => <TrmrkBtn {...props} ref={ref as React.Ref<HTMLButtonElement>} className="right-[-25px]">
             <TrmrkIcon icon="mdi:drag-vertical-variant" /></TrmrkBtn>,
           props: {}
-        }} args={(hostElem: HTMLButtonElement) => ({
-          hostElem
-        })}></TrmrkPointerDraggable>
+        }} args={{
+          drag: resizeMiddlePanelBtnDrag,
+          eventDataAvailable: (data, isForMouseUp) => {
+            data.isValid ||= pointerIsTouchOrLeftMouseBtn(data.event as PointerEvent, isForMouseUp);
+          }
+        }}></TrmrkPointerDraggable>
       </div>
     </div> }
   </>;
@@ -77,6 +113,9 @@ const ResizePanelsBottomToolbarContents = React.memo(({
 export interface Trmrk3PanelsAppLayoutProps extends ComponentProps {}
 
 export default function Trmrk3PanelsAppLayout({ className: cssClass, children }: Readonly<Trmrk3PanelsAppLayoutProps>) {
+  const leftPanelContainerElRef = React.useRef<HTMLDivElement | null>(null);
+  const middlePanelContainerElRef = React.useRef<HTMLDivElement | null>(null);
+
   const allowShowPanelAtoms = useAllowShowPanelAtoms();
   const contentsKeyPanelAtoms = usePanelContentsKeyAtoms();
   const showPanelAtoms = useShowPanelAtoms();
@@ -124,7 +163,9 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
       <ResizePanelsBottomToolbarContents
         showLeftPanelValue={showLeftPanelValue}
         showMiddlePanelValue={showMiddlePanelValue}
-        showRightPanelValue={showRightPanelValue} />
+        showRightPanelValue={showRightPanelValue}
+        leftPanelContainerElRef={leftPanelContainerElRef}
+        middlePanelContainerElRef={middlePanelContainerElRef} />
     ) : null;
 
     toolbarOverridingContentKeys.bottomToolbar.set(bottomToolbarContentsId);
@@ -145,7 +186,7 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
 
   return (
     <TrmrkBasicAppLayout className={cssClass}>
-      <TrmrkSplitContainerCore
+      <TrmrkSplitContainerCore ref={leftPanelContainerElRef}
         panel1CssClass={[ focusedPanel === TrmrkAppLayoutPanel.Left ? "trmrk-is-focused" : "" ].join(" ")}
         showPanel1={showLeftPanelValue}
         showPanel2={showMiddlePanelValue || showRightPanelValue}
@@ -158,7 +199,7 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
               contentsKeyPanelAtoms.leftPanel.value && leftPanelContents.value.keyedMap.map[contentsKeyPanelAtoms.leftPanel.value]?.node }</div></div>
             { showPanelLoaderAtoms.leftPanel.value && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }
         panel2Content={
-          <TrmrkSplitContainerCore
+          <TrmrkSplitContainerCore ref={middlePanelContainerElRef}
             panel1CssClass={[ focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-is-focused" : "" ].join(" ")}
             panel2CssClass={[ focusedPanel === TrmrkAppLayoutPanel.Right ? "trmrk-is-focused" : "" ].join(" ")}
             showPanel1={showMiddlePanelValue}

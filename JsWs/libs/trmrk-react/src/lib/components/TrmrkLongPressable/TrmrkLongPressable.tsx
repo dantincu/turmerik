@@ -20,7 +20,6 @@ export interface TrmrkLongPressableProps<T, P> {
 export default function TrmrkLongPressable<
   T, P,
 >({ hoc, args }: Readonly<TrmrkLongPressableProps<T, P>>) {
-  const initializedRef = React.useRef(false);
   let longPressService: LongPressService | null = null;
 
   const Component = React.forwardRef<T, P>((props, ref) => hoc.node(props, (el) => {
@@ -34,7 +33,6 @@ export default function TrmrkLongPressable<
     return () => {
       longPressService?.dispose();
       longPressService = null;
-      initializedRef.current = false;
     }
   }, []);
   

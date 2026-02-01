@@ -1,12 +1,13 @@
-import { NullOrUndef, actWithValIf, MtblRefValue } from "@/src/trmrk/core";
+import { NullOrUndef, actWithValIf } from "@/src/trmrk/core";
 import { TrmrkDisposableBase } from "@/src/trmrk/TrmrkDisposableBase";
-import { clearIntervalIfReq, clearTimeoutIfReq } from "@/src/trmrk/timeout";
 
-import { MouseButton } from "./touchAndMouseEvents";
+import { pointerIsTouchOrLeftMouseBtn } from "./touchAndMouseEvents";
 import { LongPressOrRightClickEventData } from "./LongPressService";
 
 export interface PointerDragServiceInitArgs {
-  hostElem: HTMLElement;
+  eventDataAvailable?:
+    | ((eventData: DragEventData, isForMouseUp: boolean) => void)
+    | NullOrUndef;
   drag?: ((event: PointerDragEvent) => void) | NullOrUndef;
   dragStart?: ((event: PointerEvent) => void) | NullOrUndef;
   dragEnd?: ((event: PointerDragEvent) => void) | NullOrUndef;
@@ -31,6 +32,7 @@ export interface DragEventData extends LongPressOrRightClickEventData {
 export class PointerDragService extends TrmrkDisposableBase {
   private args: PointerDragServiceInitArgs | null = null;
   private pointerDownEvent: PointerEvent | null = null;
+  private hostElem: HTMLElement | null = null;
 
   constructor() {
     super();
@@ -41,13 +43,14 @@ export class PointerDragService extends TrmrkDisposableBase {
   }
 
   disposeCore(): void {
-    const elem = this.args?.hostElem;
+    const elem = this.hostElem;
 
     if (elem) {
       elem.removeEventListener("pointerdown", this.pointerDown);
     }
 
     this.reset();
+    this.hostElem = null;
     this.args = null;
   }
 
@@ -94,9 +97,12 @@ export class PointerDragService extends TrmrkDisposableBase {
     this.args = {
       ...args,
     };
+  }
 
-    const elem = args.hostElem;
-    elem.addEventListener("pointerdown", this.pointerDown);
+  setHostElem(hostElem: HTMLElement | null) {
+    this.hostElem?.removeEventListener("pointerdown", this.pointerDown);
+    this.hostElem = hostElem;
+    this.hostElem?.addEventListener("pointerdown", this.pointerDown);
   }
 
   private getDragEvent(data: LongPressOrRightClickEventData) {
@@ -110,13 +116,13 @@ export class PointerDragService extends TrmrkDisposableBase {
 
   private getEventData(event: PointerEvent, isForMouseUp = false) {
     event.preventDefault();
-    const elem = this.args!.hostElem;
+    const elem = this.hostElem;
 
     const data: DragEventData = {
       elem: elem!,
       event,
       composedPath: null,
-      isValid: event.buttons === (isForMouseUp ? 0 : 1),
+      isValid: pointerIsTouchOrLeftMouseBtn(event, isForMouseUp) && !!elem,
       dragStartPosition: elem
         ? {
             clientTop: elem.clientTop,
@@ -127,17 +133,20 @@ export class PointerDragService extends TrmrkDisposableBase {
         : null,
     };
 
+    actWithValIf(this.args?.eventDataAvailable, (f) => f(data, isForMouseUp));
     return data;
   }
 
   private reset() {
     this.pointerDownEvent = null;
-    const elem = this.args?.hostElem;
 
-    if (elem) {
-      elem.removeEventListener("pointerup", this.pointerUp);
-      elem.removeEventListener("pointermove", this.pointerMove);
-    }
+    document.removeEventListener("pointerup", this.pointerUp, {
+      capture: true,
+    });
+
+    document.removeEventListener("pointermove", this.pointerMove, {
+      capture: true,
+    });
   }
 }
 

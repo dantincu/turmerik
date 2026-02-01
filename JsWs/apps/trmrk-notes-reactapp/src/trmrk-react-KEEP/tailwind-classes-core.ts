@@ -3,6 +3,6 @@ export const tailwindClassesCore = [
   "border-[2px]",
   "mr-[2px]",
   "relative",
-  "left-[-21px]",
+  "right-[-25px]",
   "justify-end",
 ];

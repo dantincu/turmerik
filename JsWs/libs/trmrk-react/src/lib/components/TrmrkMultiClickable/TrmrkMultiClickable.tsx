@@ -12,13 +12,12 @@ import { HOCArgs } from "../defs/HOC";
 
 import { updateRef } from "../../services/utils";
 
-export interface TrmrkLongPressableProps<T, P> {
+export interface TrmrkMultiClickableProps<T, P> {
   hoc: HOCArgs<T, P>,
   args: (rootEl: T) => MultiClickServiceInitArgs
 }
 
-export default function TrmrkMultiClickable<T, P>({ hoc, args }: Readonly<TrmrkLongPressableProps<T, P>>) {
-  const initializedRef = React.useRef(false);
+export default function TrmrkMultiClickable<T, P>({ hoc, args }: Readonly<TrmrkMultiClickableProps<T, P>>) {
   let multiClickService: MultiClickService | null = null;
 
   const Component = React.forwardRef<T, P>((props, ref) => hoc.node(props, (el) => {
@@ -32,7 +31,6 @@ export default function TrmrkMultiClickable<T, P>({ hoc, args }: Readonly<TrmrkL
     return () => {
       multiClickService?.dispose();
       multiClickService = null;
-      initializedRef.current = false;
     }
   }, []);
   
