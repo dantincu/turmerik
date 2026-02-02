@@ -8,9 +8,9 @@ import { clearRefVal } from "../../services/utils";
 import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
 import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
 
-import "./TrmrkPopover.scss";
+import "./TrmrkMessagePopover.scss";
 
-export interface TrmrkPopoverProps extends ComponentProps {
+export interface TrmrkMessagePopoverProps extends ComponentProps {
   msgLevel?: UserMessageLevel | NullOrUndef;
   show?: number | NullOrUndef;
   arrowPlacement?: Placement | NullOrUndef;
@@ -29,8 +29,8 @@ const CloseIcon = React.memo(({
     ref: React.Ref<HTMLButtonElement>
   }) => <TrmrkBtn ref={ref} className='trmrk-close-icon-btn' onClick={closeBtnClick} onContextMenu={closeBtnLongPressOrRightClick}><TrmrkIcon icon="mdi:close" /></TrmrkBtn>);
 
-export default function TrmrkPopover(
-  { className: cssClass, children, msgLevel, show, arrowPlacement = Placement.None, arrowStyle, closed, autoCloseMillis }: Readonly<TrmrkPopoverProps>
+export default function TrmrkMessagePopover(
+  { className: cssClass, children, msgLevel, show, arrowPlacement = Placement.None, arrowStyle, closed, autoCloseMillis }: Readonly<TrmrkMessagePopoverProps>
 ) {
   const rootElRef = React.useRef<HTMLDivElement | null>(null);
   const closeBtnElRef = React.useRef<HTMLButtonElement | null>(null);

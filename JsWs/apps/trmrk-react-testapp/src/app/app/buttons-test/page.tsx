@@ -17,7 +17,7 @@ import {
 import {useShowToolbars, useToolbarContentKeys, useToolbarOverridingContentKeys } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 import TrmrkBtn from "@/src/trmrk-react/components/TrmrkBtn/TrmrkBtn";
-import TrmrkPopover from "@/src/trmrk-react/components/TrmrkPopover/TrmrkPopover";
+import TrmrkMessagePopover from "@/src/trmrk-react/components/TrmrkMessagePopover/TrmrkMessagePopover";
 import TrmrkIcon from "@/src/trmrk-react/components/TrmrkIcon/TrmrkIcon";
 import { Placement } from '@/src/trmrk-browser/core';
 import TrmrkAppBarContents from "@/src/trmrk-react/components/TrmrkAppBarContents/TrmrkAppBarContents";
@@ -97,8 +97,8 @@ const MessageButton = React.memo(({ msg, dispatch }: {
     dispatch: React.Dispatch<any>
   }) => (<React.Fragment>
     <TrmrkBtn borderWidth={1} className="my-[1px]" onClick={() => dispatch({ type: 'SHOW_MESSAGE', idx: msg.idx })}><span className="trmrk-text">My Button {msg.idx}</span></TrmrkBtn>
-    <TrmrkPopover show={msg.show} msgLevel={msg.idx % 4} autoCloseMillis={ (msg.idx + 1) * 1000 } arrowPlacement={Placement.Top}>
-      {msg.text}</TrmrkPopover>
+    <TrmrkMessagePopover show={msg.show} msgLevel={msg.idx % 4} autoCloseMillis={ (msg.idx + 1) * 1000 } arrowPlacement={Placement.Top}>
+      {msg.text}</TrmrkMessagePopover>
   </React.Fragment>));
 
 const MiddlePanelContents = () => {
@@ -136,7 +136,7 @@ const MiddlePanelContents = () => {
     <TrmrkBtn borderWidth={0} className="my-[1px] trmrk-btn-filled-system"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={0} className="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
     <TrmrkBtn borderWidth={2} className="my-[1px]"><span className="trmrk-text">My Button</span></TrmrkBtn>
-    <TrmrkPopover show={1} msgLevel={UserMessageLevel.Success} autoCloseMillis={2000} arrowPlacement={Placement.Top}>asdfasdf</TrmrkPopover>
+    <TrmrkMessagePopover show={1} msgLevel={UserMessageLevel.Success} autoCloseMillis={2000} arrowPlacement={Placement.Top}>asdfasdf</TrmrkMessagePopover>
     { messages.map(msg => <MessageButton msg={msg} dispatch={dispatch} key={msg.idx}></MessageButton>) }
   </div>;
 };
