@@ -15,7 +15,6 @@ import TrmrkLink from "../TrmrkLink/TrmrkLink";
 export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showBackBtn?: boolean | NullOrUndef;
   showGoToParentBtn?: boolean | NullOrUndef;
-  showHomeBtn?: boolean | NullOrUndef;
   showUndoBtn?: boolean | NullOrUndef;
   showRedoBtn?: boolean | NullOrUndef;
   showEditBtn?: boolean | NullOrUndef;
@@ -289,7 +288,6 @@ export default function TrmrkTopToolBarContents({
   children,
   showBackBtn,
   showGoToParentBtn,
-  showHomeBtn,
   showUndoBtn,
   showRedoBtn,
   showEditBtn,
@@ -418,7 +416,6 @@ export default function TrmrkTopToolBarContents({
         <div className="trmrk-toolbar-contents" style={{ left: `${toolbarContentsOffsetValue}px` }} ref={toolbarContentsElAvailable}>
           { (showBackBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:arrow-back" /></TrmrkBtn> }
           { (showGoToParentBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:arrow-up" /></TrmrkBtn> }
-          { (showHomeBtn ?? true) && <TrmrkLink href="/app" isHyperLink={false}><TrmrkBtn><TrmrkIcon icon="mdi:home" /></TrmrkBtn></TrmrkLink> }
           { (showUndoBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:undo" /></TrmrkBtn> }
           { (showRedoBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:redo" /></TrmrkBtn> }
           { (showEditBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:edit" /></TrmrkBtn> }
@@ -439,7 +436,6 @@ export default function TrmrkTopToolBarContents({
           <TrmrkBtn className="trmrk-btn-filled-primary"><TrmrkIcon icon="material-symbols:select-window" /></TrmrkBtn>
           <TrmrkBtn className="trmrk-btn-filled-reject"><TrmrkIcon icon="mdi:bell-notification" /></TrmrkBtn>
           <TrmrkBtn><TrmrkIcon icon="material-symbols:tab-group" /></TrmrkBtn>
-          <TrmrkBtn><TrmrkIcon icon="mdi:close" /></TrmrkBtn>
         </div>
       </div>
       <ContentsShiftRightBtn />

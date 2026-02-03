@@ -21,8 +21,8 @@ export default function TrmrkAppBarContents({ children, leadingChildren }: Trmrk
 
   const LeadingChildren = React.useMemo(() => leadingChildren ?? (() => null), [leadingChildren]);
 
-  return <><LeadingChildren></LeadingChildren><div className="text-center grow">{children}</div>
-      <TrmrkBtn onClick={toggleToolbarsClicked} className="trmrk-btn-filled-system mr-[2px]">
+  return <><TrmrkBtn onClick={toggleToolbarsClicked} className="trmrk-btn-filled-system mr-[2px]">
         <TrmrkIcon icon={ `mdi:chevron-double-${showToolbars ? 'up' : 'down'}` }></TrmrkIcon>
-      </TrmrkBtn></>;
+      </TrmrkBtn><LeadingChildren></LeadingChildren><div className="text-center grow">{children}</div>
+      </>;
 }
