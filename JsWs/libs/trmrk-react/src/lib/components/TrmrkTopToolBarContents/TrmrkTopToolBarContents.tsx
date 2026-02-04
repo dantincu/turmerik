@@ -21,6 +21,12 @@ export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showEditDoneBtn?: boolean | NullOrUndef;
   showSaveBtn?: boolean | NullOrUndef;
   saveBtnEnabled?: boolean | NullOrUndef;
+  showSearchBtn?: boolean | NullOrUndef;
+  searchBtnIsOn?: boolean | NullOrUndef;
+  showFilterBtn?: boolean | NullOrUndef;
+  filterBtnIsOn?: boolean | NullOrUndef;
+  showSortBtn?: boolean | NullOrUndef;
+  sortBtnIsOn?: boolean | NullOrUndef;
   showRefreshBtn?: boolean | NullOrUndef;
   showClearCacheBtn?: boolean | NullOrUndef;
   showPrimaryCustomActionBtn?: boolean | NullOrUndef;
@@ -176,7 +182,7 @@ const ToggleLeftPanelBtn = React.memo(() => {
 
     return <TrmrkBtn
       className={focusedPanel === TrmrkAppLayoutPanel.Left ? "trmrk-btn-filled-opposite" : ""}
-      borderWidth={showLeftPanel ? 1 : null}
+      borderWidth={showLeftPanel ? 2 : null}
       onClick={toggleLeftPanelClicked}
       onContextMenu={toggleLeftPanelContextMenu}>
         <TrmrkIcon icon={ `material-symbols:left-panel-${showLeftPanel ? "close" : "open" }` } />
@@ -221,7 +227,7 @@ const ToggleMiddlePanelBtn = React.memo(() => {
 
     return <TrmrkBtn
       className={focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-btn-filled-opposite" : ""}
-      borderWidth={ showMiddlePanel ? 1 : null }
+      borderWidth={ showMiddlePanel ? 2 : null }
       onClick={toggleMiddlePanelClicked}
       onContextMenu={toggleMiddlePanelContextMenu}>
     <TrmrkIcon icon={ `material-symbols:left-panel-${showMiddlePanel ? "close" : "open" }-outline` } /></TrmrkBtn>;
@@ -265,7 +271,7 @@ const ToggleRightPanelBtn = React.memo(() => {
 
     return <TrmrkBtn
       className={focusedPanel === TrmrkAppLayoutPanel.Right ? "trmrk-btn-filled-opposite" : ""}
-      borderWidth={ showRightPanel ? 1 : null }
+      borderWidth={ showRightPanel ? 2 : null }
       onClick={toggleRightPanelClicked}
       onContextMenu={toggleRightPanelContextMenu}>
     <TrmrkIcon icon={ `material-symbols:right-panel-${showRightPanel ? "close" : "open" }` } /></TrmrkBtn>
@@ -286,6 +292,7 @@ const ResizePanelsBtn = React.memo(() => {
 
 export default function TrmrkTopToolBarContents({
   children,
+  className,
   showBackBtn,
   showGoToParentBtn,
   showUndoBtn,
@@ -293,6 +300,12 @@ export default function TrmrkTopToolBarContents({
   showEditBtn,
   showEditDoneBtn,
   showSaveBtn,
+  showSearchBtn,
+  searchBtnIsOn,
+  showFilterBtn,
+  filterBtnIsOn,
+  showSortBtn,
+  sortBtnIsOn,
   saveBtnEnabled,
   showRefreshBtn,
   showClearCacheBtn,
@@ -410,7 +423,7 @@ export default function TrmrkTopToolBarContents({
     }
   }, []);
 
-  return <div className="trmrk-toolbar-container" ref={toolbarContainerElAvailable}>
+  return <div className={["trmrk-toolbar-container", className].join(" ")} ref={toolbarContainerElAvailable}>
       <ContentsShiftLeftBtn />
       <div className="trmrk-toolbar-contents-wrapper">
         <div className="trmrk-toolbar-contents" style={{ left: `${toolbarContentsOffsetValue}px` }} ref={toolbarContentsElAvailable}>
@@ -421,6 +434,9 @@ export default function TrmrkTopToolBarContents({
           { (showEditBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:edit" /></TrmrkBtn> }
           { (showEditDoneBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:done" /></TrmrkBtn> }
           { (showSaveBtn ?? false) && <TrmrkBtn disabled={saveBtnEnabled === false}><TrmrkIcon icon="mdi:content-save" /></TrmrkBtn> }
+          { (showSearchBtn ?? false) && <TrmrkBtn borderWidth={searchBtnIsOn ? 1 : 0}><TrmrkIcon icon="mdi:search" /></TrmrkBtn>}
+          { (showFilterBtn ?? false) && <TrmrkBtn borderWidth={filterBtnIsOn ? 1 : 0}><TrmrkIcon icon="mdi:filter" /></TrmrkBtn>}
+          { (showSortBtn ?? false) && <TrmrkBtn borderWidth={sortBtnIsOn ? 1 : 0}><TrmrkIcon icon="mdi:sort" /></TrmrkBtn>}
           { (showRefreshBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:refresh" /></TrmrkBtn> }
           { (showClearCacheBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:notification-clear-all" /></TrmrkBtn> }
           { (showPrimaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-outline" /></TrmrkBtn> }

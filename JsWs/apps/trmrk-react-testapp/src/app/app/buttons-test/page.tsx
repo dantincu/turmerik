@@ -52,6 +52,12 @@ const TopToolbar = () => {
     showEditBtn={true}
     showEditDoneBtn={true}
     showSaveBtn={true}
+    showSearchBtn={true}
+    searchBtnIsOn={true}
+    showFilterBtn={true}
+    filterBtnIsOn={true}
+    showSortBtn={true}
+    sortBtnIsOn={true}
     showRefreshBtn={true}
     showClearCacheBtn={true}
     showOptionsBtn={true}><TrmrkLongPressable hoc={{

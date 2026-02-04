@@ -18,6 +18,10 @@ import bellNotification from "@iconify-icons/mdi/bell-notification";
 import notificationClearAll from "@iconify-icons/mdi/notification-clear-all";
 import dragVertical from "@iconify-icons/mdi/drag-vertical";
 import dragVerticalVariant from "@iconify-icons/mdi/drag-vertical-variant";
+import search from "@iconify-icons/mdi/search";
+import filter from "@iconify-icons/mdi/filter";
+import filterOutline from "@iconify-icons/mdi/filter-outline";
+import sort from "@iconify-icons/mdi/sort";
 
 import undo from "@iconify-icons/material-symbols/undo";
 import redo from "@iconify-icons/material-symbols/redo";
@@ -63,6 +67,10 @@ export const registerIconifyIcons = () => {
     ["notification-clear-all"]: notificationClearAll,
     ["drag-vertical"]: dragVertical,
     ["drag-vertical-variant"]: dragVerticalVariant,
+    search,
+    filter,
+    ["filter-outline"]: filterOutline,
+    sort,
   });
 
   registerIconifyIconsCore("material-symbols", {
