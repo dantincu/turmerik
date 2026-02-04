@@ -149,7 +149,6 @@ export default function ButtonsTestPage() {
   const toolbarContentKeyAtoms = useToolbarContentKeys();
   const overridingToolbarContentKeyAtoms = useToolbarOverridingContentKeys();
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
-  const [, setIsResizingPanels] = useAtom(trmrk3PanelsAppLayoutAtoms.isResizingPanels);
 
   React.useEffect(() => {
     const layoutInitResult = initLayout({
@@ -179,7 +178,6 @@ export default function ButtonsTestPage() {
     showPanelAtoms.leftPanel.set(true);
     showPanelAtoms.middlePanel.set(true);
     showPanelAtoms.rightPanel.set(true);
-    setIsResizingPanels(true);
 
     return () => {
       cleanupLayout(layoutInitResult);

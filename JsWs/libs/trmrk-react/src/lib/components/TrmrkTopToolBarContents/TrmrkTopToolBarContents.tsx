@@ -323,11 +323,11 @@ export default function TrmrkTopToolBarContents({
       toolbarContentsOffset]);
 
   const showResizePanelsBtn = React.useMemo(
-    () => [
+    () => isMultiPanelMode && [
       (allowShowLeftPanel && showLeftPanel),
       (allowShowMiddlePanel && showMiddlePanel),
       (allowShowRightPanel && showRightPanel)].filter(show => show).length > 1,
-    [allowShowLeftPanel, showLeftPanel, allowShowMiddlePanel, showMiddlePanel, allowShowRightPanel, showRightPanel]);
+    [isMultiPanelMode, allowShowLeftPanel, showLeftPanel, allowShowMiddlePanel, showMiddlePanel, allowShowRightPanel, showRightPanel]);
 
   const showToggleLeftPanelBtn = React.useMemo(
     () => allowShowLeftPanel && (allowShowMiddlePanel || allowShowRightPanel),
