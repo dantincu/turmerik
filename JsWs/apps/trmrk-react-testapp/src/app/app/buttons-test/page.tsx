@@ -155,6 +155,7 @@ export default function ButtonsTestPage() {
   const toolbarContentKeyAtoms = useToolbarContentKeys();
   const overridingToolbarContentKeyAtoms = useToolbarOverridingContentKeys();
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
+  const [, setIsMultiPanelMode] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode);
 
   React.useEffect(() => {
     const layoutInitResult = initLayout({
@@ -181,9 +182,10 @@ export default function ButtonsTestPage() {
       setFocusedPanel
     });
 
-    showPanelAtoms.leftPanel.set(true);
-    showPanelAtoms.middlePanel.set(true);
-    showPanelAtoms.rightPanel.set(true);
+    showPanelAtoms.leftPanel.set(false);
+    showPanelAtoms.middlePanel.set(false);
+    showPanelAtoms.rightPanel.set(false);
+    setIsMultiPanelMode(false);
 
     return () => {
       cleanupLayout(layoutInitResult);

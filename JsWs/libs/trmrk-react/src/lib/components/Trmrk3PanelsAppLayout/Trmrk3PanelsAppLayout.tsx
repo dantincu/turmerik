@@ -35,7 +35,8 @@ import {
 } from "./Trmrk3PanelsAppLayoutService";
 
 const updateLeftPanelContainerElWidth = (
-  leftPanelContainerElRef: React.RefObject<HTMLDivElement | null>
+  leftPanelContainerElRef: React.RefObject<HTMLDivElement | null>,
+  showMiddleOrRightPanel: boolean
 ) => {
   const leftPanelContainerEl = leftPanelContainerElRef.current;
 
@@ -43,8 +44,13 @@ const updateLeftPanelContainerElWidth = (
     const panel1 = leftPanelContainerEl.querySelector(":scope > .trmrk-split-panel1") as HTMLElement;
 
     if (panel1) {
-      panel1.style.flexBasis = `${trmrk3PanelsAppLayoutVars.leftPanelWidthRatio}%`;
-      panel1.style.minWidth = `${trmrk3PanelsAppLayoutVars.leftPanelWidthRatio}%`;
+      if (showMiddleOrRightPanel) {
+        panel1.style.flexBasis = `${trmrk3PanelsAppLayoutVars.leftPanelWidthRatio}%`;
+        panel1.style.minWidth = `${trmrk3PanelsAppLayoutVars.leftPanelWidthRatio}%`;
+      } else {
+        panel1.style.flexBasis = "";
+        panel1.style.minWidth = "";
+      }
     }
   }
 };
@@ -121,8 +127,8 @@ const ResizePanelsBottomToolbarContents = ({
       resizeMiddlePanelStripContainerEl.style.width = showLeftPanelValue ? `${100 - trmrk3PanelsAppLayoutVars.leftPanelWidthRatio}%` : "100%";
     }
     
-    updateLeftPanelContainerElWidth(leftPanelContainerElRef);
-  }, [showLeftPanelValue]);
+    updateLeftPanelContainerElWidth(leftPanelContainerElRef, showMiddlePanelValue || showRightPanelValue);
+  }, [showLeftPanelValue, showMiddlePanelValue, showRightPanelValue]);
 
   const onMiddlePanelWidthRatioChanged = React.useCallback(() => {
     const resizeMiddlePanelStripEl = resizeMiddlePanelStripElRef.current;
@@ -273,8 +279,8 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
 
   const leftPanelContainerElAvailable = React.useCallback((el: HTMLDivElement) => {
     leftPanelContainerElRef.current = el;
-    updateLeftPanelContainerElWidth(leftPanelContainerElRef);
-  }, []);
+    updateLeftPanelContainerElWidth(leftPanelContainerElRef, showMiddlePanelValue || showRightPanelValue);
+  }, [showMiddlePanelValue, showRightPanelValue]);
 
   const middlePanelContainerElAvailable = React.useCallback((el: HTMLDivElement) => {
     middlePanelContainerElRef.current = el;
@@ -312,11 +318,11 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
       setIsResizingPanels(false);
     }
 
-    updateLeftPanelContainerElWidth(leftPanelContainerElRef);
+    updateLeftPanelContainerElWidth(leftPanelContainerElRef, showMiddlePanelValue || showRightPanelValue);
     updateMiddlePanelContainerElWidth(middlePanelContainerElRef, showRightPanelValue);
 
     return () => {
-      updateLeftPanelContainerElWidth(leftPanelContainerElRef);
+      updateLeftPanelContainerElWidth(leftPanelContainerElRef, showRightPanelValue);
       updateMiddlePanelContainerElWidth(middlePanelContainerElRef, showRightPanelValue);
       actWithValIf(bottomToolbarContentsId, id => overridingBottomToolbarContents.value.unregister(id));
     };

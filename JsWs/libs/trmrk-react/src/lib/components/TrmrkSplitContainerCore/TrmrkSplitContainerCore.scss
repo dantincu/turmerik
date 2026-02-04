@@ -26,6 +26,7 @@
   &.trmrk-has-both-panels {
     > .trmrk-split-panel1 {
       flex-basis: 50%;
+      min-width: 50%;
     }
 
     > .trmrk-split-panel2 {
