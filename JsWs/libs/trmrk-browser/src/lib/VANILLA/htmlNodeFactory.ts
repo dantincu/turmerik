@@ -1,4 +1,9 @@
-import { NullOrUndef, actWithValIf, RefLazyValue } from "@/src/trmrk/core";
+import {
+  NullOrUndef,
+  actWithValIf,
+  RefLazyValue,
+  withValIf,
+} from "@/src/trmrk/core";
 import { mapRecordProps, forEachRecordProp } from "@/src/trmrk/obj";
 import { TrmrkDisposableBase } from "@/src/trmrk/TrmrkDisposableBase";
 
@@ -114,6 +119,13 @@ export class BasicHtmlElementWrapper<
     args = { ...args };
     args.nodeFactory ??= this.createElement.bind(this);
     args.classList ??= [];
+
+    if (typeof args.classList === "string") {
+      args.classList = args.classList
+        .split(" ")
+        .filter((cls) => cls.length > 0);
+    }
+
     args.attrs ??= {};
     args.children ??= () => null;
     return super.normalizeArgs(args);
@@ -155,7 +167,7 @@ export class BasicHtmlElementWrapper<
 
 export interface HtmlElementWrapperArgsCore<
   TElement extends HTMLElement,
-  TArgs extends BasicHtmlElementWrapperArgsCore<TElement, TArgs>,
+  TArgs extends HtmlElementWrapperArgsCore<TElement, TArgs, TExtra>,
   TExtra = any,
 > extends BasicHtmlElementWrapperArgsCore<TElement, TArgs> {
   evts?:
@@ -182,7 +194,7 @@ export interface HtmlElementWrapperArgsCore<
   afterUnmount?:
     | ((wrapper: HtmlElementWrapper<TElement, TArgs, TExtra>) => void)
     | NullOrUndef;
-  x?: TExtra;
+  xtr?: TExtra;
 }
 
 export interface HtmlElementWrapperArgs<
@@ -197,7 +209,7 @@ export class HtmlElementWrapper<
   TArgs extends HtmlElementWrapperArgsCore<TElement, TArgs, TExtra>,
   TExtra = any,
 > extends BasicHtmlElementWrapper<TElement, TArgs> {
-  x!: TExtra;
+  xtr!: TExtra;
 
   constructor(args: TArgs) {
     super(args);
@@ -205,7 +217,7 @@ export class HtmlElementWrapper<
 
   override normalizeArgs(args: TArgs): TArgs {
     args = super.normalizeArgs(args);
-    this.x = args.x!;
+    this.xtr = args.xtr!;
 
     args.evts = mapRecordProps<
       keyof HTMLElementEventMap,
@@ -244,7 +256,7 @@ export class HtmlElementWrapper<
     actWithValIf(args.beforeDispose, () => args.beforeDispose!(this));
     this.removeEventListeners(this.args, this.node);
     super.disposeCore();
-    this.x = null as any;
+    this.xtr = null as any;
   }
 
   override mount() {
@@ -384,8 +396,57 @@ export class HtmlNodeFactory {
     TElement extends HTMLElement = HTMLElement,
     TArgs extends BasicHtmlElementWrapperArgsCore<TElement, TArgs> =
       BasicHtmlElementWrapperArgs<TElement>,
-  >(args: TArgs) {
-    return new BasicHtmlElementWrapper<TElement, TArgs>(args);
+  >(
+    nodeName: string,
+    classList?: string | string[] | NullOrUndef,
+    attrs?: Record<string, string | NullOrUndef> | NullOrUndef,
+    children?: (() => HtmlNodeWrapper[] | NullOrUndef) | NullOrUndef,
+  ) {
+    const args = {
+      nodeName,
+      classList,
+      attrs,
+      children,
+    } as TArgs;
+
+    const wrapper = new BasicHtmlElementWrapper<TElement, TArgs>(args);
+    return wrapper;
+  }
+
+  elem<
+    TElement extends HTMLElement,
+    TArgs extends HtmlElementWrapperArgsCore<TElement, TArgs, TExtra>,
+    TExtra = any,
+  >(
+    nodeName: string,
+    classList?: string | string[] | NullOrUndef,
+    attrs?: Record<string, string | NullOrUndef> | NullOrUndef,
+    evts?:
+      | Record<
+          keyof HTMLElementEventMap,
+          | HtmlElementWrapperEventHandler<TElement>
+          | HtmlElementWrapperEventListenerOpts<TElement>
+        >
+      | NullOrUndef,
+    children?: (() => HtmlNodeWrapper[] | NullOrUndef) | NullOrUndef,
+    argsCreator?: (args: TArgs) => TArgs,
+  ) {
+    let args = {
+      nodeName,
+      classList,
+      attrs,
+      evts,
+      children,
+    } as TArgs;
+
+    args = withValIf(
+      argsCreator,
+      (f) => f!(args),
+      () => args,
+    );
+
+    const wrapper = new HtmlElementWrapper<TElement, TArgs, TExtra>(args);
+    return wrapper;
   }
 }
 
