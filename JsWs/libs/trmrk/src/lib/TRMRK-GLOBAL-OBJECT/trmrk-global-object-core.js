@@ -1,5 +1,5 @@
 const trmrkRef = {};
-const createTrmrkFunc = (appName, createGlobalTrmrkObj = false) => {
+const createTrmrkFunc = (appName, createGlobalTrmrkObj) => {
     const trmrk = (trmrkRef.value = createGlobalTrmrkObj
         ? (globalThis.trmrk ??= {})
         : {});

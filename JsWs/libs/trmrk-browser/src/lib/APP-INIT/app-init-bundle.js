@@ -1,24 +1,31 @@
 const trmrkRef = {};
-const createTrmrkFunc = (appName, createGlobalTrmrkObj = false) => {
+
+const createTrmrkFunc = (appName, createGlobalTrmrkObj) => {
     const trmrk = (trmrkRef.value = createGlobalTrmrkObj
         ? (globalThis.trmrk ??= {})
         : {});
+
     trmrk.appName = appName;
     trmrk.dbObjNamePrefix = `[${appName}]`;
+
     return trmrk;
 };
+
 const getTrmrk = () => trmrkRef.value;
 const createTrmrk = createTrmrkFunc;
 
-const prefersDarkMode = () => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+const prefersDarkMode = () => window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+
 const isDarkMode = (localStorageIsDarkModeKey) => {
     const localStorageIsDarkMode = localStorage.getItem(localStorageIsDarkModeKey);
     let isDarkMode;
+
     if (localStorageIsDarkMode) {
-        if ('true' === localStorageIsDarkMode) {
+        if ("true" === localStorageIsDarkMode) {
             isDarkMode = true;
         }
-        else if ('false' === localStorageIsDarkMode) {
+        else if ("false" === localStorageIsDarkMode) {
             isDarkMode = false;
         }
         else {
@@ -28,62 +35,90 @@ const isDarkMode = (localStorageIsDarkModeKey) => {
     else {
         isDarkMode = prefersDarkMode();
     }
+
     return isDarkMode;
 };
+
 class DarkModeService {
+    stateChangeHandler;
     onDarkModeStateChanged;
     dbObjNamePrefix;
     appThemeIsDarkModeLocalStorageKey;
     _disposeCalled = false;
+
     constructor() {
         this.storageEvent = this.storageEvent.bind(this);
     }
+
     init(args) {
         args ??= {
             addStorageEventListener: false,
         };
-        this.onDarkModeStateChanged = args.onDarkModeStateChanged ??= () => { };
+
         this.dbObjNamePrefix = getTrmrk().dbObjNamePrefix;
-        this.appThemeIsDarkModeLocalStorageKey = `${this.dbObjNamePrefix}[appThemeIsDarkMode]`;
+
+        this.appThemeIsDarkModeLocalStorageKey =
+            args.localStorageKey ?? `${this.dbObjNamePrefix}[appThemeIsDarkMode]`;
+
+        this.stateChangeHandler =
+            args.stateChangeHandler ??
+                ((isDarkModeValue) => {
+                    document.documentElement.setAttribute("data-theme", isDarkModeValue ? "dark" : "light");
+                });
+
+        this.onDarkModeStateChanged = args.onStateChanged ??= () => { };
+
         if (args.addStorageEventListener !== false) {
-            window.addEventListener('storage', this.storageEvent);
+            window.addEventListener("storage", this.storageEvent);
         }
+
         this.detectDarkMode();
     }
+    
     storageEvent(event) {
-        if ((event.key ?? null) === null || event.key === this.appThemeIsDarkModeLocalStorageKey) {
+        if ((event.key ?? null) === null ||
+            event.key === this.appThemeIsDarkModeLocalStorageKey) {
             let isDarkModeValue = false;
+
             if ((event.key ?? null) === null ||
-                (event.key === this.appThemeIsDarkModeLocalStorageKey && (event.newValue ?? null) === null)) {
+                (event.key === this.appThemeIsDarkModeLocalStorageKey &&
+                    (event.newValue ?? null) === null)) {
                 isDarkModeValue = isDarkMode(this.appThemeIsDarkModeLocalStorageKey);
             }
             else {
-                isDarkModeValue = event.newValue === 'true';
+                isDarkModeValue = event.newValue === "true";
             }
-            this.darkModeStateChange(isDarkModeValue);
+
+            this.updateDarkMode(isDarkModeValue);
         }
     }
-    darkModeStateChange(isDarkModeValue) {
-        document.documentElement.setAttribute('data-theme', isDarkModeValue ? 'dark' : 'light');
+
+    updateDarkMode(isDarkModeValue) {
+        this.stateChangeHandler(isDarkModeValue);
         this.onDarkModeStateChanged(isDarkModeValue);
     }
+
     detectDarkMode() {
         const isDarkModeValue = isDarkMode(this.appThemeIsDarkModeLocalStorageKey);
-        this.darkModeStateChange(isDarkModeValue);
+        this.updateDarkMode(isDarkModeValue);
     }
+
     dispose() {
         if (!this._disposeCalled) {
             this._disposeCalled = true;
+            this.stateChangeHandler = null;
             this.onDarkModeStateChanged = null;
-            window.removeEventListener('storage', this.storageEvent);
+            window.removeEventListener("storage", this.storageEvent);
         }
     }
+
     [Symbol.dispose]() {
         this.dispose();
     }
 }
-const initApp = (appName, createGlobalTrmrkObj = false) => {
+
+export const initApp = (appName, createGlobalTrmrkObj, darkModeArgs) => {
     const trmrk = createTrmrk(appName, createGlobalTrmrkObj);
     trmrk.darkModeService = new DarkModeService();
-    trmrk.darkModeService.init();
+    trmrk.darkModeService.init(darkModeArgs);
 };

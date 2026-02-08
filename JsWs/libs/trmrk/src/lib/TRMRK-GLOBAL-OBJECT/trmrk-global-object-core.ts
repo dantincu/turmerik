@@ -7,7 +7,7 @@ const trmrkRef = {} as { value: TrmrkGlobalObjectCoreIntf };
 
 const createTrmrkFunc = <TObject extends TrmrkGlobalObjectCoreIntf>(
   appName: string,
-  createGlobalTrmrkObj = false
+  createGlobalTrmrkObj?: boolean | null | undefined,
 ) => {
   const trmrk = (trmrkRef.value = createGlobalTrmrkObj
     ? ((globalThis as any).trmrk ??= {})
