@@ -9,7 +9,7 @@ import { NullOrUndef, actWithValIf } from "@/src/trmrk/core";
 import { clearRefVal, updateRef } from "../../services/utils";
 import { ComponentProps } from "../defs/common";
 
-export interface TrmrkBtnProps extends React.ComponentPropsWithRef<'button'>, ComponentProps {
+export interface TrmrkBtnProps extends React.ComponentPropsWithRef<'button'> {
   borderWidth?: number | NullOrUndef;
 }
 

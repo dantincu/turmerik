@@ -22,6 +22,8 @@ import search from "@iconify-icons/mdi/search";
 import filter from "@iconify-icons/mdi/filter";
 import filterOutline from "@iconify-icons/mdi/filter-outline";
 import sort from "@iconify-icons/mdi/sort";
+import minimize from "@iconify-icons/mdi/minimize";
+import windowMinimize from "@iconify-icons/mdi/window-minimize";
 
 import undo from "@iconify-icons/material-symbols/undo";
 import redo from "@iconify-icons/material-symbols/redo";
@@ -71,6 +73,8 @@ export const registerIconifyIcons = () => {
     filter,
     ["filter-outline"]: filterOutline,
     sort,
+    minimize,
+    ["window-minimize"]: windowMinimize,
   });
 
   registerIconifyIconsCore("material-symbols", {

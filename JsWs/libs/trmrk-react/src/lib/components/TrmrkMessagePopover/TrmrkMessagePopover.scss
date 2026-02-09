@@ -15,7 +15,7 @@
   height: fit-content;
   border-radius: 10px;
   border: 1px solid;
-  z-index: 1000000;
+  z-index: 100;
 
   &.trmrk-fade {
     animation: trmrk-popover-opacFadeOut 1s forwards;

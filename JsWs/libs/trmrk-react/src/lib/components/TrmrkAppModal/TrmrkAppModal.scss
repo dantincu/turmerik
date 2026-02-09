@@ -1,0 +1,160 @@
+@keyframes trmrk-app-modal-backdrop-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes trmrk-app-modal-backdrop-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.trmrk-app-modal-backdrop {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  justify-content: center;
+
+  &.trmrk-fade-in {
+    animation: trmrk-app-modal-backdrop-fade-in 0.3s ease-out;
+  }
+
+  &.trmrk-fade-out {
+    animation: trmrk-app-modal-backdrop-fade-out 0.3s ease-out;
+  }
+
+  &.trmrk-hidden {
+    display: none;
+  }
+}
+
+.light {
+  .trmrk-app-modal-backdrop {
+    background-color: #0008;
+  }
+}
+
+.dark {
+  .trmrk-app-modal-backdrop {
+    background-color: #0008;
+  }
+}
+
+:root {
+  /* Default offset for small phones */
+  --trmrk-app-modal-container-offset-x: 10px;
+  --trmrk-app-modal-container-offset-y: 10px;
+}
+
+@media (min-width: 480px) {
+  :root {
+    --trmrk-app-modal-container-offset-x: 20px;
+  }
+}
+
+/* Desktop screens */
+@media (min-width: 880px) {
+  :root {
+    --trmrk-app-modal-container-offset-x: 40px;
+  }
+}
+
+/* Desktop screens */
+@media (min-width: 1280px) {
+  :root {
+    --trmrk-app-modal-container-offset-x: 80px;
+  }
+}
+
+@media (min-height: 480px) {
+  :root {
+    --trmrk-app-modal-container-offset-y: 20px;
+  }
+}
+
+/* Desktop screens */
+@media (min-height: 880px) {
+  :root {
+    --trmrk-app-modal-container-offset-y: 40px;
+  }
+}
+
+/* Desktop screens */
+@media (min-height: 1280px) {
+  :root {
+    --trmrk-app-modal-container-offset-y: 80px;
+  }
+}
+
+.trmrk-app-modal-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* 1. Allows the box to shrink to small content */
+  width: fit-content;
+  height: fit-content;
+
+  /* 2. Logic: Full screen minus the responsive offset */
+  max-width: calc(100% - var(--trmrk-app-modal-container-offset-x));
+  max-height: calc(100% - var(--trmrk-app-modal-container-offset-y));
+
+  margin: auto; /* Centers it if it's smaller than the screen */
+  border-radius: var(--trmrk-panel-border-radius);
+  border: 2px solid;
+
+  .trmrk-app-modal-header,
+  .trmrk-app-modal-footer {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 1px 0;
+    background-color: var(--trmrk-tool-bar_back-color_light);
+  }
+
+  .trmrk-app-modal-top-bar,
+  .trmrk-app-modal-top-toolbar,
+  .trmrk-app-modal-bottom-bar {
+    overflow: hidden;
+  }
+  
+  .trmrk-app-modal-content {
+    display: flex;
+    overflow: auto;
+  }
+}
+
+.light {
+  .trmrk-app-modal-container {
+    border-color: var(--trmrk-tool-bar_back-color-emph_light);
+    background-color: var(--trmrk-default-back-color-light);
+      
+    .trmrk-app-modal-header .trmrk-app-modal-top-bar,
+    .trmrk-app-modal-header .trmrk-app-modal-top-toolbar,
+    .trmrk-app-modal-footer {
+      background-color: var(--trmrk-tool-bar_back-color_light);
+    }
+  }
+}
+
+.dark {
+  .trmrk-app-modal-container {
+    border-color: var(--trmrk-tool-bar_back-color-emph_dark);
+    background-color: var(--trmrk-default-back-color-dark);
+      
+    .trmrk-app-modal-header .trmrk-app-modal-top-bar,
+    .trmrk-app-modal-header .trmrk-app-modal-top-toolbar,
+    .trmrk-app-modal-footer {
+      background-color: var(--trmrk-tool-bar_back-color_dark);
+    }
+  }
+}

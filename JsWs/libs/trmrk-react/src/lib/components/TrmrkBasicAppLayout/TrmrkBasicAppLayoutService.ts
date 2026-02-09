@@ -15,6 +15,9 @@ import {
   IntKeyedComponentsMapManager,
 } from "../../services/IntKeyedComponentsMapManager";
 
+import { defaultTrmrkAppModalService } from "./TrmrkAppModalService";
+console.log("defaultTrmrkAppModalService", defaultTrmrkAppModalService);
+
 export interface TrmrkToolbarAtoms {
   show: PrimitiveAtom<boolean>;
   contentsKey: PrimitiveAtom<number | null>;
