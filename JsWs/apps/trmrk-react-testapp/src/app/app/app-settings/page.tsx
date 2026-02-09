@@ -14,11 +14,16 @@ import {
   useAllowShowPanelAtoms,
   useShowPanelAtoms,
   usePanelContentsKeyAtoms,
-  initLayout,
-  cleanupLayout
+  init3PanelsAppLayout,
+  cleanup3PanelsAppLayout
 } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 
-import { useShowToolbars, useToolbarContentKeys, useToolbarOverridingContentKeys } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
+import {
+  useShowToolbars,
+  useToolbarContentKeys,
+  useToolbarOverridingContentKeys,
+  useAppUserMessage
+} from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 const AppBar = () => {
   return <TrmrkAppBarContents><h1 className="text-center grow">App Settings</h1></TrmrkAppBarContents>;
@@ -38,14 +43,16 @@ export default function AppSettingsPage() {
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
   const [, setIsResizingPanels] = useAtom(trmrk3PanelsAppLayoutAtoms.isResizingPanels);
   const [, setIsMultiPanelMode] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode);
+  const appUserMessageAtoms = useAppUserMessage();
 
   React.useEffect(() => {
-    const layoutInitResult = initLayout({
+    const layoutInitResult = init3PanelsAppLayout({
       allowShowPanelAtoms,
       panelContentKeyAtoms,
       showToolbarAtoms,
       toolbarContentKeyAtoms,
       overridingToolbarContentKeyAtoms,
+      appUserMessageAtoms,
       appBar: {
         contents: <AppBar />,
       },
@@ -71,7 +78,7 @@ export default function AppSettingsPage() {
     setIsMultiPanelMode(true);
 
     return () => {
-      cleanupLayout(layoutInitResult);
+      cleanup3PanelsAppLayout(layoutInitResult);
     }
   }, []);
 

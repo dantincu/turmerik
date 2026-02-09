@@ -10,11 +10,16 @@ import {
   useAllowShowPanelAtoms,
   useShowPanelAtoms,
   usePanelContentsKeyAtoms,
-  initLayout,
-  cleanupLayout
+  init3PanelsAppLayout,
+  cleanup3PanelsAppLayout
 } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 
-import {useShowToolbars, useToolbarContentKeys, useToolbarOverridingContentKeys } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
+import {
+  useShowToolbars,
+  useToolbarContentKeys,
+  useToolbarOverridingContentKeys,
+  useAppUserMessage,
+} from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 import TrmrkBtn from "@/src/trmrk-react/components/TrmrkBtn/TrmrkBtn";
 import TrmrkMessagePopover from "@/src/trmrk-react/components/TrmrkMessagePopover/TrmrkMessagePopover";
@@ -109,12 +114,20 @@ const MessageButton = React.memo(({ msg, dispatch }: {
 
 const MiddlePanelContents = () => {
   const [messages, dispatch] = React.useReducer(messagesReducer, messagesArr);
+  const appUserMessageAtoms = useAppUserMessage();
+
+  const showAppUserMessageBtnClicked = () => {
+    appUserMessageAtoms.show.set((appUserMessageAtoms.show.value ?? 0) + 1);
+    appUserMessageAtoms.level.set(Math.floor(Math.random() * 4));
+    appUserMessageAtoms.content.set(<><span className="font-bold">App User Message {appUserMessageAtoms.show.value}<br />asdfasdfasf</span></>);
+    appUserMessageAtoms.autoCloseMillis.set(0);
+  }
 
   return <div className="flex flex-wrap">
     <p>asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf
       asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf asdfasdfasdf </p>
     <TrmrkBtn borderWidth={1} className="my-[1px]" onClick={e => console.log("onClick", e)}><span className="trmrk-text">My Button 123</span></TrmrkBtn>
-    <TrmrkBtn borderWidth={1} className="my-[1px]">
+    <TrmrkBtn borderWidth={1} className="my-[1px]" onClick={showAppUserMessageBtnClicked}>
       <span className="trmrk-icon-wrapper"><TrmrkIcon icon="mdi:home" /></span>
       <span className="trmrk-text">My Button</span>
     </TrmrkBtn>
@@ -156,14 +169,16 @@ export default function ButtonsTestPage() {
   const overridingToolbarContentKeyAtoms = useToolbarOverridingContentKeys();
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
   const [, setIsMultiPanelMode] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode);
+  const appUserMessageAtoms = useAppUserMessage();
 
   React.useEffect(() => {
-    const layoutInitResult = initLayout({
+    const layoutInitResult = init3PanelsAppLayout({
       allowShowPanelAtoms,
       panelContentKeyAtoms,
       showToolbarAtoms,
       toolbarContentKeyAtoms,
       overridingToolbarContentKeyAtoms,
+      appUserMessageAtoms,
       appBar: {
         contents: <AppBar />,
       },
@@ -179,7 +194,7 @@ export default function ButtonsTestPage() {
       rightPanel: {
         allowShow: true
       },
-      setFocusedPanel
+      setFocusedPanel,
     });
 
     showPanelAtoms.leftPanel.set(false);
@@ -188,7 +203,7 @@ export default function ButtonsTestPage() {
     setIsMultiPanelMode(false);
 
     return () => {
-      cleanupLayout(layoutInitResult);
+      cleanup3PanelsAppLayout(layoutInitResult);
     }
   }, []);
 

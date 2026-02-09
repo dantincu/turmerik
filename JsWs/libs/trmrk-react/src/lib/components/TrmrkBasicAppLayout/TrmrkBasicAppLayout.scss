@@ -24,6 +24,11 @@
     height: 0;
     max-height: 0;
     overflow: visible;
+
+    .trmrk-app-user-message-popover-container {
+      position: absolute;
+      bottom: 0;
+    }
   }
 }
 

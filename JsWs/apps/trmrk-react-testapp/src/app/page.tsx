@@ -10,8 +10,8 @@ import {
   trmrk3PanelsAppLayoutAtoms,
   useAllowShowPanelAtoms,
   usePanelContentsKeyAtoms,
-  initLayout,
-  cleanupLayout
+  init3PanelsAppLayout,
+  cleanup3PanelsAppLayout
 } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 
 import { useShowToolbars, useToolbarContentKeys, useToolbarOverridingContentKeys } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
@@ -34,7 +34,7 @@ export default function Landing() {
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
 
   React.useEffect(() => {
-    const layoutInitResult = initLayout({
+    const layoutInitResult = init3PanelsAppLayout({
       allowShowPanelAtoms,
       panelContentKeyAtoms,
       showToolbarAtoms,
@@ -53,7 +53,7 @@ export default function Landing() {
     });
 
     return () => {
-      cleanupLayout(layoutInitResult);
+      cleanup3PanelsAppLayout(layoutInitResult);
     }
   }, []);
 

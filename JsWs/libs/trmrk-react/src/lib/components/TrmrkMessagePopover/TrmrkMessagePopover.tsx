@@ -30,7 +30,7 @@ const CloseIcon = React.memo(({
   }) => <TrmrkBtn ref={ref} className='trmrk-close-icon-btn' onClick={closeBtnClick} onContextMenu={closeBtnLongPressOrRightClick}><TrmrkIcon icon="mdi:close" /></TrmrkBtn>);
 
 export default function TrmrkMessagePopover(
-  { className: cssClass, children, msgLevel, show, arrowPlacement = Placement.None, arrowStyle, closed, autoCloseMillis }: Readonly<TrmrkMessagePopoverProps>
+  { className, children, msgLevel, show, arrowPlacement = Placement.None, arrowStyle, closed, autoCloseMillis }: Readonly<TrmrkMessagePopoverProps>
 ) {
   const rootElRef = React.useRef<HTMLDivElement | null>(null);
   const closeBtnElRef = React.useRef<HTMLButtonElement | null>(null);
@@ -150,7 +150,7 @@ export default function TrmrkMessagePopover(
     }
   }, []);
 
-  return showEl && <div className={["trmrk-popover-container", cssClass ?? '', cssClassName, messageFadeOut ? 'trmrk-fade' : ''].join(" ")}
+  return showEl && <div className={["trmrk-popover-container", className ?? '', cssClassName, messageFadeOut ? 'trmrk-fade' : ''].join(" ")}
       ref={rootElRef} onPointerDownCapture={containerPointerDown}>
     <div className="trmrk-basement">{ arrowCssClass && <svg className={["trmrk-arrow", arrowCssClass].join(" ")} viewBox="0 0 20 10" style={ arrowStyle ?? undefined }>
       <path className="trmrk-arrow-body" strokeWidth="1" d="M 0 10 L 10 0 L 20 10" />

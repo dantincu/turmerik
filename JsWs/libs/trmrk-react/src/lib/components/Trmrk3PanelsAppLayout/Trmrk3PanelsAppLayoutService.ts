@@ -1,7 +1,11 @@
 import { atom, PrimitiveAtom } from "jotai";
 
-import { NullOrUndef, RefLazyValue, actWithValIf } from "@/src/trmrk/core";
-import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
+import {
+  NullOrUndef,
+  RefLazyValue,
+  UserMessageLevel,
+  actWithValIf,
+} from "@/src/trmrk/core";
 
 import {
   TrmrkUseAtom,
@@ -9,10 +13,7 @@ import {
   UseSetAtom,
 } from "../../services/jotai/core";
 
-import {
-  createIntKeyedComponentsMapManager,
-  IntKeyedComponentsMapManager,
-} from "../../services/IntKeyedComponentsMapManager";
+import { createIntKeyedComponentsMapManager } from "../../services/IntKeyedComponentsMapManager";
 
 import {
   appBarContents,
@@ -22,6 +23,12 @@ import {
   overridingAppBarContents,
   overridingBottomToolbarContents,
   overridingTopToolbarContents,
+  InitLayoutPartArgs,
+  initLayoutPart,
+  InitBasicAppLayoutArgs,
+  InitBasicAppLayoutResult,
+  initBasicAppLayout,
+  cleanupBasicAppLayout,
 } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 export enum TrmrkAppLayoutPanel {
@@ -108,106 +115,33 @@ export const usePanelContentsKeyAtoms = (): PanelAtoms<number | null> => ({
   rightPanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.contentsKey),
 });
 
-export interface InitLayoutPartArgs {
-  allowShow?: boolean | NullOrUndef;
-  contents?: React.ReactNode | NullOrUndef;
-  typeName?: string | NullOrUndef;
-}
-
-export interface InitLayoutArgs {
+export interface Init3PanelsAppLayoutArgs extends InitBasicAppLayoutArgs {
   allowShowPanelAtoms: PanelAtoms<boolean>;
   panelContentKeyAtoms: PanelAtoms<number | null>;
-  showToolbarAtoms: ToolbarAtoms<boolean>;
-  toolbarContentKeyAtoms: ToolbarAtoms<number | null>;
-  overridingToolbarContentKeyAtoms: ToolbarAtoms<number | null>;
-  appBar?: InitLayoutPartArgs | NullOrUndef;
-  topToolbar?: InitLayoutPartArgs | NullOrUndef;
-  bottomToolbar?: InitLayoutPartArgs | NullOrUndef;
-  overridingAppBar?: InitLayoutPartArgs | NullOrUndef;
-  overridingTopToolbar?: InitLayoutPartArgs | NullOrUndef;
-  overridingBottomToolbar?: InitLayoutPartArgs | NullOrUndef;
   leftPanel?: InitLayoutPartArgs | NullOrUndef;
   middlePanel?: InitLayoutPartArgs | NullOrUndef;
   rightPanel?: InitLayoutPartArgs | NullOrUndef;
   focusedPanel?: TrmrkAppLayoutPanel | NullOrUndef;
   setFocusedPanel: UseSetAtom<TrmrkAppLayoutPanel>;
+  appUserMessage?:
+    | {
+        show: number | null;
+        level: UserMessageLevel | null;
+        content: React.ReactNode;
+        autoCloseMillis?: number | NullOrUndef;
+      }
+    | NullOrUndef;
 }
 
-export interface InitLayoutResult {
-  appBarContentsId?: number | NullOrUndef;
-  topToolbarContentsId?: number | NullOrUndef;
-  bottomToolbarContentsId?: number | NullOrUndef;
-  overridingAppBarContentsId?: number | NullOrUndef;
-  overridingTopToolbarContentsId?: number | NullOrUndef;
-  overridingBottomToolbarContentsId?: number | NullOrUndef;
+export interface Init3PanelsAppLayoutResult extends InitBasicAppLayoutResult {
   leftPanelContentsId?: number | NullOrUndef;
   middlePanelContentsId?: number | NullOrUndef;
   rightPanelContentsId?: number | NullOrUndef;
 }
 
-export const initLayoutPart = (
-  args: InitLayoutPartArgs | NullOrUndef,
-  allowShowAtom: TrmrkUseAtom<boolean> | NullOrUndef,
-  contentsKeyManager: RefLazyValue<IntKeyedComponentsMapManager>,
-  contentsKeyAtom: TrmrkUseAtom<number | null>,
-) => {
-  args ??= {};
-  const allowShow = args.allowShow ?? (args.contents ?? null) !== null;
-
-  if (allowShowAtom) {
-    allowShowAtom.set(allowShow);
-  }
-
-  const contentsId = allowShow
-    ? contentsKeyManager.value.register(
-        defaultComponentIdService.value.getNextId(),
-        args.contents,
-        args.typeName,
-      )
-    : null;
-
-  contentsKeyAtom.set(contentsId);
-  return contentsId;
-};
-
-export const initLayout = (args: InitLayoutArgs) => {
-  const retObj: InitLayoutResult = {
-    appBarContentsId: initLayoutPart(
-      args.appBar,
-      null,
-      appBarContents,
-      args.toolbarContentKeyAtoms.appBar,
-    ),
-    topToolbarContentsId: initLayoutPart(
-      args.topToolbar,
-      null,
-      topToolbarContents,
-      args.toolbarContentKeyAtoms.topToolbar,
-    ),
-    bottomToolbarContentsId: initLayoutPart(
-      args.bottomToolbar,
-      null,
-      bottomToolbarContents,
-      args.toolbarContentKeyAtoms.bottomToolbar,
-    ),
-    overridingAppBarContentsId: initLayoutPart(
-      args.overridingAppBar,
-      null,
-      overridingAppBarContents,
-      args.overridingToolbarContentKeyAtoms.appBar,
-    ),
-    overridingTopToolbarContentsId: initLayoutPart(
-      args.overridingTopToolbar,
-      null,
-      overridingTopToolbarContents,
-      args.overridingToolbarContentKeyAtoms.topToolbar,
-    ),
-    overridingBottomToolbarContentsId: initLayoutPart(
-      args.overridingBottomToolbar,
-      null,
-      overridingBottomToolbarContents,
-      args.overridingToolbarContentKeyAtoms.bottomToolbar,
-    ),
+export const init3PanelsAppLayout = (args: Init3PanelsAppLayoutArgs) => {
+  const retObj: Init3PanelsAppLayoutResult = {
+    ...initBasicAppLayout(args),
     leftPanelContentsId: initLayoutPart(
       args.leftPanel,
       args.allowShowPanelAtoms.leftPanel,
@@ -234,7 +168,7 @@ export const initLayout = (args: InitLayoutArgs) => {
   return retObj;
 };
 
-export const getDefaultPanelToFocus = (retObj: InitLayoutResult) => {
+export const getDefaultPanelToFocus = (retObj: Init3PanelsAppLayoutResult) => {
   let focusedPanel: TrmrkAppLayoutPanel;
 
   if ((retObj.middlePanelContentsId ?? null) !== null) {
@@ -250,30 +184,8 @@ export const getDefaultPanelToFocus = (retObj: InitLayoutResult) => {
   return focusedPanel;
 };
 
-export const cleanupLayout = (result: InitLayoutResult) => {
-  actWithValIf(result.appBarContentsId, (id) => {
-    appBarContents.value.unregister(id);
-  });
-
-  actWithValIf(result.topToolbarContentsId, (id) => {
-    topToolbarContents.value.unregister(id);
-  });
-
-  actWithValIf(result.bottomToolbarContentsId, (id) => {
-    bottomToolbarContents.value.unregister(id);
-  });
-
-  actWithValIf(result.overridingAppBarContentsId, (id) => {
-    overridingAppBarContents.value.unregister(id);
-  });
-
-  actWithValIf(result.overridingTopToolbarContentsId, (id) => {
-    overridingTopToolbarContents.value.unregister(id);
-  });
-
-  actWithValIf(result.overridingBottomToolbarContentsId, (id) => {
-    overridingBottomToolbarContents.value.unregister(id);
-  });
+export const cleanup3PanelsAppLayout = (result: Init3PanelsAppLayoutResult) => {
+  cleanupBasicAppLayout(result);
 
   actWithValIf(result.leftPanelContentsId, (id) => {
     leftPanelContents.value.unregister(id);

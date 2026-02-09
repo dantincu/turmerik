@@ -1,8 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
 
-import { withValIf } from "@/src/trmrk/core";
-
 import "./TrmrkBasicAppLayout.scss";
 
 import { ComponentProps } from "../defs/common";
@@ -17,10 +15,12 @@ import {
   useToolbarOverridingContentKeys,
   overridingAppBarContents,
   overridingBottomToolbarContents,
-  overridingTopToolbarContents
+  overridingTopToolbarContents,
+  useAppUserMessage
 } from "./TrmrkBasicAppLayoutService";
 
 import { trmrkBasicAppLayoutAtoms, appOverlappingContents } from "./TrmrkBasicAppLayoutService";
+import TrmrkMessagePopover from "../TrmrkMessagePopover/TrmrkMessagePopover";
 
 export interface TrmrkBasicAppLayoutProps extends ComponentProps {}
 
@@ -32,6 +32,7 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
   const showToolbarAtoms = useShowToolbars();
   const toolbarContentKeys = useToolbarContentKeys();
   const overridingToolbarContentKeys = useToolbarOverridingContentKeys();
+  const appUserMessageAtoms = useAppUserMessage();
 
   const showAppBar = React.useMemo(() => {
     const retVal = showToolbarAtoms.appBar.value || (overridingToolbarContentKeys.appBar.value ?? null) !== null;
@@ -137,6 +138,13 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
 
       { /* **** **** **** **** **** **** **** **** OVERLAPPING_CONTENTS START **** **** **** **** **** **** **** **** */
         <div className="trmrk-overlapping-contents">
+          { ((appUserMessageAtoms.show.value ?? null) !== null && (appUserMessageAtoms.level.value ?? null) !== null) && <TrmrkMessagePopover
+            show={appUserMessageAtoms.show.value}
+            msgLevel={appUserMessageAtoms.level.value}
+            autoCloseMillis={appUserMessageAtoms.autoCloseMillis.value}
+            className={[appUserMessageAtoms.cssClass.value ?? "", "trmrk-app-user-message-popover-container"].join(' ')}>
+              { appUserMessageAtoms.content.value }</TrmrkMessagePopover> }
+
           { overlappingContentKeys.map(key => <React.Fragment key={key}>
             { appOverlappingContents.value.keyedMap.map[key]?.node }
           </React.Fragment>) }
