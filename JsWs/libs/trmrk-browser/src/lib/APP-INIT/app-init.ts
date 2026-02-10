@@ -14,14 +14,14 @@ export interface TrmrkGlobalObject extends TrmrkGlobalObjectCore {
 
 export const initApp = (
   appName: string,
+  dbObjAppName?: string | null | undefined,
   createGlobalTrmrkObj?: boolean | null | undefined,
-  dbObjNamePrefix?: string | null | undefined,
   darkModeArgs?: DarkModeServiceInitArgs | null | undefined,
 ) => {
   const trmrk = createTrmrk<TrmrkGlobalObject>(
     appName,
+    dbObjAppName,
     createGlobalTrmrkObj,
-    dbObjNamePrefix,
   );
 
   trmrk.darkModeService = new DarkModeService();

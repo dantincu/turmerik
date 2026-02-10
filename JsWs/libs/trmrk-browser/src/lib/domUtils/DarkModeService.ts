@@ -36,7 +36,7 @@ export const isDarkMode = (localStorageIsDarkModeKey: string) => {
 export class DarkModeService implements Disposable {
   stateChangeHandler!: (isDarkModeValue: boolean) => void;
   onDarkModeStateChanged!: (isDarkMode: boolean) => void;
-  dbObjNamePrefix!: string;
+  dbObjAppName!: string;
   appThemeIsDarkModeLocalStorageKey!: string;
 
   private _disposeCalled = false;
@@ -50,10 +50,10 @@ export class DarkModeService implements Disposable {
       addStorageEventListener: false,
     };
 
-    this.dbObjNamePrefix = getTrmrk().dbObjNamePrefix;
+    this.dbObjAppName = getTrmrk().dbObjAppName;
 
     this.appThemeIsDarkModeLocalStorageKey =
-      args.localStorageKey ?? `${this.dbObjNamePrefix}[appThemeIsDarkMode]`;
+      args.localStorageKey ?? `[${this.dbObjAppName}][appThemeIsDarkMode]`;
 
     this.stateChangeHandler =
       args.stateChangeHandler ??

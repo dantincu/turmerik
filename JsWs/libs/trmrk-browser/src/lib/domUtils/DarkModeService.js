@@ -23,7 +23,7 @@ export const isDarkMode = (localStorageIsDarkModeKey) => {
 export class DarkModeService {
     stateChangeHandler;
     onDarkModeStateChanged;
-    dbObjNamePrefix;
+    dbObjAppName;
     appThemeIsDarkModeLocalStorageKey;
     _disposeCalled = false;
     constructor() {
@@ -33,9 +33,9 @@ export class DarkModeService {
         args ??= {
             addStorageEventListener: false,
         };
-        this.dbObjNamePrefix = getTrmrk().dbObjNamePrefix;
+        this.dbObjAppName = getTrmrk().dbObjAppName;
         this.appThemeIsDarkModeLocalStorageKey =
-            args.localStorageKey ?? `${this.dbObjNamePrefix}[appThemeIsDarkMode]`;
+            args.localStorageKey ?? `[${this.dbObjAppName}][appThemeIsDarkMode]`;
         this.stateChangeHandler =
             args.stateChangeHandler ??
                 ((isDarkModeValue) => {

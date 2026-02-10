@@ -1,10 +1,10 @@
 const trmrkRef = {};
-const createTrmrkFunc = (appName, createGlobalTrmrkObj, dbObjNamePrefix) => {
+const createTrmrkFunc = (appName, dbObjAppName, createGlobalTrmrkObj) => {
     const trmrk = (trmrkRef.value = createGlobalTrmrkObj
         ? (globalThis.trmrk ??= {})
         : {});
     trmrk.appName = appName;
-    trmrk.dbObjNamePrefix = dbObjNamePrefix ?? `[${appName}]`;
+    trmrk.dbObjAppName = dbObjAppName ?? appName;
     return trmrk;
 };
 const getTrmrk = () => trmrkRef.value;
@@ -33,7 +33,7 @@ const isDarkMode = (localStorageIsDarkModeKey) => {
 class DarkModeService {
     stateChangeHandler;
     onDarkModeStateChanged;
-    dbObjNamePrefix;
+    dbObjAppName;
     appThemeIsDarkModeLocalStorageKey;
     _disposeCalled = false;
     constructor() {
@@ -43,9 +43,9 @@ class DarkModeService {
         args ??= {
             addStorageEventListener: false,
         };
-        this.dbObjNamePrefix = getTrmrk().dbObjNamePrefix;
+        this.dbObjAppName = getTrmrk().dbObjAppName;
         this.appThemeIsDarkModeLocalStorageKey =
-            args.localStorageKey ?? `${this.dbObjNamePrefix}[appThemeIsDarkMode]`;
+            args.localStorageKey ?? `[${this.dbObjAppName}][appThemeIsDarkMode]`;
         this.stateChangeHandler =
             args.stateChangeHandler ??
                 ((isDarkModeValue) => {
@@ -92,8 +92,8 @@ class DarkModeService {
         this.dispose();
     }
 }
-const initApp = (appName, createGlobalTrmrkObj, dbObjNamePrefix, darkModeArgs) => {
-    const trmrk = createTrmrk(appName, createGlobalTrmrkObj, dbObjNamePrefix);
+const initApp = (appName, dbObjAppName, createGlobalTrmrkObj, darkModeArgs) => {
+    const trmrk = createTrmrk(appName, dbObjAppName, createGlobalTrmrkObj);
     trmrk.darkModeService = new DarkModeService();
     trmrk.darkModeService.init(darkModeArgs);
 };
