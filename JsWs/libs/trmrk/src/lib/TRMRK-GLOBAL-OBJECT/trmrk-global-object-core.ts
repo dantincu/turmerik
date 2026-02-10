@@ -8,13 +8,14 @@ const trmrkRef = {} as { value: TrmrkGlobalObjectCoreIntf };
 const createTrmrkFunc = <TObject extends TrmrkGlobalObjectCoreIntf>(
   appName: string,
   createGlobalTrmrkObj?: boolean | null | undefined,
+  dbObjNamePrefix?: string | null | undefined,
 ) => {
   const trmrk = (trmrkRef.value = createGlobalTrmrkObj
     ? ((globalThis as any).trmrk ??= {})
     : {}) as TObject;
 
   trmrk.appName = appName;
-  trmrk.dbObjNamePrefix = `[${appName}]`;
+  trmrk.dbObjNamePrefix = dbObjNamePrefix ?? `[${appName}]`;
   return trmrk;
 };
 
