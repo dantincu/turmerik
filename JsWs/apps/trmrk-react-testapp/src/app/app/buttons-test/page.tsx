@@ -111,7 +111,7 @@ const MessageButton = React.memo(({ msg, dispatch }: {
   }) => (<React.Fragment>
     <TrmrkBtn borderWidth={msg.idx % 3} className="my-[1px]" onClick={() => dispatch({ type: 'SHOW_MESSAGE', idx: msg.idx })}><span className="trmrk-text flex flex-col">
       <span>My Button {msg.idx}</span><span>asdfasdf</span></span></TrmrkBtn>
-    <TrmrkMessagePopover show={msg.show} msgLevel={msg.idx % 4} autoCloseMillis={ (msg.idx + 1) * 1000 } arrowPlacement={Placement.Top}>
+    <TrmrkMessagePopover show={msg.show} msgLevel={msg.idx % 5} autoCloseMillis={ (msg.idx + 1) * 1000 } arrowPlacement={Placement.Top}>
       {msg.text}</TrmrkMessagePopover>
   </React.Fragment>));
 

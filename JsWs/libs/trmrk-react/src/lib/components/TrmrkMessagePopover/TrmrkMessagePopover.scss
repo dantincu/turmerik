@@ -13,7 +13,7 @@
   display: flex;
   width: fit-content;
   height: fit-content;
-  border-radius: 10px;
+  border-radius: var(--trmrk-panel-border-radius);
   border: 1px solid;
   z-index: 100;
 
@@ -27,12 +27,6 @@
     max-width: 100vw;
     display: flex;
     align-items: center;
-
-    .trmrk-close-icon-btn {
-      width: 30px;
-      min-width: 30px;
-      height: 30px;
-    }
   }
 
   .trmrk-basement {
@@ -74,8 +68,26 @@
 
 .light {
   .trmrk-popover-container {
+    color: var(--trmrk-tool-bar_fore-color_light);
+
     .trmrk-close-icon-btn {
       background-color: #0002;
+    }
+
+    &.trmrk-default {
+      background-color: var(--trmrk-popover-default_back-color_light);
+      border-color: var(--trmrk-popover-default_border-color_light);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-popover-default_back-color_light);
+          fill: var(--trmrk-popover-default_back-color_light);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-popover-default_border-color_light);
+        }
+      }
     }
 
     &.trmrk-success {
@@ -146,8 +158,26 @@
 
 .dark {
   .trmrk-popover-container {
+    color: var(--trmrk-tool-bar_fore-color_dark);
+
     .trmrk-close-icon-btn {
       background-color: #FFF2;
+    }
+
+    &.trmrk-default {
+      background-color: var(--trmrk-popover-default_back-color_dark);
+      border-color: var(--trmrk-popover-default_border-color_dark);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-popover-default_back-color_dark);
+          fill: var(--trmrk-popover-default_back-color_dark);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-popover-default_border-color_dark);
+        }
+      }
     }
 
     &.trmrk-success {

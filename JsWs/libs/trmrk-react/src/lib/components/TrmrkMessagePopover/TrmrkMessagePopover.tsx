@@ -46,6 +46,9 @@ export default function TrmrkMessagePopover(
     let cssClass = '';
 
     switch (msgLevel) {
+      case UserMessageLevel.Default:
+        cssClass = 'trmrk-default';
+        break;
       case UserMessageLevel.Success:
         cssClass = 'trmrk-success';
         break;

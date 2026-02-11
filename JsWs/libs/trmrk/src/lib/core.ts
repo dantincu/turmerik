@@ -183,7 +183,8 @@ export const asNumber = (val: number | NullOrUndef, dfVal: number): number =>
 export const nullify = <T>(val: T | NullOrUndef) => (val ? val : null);
 
 export enum UserMessageLevel {
-  Success = 0,
+  Default = 0,
+  Success,
   Info,
   Warn,
   Error,

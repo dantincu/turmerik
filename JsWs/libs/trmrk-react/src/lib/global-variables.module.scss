@@ -14,6 +14,9 @@
 
   --trmrk-default-back-color-dark: #000;
   --trmrk-default-fore-color-dark: #ddd;
+  
+  --trmrk-tool-bar_fore-color_light: #000;
+  --trmrk-tool-bar_fore-color_dark: #fff;
 
   --trmrk-primary-color-theme-light: #04F;
   --trmrk-primary-color-theme-dark: #48F;
@@ -31,6 +34,9 @@
   --trmrk-warn-color-theme-dark: #DB0;
   --trmrk-warn-back-color: #FD0;
 
+  --trmrk-popover-default_back-color_light: #ddd;
+  --trmrk-popover-default_border-color_light: #aaa;
+
   --trmrk-popover-success_back-color_light: #40f040;
   --trmrk-popover-success_border-color_light: #10d010;
 
@@ -43,8 +49,11 @@
   --trmrk-popover-error_back-color_light: #f0a0a0;
   --trmrk-popover-error_border-color_light: #d07070;
 
-  --trmrk-popover-success_back-color_dark: #002000;
-  --trmrk-popover-success_border-color_dark: #004000;
+  --trmrk-popover-default_back-color_dark: #002000;
+  --trmrk-popover-default_border-color_dark: #004000;
+
+  --trmrk-popover-success_back-color_dark: #333;
+  --trmrk-popover-success_border-color_dark: #555;
 
   --trmrk-popover-info_back-color_dark: #000040;
   --trmrk-popover-info_border-color_dark: #000080;
@@ -54,16 +63,10 @@
 
   --trmrk-popover-error_back-color_dark: #600000;
   --trmrk-popover-error_border-color_dark: #a00000;
-}
 
-/* app theme */
+  --trmrk-menu-popover-default_back-color_light: #ddd;
+  --trmrk-menu-popover-default_border-color_light: #aaa;
 
-:root {
-  /* --trmrk-tool-bar_back-color_light: #ffe000;
-  --trmrk-tool-bar_back-color-emph_light: #e0a000;
-  --trmrk-tool-bar_fore-color_light: #000;
-
-  --trmrk-tool-bar_back-color_dark: #200800;
-  --trmrk-tool-bar_back-color-emph_dark: #602000;
-  --trmrk-tool-bar_fore-color_dark: #fff; */
+  --trmrk-menu-popover-default_back-color_dark: #333;
+  --trmrk-menu-popover-default_border-color_dark: #555;
 }
