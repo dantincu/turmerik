@@ -24,6 +24,10 @@ import filterOutline from "@iconify-icons/mdi/filter-outline";
 import sort from "@iconify-icons/mdi/sort";
 import minimize from "@iconify-icons/mdi/minimize";
 import windowMinimize from "@iconify-icons/mdi/window-minimize";
+import keyboardArrowUp from "@iconify-icons/mdi/keyboard-arrow-up";
+import keyboardArrowLeft from "@iconify-icons/mdi/keyboard-arrow-left";
+import keyboardArrowDown from "@iconify-icons/mdi/keyboard-arrow-down";
+import keyboardArrowRight from "@iconify-icons/mdi/keyboard-arrow-right";
 
 import undo from "@iconify-icons/material-symbols/undo";
 import redo from "@iconify-icons/material-symbols/redo";
@@ -75,6 +79,10 @@ export const registerIconifyIcons = () => {
     sort,
     minimize,
     ["window-minimize"]: windowMinimize,
+    ["keyboard-arrow-up"]: keyboardArrowUp,
+    ["keyboard-arrow-left"]: keyboardArrowLeft,
+    ["keyboard-arrow-down"]: keyboardArrowDown,
+    ["keyboard-arrow-right"]: keyboardArrowRight,
   });
 
   registerIconifyIconsCore("material-symbols", {

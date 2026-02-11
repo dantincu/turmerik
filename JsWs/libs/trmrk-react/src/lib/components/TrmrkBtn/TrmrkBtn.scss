@@ -30,6 +30,11 @@
     transition: background-color 0.2s;
   }
 
+  .trmrk-text {
+    margin: 0 6px;
+    line-height: 1.4;
+  }
+
   &.trmrk-border {
     .trmrk-btn-overlay {
       border-style: solid;
@@ -47,10 +52,6 @@
     .trmrk-btn-overlay {
       border-width: 2px;
     }
-  }
-
-  .trmrk-text {
-    margin: 0 6px;
   }
 }
 

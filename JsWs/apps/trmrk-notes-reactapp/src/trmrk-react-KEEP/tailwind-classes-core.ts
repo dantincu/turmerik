@@ -4,6 +4,7 @@ export const tailwindClassesCore = [
   "border-[1px]",
   "border-[2px]",
   "content-center",
+  "flex-col",
   "justify-end",
   "justify-self-center",
   "h-full",

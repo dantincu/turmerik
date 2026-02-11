@@ -1,10 +1,13 @@
 import React from "react";
 import { useAtom } from "jotai";
 
+import { withValIf } from "@/src/trmrk/core";
+
 import "./TrmrkBasicAppLayout.scss";
 
 import { ComponentProps } from "../defs/common";
 import TrmrkHorizStrip from "../TrmrkHorizStrip/TrmrkHorizStrip";
+import { defaultTrmrkAppModalService } from "./TrmrkAppModalService";
 
 import {
   appBarContents,
@@ -30,6 +33,7 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
   const [ overlappingContentKeys ] = useAtom(appOverlappingContents.value.currentKeysAtom);
   const [cssClassValue] = useAtom(trmrkBasicAppLayoutAtoms.cssClass);
   const [showToolbars] = useAtom(trmrkBasicAppLayoutAtoms.showToolbars);
+  const [openModalsCurrentKeys] = useAtom(defaultTrmrkAppModalService.value.openModals.currentKeysAtom);
 
   const showToolbarAtoms = useShowToolbars();
   const toolbarContentKeys = useToolbarContentKeys();
@@ -109,6 +113,20 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
     toolbarContentKeys.bottomToolbar.value
   ]);
 
+  const openModalCurrentKey = React.useMemo(
+    () => openModalsCurrentKeys.length ? openModalsCurrentKeys[openModalsCurrentKeys.length - 1] : null,
+    [openModalsCurrentKeys])
+
+  const openModalNode = React.useMemo(() => {
+    return (openModalCurrentKey ?? null) !== null && withValIf(
+      defaultTrmrkAppModalService.value.openModals.keyedMap.map[openModalCurrentKey!],
+      modal => modal.node(modal.key))
+  }, [openModalCurrentKey]);
+
+  React.useEffect(() => {
+    console.log("APP LAYOUT MOUNTED");
+  }, []);
+
   return (
     <div className={['trmrk-app-layout', cssClass ?? '', cssClassValue ?? ''].join(' ')}>
 
@@ -150,101 +168,10 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
             autoCloseMillis={appUserMessageAtoms.autoCloseMillis.value}
             className={[appUserMessageAtoms.cssClass.value ?? "", "trmrk-app-user-message-popover-container"].join(' ')}>
               { appUserMessageAtoms.content.value }</TrmrkMessagePopover> }
-              
-          <div className="trmrk-app-modal-backdrop trmrk-fade-in">
-            <div className="trmrk-app-modal-container">
-              <div className="trmrk-app-modal-header">
-                <div className="trmrk-horiz-strip trmrk-app-modal-top-bar">
-                  <div className="trmrk-leading-content flex">
-                    <TrmrkBtn className="trmrk-btn-filled-system" onClick={() => {}}>
-                      <TrmrkIcon icon="mdi:chevron-double-up"></TrmrkIcon>
-                    </TrmrkBtn>
-                  </div>
-                  <div className="trmrk-content flex grow content-center ml-[2px]">
-                    <h2 className="text-center flex grow items-center justify-center">asdfasdf</h2>
-                  </div>
-                  <div className="trmrk-trailing-content flex mr-[2px]">
-                    <TrmrkBtn className="trmrk-btn-filled-system" onClick={() => {}}>
-                      <TrmrkIcon icon="mdi:minimize"></TrmrkIcon>
-                    </TrmrkBtn>
-                    <TrmrkBtn className="trmrk-btn-filled-system" onClick={() => {}}>
-                      <TrmrkIcon icon="mdi:close"></TrmrkIcon>
-                    </TrmrkBtn>
-                  </div>
-                </div>
-                <div className="trmrk-horiz-strip trmrk-app-modal-top-toolbar"></div>
-              </div>
-              <div className="trmrk-app-modal-content">
-              asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf
-              asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf
-              asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf
-              asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf
-              asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf
-              asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf
-              asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf
-              asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
-              asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf
-              </div>
-              <div className="trmrk-app-modal-footer">
-                <div className="trmrk-horiz-strip trmrk-app-modal-bottom-bar"></div>
-              </div>
-            </div>
-          </div>
+          
+          { (openModalCurrentKey ?? null) !== null && <div className="trmrk-app-modal-backdrop trmrk-fade-in">
+            { openModalNode }
+          </div> }
         </div>
       /* **** **** **** **** **** **** **** **** OVERLAPPING_CONTENTS END **** **** **** **** **** **** **** **** */ }
 

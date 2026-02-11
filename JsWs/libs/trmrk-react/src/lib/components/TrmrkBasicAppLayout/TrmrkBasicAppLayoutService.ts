@@ -6,6 +6,7 @@ import {
   RefLazyValue,
   UserMessageLevel,
 } from "@/src/trmrk/core";
+
 import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
 
 import { trmrkUseAtom, TrmrkUseAtom } from "../../services/jotai/core";
@@ -14,9 +15,6 @@ import {
   createIntKeyedComponentsMapManager,
   IntKeyedComponentsMapManager,
 } from "../../services/IntKeyedComponentsMapManager";
-
-import { defaultTrmrkAppModalService } from "./TrmrkAppModalService";
-console.log("defaultTrmrkAppModalService", defaultTrmrkAppModalService);
 
 export interface TrmrkToolbarAtoms {
   show: PrimitiveAtom<boolean>;
