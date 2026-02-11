@@ -114,7 +114,6 @@
     flex-direction: column;
     position: relative;
     padding: 1px 0;
-    background-color: var(--trmrk-tool-bar_back-color_light);
   }
 
   .trmrk-modal-top-bar,
@@ -130,27 +129,37 @@
 }
 
 .light {
-  .trmrk-app-modal-container, .trmrk-popover-container {
+  .trmrk-app-modal-container {
     border-color: var(--trmrk-tool-bar_back-color-emph_light);
     background-color: var(--trmrk-default-back-color-light);
+    color: var(--trmrk-default-fore-color-light);
       
-    .trmrk-modal-header .trmrk-modal-top-bar,
-    .trmrk-modal-header .trmrk-modal-top-toolbar,
+    .trmrk-modal-header,
     .trmrk-modal-footer {
       background-color: var(--trmrk-tool-bar_back-color_light);
     }
   }
+
+  .trmrk-popover-container {
+    border-color: var(--trmrk-menu-popover-default_border-color_light);
+    background-color: var(--trmrk-menu-popover-default_back-color_light);
+  }
 }
 
 .dark {
-  .trmrk-app-modal-container, .trmrk-popover-container {
+  .trmrk-app-modal-container {
     border-color: var(--trmrk-tool-bar_back-color-emph_dark);
     background-color: var(--trmrk-default-back-color-dark);
+    color: var(--trmrk-default-fore-color-dark);
       
-    .trmrk-modal-header .trmrk-modal-top-bar,
-    .trmrk-modal-header .trmrk-modal-top-toolbar,
+    .trmrk-modal-header,
     .trmrk-modal-footer {
       background-color: var(--trmrk-tool-bar_back-color_dark);
     }
+  }
+  
+  .trmrk-popover-container {
+    border-color: var(--trmrk-menu-popover-default_border-color_dark);
+    background-color: var(--trmrk-menu-popover-default_back-color_dark);
   }
 }
