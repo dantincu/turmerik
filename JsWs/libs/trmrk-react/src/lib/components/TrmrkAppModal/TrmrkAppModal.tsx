@@ -18,7 +18,6 @@ export interface TrmrkAppModalProps extends React.ComponentPropsWithRef<'div'> {
   footerContents?: React.ReactNode | NullOrUndef;
   showCloseBtn?: boolean | NullOrUndef;
   showMinimizeBtn?: boolean | NullOrUndef;
-  closing?: (() => void) | NullOrUndef;
 }
 
 const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalProps>(({
@@ -34,7 +33,6 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
   footerContents,
   showMinimizeBtn,
   showCloseBtn,
-  closing,
   ...props
 }, ref) => {
 
@@ -53,8 +51,8 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
   }, [showTopBarOnly]);
 
   return <div ref={ref} className={[className ?? "", "trmrk-app-modal-container"].join(' ')} {...props}>
-    { (showHeader ?? true) && <div className="trmrk-app-modal-header">
-      { (showTopBar ?? true) && <div className="trmrk-horiz-strip trmrk-app-modal-top-bar">
+    { (showHeader ?? true) && <div className="trmrk-modal-header">
+      { (showTopBar ?? true) && <div className="trmrk-horiz-strip trmrk-modal-top-bar">
         <div className="trmrk-leading-content flex">
           { (showTopToolbar || showFooter) && <TrmrkBtn className="trmrk-btn-filled-system"
               onClick={toggleShowTopBarOnlyClicked}>
@@ -75,11 +73,11 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
           </TrmrkBtn> }
         </div>
       </div> }
-    { (showTopToolbar ?? false) && !showTopBarOnly && <div className="trmrk-horiz-strip trmrk-app-modal-top-toolbar">{topToolbarContents}</div> }
+    { (showTopToolbar ?? false) && !showTopBarOnly && <div className="trmrk-horiz-strip trmrk-modal-top-toolbar">{topToolbarContents}</div> }
     </div> }
-    <div className="trmrk-app-modal-content">{ children }</div>
-    { (showFooter ?? false) && !showTopBarOnly && <div className="trmrk-app-modal-footer">
-      <div className="trmrk-horiz-strip trmrk-app-modal-top-toolbar">{footerContents}</div>
+    <div className="trmrk-modal-content">{ children }</div>
+    { (showFooter ?? false) && !showTopBarOnly && <div className="trmrk-modal-footer">
+      <div className="trmrk-horiz-strip trmrk-modal-top-toolbar">{footerContents}</div>
     </div> }
   </div>;
 }));

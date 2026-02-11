@@ -16,7 +16,7 @@
   }
 }
 
-.trmrk-app-modal-backdrop {
+.trmrk-app-modal-backdrop, .trmrk-popover-backdrop {
   display: flex;
   position: fixed;
   inset: 0;
@@ -31,10 +31,6 @@
 
   &.trmrk-fade-out {
     animation: trmrk-app-modal-backdrop-fade-out 0.3s ease-out;
-  }
-
-  &.trmrk-hidden {
-    display: none;
   }
 }
 
@@ -52,51 +48,51 @@
 
 :root {
   /* Default offset for small phones */
-  --trmrk-app-modal-container-offset-x: 10px;
-  --trmrk-app-modal-container-offset-y: 10px;
+  --trmrk-modal-container-offset-x: 10px;
+  --trmrk-modal-container-offset-y: 10px;
 }
 
 @media (min-width: 480px) {
   :root {
-    --trmrk-app-modal-container-offset-x: 20px;
+    --trmrk-modal-container-offset-x: 20px;
   }
 }
 
 /* Desktop screens */
 @media (min-width: 880px) {
   :root {
-    --trmrk-app-modal-container-offset-x: 40px;
+    --trmrk-modal-container-offset-x: 40px;
   }
 }
 
 /* Desktop screens */
 @media (min-width: 1280px) {
   :root {
-    --trmrk-app-modal-container-offset-x: 80px;
+    --trmrk-modal-container-offset-x: 80px;
   }
 }
 
 @media (min-height: 480px) {
   :root {
-    --trmrk-app-modal-container-offset-y: 20px;
+    --trmrk-modal-container-offset-y: 20px;
   }
 }
 
 /* Desktop screens */
 @media (min-height: 880px) {
   :root {
-    --trmrk-app-modal-container-offset-y: 40px;
+    --trmrk-modal-container-offset-y: 40px;
   }
 }
 
 /* Desktop screens */
 @media (min-height: 1280px) {
   :root {
-    --trmrk-app-modal-container-offset-y: 80px;
+    --trmrk-modal-container-offset-y: 80px;
   }
 }
 
-.trmrk-app-modal-container {
+.trmrk-app-modal-container, .trmrk-popover-container {
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -105,15 +101,15 @@
   height: fit-content;
 
   /* 2. Logic: Full screen minus the responsive offset */
-  max-width: calc(100% - var(--trmrk-app-modal-container-offset-x));
-  max-height: calc(100% - var(--trmrk-app-modal-container-offset-y));
+  max-width: calc(100% - var(--trmrk-modal-container-offset-x));
+  max-height: calc(100% - var(--trmrk-modal-container-offset-y));
 
   margin: auto; /* Centers it if it's smaller than the screen */
   border-radius: var(--trmrk-panel-border-radius);
   border: 2px solid;
 
-  .trmrk-app-modal-header,
-  .trmrk-app-modal-footer {
+  .trmrk-modal-header,
+  .trmrk-modal-footer {
     display: flex;
     flex-direction: column;
     position: relative;
@@ -121,39 +117,39 @@
     background-color: var(--trmrk-tool-bar_back-color_light);
   }
 
-  .trmrk-app-modal-top-bar,
-  .trmrk-app-modal-top-toolbar,
-  .trmrk-app-modal-bottom-bar {
+  .trmrk-modal-top-bar,
+  .trmrk-modal-top-toolbar,
+  .trmrk-modal-bottom-bar {
     overflow: hidden;
   }
   
-  .trmrk-app-modal-content {
+  .trmrk-modal-content {
     display: flex;
     overflow: auto;
   }
 }
 
 .light {
-  .trmrk-app-modal-container {
+  .trmrk-app-modal-container, .trmrk-popover-container {
     border-color: var(--trmrk-tool-bar_back-color-emph_light);
     background-color: var(--trmrk-default-back-color-light);
       
-    .trmrk-app-modal-header .trmrk-app-modal-top-bar,
-    .trmrk-app-modal-header .trmrk-app-modal-top-toolbar,
-    .trmrk-app-modal-footer {
+    .trmrk-modal-header .trmrk-modal-top-bar,
+    .trmrk-modal-header .trmrk-modal-top-toolbar,
+    .trmrk-modal-footer {
       background-color: var(--trmrk-tool-bar_back-color_light);
     }
   }
 }
 
 .dark {
-  .trmrk-app-modal-container {
+  .trmrk-app-modal-container, .trmrk-popover-container {
     border-color: var(--trmrk-tool-bar_back-color-emph_dark);
     background-color: var(--trmrk-default-back-color-dark);
       
-    .trmrk-app-modal-header .trmrk-app-modal-top-bar,
-    .trmrk-app-modal-header .trmrk-app-modal-top-toolbar,
-    .trmrk-app-modal-footer {
+    .trmrk-modal-header .trmrk-modal-top-bar,
+    .trmrk-modal-header .trmrk-modal-top-toolbar,
+    .trmrk-modal-footer {
       background-color: var(--trmrk-tool-bar_back-color_dark);
     }
   }
