@@ -34,6 +34,7 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
   const [cssClassValue] = useAtom(trmrkBasicAppLayoutAtoms.cssClass);
   const [showToolbars] = useAtom(trmrkBasicAppLayoutAtoms.showToolbars);
   const [openModalsCurrentKeys] = useAtom(defaultTrmrkAppModalService.value.openModals.currentKeysAtom);
+  const [isClosingModals] = useAtom(defaultTrmrkAppModalService.value.isClosingModals);
 
   const showToolbarAtoms = useShowToolbars();
   const toolbarContentKeys = useToolbarContentKeys();
@@ -169,7 +170,9 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
             className={[appUserMessageAtoms.cssClass.value ?? "", "trmrk-app-user-message-popover-container"].join(' ')}>
               { appUserMessageAtoms.content.value }</TrmrkMessagePopover> }
           
-          { (openModalCurrentKey ?? null) !== null && <div className="trmrk-app-modal-backdrop trmrk-fade-in">
+          { ((openModalCurrentKey ?? null) !== null) && <div className={[
+            "trmrk-app-modal-backdrop",
+            isClosingModals ? "trmrk-fade-out" : "trmrk-fade-in"].join(" ")}>
             { openModalNode }
           </div> }
         </div>

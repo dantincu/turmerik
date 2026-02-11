@@ -1,6 +1,7 @@
-import { atom, PrimitiveAtom, Atom } from "jotai";
+import { atom, PrimitiveAtom, getDefaultStore } from "jotai";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-import { NullOrUndef, RefLazyValue, MtblRefValue } from "@/src/trmrk/core";
+import { NullOrUndef, RefLazyValue } from "@/src/trmrk/core";
 import { TrmrkDisposableBase } from "@/src/trmrk/TrmrkDisposableBase";
 import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
 
@@ -13,6 +14,10 @@ import {
   IntKeyedComponentsMapManager,
   createIntKeyedComponentsMapManager,
 } from "../../services/IntKeyedComponentsMapManager";
+
+import { JotaiStore } from "../../services/jotai/core";
+
+export const MODAL_FADE_MILLIS = 300;
 
 export enum ModalCloseKind {
   Button,
@@ -57,7 +62,11 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
     TrmrkAppModalData
   >;
 
-  constructor() {
+  isClosingModals: PrimitiveAtom<boolean>;
+
+  private readonly store: JotaiStore;
+
+  constructor(store?: JotaiStore | NullOrUndef) {
     super();
 
     this.minimizedModals = createIntKeyedComponentsMapManager<
@@ -69,6 +78,9 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
       TrmrkAppModalNodeFactory,
       TrmrkAppModalData
     >();
+
+    this.isClosingModals = atom(false);
+    this.store = store ?? getDefaultStore();
   }
 
   disposeCore() {}
@@ -85,23 +97,53 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
     };
 
     this.openModals.register(modalId, args.modal, null, modalData);
+    this.store.set(this.isClosingModals, () => false);
     return modalId;
   }
 
   closeModal(modalId: number) {
-    return this.openModals.unregister(modalId);
+    this.store.set(this.isClosingModals, () => true);
+
+    setTimeout(() => {
+      this.openModals.unregister(modalId);
+    }, MODAL_FADE_MILLIS);
   }
 
   closeCurrentModal() {
-    const openModalsIdsArr = this.openModals.getCurrentKeys();
-    const modalId = openModalsIdsArr[openModalsIdsArr.length - 1];
-    return this.openModals.unregister(modalId);
+    const modalsIdsArr = this.openModals.getCurrentKeys();
+    const modalId = modalsIdsArr[modalsIdsArr.length - 1];
+    this.closeModal(modalId);
   }
 
   minimizeAllModals() {
-    if (Object.keys(this.minimizedModals.keyedMap.map).length === 0) {
-      const openModalsMap = this.openModals.replaceAll({});
-      this.minimizedModals.replaceAll(openModalsMap);
+    const modalsIdsArr = this.minimizedModals.getCurrentKeys();
+
+    if (modalsIdsArr.length === 0) {
+      this.store.set(this.isClosingModals, () => true);
+
+      setTimeout(() => {
+        const openModalsMap = this.openModals.replaceAll({});
+        this.minimizedModals.replaceAll(openModalsMap);
+      }, MODAL_FADE_MILLIS);
+    }
+  }
+
+  restoreMinimizedModals(router: AppRouterInstance) {
+    const modalsIdsArr = this.minimizedModals.getCurrentKeys();
+
+    if (modalsIdsArr.length > 0) {
+      const minimizedModals = this.minimizedModals.replaceAll([]);
+
+      const currentModal =
+        minimizedModals[modalsIdsArr[modalsIdsArr.length - 1]];
+
+      if (currentModal) {
+        var newUrl = currentModal.data!.refUrl.relUrlStr;
+        router.push(newUrl);
+
+        this.store.set(this.isClosingModals, () => false);
+        this.openModals.replaceAll(minimizedModals);
+      }
     }
   }
 }
