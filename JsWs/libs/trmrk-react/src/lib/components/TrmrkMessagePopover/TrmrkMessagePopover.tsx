@@ -153,13 +153,13 @@ export default function TrmrkMessagePopover(
     }
   }, []);
 
-  return showEl && <div className={["trmrk-popover-container", className ?? '', cssClassName, messageFadeOut ? 'trmrk-fade' : ''].join(" ")}
+  return showEl && <div className={["trmrk-message-popover-container", className ?? '', cssClassName, messageFadeOut ? 'trmrk-fade' : ''].join(" ")}
       ref={rootElRef} onPointerDownCapture={containerPointerDown}>
     <div className="trmrk-basement">{ arrowCssClass && <svg className={["trmrk-arrow", arrowCssClass].join(" ")} viewBox="0 0 20 10" style={ arrowStyle ?? undefined }>
       <path className="trmrk-arrow-body" strokeWidth="1" d="M 0 10 L 10 0 L 20 10" />
       <path className="trmrk-arrow-border" strokeWidth="1" d="M 0 10 L 10 0 L 20 10" fill="none" />
     </svg> }</div>
-    <div className={['trmrk-popover'].join(' ')}>
+    <div className={['trmrk-message-popover'].join(' ')}>
       <CloseIcon closeBtnLongPressOrRightClick={closeBtnLongPressOrRightClick} closeBtnClick={closeBtnClick} ref={closeBtnElRef} />
       { children }
     </div>
