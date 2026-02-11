@@ -15,7 +15,7 @@
   height: fit-content;
   border-radius: var(--trmrk-panel-border-radius);
   border: 1px solid;
-  z-index: 100;
+  z-index: 1000;
 
   &.trmrk-fade {
     animation: trmrk-popover-opacFadeOut 1s forwards;
