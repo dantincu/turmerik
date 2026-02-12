@@ -11,7 +11,6 @@ import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
 import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
 import { trmrk3PanelsAppLayoutAtoms, TrmrkAppLayoutPanel } from "../Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 import { trmrkTopToolBarContentsAtoms } from "./TrmrkTopToolBarContentsService";
-import TrmrkLink from "../TrmrkLink/TrmrkLink";
 import { defaultTrmrkAppModalService } from "../TrmrkBasicAppLayout/TrmrkAppModalService";
 
 export interface TrmrkTopToolBarContentsProps extends ComponentProps {
@@ -123,24 +122,36 @@ const togglePanelClicked = (
     setShowPanel(willShowPanel);
   }
 
+  const updateFocusedPanel = !isMultiPanelMode || (!willShowPanel && panel === focusedPanel);
+
   if (willShowPanel) {
-    setFocusedPanel(panel);
+    if (updateFocusedPanel) {
+      setFocusedPanel(panel);
+    }
   } else {
     if (allowShowPrimaryAltPanel && showPrimaryAltPanel) {
-      setFocusedPanel(primaryAltPanel);
+      if (updateFocusedPanel) {
+        setFocusedPanel(primaryAltPanel);
+      }
     } else if (allowShowSecondaryAltPanel && showSecondaryAltPanel) {
-      setFocusedPanel(secondaryAltPanel);
+      if (updateFocusedPanel) {
+        setFocusedPanel(secondaryAltPanel);
+      }
     } else if (allowShowPrimaryAltPanel) {
-      setFocusedPanel(primaryAltPanel);
-
       if (isMultiPanelMode) {
-          setShowPrimaryAltPanel(true);
+        setShowPrimaryAltPanel(true);
+      }
+
+      if (updateFocusedPanel) {
+        setFocusedPanel(primaryAltPanel);
       }
     } else {
-      setFocusedPanel(secondaryAltPanel)
-
       if (isMultiPanelMode) {
         setShowSecondaryAltPanel(true);
+      }
+
+      if (updateFocusedPanel) {
+        setFocusedPanel(secondaryAltPanel)
       }
     }
   }

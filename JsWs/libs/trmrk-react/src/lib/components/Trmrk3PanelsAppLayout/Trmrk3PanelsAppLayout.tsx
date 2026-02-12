@@ -5,7 +5,6 @@ import { useAtom } from "jotai";
 
 import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
 import { actWithValIf } from "@/src/trmrk/core";
-import { getVarName } from "@/src/trmrk/Reflection/core";
 import { joinNames } from "@/src/trmrk/name-generators";
 import { PointerDragEvent, DragEventData } from "@/src/trmrk-browser/domUtils/PointerDragService";
 import { pointerIsTouchOrLeftMouseBtn } from "@/src/trmrk-browser/domUtils/touchAndMouseEvents";
@@ -26,13 +25,16 @@ import {
   middlePanelContents,
   rightPanelContents,
   TrmrkAppLayoutPanel,
-  useAllowShowPanelAtoms,
   usePanelContentsKeyAtoms,
-  useShowPanelAtoms,
   useShowPanelLoaderAtoms,
-  trmrk3PanelsAppLayoutConstants,
+  useRenderPanelAtoms,
   trmrk3PanelsAppLayoutVars
 } from "./Trmrk3PanelsAppLayoutService";
+
+export const Trmrk3PanelsAppLayoutTypeName = "Trmrk3PanelsAppLayout";
+
+export const RegisteredResizePanelsBottomToolbarContentsTypeName = joinNames([
+  Trmrk3PanelsAppLayoutTypeName, "ResizePanelsBottomToolbarContents"]);
 
 const updateLeftPanelContainerElWidth = (
   leftPanelContainerElRef: React.RefObject<HTMLDivElement | null>,
@@ -75,10 +77,6 @@ const updateMiddlePanelContainerElWidth = (
     }
   }
 };
-
-export const RegisteredResizePanelsBottomToolbarContentsTypeName = joinNames([
-  getVarName(() => Trmrk3PanelsAppLayout),
-  getVarName(() => ResizePanelsBottomToolbarContents)]);
 
 const ResizePanelsBottomToolbarContents = ({
   showLeftPanelValue,
@@ -243,27 +241,13 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
   const currentBottomToolbarContentsIdRef = React.useRef<number | null>(null);
   const currentBottomToolbarContentsTypeNameRef = React.useRef<string | null>(null);
 
-  const allowShowPanelAtoms = useAllowShowPanelAtoms();
   const contentsKeyPanelAtoms = usePanelContentsKeyAtoms();
-  const showPanelAtoms = useShowPanelAtoms();
+  const renderPanelAtoms = useRenderPanelAtoms();
   const showPanelLoaderAtoms = useShowPanelLoaderAtoms();
   const toolbarOverridingContentKeys = useToolbarOverridingContentKeys();
 
   const [focusedPanel, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
   const [isResizingPanels, setIsResizingPanels] = useAtom(trmrk3PanelsAppLayoutAtoms.isResizingPanels);
-  const [isMultiPanelMode] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode);
-
-  const showLeftPanelValue = React.useMemo(
-    () => focusedPanel === TrmrkAppLayoutPanel.Left || (isMultiPanelMode && allowShowPanelAtoms.leftPanel.value && showPanelAtoms.leftPanel.value),
-    [allowShowPanelAtoms.leftPanel.value, showPanelAtoms.leftPanel.value, focusedPanel, isMultiPanelMode])
-
-  const showMiddlePanelValue = React.useMemo(
-    () => focusedPanel === TrmrkAppLayoutPanel.Middle || (isMultiPanelMode && allowShowPanelAtoms.middlePanel.value && showPanelAtoms.middlePanel.value),
-    [allowShowPanelAtoms.middlePanel.value, showPanelAtoms.middlePanel.value, focusedPanel, isMultiPanelMode]);
-
-  const showRightPanelValue = React.useMemo(
-    () => focusedPanel === TrmrkAppLayoutPanel.Right || (isMultiPanelMode && allowShowPanelAtoms.rightPanel.value && showPanelAtoms.rightPanel.value),
-    [allowShowPanelAtoms.rightPanel.value, showPanelAtoms.rightPanel.value, focusedPanel, isMultiPanelMode]);
 
   const leftPanelPointerDown = React.useCallback(() => {
     setFocusedPanel(TrmrkAppLayoutPanel.Left);
@@ -279,26 +263,26 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
 
   const leftPanelContainerElAvailable = React.useCallback((el: HTMLDivElement) => {
     leftPanelContainerElRef.current = el;
-    updateLeftPanelContainerElWidth(leftPanelContainerElRef, showMiddlePanelValue || showRightPanelValue);
-  }, [showMiddlePanelValue, showRightPanelValue]);
+    updateLeftPanelContainerElWidth(leftPanelContainerElRef, renderPanelAtoms.middlePanel.value || renderPanelAtoms.rightPanel.value);
+  }, [renderPanelAtoms.middlePanel.value, renderPanelAtoms.rightPanel.value]);
 
   const middlePanelContainerElAvailable = React.useCallback((el: HTMLDivElement) => {
     middlePanelContainerElRef.current = el;
-    updateMiddlePanelContainerElWidth(middlePanelContainerElRef, showRightPanelValue);
-  }, [showRightPanelValue]);
+    updateMiddlePanelContainerElWidth(middlePanelContainerElRef, renderPanelAtoms.rightPanel.value);
+  }, [renderPanelAtoms.rightPanel.value]);
 
   React.useEffect(() => {
     const allowResizingPanels = [
-      showLeftPanelValue,
-      showMiddlePanelValue,
-      showRightPanelValue].filter(show => show).length > 1;
+      renderPanelAtoms.leftPanel.value,
+      renderPanelAtoms.middlePanel.value,
+      renderPanelAtoms.rightPanel.value].filter(show => show).length > 1;
 
     const bottomToolbarContentsId = allowResizingPanels && isResizingPanels ? overridingBottomToolbarContents.value.register(
       defaultComponentIdService.value.getNextId(),
       <ResizePanelsBottomToolbarContents
-        showLeftPanelValue={showLeftPanelValue}
-        showMiddlePanelValue={showMiddlePanelValue}
-        showRightPanelValue={showRightPanelValue}
+        showLeftPanelValue={renderPanelAtoms.leftPanel.value}
+        showMiddlePanelValue={renderPanelAtoms.middlePanel.value}
+        showRightPanelValue={renderPanelAtoms.rightPanel.value}
         leftPanelContainerElRef={leftPanelContainerElRef}
         middlePanelContainerElRef={middlePanelContainerElRef} />,
         RegisteredResizePanelsBottomToolbarContentsTypeName
@@ -318,19 +302,19 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
       setIsResizingPanels(false);
     }
 
-    updateLeftPanelContainerElWidth(leftPanelContainerElRef, showMiddlePanelValue || showRightPanelValue);
-    updateMiddlePanelContainerElWidth(middlePanelContainerElRef, showRightPanelValue);
+    updateLeftPanelContainerElWidth(leftPanelContainerElRef, renderPanelAtoms.middlePanel.value || renderPanelAtoms.rightPanel.value);
+    updateMiddlePanelContainerElWidth(middlePanelContainerElRef, renderPanelAtoms.rightPanel.value);
 
     return () => {
-      updateLeftPanelContainerElWidth(leftPanelContainerElRef, showRightPanelValue);
-      updateMiddlePanelContainerElWidth(middlePanelContainerElRef, showRightPanelValue);
+      updateLeftPanelContainerElWidth(leftPanelContainerElRef, renderPanelAtoms.rightPanel.value);
+      updateMiddlePanelContainerElWidth(middlePanelContainerElRef, renderPanelAtoms.rightPanel.value);
       actWithValIf(bottomToolbarContentsId, id => overridingBottomToolbarContents.value.unregister(id));
     };
   }, [
     isResizingPanels,
-    showLeftPanelValue,
-    showMiddlePanelValue,
-    showRightPanelValue,
+      renderPanelAtoms.leftPanel.value,
+      renderPanelAtoms.middlePanel.value,
+      renderPanelAtoms.rightPanel.value
   ]);
 
   React.useEffect(() => {
@@ -347,10 +331,10 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
     <TrmrkBasicAppLayout className={cssClass}>
       <TrmrkSplitContainerCore ref={leftPanelContainerElAvailable}
         panel1CssClass={[ focusedPanel === TrmrkAppLayoutPanel.Left ? "trmrk-is-focused" : "" ].join(" ")}
-        showPanel1={showLeftPanelValue}
-        showPanel2={showMiddlePanelValue || showRightPanelValue}
+        showPanel1={renderPanelAtoms.leftPanel.value}
+        showPanel2={renderPanelAtoms.middlePanel.value || renderPanelAtoms.rightPanel.value}
         panel1Content={
-          showLeftPanelValue && <>
+          renderPanelAtoms.leftPanel.value && <>
             <div className="trmrk-panel-body-container"
               onMouseDownCapture={leftPanelPointerDown}
               onTouchStartCapture={leftPanelPointerDown}><div className="trmrk-panel-body">{
@@ -360,14 +344,14 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
           <TrmrkSplitContainerCore ref={middlePanelContainerElAvailable}
             panel1CssClass={[ focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-is-focused" : "" ].join(" ")}
             panel2CssClass={[ focusedPanel === TrmrkAppLayoutPanel.Right ? "trmrk-is-focused" : "" ].join(" ")}
-            showPanel1={showMiddlePanelValue}
-            showPanel2={showRightPanelValue}
-            panel1Content={showMiddlePanelValue && <><div className="trmrk-panel-body-container"
+            showPanel1={renderPanelAtoms.middlePanel.value}
+            showPanel2={renderPanelAtoms.rightPanel.value}
+            panel1Content={renderPanelAtoms.middlePanel.value && <><div className="trmrk-panel-body-container"
               onMouseDownCapture={middlePanelPointerDown}
               onTouchStartCapture={middlePanelPointerDown}><div className="trmrk-panel-body">{ 
               contentsKeyPanelAtoms.middlePanel.value && middlePanelContents.value.keyedMap.map[contentsKeyPanelAtoms.middlePanel.value]?.node }</div></div>
               { showPanelLoaderAtoms.middlePanel.value && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }
-            panel2Content={showRightPanelValue && <>
+            panel2Content={renderPanelAtoms.rightPanel.value && <>
               <div className="trmrk-panel-body-container"
                 onMouseDownCapture={rightPanelPointerDown}
                 onTouchStartCapture={rightPanelPointerDown}><div className="trmrk-panel-body">{

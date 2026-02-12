@@ -1,4 +1,4 @@
-import { atom, PrimitiveAtom } from "jotai";
+import { atom, Atom, PrimitiveAtom } from "jotai";
 
 import {
   NullOrUndef,
@@ -39,18 +39,38 @@ export enum TrmrkAppLayoutPanel {
 }
 
 export interface TrmrkPanelAtoms {
+  panel: TrmrkAppLayoutPanel;
   show: PrimitiveAtom<boolean>;
   allowShow: PrimitiveAtom<boolean>;
+  render: Atom<boolean>;
   showLoader: PrimitiveAtom<boolean>;
   contentsKey: PrimitiveAtom<number | null>;
 }
 
-const createPanelAtoms = (): TrmrkPanelAtoms => ({
-  show: atom(false),
-  allowShow: atom(false),
-  showLoader: atom(false),
-  contentsKey: atom<number | null>(null),
-});
+const createPanelAtoms = (panel: TrmrkAppLayoutPanel): TrmrkPanelAtoms => {
+  const retObj: Partial<TrmrkPanelAtoms> = {
+    panel,
+    show: atom(false),
+    allowShow: atom(false),
+    showLoader: atom(false),
+    contentsKey: atom<number | null>(null),
+  };
+
+  retObj.render = atom((get) => {
+    let retVal = get(trmrk3PanelsAppLayoutAtoms.focusedPanel) === panel;
+
+    if (!retVal) {
+      retVal =
+        get(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode) &&
+        get(retObj.allowShow!) &&
+        get(retObj.show!);
+    }
+
+    return retVal;
+  });
+
+  return retObj as TrmrkPanelAtoms;
+};
 
 export const trmrk3PanelsAppLayoutConstants = {
   defaultLeftPanelWidthRatio: 33.333,
@@ -65,9 +85,9 @@ export const trmrk3PanelsAppLayoutVars = {
 };
 
 export const trmrk3PanelsAppLayoutAtoms = {
-  leftPanel: createPanelAtoms(),
-  middlePanel: createPanelAtoms(),
-  rightPanel: createPanelAtoms(),
+  leftPanel: createPanelAtoms(TrmrkAppLayoutPanel.Left),
+  middlePanel: createPanelAtoms(TrmrkAppLayoutPanel.Middle),
+  rightPanel: createPanelAtoms(TrmrkAppLayoutPanel.Right),
   focusedPanel: atom(TrmrkAppLayoutPanel.Middle),
   isMultiPanelMode: atom(false),
   isResizingPanels: atom(false),
@@ -101,6 +121,12 @@ export const useAllowShowPanelAtoms = (): PanelAtoms<boolean> => ({
   leftPanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.allowShow),
   middlePanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.allowShow),
   rightPanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.allowShow),
+});
+
+export const useRenderPanelAtoms = (): PanelAtoms<boolean> => ({
+  leftPanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.render),
+  middlePanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.render),
+  rightPanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.render),
 });
 
 export const useShowPanelLoaderAtoms = (): PanelAtoms<boolean> => ({
