@@ -7,7 +7,12 @@ import "./TrmrkBasicAppLayout.scss";
 
 import { ComponentProps } from "../defs/common";
 import TrmrkHorizStrip from "../TrmrkHorizStrip/TrmrkHorizStrip";
-import { defaultTrmrkAppModalService } from "./TrmrkAppModalService";
+
+import {
+  defaultTrmrkAppModalService,
+  TrmrkAppModalPropsCore,
+  TrmrkAppModalPropsCoreWithModalId
+} from "./TrmrkAppModalService";
 
 import {
   appBarContents,
@@ -24,8 +29,6 @@ import {
 
 import { trmrkBasicAppLayoutAtoms, appOverlappingContents } from "./TrmrkBasicAppLayoutService";
 import TrmrkMessagePopover from "../TrmrkMessagePopover/TrmrkMessagePopover";
-import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
-import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
 
 export interface TrmrkBasicAppLayoutProps extends ComponentProps {}
 
@@ -121,7 +124,7 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
   const openModalNode = React.useMemo(() => {
     return (openModalCurrentKey ?? null) !== null && withValIf(
       defaultTrmrkAppModalService.value.openModals.keyedMap.map[openModalCurrentKey!],
-      modal => modal.node(modal.key))
+      modal => modal.node(modal.data!.props))
   }, [openModalCurrentKey]);
 
   React.useEffect(() => {

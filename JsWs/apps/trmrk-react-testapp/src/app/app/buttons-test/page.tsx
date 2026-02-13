@@ -128,7 +128,8 @@ const MiddlePanelContents = () => {
 
   const openModal = React.useCallback(() => {
     defaultTrmrkAppModalService.value.openModal({
-      modal: modalId => <TrmrkAppModal modalId={modalId} showTopToolbar={true} topBarContents={<h2>asdasdf</h2>}>
+      props: {},
+      modal: (props) => <TrmrkAppModal {...props} showTopToolbar={true} topBarContents={<h2>asdasdf</h2>}>
         asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
         asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
         asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
@@ -272,10 +273,10 @@ export default function ButtonsTestPage() {
       setFocusedPanel,
     });
 
-    showPanelAtoms.leftPanel.set(false);
-    showPanelAtoms.middlePanel.set(false);
-    showPanelAtoms.rightPanel.set(false);
-    setIsMultiPanelMode(false);
+    showPanelAtoms.leftPanel.set(true);
+    showPanelAtoms.middlePanel.set(true);
+    showPanelAtoms.rightPanel.set(true);
+    setIsMultiPanelMode(true);
 
     return () => {
       cleanup3PanelsAppLayout(layoutInitResult);

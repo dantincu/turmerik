@@ -19,25 +19,21 @@ import { JotaiStore } from "../../services/jotai/core";
 
 export const MODAL_FADE_MILLIS = 300;
 
-export enum ModalCloseKind {
-  Button,
-  Programatically,
+export interface TrmrkAppModalPropsCore {
+  canCloseManually?: boolean | NullOrUndef;
 }
 
-export type TrmrkAppModalNodeFactory = (modalId: number) => React.ReactNode;
-
-export interface ModalClosedEvent {
+export interface TrmrkAppModalPropsCoreWithModalId extends TrmrkAppModalPropsCore {
   modalId: number;
-  modalData: TrmrkAppModalData;
-  closeKind: ModalCloseKind;
-  minimized: boolean;
 }
 
-export type ModalClosedEventHandler = (event: ModalClosedEvent) => void;
+export type TrmrkAppModalNodeFactory = (
+  props: TrmrkAppModalPropsCoreWithModalId,
+) => React.ReactNode;
 
 export interface TrmrkAppModalArgs {
+  props: TrmrkAppModalPropsCore;
   modal: TrmrkAppModalNodeFactory;
-  closed?: ModalClosedEventHandler | NullOrUndef;
   urlTransformer?: (url: ParsedUrl) => ParsedUrl | NullOrUndef;
   activator?: (
     data: TrmrkAppModalData,
@@ -46,7 +42,7 @@ export interface TrmrkAppModalArgs {
 }
 
 export interface TrmrkAppModalData {
-  modalId: number;
+  props: TrmrkAppModalPropsCoreWithModalId;
   args: TrmrkAppModalArgs;
   refUrl: ParsedUrl;
 }
@@ -85,13 +81,17 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
 
   disposeCore() {}
 
+  refreshModal() {
+    return this.openModals.refreshKeys();
+  }
+
   openModal(args: TrmrkAppModalArgs) {
     const modalId = defaultComponentIdService.value.getNextId();
     let refUrl = defaultUrlSerializer.value.deserializeUrl(location.href);
     refUrl = args.urlTransformer?.(refUrl) ?? refUrl;
 
     const modalData: TrmrkAppModalData = {
-      modalId,
+      props: { ...args.props, modalId },
       args,
       refUrl,
     };
@@ -113,6 +113,14 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
     const modalsIdsArr = this.openModals.getCurrentKeys();
     const modalId = modalsIdsArr[modalsIdsArr.length - 1];
     this.closeModal(modalId);
+  }
+
+  closeAllModalsManually() {
+    this.store.set(this.isClosingModals, () => true);
+
+    setTimeout(() => {
+      return this.openModals.replaceAll({});
+    }, MODAL_FADE_MILLIS);
   }
 
   minimizeAllModals() {

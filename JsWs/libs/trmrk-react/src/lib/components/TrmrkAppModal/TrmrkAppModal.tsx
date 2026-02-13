@@ -5,10 +5,9 @@ import { NullOrUndef } from "@/src/trmrk/core";
 import "./TrmrkAppModal.scss";
 import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
 import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
-import { defaultTrmrkAppModalService } from "../TrmrkBasicAppLayout/TrmrkAppModalService";
+import { defaultTrmrkAppModalService, TrmrkAppModalPropsCoreWithModalId } from "../TrmrkBasicAppLayout/TrmrkAppModalService";
 
-export interface TrmrkAppModalProps extends React.ComponentPropsWithRef<'div'> {
-  modalId: number;
+export interface TrmrkAppModalProps extends React.ComponentPropsWithRef<'div'>, TrmrkAppModalPropsCoreWithModalId {
   showHeader?: boolean | NullOrUndef;
   showTopBar?: boolean | NullOrUndef;
   topBarContents?: React.ReactNode | NullOrUndef;
@@ -16,8 +15,8 @@ export interface TrmrkAppModalProps extends React.ComponentPropsWithRef<'div'> {
   topToolbarContents?: React.ReactNode | NullOrUndef;
   showFooter?: boolean | NullOrUndef;
   footerContents?: React.ReactNode | NullOrUndef;
-  showCloseBtn?: boolean | NullOrUndef;
-  showMinimizeBtn?: boolean | NullOrUndef;
+  canToggleToolbarsManually?: boolean | NullOrUndef;
+  canMinimizeManually?: boolean | NullOrUndef;
 }
 
 const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalProps>(({
@@ -31,8 +30,9 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
   topToolbarContents,
   showFooter,
   footerContents,
-  showMinimizeBtn,
-  showCloseBtn,
+  canToggleToolbarsManually,
+  canMinimizeManually,
+  canCloseManually,
   ...props
 }, ref) => {
 
@@ -40,6 +40,10 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
 
   const closebtnClicked = React.useCallback(() => {
     defaultTrmrkAppModalService.value.closeModal(modalId);
+  }, []);
+
+  const closeAllbtnClicked = React.useCallback(() => {
+    defaultTrmrkAppModalService.value.closeAllModalsManually();
   }, []);
 
   const minimizebtnClicked = React.useCallback(() => {
@@ -54,7 +58,10 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
     { (showHeader ?? true) && <div className="trmrk-modal-header">
       { (showTopBar ?? true) && <div className="trmrk-horiz-strip trmrk-modal-top-bar">
         <div className="trmrk-leading-content flex">
-          { (showTopToolbar || showFooter) && <TrmrkBtn className="trmrk-btn-filled-system"
+          { (canCloseManually ?? true) && <TrmrkBtn className="trmrk-btn-filled-system" onClick={closebtnClicked}>
+            <TrmrkIcon icon="mdi:arrow-back"></TrmrkIcon>
+          </TrmrkBtn> }
+          { (canToggleToolbarsManually ?? true) && (showTopToolbar || showFooter) && <TrmrkBtn className="trmrk-btn-filled-system"
               onClick={toggleShowTopBarOnlyClicked}>
             <TrmrkIcon icon={`mdi:chevron-double-${showTopBarOnly ? 'down' : 'up'}`}></TrmrkIcon>
           </TrmrkBtn> }
@@ -63,12 +70,12 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
           {topBarContents}
         </div>
         <div className="trmrk-trailing-content flex mr-[2px]">
-          { (showMinimizeBtn ?? true) && <TrmrkBtn className="trmrk-btn-filled-system"
+          { (canMinimizeManually ?? true) && <TrmrkBtn className="trmrk-btn-filled-system"
               disabled={defaultTrmrkAppModalService.value.minimizedModals.getCurrentKeys().length > 0}
               onClick={minimizebtnClicked}>
             <TrmrkIcon icon="mdi:minimize"></TrmrkIcon>
           </TrmrkBtn> }
-          { (showCloseBtn ?? true) && <TrmrkBtn className="trmrk-btn-filled-system" onClick={closebtnClicked}>
+          { (canCloseManually ?? true) && <TrmrkBtn className="trmrk-btn-filled-system" onClick={closeAllbtnClicked}>
             <TrmrkIcon icon="mdi:close"></TrmrkIcon>
           </TrmrkBtn> }
         </div>
