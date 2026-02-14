@@ -1,6 +1,5 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { useRouter } from "next/navigation";
 
 import { NullOrUndef } from "@/src/trmrk/core";
 
@@ -329,8 +328,6 @@ export default function TrmrkTopToolBarContents({
   const toolbarContainerElRef = React.useRef<HTMLDivElement | null>(null);
   const toolbarContentsElRef = React.useRef<HTMLDivElement | null>(null);
 
-  const router = useRouter();
-
   const [ showLeftPanel, setShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.show);
   const [ allowShowLeftPanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.allowShow);
   const [ showMiddlePanel, setShowMiddlePanel ] = useAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.show);
@@ -344,7 +341,7 @@ export default function TrmrkTopToolBarContents({
   const [ toolbarContentsMaxOffset, setToolbarContentsMaxOffset ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsMaxOffset);
   const [ toolbarContentsOffset, setToolbarContentsOffset ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsOffset);
   const [ , setShowToolbarContentsScrollBtns ] = useAtom(trmrkTopToolBarContentsAtoms.showToolbarContentsScrollBtns);
-  const [ minimizedModalsCurrentKeys ] = useAtom(defaultTrmrkAppModalService.value.minimizedModals.currentKeysAtom);
+  const [currentModalStackKey] = useAtom(defaultTrmrkAppModalService.value.stacks.currentKeyAtom);
 
   const toolbarContentsOffsetValue = React.useMemo(
     () => -1 * Math.max(0, Math.min(toolbarContentsMaxOffset, toolbarContentsOffset)), [
@@ -431,8 +428,12 @@ export default function TrmrkTopToolBarContents({
   }, []);
 
   const restoreMinimizedModalsClicked = React.useCallback(() => {
-    defaultTrmrkAppModalService.value.restoreMinimizedModals(router);
+    defaultTrmrkAppModalService.value.restoreMinimizedModals();
   }, []);
+
+  const currentModalsStack = React.useMemo(
+    () => (currentModalStackKey ?? null) !== null ? defaultTrmrkAppModalService.value.stacks.keyedMap.map[currentModalStackKey!]?.node ?? null : null,
+    [currentModalStackKey]);
 
   React.useEffect(() => {
     return () => {
@@ -469,7 +470,7 @@ export default function TrmrkTopToolBarContents({
           { showToggleMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
             <TrmrkIcon icon={`material-symbols:view-column${isMultiPanelMode ? "-outline" : ""}-sharp`} /></TrmrkBtn> }
           { showResizePanelsBtn && <ResizePanelsBtn></ResizePanelsBtn> }
-          { (minimizedModalsCurrentKeys.length > 0) && <TrmrkBtn className="trmrk-btn-filled-primary" onClick={restoreMinimizedModalsClicked}>
+          { (defaultTrmrkAppModalService.value.restorableMinimizedStacks.length > 0) && <TrmrkBtn className="trmrk-btn-filled-primary" onClick={restoreMinimizedModalsClicked}>
             <TrmrkIcon icon="material-symbols:select-window" /></TrmrkBtn> }
           <TrmrkBtn className="trmrk-btn-filled-reject"><TrmrkIcon icon="mdi:bell-notification" /></TrmrkBtn>
           <TrmrkBtn><TrmrkIcon icon="material-symbols:tab-group" /></TrmrkBtn>

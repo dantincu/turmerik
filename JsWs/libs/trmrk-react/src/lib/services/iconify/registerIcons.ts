@@ -23,6 +23,8 @@ import filter from "@iconify-icons/mdi/filter";
 import filterOutline from "@iconify-icons/mdi/filter-outline";
 import sort from "@iconify-icons/mdi/sort";
 import minimize from "@iconify-icons/mdi/minimize";
+import maximize from "@iconify-icons/mdi/maximize";
+import windowMaximize from "@iconify-icons/mdi/window-maximize";
 import windowMinimize from "@iconify-icons/mdi/window-minimize";
 import keyboardArrowUp from "@iconify-icons/mdi/keyboard-arrow-up";
 import keyboardArrowLeft from "@iconify-icons/mdi/keyboard-arrow-left";
@@ -78,6 +80,8 @@ export const registerIconifyIcons = () => {
     ["filter-outline"]: filterOutline,
     sort,
     minimize,
+    maximize,
+    ["window-maximize"]: windowMaximize,
     ["window-minimize"]: windowMinimize,
     ["keyboard-arrow-up"]: keyboardArrowUp,
     ["keyboard-arrow-left"]: keyboardArrowLeft,

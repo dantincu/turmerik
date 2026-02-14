@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useAtom } from "jotai";
+import { atomEffect } from 'jotai-effect';
 
 import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
 import { actWithValIf } from "@/src/trmrk/core";
@@ -235,7 +236,16 @@ const ResizePanelsBottomToolbarContents = ({
 
 export interface Trmrk3PanelsAppLayoutProps extends ComponentProps {}
 
+const lifecycleEffect = atomEffect((get, set) => {
+  console.log('3PanelsAppLayout HAS BEEN MOUNTED');
+
+  return () => {
+    console.log('3PanelsAppLayout HAS BEEN UNMOUNTED');
+  };
+});
+
 export default function Trmrk3PanelsAppLayout({ className: cssClass, children }: Readonly<Trmrk3PanelsAppLayoutProps>) {
+  useAtom(lifecycleEffect);
   const leftPanelContainerElRef = React.useRef<HTMLDivElement | null>(null);
   const middlePanelContainerElRef = React.useRef<HTMLDivElement | null>(null);
   const currentBottomToolbarContentsIdRef = React.useRef<number | null>(null);
@@ -278,7 +288,6 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
       renderPanelAtoms.rightPanel.value].filter(show => show).length > 1;
 
     const bottomToolbarContentsId = allowResizingPanels && isResizingPanels ? overridingBottomToolbarContents.value.register(
-      defaultComponentIdService.value.getNextId(),
       <ResizePanelsBottomToolbarContents
         showLeftPanelValue={renderPanelAtoms.leftPanel.value}
         showMiddlePanelValue={renderPanelAtoms.middlePanel.value}
@@ -286,7 +295,7 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
         leftPanelContainerElRef={leftPanelContainerElRef}
         middlePanelContainerElRef={middlePanelContainerElRef} />,
         RegisteredResizePanelsBottomToolbarContentsTypeName
-    ) : null;
+    ).key : null;
 
     const currentBottomToolbarContentsId = currentBottomToolbarContentsIdRef.current;
     let shouldSetBottomToolbarContentsId = (bottomToolbarContentsId ?? null) !== null;

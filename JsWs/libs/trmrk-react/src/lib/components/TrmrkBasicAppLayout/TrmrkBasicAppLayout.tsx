@@ -1,5 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
+import { atomEffect } from 'jotai-effect';
 
 import { withValIf } from "@/src/trmrk/core";
 
@@ -11,7 +12,7 @@ import TrmrkHorizStrip from "../TrmrkHorizStrip/TrmrkHorizStrip";
 import {
   defaultTrmrkAppModalService,
   TrmrkAppModalPropsCore,
-  TrmrkAppModalPropsCoreWithModalId
+  TrmrkAppModalPropsCoreWithData
 } from "./TrmrkAppModalService";
 
 import {
@@ -32,11 +33,22 @@ import TrmrkMessagePopover from "../TrmrkMessagePopover/TrmrkMessagePopover";
 
 export interface TrmrkBasicAppLayoutProps extends ComponentProps {}
 
+const lifecycleEffect = atomEffect((get, set) => {
+  console.log('APP HAS BEEN MOUNTED');
+
+  return () => {
+    console.log('APP HAS BEEN UNMOUNTED');
+  };
+});
+
 export default function TrmrkBasicAppLayout({children, className: cssClass}: Readonly<TrmrkBasicAppLayoutProps>) {
-  const [ overlappingContentKeys ] = useAtom(appOverlappingContents.value.currentKeysAtom);
+  useAtom(lifecycleEffect);
+  const myIdRef = React.useRef(0);
+  const [ overlappingContentKeys ] = useAtom(appOverlappingContents.value.keysAtom);
   const [cssClassValue] = useAtom(trmrkBasicAppLayoutAtoms.cssClass);
   const [showToolbars] = useAtom(trmrkBasicAppLayoutAtoms.showToolbars);
-  const [openModalsCurrentKeys] = useAtom(defaultTrmrkAppModalService.value.openModals.currentKeysAtom);
+  const [currentModalStackKey] = useAtom(defaultTrmrkAppModalService.value.stacks.currentKeyAtom);
+  const [currentModalKey] = useAtom(defaultTrmrkAppModalService.value.currentModalKey);
   const [isClosingModals] = useAtom(defaultTrmrkAppModalService.value.isClosingModals);
 
   const showToolbarAtoms = useShowToolbars();
@@ -117,18 +129,18 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
     toolbarContentKeys.bottomToolbar.value
   ]);
 
-  const openModalCurrentKey = React.useMemo(
-    () => openModalsCurrentKeys.length ? openModalsCurrentKeys[openModalsCurrentKeys.length - 1] : null,
-    [openModalsCurrentKeys])
+  const currentModalsStack = React.useMemo(
+    () => (currentModalStackKey ?? null) !== null ? defaultTrmrkAppModalService.value.stacks.keyedMap.map[currentModalStackKey!]?.node ?? null : null,
+    [currentModalStackKey]);
 
   const openModalNode = React.useMemo(() => {
-    return (openModalCurrentKey ?? null) !== null && withValIf(
-      defaultTrmrkAppModalService.value.openModals.keyedMap.map[openModalCurrentKey!],
-      modal => modal.node(modal.data!.props))
-  }, [openModalCurrentKey]);
+    return (currentModalKey ?? null) !== null && (currentModalsStack ?? null) !== null && withValIf(
+      currentModalsStack!.openModals.keyedMap.map[currentModalKey!],
+      modal => modal.node(modal.nodeData!.props))
+  }, [currentModalKey, currentModalsStack]);
 
   React.useEffect(() => {
-    console.log("APP LAYOUT MOUNTED");
+    console.log("APP LAYOUT MOUNTED", myIdRef.current++);
   }, []);
 
   return (
@@ -173,7 +185,7 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
             className={[appUserMessageAtoms.cssClass.value ?? "", "trmrk-app-user-message-popover-container"].join(' ')}>
               { appUserMessageAtoms.content.value }</TrmrkMessagePopover> }
           
-          { ((openModalCurrentKey ?? null) !== null) && <div className={[
+          { ((currentModalKey ?? null) !== null) && <div className={[
             "trmrk-app-modal-backdrop",
             isClosingModals ? "trmrk-fade-out" : "trmrk-fade-in"].join(" ")}>
             { openModalNode }

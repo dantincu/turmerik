@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useAtom } from 'jotai';
+import { useAtom, atom } from 'jotai';
 
 import './page.scss';
 
@@ -128,8 +128,10 @@ const MiddlePanelContents = () => {
 
   const openModal = React.useCallback(() => {
     defaultTrmrkAppModalService.value.openModal({
-      props: {},
-      modal: (props) => <TrmrkAppModal {...props} showTopToolbar={true} topBarContents={<h2>asdasdf</h2>}>
+      props: {
+        modalTitle: atom("asdfasdf")
+      },
+      modal: (props) => <TrmrkAppModal {...props} showTopToolbar={true}>
         asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
         asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
         asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
@@ -195,7 +197,7 @@ const MiddlePanelContents = () => {
         asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
         asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf
       </TrmrkAppModal>
-    });
+    }, {});
   }, []);
 
   return <div className="flex flex-wrap">

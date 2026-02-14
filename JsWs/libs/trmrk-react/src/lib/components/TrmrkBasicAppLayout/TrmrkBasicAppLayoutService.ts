@@ -7,14 +7,14 @@ import {
   UserMessageLevel,
 } from "@/src/trmrk/core";
 
-import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
-
 import { trmrkUseAtom, TrmrkUseAtom } from "../../services/jotai/core";
 
 import {
   createIntKeyedComponentsMapManager,
   IntKeyedComponentsMapManager,
 } from "../../services/IntKeyedComponentsMapManager";
+
+import { defaultTrmrkAppModalService } from "./TrmrkAppModalService";
 
 export interface TrmrkToolbarAtoms {
   show: PrimitiveAtom<boolean>;
@@ -141,11 +141,7 @@ export const initLayoutPart = (
   }
 
   const contentsId = allowShow
-    ? contentsKeyManager.value.register(
-        defaultComponentIdService.value.getNextId(),
-        args.contents,
-        args.typeName,
-      )
+    ? contentsKeyManager.value.register(args.contents, args.typeName).key
     : null;
 
   contentsKeyAtom.set(contentsId);
@@ -183,6 +179,8 @@ export interface InitBasicAppLayoutResult {
 }
 
 export const initBasicAppLayout = (args: InitBasicAppLayoutArgs) => {
+  defaultTrmrkAppModalService.value.updateRestorableMinimizedStacks();
+
   const retObj: InitBasicAppLayoutResult = {
     appBarContentsId: initLayoutPart(
       args.appBar,
@@ -235,6 +233,8 @@ export const initBasicAppLayout = (args: InitBasicAppLayoutArgs) => {
 };
 
 export const cleanupBasicAppLayout = (result: InitBasicAppLayoutResult) => {
+  defaultTrmrkAppModalService.value.clearRestorableMinimizedStacks();
+
   actWithValIf(result.appBarContentsId, (id) => {
     appBarContents.value.unregister(id);
   });

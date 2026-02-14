@@ -99,10 +99,33 @@
   /* 1. Allows the box to shrink to small content */
   width: fit-content;
   height: fit-content;
+  transition: max-width 0.1s ease-in-out, 
+    max-height 0.1s ease-in-out;
 
-  /* 2. Logic: Full screen minus the responsive offset */
-  max-width: calc(100% - var(--trmrk-modal-container-offset-x));
-  max-height: calc(100% - var(--trmrk-modal-container-offset-y));
+  &:not(.trmrk-is-maximized) {
+    max-height: calc(100% - var(--trmrk-modal-container-offset-y));
+
+    &.trmrk-width-thin {
+      max-width: calc(min(400px, 100% - var(--trmrk-modal-container-offset-x)));
+    }
+
+    &.trmrk-width-regular {
+      max-width: calc(min(800px, 100% - var(--trmrk-modal-container-offset-x)));
+    }
+
+    &.trmrk-width-wide {
+      max-width: calc(min(1200px, 100% - var(--trmrk-modal-container-offset-x)));
+    }
+
+    &.trmrk-width-stretch {
+      max-width: calc(100% - var(--trmrk-modal-container-offset-x));
+    }
+  }
+
+  &.trmrk-is-maximized {
+    max-width: 100%;
+    max-height: 100%;
+  }
 
   margin: auto; /* Centers it if it's smaller than the screen */
   border-radius: var(--trmrk-panel-border-radius);

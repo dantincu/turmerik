@@ -2,19 +2,19 @@ import { atom, getDefaultStore } from "jotai";
 
 import { NullOrUndef } from "@/src/trmrk/core";
 
-import {
-  IntKeyedReactNodesMap,
-  IntKeyedReactNode,
-} from "../components/defs/common";
+import { IntKeyedNodesMap, IntKeyedNode } from "../components/defs/common";
 import { JotaiStore } from "./jotai/core";
+import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
 
 export class IntKeyedComponentsMapManager<
   TNode = React.ReactNode,
   TData = any,
 > {
-  readonly currentKeysAtom = atom<number[]>([]);
+  readonly keysAtom = atom<number[]>([]);
+  readonly currentKeyAtom = atom<number | null>(null);
+  readonly updateAtom = atom<number>(0);
 
-  readonly keyedMap: IntKeyedReactNodesMap<TNode, TData> = {
+  readonly keyedMap: IntKeyedNodesMap<TNode, TData> = {
     map: {},
   };
 
@@ -24,42 +24,68 @@ export class IntKeyedComponentsMapManager<
     this.store = store ?? getDefaultStore();
   }
 
-  getCurrentKeys() {
-    const currentKeys = this.store.get(this.currentKeysAtom);
-    return currentKeys;
+  getKeys() {
+    const keys = this.store.get(this.keysAtom);
+    return keys;
   }
 
-  refreshKeys() {
-    const currentKeys = this.store.get(this.currentKeysAtom);
-    this.store.set(this.currentKeysAtom, [...currentKeys]);
-    return currentKeys;
+  getCurrentKey() {
+    const currentKey = this.store.get(this.currentKeyAtom);
+    return currentKey;
+  }
+
+  retrieveOrRegister(
+    component: (key: number) => TNode,
+    typeName?: string | NullOrUndef,
+    key?: number | NullOrUndef,
+    data?: TData,
+  ) {
+    const hasKey = (key ?? null) !== null;
+    key ??= defaultComponentIdService.value.getNextId();
+    const hasNode = hasKey && this.store.get(this.keysAtom).indexOf(key) >= 0;
+
+    const node = hasNode
+      ? this.keyedMap.map[key]
+      : {
+          key,
+          node: component(key),
+          typeName,
+          nodeData: data,
+        };
+
+    if (!hasNode) {
+      this.keyedMap.map[key] = node;
+    }
   }
 
   register(
-    key: number,
     component: TNode,
     typeName?: string | NullOrUndef,
+    key?: number | NullOrUndef,
     data?: TData,
   ) {
-    this.keyedMap.map[key] = {
+    key ??= defaultComponentIdService.value.getNextId();
+
+    const retObj: IntKeyedNode<TNode, TData> = (this.keyedMap.map[key] = {
       key,
       node: component,
       typeName,
-      data,
-    };
+      nodeData: data,
+    });
 
-    this.store.set(this.currentKeysAtom, (prev) =>
+    this.store.set(this.keysAtom, (prev) =>
       prev.indexOf(key) < 0 ? [...prev, key] : prev,
     );
 
-    return key;
+    this.store.set(this.currentKeyAtom, () => key);
+    return retObj;
   }
 
   unregister(key: number) {
-    let component: IntKeyedReactNode<TNode, TData> | null = null;
+    let component: IntKeyedNode<TNode, TData> | null = null;
 
     if ((key ?? null) !== null) {
-      this.store.set(this.currentKeysAtom, (arr) => {
+      this.store.set(this.keysAtom, (arr) => {
         const idx = arr.indexOf(key);
 
         if (idx >= 0) {
@@ -70,6 +96,7 @@ export class IntKeyedComponentsMapManager<
         return arr;
       });
 
+      this.store.set(this.currentKeyAtom, () => null);
       component = this.keyedMap.map[key] ?? null;
       delete this.keyedMap.map[key];
     }
@@ -79,9 +106,10 @@ export class IntKeyedComponentsMapManager<
 
   replaceSome(
     extract: (currentKeys: number[]) => number[],
-    map: { [key: number]: IntKeyedReactNode<TNode, TData> },
+    map: { [key: number]: IntKeyedNode<TNode, TData> },
   ) {
-    const currentKeysArr = this.getCurrentKeys();
+    const currentKey = this.getCurrentKey();
+    const currentKeysArr = this.getKeys();
     const extractedKeysArr = extract(currentKeysArr);
 
     const remainingKeys = currentKeysArr.filter(
@@ -91,7 +119,14 @@ export class IntKeyedComponentsMapManager<
     const extractedArr = extractedKeysArr.map((key) => this.keyedMap.map[key]);
     const addedKeysArr = Object.keys(map).map((key) => map[parseInt(key)].key);
     remainingKeys.push(...addedKeysArr);
-    this.store.set(this.currentKeysAtom, remainingKeys);
+    this.store.set(this.keysAtom, remainingKeys);
+
+    if (
+      (currentKey ?? null) !== null &&
+      remainingKeys.indexOf(currentKey!) < 0
+    ) {
+      this.store.set(this.currentKeyAtom, null);
+    }
 
     for (let extractedKey of extractedKeysArr) {
       delete this.keyedMap.map[extractedKey];
@@ -104,14 +139,15 @@ export class IntKeyedComponentsMapManager<
     return extractedArr;
   }
 
-  replaceAll(map: { [key: number]: IntKeyedReactNode<TNode, TData> }) {
+  replaceAll(map: { [key: number]: IntKeyedNode<TNode, TData> }) {
     const prevMap = this.keyedMap.map;
     this.keyedMap.map = map;
 
-    this.store.set(this.currentKeysAtom, () =>
+    this.store.set(this.keysAtom, () =>
       Object.keys(map).map((key) => map[parseInt(key)].key),
     );
 
+    this.store.set(this.currentKeyAtom, null);
     return prevMap;
   }
 }

@@ -9,31 +9,31 @@ export interface ComponentProps {
   children?: React.ReactNode | NullOrUndef;
 }
 
-export interface KeyedReactNode<TKey, TNode = React.ReactNode, TData = any> {
+export interface KeyedNode<TKey, TNode = React.ReactNode, TData = any> {
   key: TKey;
   typeName?: string | NullOrUndef;
   node: TNode;
-  data?: TData;
+  nodeData?: TData;
 }
 
-export interface IntKeyedReactNode<
+export interface IntKeyedNode<
   TNode = React.ReactNode,
   TData = any,
-> extends KeyedReactNode<number, TNode, TData> {}
+> extends KeyedNode<number, TNode, TData> {}
 
-export interface StrKeyedReactNode<
+export interface StrKeyedNode<
   TNode = React.ReactNode,
   TData = any,
-> extends KeyedReactNode<string, TNode, TData> {}
+> extends KeyedNode<string, TNode, TData> {}
 
 export interface ComponentsMap {
   map: { [key: string]: () => React.ReactNode };
 }
 
-export interface IntKeyedReactNodesMap<TNode = React.ReactNode, TData = any> {
-  map: { [key: number]: IntKeyedReactNode<TNode, TData> };
+export interface IntKeyedNodesMap<TNode = React.ReactNode, TData = any> {
+  map: { [key: number]: IntKeyedNode<TNode, TData> };
 }
 
-export interface StrKeyedReactNodesMap<TNode = React.ReactNode, TData = any> {
-  map: { [key: string]: StrKeyedReactNode<TNode, TData> };
+export interface StrKeyedNodesMap<TNode = React.ReactNode, TData = any> {
+  map: { [key: string]: StrKeyedNode<TNode, TData> };
 }
