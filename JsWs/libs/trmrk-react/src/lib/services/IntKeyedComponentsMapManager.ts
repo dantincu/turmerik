@@ -34,30 +34,6 @@ export class IntKeyedComponentsMapManager<
     return currentKey;
   }
 
-  retrieveOrRegister(
-    component: (key: number) => TNode,
-    typeName?: string | NullOrUndef,
-    key?: number | NullOrUndef,
-    data?: TData,
-  ) {
-    const hasKey = (key ?? null) !== null;
-    key ??= defaultComponentIdService.value.getNextId();
-    const hasNode = hasKey && this.store.get(this.keysAtom).indexOf(key) >= 0;
-
-    const node = hasNode
-      ? this.keyedMap.map[key]
-      : {
-          key,
-          node: component(key),
-          typeName,
-          nodeData: data,
-        };
-
-    if (!hasNode) {
-      this.keyedMap.map[key] = node;
-    }
-  }
-
   register(
     component: TNode,
     typeName?: string | NullOrUndef,
@@ -81,22 +57,34 @@ export class IntKeyedComponentsMapManager<
     return retObj;
   }
 
-  unregister(key: number) {
+  unregister(key: number, setCurrentToPrev?: boolean | NullOrUndef) {
     let component: IntKeyedNode<TNode, TData> | null = null;
 
     if ((key ?? null) !== null) {
+      let isCurrent = false;
+      let prevKey: number | null = null;
+
       this.store.set(this.keysAtom, (arr) => {
         const idx = arr.indexOf(key);
 
         if (idx >= 0) {
+          isCurrent = true;
           arr = [...arr];
           arr.splice(idx, 1);
+          prevKey = arr[arr.length - 1] ?? null;
         }
 
         return arr;
       });
 
-      this.store.set(this.currentKeyAtom, () => null);
+      if (isCurrent) {
+        if (setCurrentToPrev) {
+          this.store.set(this.currentKeyAtom, () => prevKey);
+        } else {
+          this.store.set(this.currentKeyAtom, () => null);
+        }
+      }
+
       component = this.keyedMap.map[key] ?? null;
       delete this.keyedMap.map[key];
     }

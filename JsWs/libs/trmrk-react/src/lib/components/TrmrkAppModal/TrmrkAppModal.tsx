@@ -53,7 +53,8 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
   const [ showTopBarOnly, setShowTopBarOnly ] = React.useState(false);
   const [canCloseManuallyVal] = useAtom(defaultTrmrkAppModalService.value.canCloseCurrentModalManuallyAtom);
   const [canCloseAllManuallyVal] = useAtom(defaultTrmrkAppModalService.value.canCloseAllModalsManuallyAtom);
-  const [currentModalIsMaximizedAtom, setCurrentModalIsMaximizedAtom] = useAtom(defaultTrmrkAppModalService.value.currentModalIsMaximizedAtom);
+  const [currentModalIsMaximized, setCurrentModalIsMaximized] = useAtom(defaultTrmrkAppModalService.value.currentModalIsMaximizedAtom);
+  const [currentModalIsFadingOut] = useAtom(defaultTrmrkAppModalService.value.currentModalIsFadingOut);
   const [modalTitleVal] = useAtom(modalTitle);
 
   const widthCssClass = React.useMemo(() => {
@@ -71,7 +72,7 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
 
   const closeBtnClicked = React.useCallback(() => {
     defaultTrmrkAppModalService.value.closeModal(modalId);
-  }, []);
+  }, [modalId]);
 
   const closeAllBtnClicked = React.useCallback(() => {
     defaultTrmrkAppModalService.value.closeAllModalsManually();
@@ -82,8 +83,8 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
   }, []);
 
   const maximizeBtnClicked = React.useCallback(() => {
-    setCurrentModalIsMaximizedAtom(!currentModalIsMaximizedAtom);
-  }, [currentModalIsMaximizedAtom]);
+    setCurrentModalIsMaximized(!currentModalIsMaximized);
+  }, [currentModalIsMaximized]);
 
   const toggleShowTopBarOnlyClicked = React.useCallback(() => {
     setShowTopBarOnly(!showTopBarOnly);
@@ -93,7 +94,8 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
         className ?? "",
         "trmrk-app-modal-container",
         widthCssClass,
-        currentModalIsMaximizedAtom ? "trmrk-is-maximized" : ""].join(' ')}
+        currentModalIsMaximized ? "trmrk-is-maximized" : "",
+        currentModalIsFadingOut ? "trmrk-fade-out" : "trmrk-fade-in"].join(' ')}
       {...props}>
     { (showHeader ?? true) && <div className="trmrk-modal-header">
       { (showTopBar ?? true) && <div className="trmrk-horiz-strip trmrk-modal-top-bar">
@@ -116,7 +118,7 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
             <TrmrkIcon icon="mdi:minimize"></TrmrkIcon>
           </TrmrkBtn> }
           { (canMaximizeManually ?? true) && <TrmrkBtn className="trmrk-btn-filled-system" onClick={maximizeBtnClicked}>
-            <TrmrkIcon icon={`mdi:${currentModalIsMaximizedAtom ? "window-maximize" : "maximize"}`}></TrmrkIcon>
+            <TrmrkIcon icon={`mdi:${currentModalIsMaximized ? "window-maximize" : "maximize"}`}></TrmrkIcon>
           </TrmrkBtn> }
           { canCloseManuallyVal && canCloseAllManuallyVal && <TrmrkBtn className="trmrk-btn-filled-system" onClick={closeAllBtnClicked}>
             <TrmrkIcon icon="mdi:close"></TrmrkIcon>

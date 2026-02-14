@@ -74,6 +74,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
   canCloseCurrentModalManuallyAtom: Atom<boolean>;
   canCloseAllModalsManuallyAtom: Atom<boolean>;
   currentModalIsMaximizedAtom: PrimitiveAtom<boolean>;
+  currentModalIsFadingOut: PrimitiveAtom<boolean>;
   refUrl: ParsedUrl;
 
   private readonly store: JotaiStore;
@@ -152,6 +153,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
       },
     );
 
+    this.currentModalIsFadingOut = atom(false);
     this.refUrl = defaultUrlSerializer.value.deserializeUrl(location.href);
     this.refUrl = args.urlTransformer?.(this.refUrl) ?? this.refUrl;
   }
@@ -204,20 +206,39 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
       isMaximized: atom(false),
     };
 
-    this.openModals.register(args.modal, null, modalId, nodeData);
     this.store.set(this.isClosingModals, () => false);
+    const alreadyHasModals = this.openModals.getKeys().length > 0;
+
+    if (alreadyHasModals) {
+      this.store.set(this.currentModalIsFadingOut, () => true);
+
+      setTimeout(() => {
+        this.store.set(this.currentModalIsFadingOut, () => false);
+        this.openModals.register(args.modal, null, modalId, nodeData);
+      }, MODAL_FADE_MILLIS);
+    } else {
+      this.openModals.register(args.modal, null, modalId, nodeData);
+    }
+
     return modalId;
   }
 
-  closeModal(modalId: number, isLastModal?: boolean | NullOrUndef) {
+  closeModal(
+    modalId: number,
+    isLastModal?: boolean | NullOrUndef,
+    callback?: (() => void) | NullOrUndef,
+  ) {
     isLastModal ??= this.openModals.getKeys().length === 1;
+    this.store.set(this.currentModalIsFadingOut, () => true);
 
     if (isLastModal) {
       this.store.set(this.isClosingModals, () => true);
     }
 
     setTimeout(() => {
-      this.openModals.unregister(modalId);
+      this.store.set(this.currentModalIsFadingOut, () => false);
+      this.openModals.unregister(modalId, true);
+      callback?.();
     }, MODAL_FADE_MILLIS);
   }
 
@@ -227,8 +248,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
   ) {
     modalsIdsArr ??= this.openModals.getKeys();
     const modalId = modalsIdsArr[modalsIdsArr.length - 1];
-    this.closeModal(modalId, modalsIdsArr.length === 1);
-    callback?.();
+    this.closeModal(modalId, modalsIdsArr.length === 1, callback);
   }
 
   closeAllModalsManually(
@@ -303,6 +323,7 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
   canCloseAllModalsManuallyAtom: Atom<boolean>;
   currentModalKey: Atom<number | null>;
   currentModalIsMaximizedAtom: PrimitiveAtom<boolean>;
+  currentModalIsFadingOut: PrimitiveAtom<boolean>;
   hasRestorableMinimizedStacks: PrimitiveAtom<boolean>;
 
   private readonly store: JotaiStore;
@@ -406,6 +427,36 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
       },
     );
 
+    this.currentModalIsFadingOut = atom(
+      (get) => {
+        const currentStackId = get(this.stacks.currentKeyAtom);
+
+        if ((currentStackId ?? null) !== null) {
+          const currentStack = this.stacks.keyedMap.map[currentStackId!]?.node;
+
+          if (currentStack) {
+            const currentModalIsFadingOut = get(
+              currentStack.currentModalIsFadingOut,
+            );
+            return currentModalIsFadingOut;
+          }
+        }
+
+        return false;
+      },
+      (get, set, newValue) => {
+        const currentStackId = get(this.stacks.currentKeyAtom);
+
+        if ((currentStackId ?? null) !== null) {
+          const currentStack = this.stacks.keyedMap.map[currentStackId!]?.node;
+
+          if (currentStack) {
+            set(currentStack.currentModalIsFadingOut, newValue);
+          }
+        }
+      },
+    );
+
     this.hasRestorableMinimizedStacks = atom(false);
     this.store = store ?? getDefaultStore();
   }
@@ -471,11 +522,12 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
 
     if (currentStack) {
       const isLastModal = currentStack.openModals.getKeys().length === 1;
-      currentStack.closeModal(modalId, isLastModal);
 
-      if (isLastModal) {
-        this.stacks.unregister(currentStack.stackId);
-      }
+      currentStack.closeModal(modalId, isLastModal, () => {
+        if (isLastModal) {
+          this.stacks.unregister(currentStack.stackId);
+        }
+      });
     }
   }
 
