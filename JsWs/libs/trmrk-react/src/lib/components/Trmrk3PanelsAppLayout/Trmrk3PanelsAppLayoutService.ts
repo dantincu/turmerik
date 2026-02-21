@@ -22,6 +22,8 @@ import {
   InitBasicAppLayoutResult,
   initBasicAppLayout,
   cleanupBasicAppLayout,
+  UseBasicAppLayoutAtoms,
+  useBasicAppLayoutAtoms,
 } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 export enum TrmrkAppLayoutPanel {
@@ -134,9 +136,13 @@ export const usePanelContentsKeyAtoms = (): PanelAtoms<number | null> => ({
   rightPanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.contentsKey),
 });
 
-export interface Init3PanelsAppLayoutArgs extends InitBasicAppLayoutArgs {
+export interface Use3PanelsAppLayoutAtoms extends UseBasicAppLayoutAtoms {
   allowShowPanelAtoms: PanelAtoms<boolean>;
   panelContentKeyAtoms: PanelAtoms<number | null>;
+}
+
+export interface Init3PanelsAppLayoutArgs
+  extends InitBasicAppLayoutArgs, Use3PanelsAppLayoutAtoms {
   leftPanel?: InitLayoutPartArgs | NullOrUndef;
   middlePanel?: InitLayoutPartArgs | NullOrUndef;
   rightPanel?: InitLayoutPartArgs | NullOrUndef;
@@ -218,3 +224,9 @@ export const cleanup3PanelsAppLayout = (result: Init3PanelsAppLayoutResult) => {
     rightPanelContents.value.unregister(id);
   });
 };
+
+export const use3PanelsAppLayoutAtoms = (): Use3PanelsAppLayoutAtoms => ({
+  ...useBasicAppLayoutAtoms(),
+  allowShowPanelAtoms: useAllowShowPanelAtoms(),
+  panelContentKeyAtoms: usePanelContentsKeyAtoms(),
+});

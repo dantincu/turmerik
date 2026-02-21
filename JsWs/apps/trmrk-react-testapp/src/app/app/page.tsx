@@ -8,18 +8,10 @@ import TrmrkTopToolBarContents from "@/src/trmrk-react/components/TrmrkTopToolBa
 
 import {
   trmrk3PanelsAppLayoutAtoms,
-  useAllowShowPanelAtoms,
-  usePanelContentsKeyAtoms,
   init3PanelsAppLayout,
-  cleanup3PanelsAppLayout
+  cleanup3PanelsAppLayout,
+  use3PanelsAppLayoutAtoms
 } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
-
-import {
-  useShowToolbars,
-  useToolbarContentKeys,
-  useToolbarOverridingContentKeys,
-  useAppUserMessage
-} from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 const AppBar = () => {
   return <TrmrkAppBarContents><h1 className="text-center grow">Turmerik Notes</h1></TrmrkAppBarContents>;
@@ -30,22 +22,12 @@ const TopToolbar = () => {
 }
 
 export default function Home() {
-  const allowShowPanelAtoms = useAllowShowPanelAtoms();
-  const panelContentKeyAtoms = usePanelContentsKeyAtoms();
-  const showToolbarAtoms = useShowToolbars();
-  const toolbarContentKeyAtoms = useToolbarContentKeys();
-  const overridingToolbarContentKeyAtoms = useToolbarOverridingContentKeys();
-  const appUserMessageAtoms = useAppUserMessage();
+  const trmrk3PanelsLayoutAtoms = use3PanelsAppLayoutAtoms();
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
 
   React.useEffect(() => {
     const layoutInitResult = init3PanelsAppLayout({
-      allowShowPanelAtoms,
-      panelContentKeyAtoms,
-      showToolbarAtoms,
-      toolbarContentKeyAtoms,
-      overridingToolbarContentKeyAtoms,
-      appUserMessageAtoms,
+      ...trmrk3PanelsLayoutAtoms,
       appBar: {
         contents: <AppBar />,
       },

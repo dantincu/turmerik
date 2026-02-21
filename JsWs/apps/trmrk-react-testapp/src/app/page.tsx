@@ -11,7 +11,8 @@ import {
   useAllowShowPanelAtoms,
   usePanelContentsKeyAtoms,
   init3PanelsAppLayout,
-  cleanup3PanelsAppLayout
+  cleanup3PanelsAppLayout,
+  use3PanelsAppLayoutAtoms
 } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 
 import {
@@ -32,22 +33,12 @@ const TopToolbar = () => {
 }
 
 export default function Landing() {
-  const allowShowPanelAtoms = useAllowShowPanelAtoms();
-  const panelContentKeyAtoms = usePanelContentsKeyAtoms();
-  const showToolbarAtoms = useShowToolbars();
-  const toolbarContentKeyAtoms = useToolbarContentKeys();
-  const overridingToolbarContentKeyAtoms = useToolbarOverridingContentKeys();
+  const trmrk3PanelsLayoutAtoms = use3PanelsAppLayoutAtoms();
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
-  const appUserMessageAtoms = useAppUserMessage();
 
   React.useEffect(() => {
     const layoutInitResult = init3PanelsAppLayout({
-      allowShowPanelAtoms,
-      panelContentKeyAtoms,
-      showToolbarAtoms,
-      toolbarContentKeyAtoms,
-      overridingToolbarContentKeyAtoms,
-      appUserMessageAtoms,
+      ...trmrk3PanelsLayoutAtoms,
       appBar: {
         contents: <AppBar />,
       },

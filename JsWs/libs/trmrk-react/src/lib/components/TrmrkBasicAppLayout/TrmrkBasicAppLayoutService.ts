@@ -175,11 +175,14 @@ export interface InitBasicAppLayoutAppUserMessageArgs {
   autoCloseMillis?: number | NullOrUndef;
 }
 
-export interface InitBasicAppLayoutArgs {
+export interface UseBasicAppLayoutAtoms {
   showToolbarAtoms: ToolbarAtoms<boolean>;
   toolbarContentKeyAtoms: ToolbarAtoms<number | null>;
   overridingToolbarContentKeyAtoms: ToolbarAtoms<number | null>;
   appUserMessageAtoms: UseUserMessageAtoms;
+}
+
+export interface InitBasicAppLayoutArgs extends UseBasicAppLayoutAtoms {
   appBar?: InitLayoutPartArgs | NullOrUndef;
   topToolbar?: InitLayoutPartArgs | NullOrUndef;
   bottomToolbar?: InitLayoutPartArgs | NullOrUndef;
@@ -279,3 +282,10 @@ export const cleanupBasicAppLayout = (result: InitBasicAppLayoutResult) => {
     overridingBottomToolbarContents.value.unregister(id);
   });
 };
+
+export const useBasicAppLayoutAtoms = (): UseBasicAppLayoutAtoms => ({
+  showToolbarAtoms: useShowToolbars(),
+  toolbarContentKeyAtoms: useToolbarContentKeys(),
+  overridingToolbarContentKeyAtoms: useToolbarOverridingContentKeys(),
+  appUserMessageAtoms: useAppUserMessage(),
+});

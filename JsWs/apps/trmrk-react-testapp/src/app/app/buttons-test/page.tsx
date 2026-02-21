@@ -7,20 +7,13 @@ import './page.scss';
 
 import {
   trmrk3PanelsAppLayoutAtoms,
-  useAllowShowPanelAtoms,
   useShowPanelAtoms,
-  usePanelContentsKeyAtoms,
   init3PanelsAppLayout,
-  cleanup3PanelsAppLayout
+  cleanup3PanelsAppLayout,
+  use3PanelsAppLayoutAtoms
 } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 
-import {
-  useShowToolbars,
-  useToolbarContentKeys,
-  useToolbarOverridingContentKeys,
-  useAppUserMessage,
-} from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
-
+import { useAppUserMessage } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 import TrmrkBtn from "@/src/trmrk-react/components/TrmrkBtn/TrmrkBtn";
 import TrmrkMessagePopover from "@/src/trmrk-react/components/TrmrkMessagePopover/TrmrkMessagePopover";
 import TrmrkIcon from "@/src/trmrk-react/components/TrmrkIcon/TrmrkIcon";
@@ -254,24 +247,14 @@ const MiddlePanelContents = () => {
 };
 
 export default function ButtonsTestPage() {
-  const allowShowPanelAtoms = useAllowShowPanelAtoms();
+  const trmrk3PanelsLayoutAtoms = use3PanelsAppLayoutAtoms();
   const showPanelAtoms = useShowPanelAtoms();
-  const panelContentKeyAtoms = usePanelContentsKeyAtoms();
-  const showToolbarAtoms = useShowToolbars();
-  const toolbarContentKeyAtoms = useToolbarContentKeys();
-  const overridingToolbarContentKeyAtoms = useToolbarOverridingContentKeys();
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
   const [, setIsMultiPanelMode] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode);
-  const appUserMessageAtoms = useAppUserMessage();
 
   React.useEffect(() => {
     const layoutInitResult = init3PanelsAppLayout({
-      allowShowPanelAtoms,
-      panelContentKeyAtoms,
-      showToolbarAtoms,
-      toolbarContentKeyAtoms,
-      overridingToolbarContentKeyAtoms,
-      appUserMessageAtoms,
+      ...trmrk3PanelsLayoutAtoms,
       appBar: {
         contents: <AppBar />,
       },
