@@ -12,7 +12,8 @@ import TrmrkHorizStrip from "../TrmrkHorizStrip/TrmrkHorizStrip";
 import {
   defaultTrmrkAppModalService,
   TrmrkAppModalPropsCore,
-  TrmrkAppModalPropsCoreWithData
+  TrmrkAppModalPropsCoreWithData,
+  useCurrentModalUserMessage
 } from "./TrmrkAppModalService";
 
 import {
@@ -55,6 +56,7 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
   const toolbarContentKeys = useToolbarContentKeys();
   const overridingToolbarContentKeys = useToolbarOverridingContentKeys();
   const appUserMessageAtoms = useAppUserMessage();
+  const currentModalUserMessage = useCurrentModalUserMessage();
 
   const showAppBar = React.useMemo(() => {
     const retVal = showToolbarAtoms.appBar.value || (overridingToolbarContentKeys.appBar.value ?? null) !== null;
@@ -186,9 +188,15 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
               { appUserMessageAtoms.content.value }</TrmrkMessagePopover> }
           
           { ((currentModalKey ?? null) !== null) && <div className={[
-            "trmrk-app-modal-backdrop",
-            isClosingModals ? "trmrk-fade-out" : "trmrk-fade-in"].join(" ")}>
+              "trmrk-app-modal-backdrop",
+              isClosingModals ? "trmrk-fade-out" : "trmrk-fade-in"].join(" ")}>
             { openModalNode }
+            { ((currentModalUserMessage.show.value ?? null) !== null && (currentModalUserMessage.level.value ?? null) !== null) && <TrmrkMessagePopover
+              show={currentModalUserMessage.show.value}
+              msgLevel={currentModalUserMessage.level.value}
+              autoCloseMillis={currentModalUserMessage.autoCloseMillis.value}
+              className={[currentModalUserMessage.cssClass.value ?? "", "trmrk-current-modal-user-message-popover-container"].join(' ')}>
+                { currentModalUserMessage.content.value?.() }</TrmrkMessagePopover> }
           </div> }
         </div>
       /* **** **** **** **** **** **** **** **** OVERLAPPING_CONTENTS END **** **** **** **** **** **** **** **** */ }

@@ -1,7 +1,13 @@
 import { atom, PrimitiveAtom, Atom, getDefaultStore } from "jotai";
 // import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-import { NullOrUndef, RefLazyValue, withValIf } from "@/src/trmrk/core";
+import {
+  NullOrUndef,
+  RefLazyValue,
+  withValIf,
+  withVal,
+} from "@/src/trmrk/core";
+
 import { TrmrkDisposableBase } from "@/src/trmrk/TrmrkDisposableBase";
 import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
 
@@ -16,8 +22,14 @@ import {
 } from "../../services/IntKeyedComponentsMapManager";
 
 import { IntKeyedNode } from "../defs/common";
+import { JotaiStore, trmrkUseAtom } from "../../services/jotai/core";
 
-import { JotaiStore } from "../../services/jotai/core";
+import {
+  UseUserMessageAtoms,
+  UserMessageAtoms,
+  UserMessageAtomsArgs,
+  createUserMessageAtoms,
+} from "./TrmrkBasicAppLayoutService";
 
 export const MODAL_FADE_MILLIS = 300;
 
@@ -41,6 +53,7 @@ export interface TrmrkAppModalArgs<TModalData> {
   props: TrmrkAppModalPropsCore;
   data?: TModalData | NullOrUndef;
   modal: TrmrkAppModalNodeFactory<TModalData>;
+  userMessage?: UserMessageAtomsArgs<() => React.ReactNode> | NullOrUndef;
 }
 
 export interface TrmrkAppModalData<TModalData> {
@@ -49,6 +62,7 @@ export interface TrmrkAppModalData<TModalData> {
   data: TModalData;
   canCloseManually: PrimitiveAtom<boolean>;
   isMaximized: PrimitiveAtom<boolean>;
+  userMessageAtoms: UserMessageAtoms<() => React.ReactNode>;
 }
 
 export interface AppModalsStackArgs {
@@ -74,7 +88,8 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
   canCloseCurrentModalManuallyAtom: Atom<boolean>;
   canCloseAllModalsManuallyAtom: Atom<boolean>;
   currentModalIsMaximizedAtom: PrimitiveAtom<boolean>;
-  currentModalIsFadingOut: PrimitiveAtom<boolean>;
+  currentModalIsFadingOutAtom: PrimitiveAtom<boolean>;
+  currentModalUserMessageAtoms: UserMessageAtoms<() => React.ReactNode>;
   refUrl: ParsedUrl;
 
   private readonly store: JotaiStore;
@@ -153,7 +168,157 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
       },
     );
 
-    this.currentModalIsFadingOut = atom(false);
+    this.currentModalIsFadingOutAtom = atom(false);
+
+    this.currentModalUserMessageAtoms = {
+      show: atom(
+        (get) => {
+          const currentModalId = get(this.openModals.currentKeyAtom);
+
+          if ((currentModalId ?? null) !== null) {
+            const currentModal = this.openModals.keyedMap.map[currentModalId!];
+
+            if (currentModal) {
+              const show = get(currentModal.nodeData!.userMessageAtoms.show);
+              return show;
+            }
+          }
+
+          return null;
+        },
+        (get, set, newValue) => {
+          const currentModalId = get(this.openModals.currentKeyAtom);
+
+          if ((currentModalId ?? null) !== null) {
+            const currentModal = this.openModals.keyedMap.map[currentModalId!];
+
+            if (currentModal) {
+              set(currentModal.nodeData!.userMessageAtoms.show, newValue);
+            }
+          }
+        },
+      ),
+      level: atom(
+        (get) => {
+          const currentModalId = get(this.openModals.currentKeyAtom);
+
+          if ((currentModalId ?? null) !== null) {
+            const currentModal = this.openModals.keyedMap.map[currentModalId!];
+
+            if (currentModal) {
+              const level = get(currentModal.nodeData!.userMessageAtoms.level);
+              return level;
+            }
+          }
+
+          return null;
+        },
+        (get, set, newValue) => {
+          const currentModalId = get(this.openModals.currentKeyAtom);
+
+          if ((currentModalId ?? null) !== null) {
+            const currentModal = this.openModals.keyedMap.map[currentModalId!];
+
+            if (currentModal) {
+              set(currentModal.nodeData!.userMessageAtoms.level, newValue);
+            }
+          }
+        },
+      ),
+      content: atom(
+        (get) => {
+          const currentModalId = get(this.openModals.currentKeyAtom);
+
+          if ((currentModalId ?? null) !== null) {
+            const currentModal = this.openModals.keyedMap.map[currentModalId!];
+
+            if (currentModal) {
+              const content = get(
+                currentModal.nodeData!.userMessageAtoms.content,
+              );
+              return content;
+            }
+          }
+
+          return null;
+        },
+        (get, set, newValue) => {
+          const currentModalId = get(this.openModals.currentKeyAtom);
+
+          if ((currentModalId ?? null) !== null) {
+            const currentModal = this.openModals.keyedMap.map[currentModalId!];
+
+            if (currentModal) {
+              set(currentModal.nodeData!.userMessageAtoms.content, newValue);
+            }
+          }
+        },
+      ),
+      autoCloseMillis: atom(
+        (get) => {
+          const currentModalId = get(this.openModals.currentKeyAtom);
+
+          if ((currentModalId ?? null) !== null) {
+            const currentModal = this.openModals.keyedMap.map[currentModalId!];
+
+            if (currentModal) {
+              const autoCloseMillis = get(
+                currentModal.nodeData!.userMessageAtoms.autoCloseMillis,
+              );
+
+              return autoCloseMillis;
+            }
+          }
+
+          return null;
+        },
+        (get, set, newValue) => {
+          const currentModalId = get(this.openModals.currentKeyAtom);
+
+          if ((currentModalId ?? null) !== null) {
+            const currentModal = this.openModals.keyedMap.map[currentModalId!];
+
+            if (currentModal) {
+              set(
+                currentModal.nodeData!.userMessageAtoms.autoCloseMillis,
+                newValue,
+              );
+            }
+          }
+        },
+      ),
+      cssClass: atom(
+        (get) => {
+          const currentModalId = get(this.openModals.currentKeyAtom);
+
+          if ((currentModalId ?? null) !== null) {
+            const currentModal = this.openModals.keyedMap.map[currentModalId!];
+
+            if (currentModal) {
+              const cssClass = get(
+                currentModal.nodeData!.userMessageAtoms.cssClass,
+              );
+
+              return cssClass;
+            }
+          }
+
+          return null;
+        },
+        (get, set, newValue) => {
+          const currentModalId = get(this.openModals.currentKeyAtom);
+
+          if ((currentModalId ?? null) !== null) {
+            const currentModal = this.openModals.keyedMap.map[currentModalId!];
+
+            if (currentModal) {
+              set(currentModal.nodeData!.userMessageAtoms.cssClass, newValue);
+            }
+          }
+        },
+      ),
+    };
+
     this.refUrl = defaultUrlSerializer.value.deserializeUrl(location.href);
     this.refUrl = args.urlTransformer?.(this.refUrl) ?? this.refUrl;
   }
@@ -204,16 +369,17 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
       data,
       canCloseManually,
       isMaximized: atom(false),
+      userMessageAtoms: createUserMessageAtoms(args.userMessage ?? {}),
     };
 
     this.store.set(this.isClosingModals, () => false);
     const alreadyHasModals = this.openModals.getKeys().length > 0;
 
     if (alreadyHasModals) {
-      this.store.set(this.currentModalIsFadingOut, () => true);
+      this.store.set(this.currentModalIsFadingOutAtom, () => true);
 
       setTimeout(() => {
-        this.store.set(this.currentModalIsFadingOut, () => false);
+        this.store.set(this.currentModalIsFadingOutAtom, () => false);
         this.openModals.register(args.modal, null, modalId, nodeData);
       }, MODAL_FADE_MILLIS);
     } else {
@@ -229,14 +395,14 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
     callback?: (() => void) | NullOrUndef,
   ) {
     isLastModal ??= this.openModals.getKeys().length === 1;
-    this.store.set(this.currentModalIsFadingOut, () => true);
+    this.store.set(this.currentModalIsFadingOutAtom, () => true);
 
     if (isLastModal) {
       this.store.set(this.isClosingModals, () => true);
     }
 
     setTimeout(() => {
-      this.store.set(this.currentModalIsFadingOut, () => false);
+      this.store.set(this.currentModalIsFadingOutAtom, () => false);
       this.openModals.unregister(modalId, true);
       callback?.();
     }, MODAL_FADE_MILLIS);
@@ -325,6 +491,7 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
   currentModalIsMaximizedAtom: PrimitiveAtom<boolean>;
   currentModalIsFadingOut: PrimitiveAtom<boolean>;
   hasRestorableMinimizedStacks: PrimitiveAtom<boolean>;
+  currentModalUserMessageAtoms: UserMessageAtoms<() => React.ReactNode>;
 
   private readonly store: JotaiStore;
 
@@ -436,8 +603,9 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
 
           if (currentStack) {
             const currentModalIsFadingOut = get(
-              currentStack.currentModalIsFadingOut,
+              currentStack.currentModalIsFadingOutAtom,
             );
+
             return currentModalIsFadingOut;
           }
         }
@@ -451,11 +619,175 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
           const currentStack = this.stacks.keyedMap.map[currentStackId!]?.node;
 
           if (currentStack) {
-            set(currentStack.currentModalIsFadingOut, newValue);
+            set(currentStack.currentModalIsFadingOutAtom, newValue);
           }
         }
       },
     );
+
+    this.currentModalUserMessageAtoms = {
+      show: atom(
+        (get) => {
+          const currentStackId = get(this.stacks.currentKeyAtom);
+
+          if ((currentStackId ?? null) !== null) {
+            const currentStack =
+              this.stacks.keyedMap.map[currentStackId!]?.node;
+
+            if (currentStack) {
+              const show = get(currentStack.currentModalUserMessageAtoms.show);
+
+              return show;
+            }
+          }
+
+          return null;
+        },
+        (get, set, newValue) => {
+          const currentStackId = get(this.stacks.currentKeyAtom);
+
+          if ((currentStackId ?? null) !== null) {
+            const currentStack =
+              this.stacks.keyedMap.map[currentStackId!]?.node;
+
+            if (currentStack) {
+              set(currentStack.currentModalUserMessageAtoms.show, newValue);
+            }
+          }
+        },
+      ),
+      level: atom(
+        (get) => {
+          const currentStackId = get(this.stacks.currentKeyAtom);
+
+          if ((currentStackId ?? null) !== null) {
+            const currentStack =
+              this.stacks.keyedMap.map[currentStackId!]?.node;
+
+            if (currentStack) {
+              const level = get(
+                currentStack.currentModalUserMessageAtoms.level,
+              );
+
+              return level;
+            }
+          }
+
+          return null;
+        },
+        (get, set, newValue) => {
+          const currentStackId = get(this.stacks.currentKeyAtom);
+
+          if ((currentStackId ?? null) !== null) {
+            const currentStack =
+              this.stacks.keyedMap.map[currentStackId!]?.node;
+
+            if (currentStack) {
+              set(currentStack.currentModalUserMessageAtoms.level, newValue);
+            }
+          }
+        },
+      ),
+      content: atom(
+        (get) => {
+          const currentStackId = get(this.stacks.currentKeyAtom);
+
+          if ((currentStackId ?? null) !== null) {
+            const currentStack =
+              this.stacks.keyedMap.map[currentStackId!]?.node;
+
+            if (currentStack) {
+              const content = get(
+                currentStack.currentModalUserMessageAtoms.content,
+              );
+
+              return content;
+            }
+          }
+
+          return null;
+        },
+        (get, set, newValue) => {
+          const currentStackId = get(this.stacks.currentKeyAtom);
+
+          if ((currentStackId ?? null) !== null) {
+            const currentStack =
+              this.stacks.keyedMap.map[currentStackId!]?.node;
+
+            if (currentStack) {
+              set(currentStack.currentModalUserMessageAtoms.content, newValue);
+            }
+          }
+        },
+      ),
+      autoCloseMillis: atom(
+        (get) => {
+          const currentStackId = get(this.stacks.currentKeyAtom);
+
+          if ((currentStackId ?? null) !== null) {
+            const currentStack =
+              this.stacks.keyedMap.map[currentStackId!]?.node;
+
+            if (currentStack) {
+              const autoCloseMillis = get(
+                currentStack.currentModalUserMessageAtoms.autoCloseMillis,
+              );
+
+              return autoCloseMillis;
+            }
+          }
+
+          return null;
+        },
+        (get, set, newValue) => {
+          const currentStackId = get(this.stacks.currentKeyAtom);
+
+          if ((currentStackId ?? null) !== null) {
+            const currentStack =
+              this.stacks.keyedMap.map[currentStackId!]?.node;
+
+            if (currentStack) {
+              set(
+                currentStack.currentModalUserMessageAtoms.autoCloseMillis,
+                newValue,
+              );
+            }
+          }
+        },
+      ),
+      cssClass: atom(
+        (get) => {
+          const currentStackId = get(this.stacks.currentKeyAtom);
+
+          if ((currentStackId ?? null) !== null) {
+            const currentStack =
+              this.stacks.keyedMap.map[currentStackId!]?.node;
+
+            if (currentStack) {
+              const cssClass = get(
+                currentStack.currentModalUserMessageAtoms.cssClass,
+              );
+
+              return cssClass;
+            }
+          }
+
+          return null;
+        },
+        (get, set, newValue) => {
+          const currentStackId = get(this.stacks.currentKeyAtom);
+
+          if ((currentStackId ?? null) !== null) {
+            const currentStack =
+              this.stacks.keyedMap.map[currentStackId!]?.node;
+
+            if (currentStack) {
+              set(currentStack.currentModalUserMessageAtoms.cssClass, newValue);
+            }
+          }
+        },
+      ),
+    };
 
     this.hasRestorableMinimizedStacks = atom(false);
     this.store = store ?? getDefaultStore();
@@ -608,3 +940,23 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
 export const defaultTrmrkAppModalService = new RefLazyValue(
   () => new TrmrkAppModalService(),
 );
+
+export const useCurrentModalUserMessage = (
+  appModalService?: TrmrkAppModalService | NullOrUndef,
+): UseUserMessageAtoms<() => React.ReactNode> =>
+  withVal(
+    appModalService ?? defaultTrmrkAppModalService.value,
+    (appModalService) => ({
+      show: trmrkUseAtom(appModalService.currentModalUserMessageAtoms.show),
+      level: trmrkUseAtom(appModalService.currentModalUserMessageAtoms.level),
+      content: trmrkUseAtom(
+        appModalService.currentModalUserMessageAtoms.content,
+      ),
+      autoCloseMillis: trmrkUseAtom(
+        appModalService.currentModalUserMessageAtoms.autoCloseMillis,
+      ),
+      cssClass: trmrkUseAtom(
+        appModalService.currentModalUserMessageAtoms.cssClass,
+      ),
+    }),
+  );

@@ -28,6 +28,32 @@ export interface InitLayoutPartArgs {
   typeName?: string | NullOrUndef;
 }
 
+export interface UserMessageAtoms<TContentNode = React.ReactNode> {
+  show: PrimitiveAtom<number | null>;
+  level: PrimitiveAtom<UserMessageLevel | null>;
+  content: PrimitiveAtom<TContentNode | null>;
+  autoCloseMillis: PrimitiveAtom<number | null>;
+  cssClass: PrimitiveAtom<string | null>;
+}
+
+export interface UserMessageAtomsArgs<TContentNode = React.ReactNode> {
+  show?: PrimitiveAtom<number | null> | NullOrUndef;
+  level?: PrimitiveAtom<UserMessageLevel | null> | NullOrUndef;
+  content?: PrimitiveAtom<TContentNode | null> | NullOrUndef;
+  autoCloseMillis?: PrimitiveAtom<number | null> | NullOrUndef;
+  cssClass?: PrimitiveAtom<string | null> | NullOrUndef;
+}
+
+export const createUserMessageAtoms = <TContentNode = React.ReactNode>(
+  args: UserMessageAtomsArgs<TContentNode>,
+): UserMessageAtoms<TContentNode> => ({
+  show: args.show ?? atom<number | null>(null),
+  level: args.level ?? atom<UserMessageLevel | null>(null),
+  content: args.content ?? atom<TContentNode | null>(null),
+  autoCloseMillis: args.autoCloseMillis ?? atom<number | null>(null),
+  cssClass: args.cssClass ?? atom<string | null>(null),
+});
+
 const createToolbarAtoms = (show: boolean): TrmrkToolbarAtoms => ({
   show: atom(show),
   contentsKey: atom<number | null>(null),
@@ -40,13 +66,7 @@ export const trmrkBasicAppLayoutAtoms = {
   appBar: createToolbarAtoms(true),
   topToolbar: createToolbarAtoms(true),
   bottomToolbar: createToolbarAtoms(false),
-  appUserMessage: {
-    show: atom<number | null>(null),
-    level: atom<UserMessageLevel | null>(null),
-    content: atom<React.ReactNode>(null),
-    autoCloseMillis: atom<number | null>(null),
-    cssClass: atom<string | null>(null),
-  },
+  appUserMessage: createUserMessageAtoms({}),
 };
 
 export const appBarContents = new RefLazyValue(() =>
@@ -83,10 +103,10 @@ export interface ToolbarAtoms<Value> {
   bottomToolbar: TrmrkUseAtom<Value>;
 }
 
-export interface AppUserMessageAtoms {
+export interface UseUserMessageAtoms<TContentNode = React.ReactNode> {
   show: TrmrkUseAtom<number | null>;
   level: TrmrkUseAtom<UserMessageLevel | null>;
-  content: TrmrkUseAtom<React.ReactNode>;
+  content: TrmrkUseAtom<TContentNode | null>;
   autoCloseMillis: TrmrkUseAtom<number | null>;
   cssClass: TrmrkUseAtom<string | null>;
 }
@@ -117,7 +137,7 @@ export const useToolbarOverridingContentKeys = (): ToolbarAtoms<
   ),
 });
 
-export const useAppUserMessage = (): AppUserMessageAtoms => ({
+export const useAppUserMessage = (): UseUserMessageAtoms => ({
   show: trmrkUseAtom(trmrkBasicAppLayoutAtoms.appUserMessage.show),
   level: trmrkUseAtom(trmrkBasicAppLayoutAtoms.appUserMessage.level),
   content: trmrkUseAtom(trmrkBasicAppLayoutAtoms.appUserMessage.content),
@@ -159,7 +179,7 @@ export interface InitBasicAppLayoutArgs {
   showToolbarAtoms: ToolbarAtoms<boolean>;
   toolbarContentKeyAtoms: ToolbarAtoms<number | null>;
   overridingToolbarContentKeyAtoms: ToolbarAtoms<number | null>;
-  appUserMessageAtoms: AppUserMessageAtoms;
+  appUserMessageAtoms: UseUserMessageAtoms;
   appBar?: InitLayoutPartArgs | NullOrUndef;
   topToolbar?: InitLayoutPartArgs | NullOrUndef;
   bottomToolbar?: InitLayoutPartArgs | NullOrUndef;
