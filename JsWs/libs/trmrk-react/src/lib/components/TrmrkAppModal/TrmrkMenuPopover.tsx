@@ -26,7 +26,7 @@ const TrmrkPopover = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalPr
   const closebtnClicked = React.useCallback(() => {
   }, []);
 
-  return <div ref={ref} className={[className ?? "", "trmrk-popover-container"].join(' ')} {...props}>
+  return <div ref={ref} className={[className ?? "", "trmrk-menu-popover-container"].join(' ')} {...props}>
     <div className="trmrk-modal-header">
       <div className="trmrk-horiz-strip trmrk-modal-top-bar">
         <div className="trmrk-leading-content flex">

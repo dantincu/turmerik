@@ -95,7 +95,7 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
         "trmrk-app-modal-container",
         widthCssClass,
         currentModalIsMaximized ? "trmrk-is-maximized" : "",
-        currentModalIsFadingOut ? "trmrk-fade-out" : "trmrk-fade-in"].join(' ')}
+        currentModalIsFadingOut ? "trmrk-opac-fade-out" : "trmrk-opac-fade-in"].join(' ')}
       {...props}>
     { (showHeader ?? true) && <div className="trmrk-modal-header">
       { (showTopBar ?? true) && <div className="trmrk-horiz-strip trmrk-modal-top-bar">

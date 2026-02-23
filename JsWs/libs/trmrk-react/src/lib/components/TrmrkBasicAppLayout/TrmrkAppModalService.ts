@@ -184,7 +184,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
             }
           }
 
-          return null;
+          return 0;
         },
         (get, set, newValue) => {
           const currentModalId = get(this.openModals.currentKeyAtom);
@@ -641,7 +641,7 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
             }
           }
 
-          return null;
+          return 0;
         },
         (get, set, newValue) => {
           const currentStackId = get(this.stacks.currentKeyAtom);

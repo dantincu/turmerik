@@ -30,7 +30,7 @@ export interface InitLayoutPartArgs {
 }
 
 export interface UserMessageAtoms<TContentNode = React.ReactNode> {
-  show: PrimitiveAtom<number | null>;
+  show: PrimitiveAtom<number>;
   level: PrimitiveAtom<UserMessageLevel | null>;
   content: PrimitiveAtom<TContentNode | null>;
   autoCloseMillis: PrimitiveAtom<number | null>;
@@ -38,7 +38,7 @@ export interface UserMessageAtoms<TContentNode = React.ReactNode> {
 }
 
 export interface UserMessageAtomsArgs<TContentNode = React.ReactNode> {
-  show?: PrimitiveAtom<number | null> | NullOrUndef;
+  show?: PrimitiveAtom<number> | NullOrUndef;
   level?: PrimitiveAtom<UserMessageLevel | null> | NullOrUndef;
   content?: PrimitiveAtom<TContentNode | null> | NullOrUndef;
   autoCloseMillis?: PrimitiveAtom<number | null> | NullOrUndef;
@@ -48,7 +48,7 @@ export interface UserMessageAtomsArgs<TContentNode = React.ReactNode> {
 export const createUserMessageAtoms = <TContentNode = React.ReactNode>(
   args: UserMessageAtomsArgs<TContentNode>,
 ): UserMessageAtoms<TContentNode> => ({
-  show: args.show ?? atom<number | null>(null),
+  show: args.show ?? atom<number>(0),
   level: args.level ?? atom<UserMessageLevel | null>(null),
   content: args.content ?? atom<TContentNode | null>(null),
   autoCloseMillis: args.autoCloseMillis ?? atom<number | null>(null),
@@ -107,7 +107,7 @@ export interface ToolbarAtoms<Value> {
 }
 
 export interface UseUserMessageAtoms<TContentNode = React.ReactNode> {
-  show: TrmrkUseAtom<number | null>;
+  show: TrmrkUseAtom<number>;
   level: TrmrkUseAtom<UserMessageLevel | null>;
   content: TrmrkUseAtom<TContentNode | null>;
   autoCloseMillis: TrmrkUseAtom<number | null>;
@@ -256,7 +256,7 @@ export const initBasicAppLayout = (args: InitBasicAppLayoutArgs) => {
   };
 
   const appUserMessageArgs = args.appUserMessage ?? {};
-  args.appUserMessageAtoms.show.set(appUserMessageArgs.show ?? null);
+  args.appUserMessageAtoms.show.set(appUserMessageArgs.show ?? 0);
   args.appUserMessageAtoms.level.set(appUserMessageArgs.level ?? null);
   args.appUserMessageAtoms.content.set(appUserMessageArgs.content);
 

@@ -2,9 +2,9 @@ import trmrk from "../trmrk";
 import { NullOrUndef } from "../trmrk/core";
 
 export const defaultLongPressTimeoutMills = 400;
-export const defaultFastAnimationDurationMillis = 100;
-export const defaultAnimationDurationMillis = 500;
-export const defaultSlowAnimationDurationMillis = 1000;
+export const fastAnimationDurationMillis = 100;
+export const defaultAnimationDurationMillis = 300;
+export const slowAnimationDurationMillis = 1000;
 
 export const absUriRegex = () => () =>
   /^[\w\-_]+\:\/\/([\w\-_]+\.?)+(\:[0-9]+)?(\/[\w\-\?\.\+_&=#,]*)*$/g;

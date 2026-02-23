@@ -1,7 +1,7 @@
 import React, { CSSProperties} from "react";
 
 import { UserMessageLevel, NullOrUndef, actWithValIf } from '@/src/trmrk/core';
-import { Placement, defaultSlowAnimationDurationMillis } from "@/src/trmrk-browser/core";
+import { Placement, defaultAnimationDurationMillis } from "@/src/trmrk-browser/core";
 
 import { ComponentProps } from "../defs/common";
 import { clearRefVal } from "../../services/utils";
@@ -109,7 +109,7 @@ export default function TrmrkMessagePopover(
         setMessageFadeOut(false);
         setShowEl(false);
         actWithValIf(closed, f => f(false));
-      }, defaultSlowAnimationDurationMillis);
+      }, defaultAnimationDurationMillis);
     }, autoCloseMillisVal);
   }, [autoCloseEl]);
 
@@ -153,7 +153,7 @@ export default function TrmrkMessagePopover(
     }
   }, []);
 
-  return showEl && <div className={["trmrk-message-popover-container", className ?? '', cssClassName, messageFadeOut ? 'trmrk-fade' : ''].join(" ")}
+  return showEl && <div className={["trmrk-message-popover-container", className ?? '', cssClassName, messageFadeOut ? 'trmrk-opac-fade-out' : 'trmrk-opac-fade-in'].join(" ")}
       ref={rootElRef} onPointerDownCapture={containerPointerDown}>
     <div className="trmrk-basement">{ arrowCssClass && <svg className={["trmrk-arrow", arrowCssClass].join(" ")} viewBox="0 0 20 10" style={ arrowStyle ?? undefined }>
       <path className="trmrk-arrow-body" strokeWidth="1" d="M 0 10 L 10 0 L 20 10" />

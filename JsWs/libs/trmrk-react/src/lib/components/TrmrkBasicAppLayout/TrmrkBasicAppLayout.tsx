@@ -200,7 +200,7 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
             { appOverlappingContents.value.keyedMap.map[key]?.node }
           </React.Fragment>) }
           
-          { ((appUserMessageAtoms.show.value ?? null) !== null && (appUserMessageAtoms.level.value ?? null) !== null) && <TrmrkMessagePopover
+          { ((appUserMessageAtoms.level.value ?? null) !== null) && <TrmrkMessagePopover
             show={appUserMessageAtoms.show.value}
             msgLevel={appUserMessageAtoms.level.value}
             autoCloseMillis={appUserMessageAtoms.autoCloseMillis.value}
@@ -209,7 +209,7 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
           
           { ((currentModalKey ?? null) !== null) && <div className={[
               "trmrk-app-modal-backdrop",
-              isClosingModals ? "trmrk-fade-out" : "trmrk-fade-in"].join(" ")}>
+              isClosingModals ? "trmrk-opac-fade-out" : "trmrk-opac-fade-in"].join(" ")}>
             { openModalNode }
             { ((currentModalUserMessage.show.value ?? null) !== null && (currentModalUserMessage.level.value ?? null) !== null) && <TrmrkMessagePopover
               show={currentModalUserMessage.show.value}
