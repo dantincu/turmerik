@@ -29,7 +29,7 @@ import {
   useAppUserMessage
 } from "./TrmrkBasicAppLayoutService";
 
-import { trmrkBasicAppLayoutAtoms, appOverlappingContents } from "./TrmrkBasicAppLayoutService";
+import { trmrkBasicAppLayoutAtoms, appLeadingOverlappingContents, appTrailingOverlappingContents } from "./TrmrkBasicAppLayoutService";
 import TrmrkMessagePopover from "../TrmrkMessagePopover/TrmrkMessagePopover";
 
 export interface TrmrkBasicAppLayoutProps extends ComponentProps {}
@@ -49,7 +49,8 @@ const lifecycleEffect = atomEffect((get, set) => {
 export default function TrmrkBasicAppLayout({children, className: cssClass}: Readonly<TrmrkBasicAppLayoutProps>) {
   useAtom(lifecycleEffect);
   const layoutRenderIdRef = React.useRef(0);
-  const [ overlappingContentKeys ] = useAtom(appOverlappingContents.value.keysAtom);
+  const [ leadingOverlappingContentKeys ] = useAtom(appLeadingOverlappingContents.value.keysAtom);
+  const [ trailingOverlappingContentKeys ] = useAtom(appTrailingOverlappingContents.value.keysAtom);
   const [cssClassValue] = useAtom(trmrkBasicAppLayoutAtoms.cssClass);
   const [hideHeaderAndFooter] = useAtom(trmrkBasicAppLayoutAtoms.hideHeaderAndFooter);
   const [showToolbars] = useAtom(trmrkBasicAppLayoutAtoms.showToolbars);
@@ -196,8 +197,8 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
 
       { /* **** **** **** **** **** **** **** **** OVERLAPPING_CONTENTS START **** **** **** **** **** **** **** **** */
         <div className="trmrk-overlapping-contents">
-          { overlappingContentKeys.map(key => <React.Fragment key={key}>
-            { appOverlappingContents.value.keyedMap.map[key]?.node }
+          { leadingOverlappingContentKeys.map(key => <React.Fragment key={key}>
+            { appLeadingOverlappingContents.value.keyedMap.map[key]?.node }
           </React.Fragment>) }
           
           { ((appUserMessageAtoms.level.value ?? null) !== null) && <TrmrkMessagePopover
@@ -218,6 +219,10 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
               className={[currentModalUserMessage.cssClass.value ?? "", "trmrk-current-modal-user-message-popover-container"].join(' ')}>
                 { currentModalUserMessage.content.value?.() }</TrmrkMessagePopover> }
           </div> }
+          
+          { trailingOverlappingContentKeys.map(key => <React.Fragment key={key}>
+            { appTrailingOverlappingContents.value.keyedMap.map[key]?.node }
+          </React.Fragment>) }
         </div>
       /* **** **** **** **** **** **** **** **** OVERLAPPING_CONTENTS END **** **** **** **** **** **** **** **** */ }
 

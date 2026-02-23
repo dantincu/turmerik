@@ -96,7 +96,11 @@ export const overridingBottomToolbarContents = new RefLazyValue(() =>
   createIntKeyedComponentsMapManager(),
 );
 
-export const appOverlappingContents = new RefLazyValue(() =>
+export const appLeadingOverlappingContents = new RefLazyValue(() =>
+  createIntKeyedComponentsMapManager(),
+);
+
+export const appTrailingOverlappingContents = new RefLazyValue(() =>
   createIntKeyedComponentsMapManager(),
 );
 
