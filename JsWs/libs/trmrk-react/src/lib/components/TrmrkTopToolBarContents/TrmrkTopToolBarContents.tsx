@@ -76,7 +76,7 @@ const ContentsShiftRightBtn = React.memo(() => {
     }));
 
     setToolbarContentsOffset(newToolbarContentsOffset);
-  }, [toolbarContentsOffset, toolbarContainerWidth]);
+  }, [toolbarContentsMaxOffset, toolbarContentsOffset, toolbarContainerWidth]);
 
   return <TrmrkBtn onClick={btnClicked} className={[
     "trmrk-btn-filled-system trmrk-contents-shift-right",
@@ -342,7 +342,6 @@ export default function TrmrkTopToolBarContents({
   const [ toolbarContentsMaxOffset, setToolbarContentsMaxOffset ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsMaxOffset);
   const [ toolbarContentsOffset, setToolbarContentsOffset ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsOffset);
   const [ , setShowToolbarContentsScrollBtns ] = useAtom(trmrkTopToolBarContentsAtoms.showToolbarContentsScrollBtns);
-  const [currentModalStackKey] = useAtom(defaultTrmrkAppModalService.value.stacks.currentKeyAtom);
   const appUserMessage = useAppUserMessage();
 
   const toolbarContentsOffsetValue = React.useMemo(
