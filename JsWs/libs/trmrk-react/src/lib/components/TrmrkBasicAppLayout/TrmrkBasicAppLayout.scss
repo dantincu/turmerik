@@ -25,7 +25,8 @@
     max-height: 0;
     overflow: visible;
 
-    .trmrk-app-user-message-popover-container {
+    .trmrk-app-user-message-popover-container,
+    .trmrk-current-modal-user-message-popover-container {
       position: absolute;
       bottom: 0;
     }

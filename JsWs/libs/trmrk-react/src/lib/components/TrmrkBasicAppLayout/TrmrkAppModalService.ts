@@ -454,8 +454,10 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
         this.store.set(this.isClosingModals, () => true);
 
         setTimeout(() => {
+          const modalId = this.openModals.getCurrentKey();
           const openModalsMap = this.openModals.replaceAll({});
           const replaced = this.minimizedModals.replaceAll(openModalsMap);
+          this.store.set(this.minimizedModals.currentKeyAtom, modalId);
           callback?.(replaced);
         }, MODAL_FADE_MILLIS);
       }
@@ -466,15 +468,12 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
     const modalsIdsArr = this.minimizedModals.getKeys();
 
     if (modalsIdsArr.length > 0) {
+      const modalId = this.minimizedModals.getCurrentKey();
       const minimizedModals = this.minimizedModals.replaceAll([]);
 
-      const currentModal =
-        minimizedModals[modalsIdsArr[modalsIdsArr.length - 1]];
-
-      if (currentModal) {
-        this.store.set(this.isClosingModals, () => false);
-        this.openModals.replaceAll(minimizedModals);
-      }
+      this.store.set(this.isClosingModals, () => false);
+      this.openModals.replaceAll(minimizedModals);
+      this.store.set(this.openModals.currentKeyAtom, modalId);
     }
   }
 }
@@ -901,19 +900,16 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
     }
   }
 
-  restoreMinimizedModals() {
-    const currentStack = this.getCurrentStack();
+  restoreMinimizedModals(stack: TrmrkAppModalsStackService) {
+    stack.restoreMinimizedModals();
+    const idx = this.restorableMinimizedStacks.indexOf(stack);
+    this.restorableMinimizedStacks.splice(idx, 1);
+    this.stacks.register(stack, null, stack.stackId);
 
-    if (currentStack) {
-      currentStack.restoreMinimizedModals();
-      const idx = this.restorableMinimizedStacks.indexOf(currentStack);
-      this.restorableMinimizedStacks.splice(idx, 1);
-
-      this.store.set(
-        this.hasRestorableMinimizedStacks,
-        this.restorableMinimizedStacks.length > 0,
-      );
-    }
+    this.store.set(
+      this.hasRestorableMinimizedStacks,
+      this.restorableMinimizedStacks.length > 0,
+    );
   }
 
   updateRestorableMinimizedStacks(

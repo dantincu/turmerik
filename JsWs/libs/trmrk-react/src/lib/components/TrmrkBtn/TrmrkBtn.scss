@@ -66,6 +66,7 @@
 
   &.trmrk-btn-filled-warn, .trmrk-background-color-warn {
     color: var(--trmrk-tool-bar_fore-color_light);
+    background-color: var(--trmrk-warn-back-color);
   }
     
   &.trmrk-btn-filled-primary, .trmrk-background-color-primary {
@@ -82,10 +83,6 @@
 
   &.trmrk-btn-filled-reject, .trmrk-background-color-reject {
     background-color: var(--trmrk-reject-back-color);
-  }
-
-  &.trmrk-btn-filled-warn, .trmrk-background-color-warn {
-    background-color: var(--trmrk-warn-back-color);
   }
 }
 

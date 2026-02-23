@@ -1,7 +1,7 @@
 import React from "react";
 import { useAtom } from "jotai";
 
-import { NullOrUndef } from "@/src/trmrk/core";
+import { NullOrUndef, UserMessageLevel } from "@/src/trmrk/core";
 
 import "./TrmrkTopToolBarContents.scss";
 import { UseSetAtom } from "../../services/jotai/core";
@@ -11,6 +11,7 @@ import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
 import { trmrk3PanelsAppLayoutAtoms, TrmrkAppLayoutPanel } from "../Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 import { trmrkTopToolBarContentsAtoms } from "./TrmrkTopToolBarContentsService";
 import { defaultTrmrkAppModalService } from "../TrmrkBasicAppLayout/TrmrkAppModalService";
+import { useAppUserMessage } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showBackBtn?: boolean | NullOrUndef;
@@ -342,6 +343,7 @@ export default function TrmrkTopToolBarContents({
   const [ toolbarContentsOffset, setToolbarContentsOffset ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsOffset);
   const [ , setShowToolbarContentsScrollBtns ] = useAtom(trmrkTopToolBarContentsAtoms.showToolbarContentsScrollBtns);
   const [currentModalStackKey] = useAtom(defaultTrmrkAppModalService.value.stacks.currentKeyAtom);
+  const appUserMessage = useAppUserMessage();
 
   const toolbarContentsOffsetValue = React.useMemo(
     () => -1 * Math.max(0, Math.min(toolbarContentsMaxOffset, toolbarContentsOffset)), [
@@ -428,12 +430,39 @@ export default function TrmrkTopToolBarContents({
   }, []);
 
   const restoreMinimizedModalsClicked = React.useCallback(() => {
-    defaultTrmrkAppModalService.value.restoreMinimizedModals();
+    defaultTrmrkAppModalService.value.restoreMinimizedModals(
+      defaultTrmrkAppModalService.value.minimizedStacks[0]
+    );
   }, []);
 
-  const currentModalsStack = React.useMemo(
-    () => (currentModalStackKey ?? null) !== null ? defaultTrmrkAppModalService.value.stacks.keyedMap.map[currentModalStackKey!]?.node ?? null : null,
-    [currentModalStackKey]);
+  const showAppMessageBtnCssClass = React.useMemo(() => {
+    let cssClass: string;
+
+    switch (appUserMessage.level.value) {
+      case UserMessageLevel.Success:
+        cssClass = "accept";
+        break;
+      case UserMessageLevel.Info:
+        cssClass = "primary";
+        break;
+      case UserMessageLevel.Warn:
+        cssClass = "warn";
+        break;
+      case UserMessageLevel.Error:
+        cssClass = "reject";
+        break;
+      default:
+        cssClass = "secondary";
+        break;
+    }
+
+    cssClass = `trmrk-btn-filled-${cssClass}`;
+    return cssClass;
+  }, [appUserMessage.level.value]);
+
+  const showAppMessageBtnClicked = React.useCallback(() => {
+    appUserMessage.show.set(appUserMessage.show.value + 1);
+  }, [appUserMessage.show.value]);
 
   React.useEffect(() => {
     return () => {
@@ -472,7 +501,7 @@ export default function TrmrkTopToolBarContents({
           { showResizePanelsBtn && <ResizePanelsBtn></ResizePanelsBtn> }
           { (defaultTrmrkAppModalService.value.restorableMinimizedStacks.length > 0) && <TrmrkBtn className="trmrk-btn-filled-primary" onClick={restoreMinimizedModalsClicked}>
             <TrmrkIcon icon="material-symbols:select-window" /></TrmrkBtn> }
-          <TrmrkBtn className="trmrk-btn-filled-reject"><TrmrkIcon icon="mdi:bell-notification" /></TrmrkBtn>
+          { ((appUserMessage.level.value ?? null) !== null) && <TrmrkBtn borderWidth={1} className={showAppMessageBtnCssClass} onClick={showAppMessageBtnClicked}><TrmrkIcon icon="mdi:bell-notification" /></TrmrkBtn> }
           <TrmrkBtn><TrmrkIcon icon="material-symbols:tab-group" /></TrmrkBtn>
         </div>
       </div>
