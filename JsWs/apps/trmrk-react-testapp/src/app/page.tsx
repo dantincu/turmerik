@@ -8,19 +8,10 @@ import TrmrkTopToolBarContents from "@/src/trmrk-react/components/TrmrkTopToolBa
 
 import {
   trmrk3PanelsAppLayoutAtoms,
-  useAllowShowPanelAtoms,
-  usePanelContentsKeyAtoms,
   init3PanelsAppLayout,
   cleanup3PanelsAppLayout,
   use3PanelsAppLayoutAtoms
 } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
-
-import {
-  useShowToolbars,
-  useToolbarContentKeys,
-  useToolbarOverridingContentKeys,
-  useAppUserMessage
-} from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 import TrmrkLink from "@/src/trmrk-react/components/TrmrkLink/TrmrkLink";
 

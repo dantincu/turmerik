@@ -3,6 +3,7 @@ import { useAtom } from "jotai";
 import { atomEffect } from 'jotai-effect';
 
 import { withValIf } from "@/src/trmrk/core";
+import { isDebugLoggingEnabled } from "@/src/trmrk/dev";
 
 import "./TrmrkBasicAppLayout.scss";
 
@@ -11,8 +12,6 @@ import TrmrkHorizStrip from "../TrmrkHorizStrip/TrmrkHorizStrip";
 
 import {
   defaultTrmrkAppModalService,
-  TrmrkAppModalPropsCore,
-  TrmrkAppModalPropsCoreWithData,
   useCurrentModalUserMessage
 } from "./TrmrkAppModalService";
 
@@ -21,6 +20,7 @@ import {
   bottomToolbarContents,
   topToolbarContents,
   useShowToolbars,
+  useShowOverridingToolbars,
   useToolbarContentKeys,
   useToolbarOverridingContentKeys,
   overridingAppBarContents,
@@ -35,100 +35,118 @@ import TrmrkMessagePopover from "../TrmrkMessagePopover/TrmrkMessagePopover";
 export interface TrmrkBasicAppLayoutProps extends ComponentProps {}
 
 const lifecycleEffect = atomEffect((get, set) => {
-  console.log('APP HAS BEEN MOUNTED');
+  if (isDebugLoggingEnabled.value) {
+    console.log('APP HAS BEEN MOUNTED');
+  }
 
   return () => {
-    console.log('APP HAS BEEN UNMOUNTED');
+    if (isDebugLoggingEnabled.value) {
+      console.log('APP HAS BEEN UNMOUNTED');
+    }
   };
 });
 
 export default function TrmrkBasicAppLayout({children, className: cssClass}: Readonly<TrmrkBasicAppLayoutProps>) {
   useAtom(lifecycleEffect);
-  const myIdRef = React.useRef(0);
+  const layoutRenderIdRef = React.useRef(0);
   const [ overlappingContentKeys ] = useAtom(appOverlappingContents.value.keysAtom);
   const [cssClassValue] = useAtom(trmrkBasicAppLayoutAtoms.cssClass);
+  const [hideHeaderAndFooter] = useAtom(trmrkBasicAppLayoutAtoms.hideHeaderAndFooter);
   const [showToolbars] = useAtom(trmrkBasicAppLayoutAtoms.showToolbars);
   const [currentModalStackKey] = useAtom(defaultTrmrkAppModalService.value.stacks.currentKeyAtom);
   const [currentModalKey] = useAtom(defaultTrmrkAppModalService.value.currentModalKey);
   const [isClosingModals] = useAtom(defaultTrmrkAppModalService.value.isClosingModals);
 
   const showToolbarAtoms = useShowToolbars();
+  const showOverridingToolbarAtoms = useShowOverridingToolbars();
   const toolbarContentKeys = useToolbarContentKeys();
   const overridingToolbarContentKeys = useToolbarOverridingContentKeys();
   const appUserMessageAtoms = useAppUserMessage();
   const currentModalUserMessage = useCurrentModalUserMessage();
 
   const showAppBar = React.useMemo(() => {
-    const retVal = showToolbarAtoms.appBar.value || (overridingToolbarContentKeys.appBar.value ?? null) !== null;
+    const retVal = (!hideHeaderAndFooter && showToolbarAtoms.appBar.value) || showOverridingToolbarAtoms.appBar.value;
     return retVal;
   }, [
     showToolbarAtoms.appBar.value,
-    overridingToolbarContentKeys.appBar.value
+    showOverridingToolbarAtoms.appBar.value,
+    hideHeaderAndFooter
   ]);
 
   const showTopToolbar = React.useMemo(() => {
-    let retVal = showToolbars && showToolbarAtoms.topToolbar.value;
-    retVal ||= (overridingToolbarContentKeys.topToolbar.value ?? null) !== null;
+    let retVal = !hideHeaderAndFooter && showToolbars && showToolbarAtoms.topToolbar.value;
+    retVal ||= showOverridingToolbarAtoms.topToolbar.value;
     return retVal;
   }, [
     showToolbars,
     showToolbarAtoms.topToolbar.value,
-    overridingToolbarContentKeys.topToolbar.value
+    showOverridingToolbarAtoms.topToolbar.value,
+    hideHeaderAndFooter
   ]);
 
   const showBottomToolbar = React.useMemo(() => {
-    let retVal = showToolbars && showToolbarAtoms.bottomToolbar.value;
-    retVal ||= (overridingToolbarContentKeys.bottomToolbar.value ?? null) !== null;
+    let retVal = !hideHeaderAndFooter && showToolbars && showToolbarAtoms.bottomToolbar.value;
+    retVal ||= showOverridingToolbarAtoms.bottomToolbar.value;
     return retVal;
   }, [
     showToolbars,
     showToolbarAtoms.bottomToolbar.value,
-    overridingToolbarContentKeys.bottomToolbar.value
+    showOverridingToolbarAtoms.bottomToolbar.value,
+    hideHeaderAndFooter
   ]);
 
   const appBarContentsNode = React.useMemo(() => {
     let retVal: React.ReactNode = null;
 
-    if ((overridingToolbarContentKeys.appBar.value ?? null) !== null) {
+    if (showOverridingToolbarAtoms.appBar.value) {
       retVal = overridingAppBarContents.value.keyedMap.map[overridingToolbarContentKeys.appBar.value!]?.node;
-    } else if ((toolbarContentKeys.appBar.value ?? null) !== null) {
+    } else if (!hideHeaderAndFooter && showToolbarAtoms.appBar.value) {
       retVal = appBarContents.value.keyedMap.map[toolbarContentKeys.appBar.value!]?.node;
     }
 
     return retVal;
   }, [
     overridingToolbarContentKeys.appBar.value,
-    toolbarContentKeys.appBar.value
+    toolbarContentKeys.appBar.value,
+    showToolbarAtoms.appBar.value,
+    showOverridingToolbarAtoms.appBar.value,
+    hideHeaderAndFooter
   ]);
 
   const topToolbarContentsNode = React.useMemo(() => {
     let retVal: React.ReactNode = null;
 
-    if ((overridingToolbarContentKeys.topToolbar.value ?? null) !== null) {
+    if (showOverridingToolbarAtoms.topToolbar.value) {
       retVal = overridingTopToolbarContents.value.keyedMap.map[overridingToolbarContentKeys.topToolbar.value!]?.node;
-    } else if (showToolbars && (showToolbarAtoms.topToolbar.value ?? null) !== null) {
+    } else if (!hideHeaderAndFooter && showToolbars && showToolbarAtoms.topToolbar.value) {
       retVal = topToolbarContents.value.keyedMap.map[toolbarContentKeys.topToolbar.value!]?.node;
     }
 
     return retVal;
   }, [
     overridingToolbarContentKeys.topToolbar.value,
-    toolbarContentKeys.topToolbar.value
+    toolbarContentKeys.topToolbar.value,
+    showToolbarAtoms.topToolbar.value,
+    showOverridingToolbarAtoms.topToolbar.value,
+    hideHeaderAndFooter
   ]);
 
   const bottomToolbarContentsNode = React.useMemo(() => {
     let retVal: React.ReactNode = null;
 
-    if ((overridingToolbarContentKeys.bottomToolbar.value ?? null) !== null) {
+    if (showOverridingToolbarAtoms.bottomToolbar.value) {
       retVal = overridingBottomToolbarContents.value.keyedMap.map[overridingToolbarContentKeys.bottomToolbar.value!]?.node;
-    } else if (showToolbars && (showToolbarAtoms.bottomToolbar.value ?? null) !== null) {
+    } else if (!hideHeaderAndFooter && showToolbars && showToolbarAtoms.bottomToolbar.value) {
       retVal = bottomToolbarContents.value.keyedMap.map[toolbarContentKeys.bottomToolbar.value!]?.node;
     }
 
     return retVal;
   }, [
     overridingToolbarContentKeys.bottomToolbar.value,
-    toolbarContentKeys.bottomToolbar.value
+    toolbarContentKeys.bottomToolbar.value,
+    showToolbarAtoms.bottomToolbar.value,
+    showOverridingToolbarAtoms.bottomToolbar.value,
+    hideHeaderAndFooter
   ]);
 
   const currentModalsStack = React.useMemo(
@@ -142,7 +160,9 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
   }, [currentModalKey, currentModalsStack]);
 
   React.useEffect(() => {
-    console.log("APP LAYOUT MOUNTED", myIdRef.current++);
+    if (isDebugLoggingEnabled.value) {
+      console.log("APP LAYOUT MOUNTED", layoutRenderIdRef.current++);
+    }
   }, []);
 
   return (

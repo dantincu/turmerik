@@ -1,6 +1,10 @@
-import { MtblRefValue } from './core';
+import { MtblRefValue } from "./core";
 
 export const isDevEnv: MtblRefValue<boolean | null> = {
+  value: null,
+};
+
+export const isDebugLoggingEnabled: MtblRefValue<boolean | null> = {
   value: null,
 };
 

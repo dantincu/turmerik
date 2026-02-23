@@ -13,7 +13,7 @@ import { pointerIsTouchOrLeftMouseBtn } from "@/src/trmrk-browser/domUtils/touch
 import "./Trmrk3PanelsAppLayout.scss";
 import { ComponentProps } from "../defs/common";
 import TrmrkBasicAppLayout from "../TrmrkBasicAppLayout/TrmrkBasicAppLayout";
-import { overridingBottomToolbarContents, useToolbarOverridingContentKeys } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
+import { overridingBottomToolbarContents, useToolbarOverridingContentKeys, useShowOverridingToolbars } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 import TrmrkSplitContainerCore from "../TrmrkSplitContainerCore/TrmrkSplitContainerCore";
 import TrmrkLoader from "../TrmrkLoader/TrmrkLoader";
 import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
@@ -254,6 +254,7 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
   const contentsKeyPanelAtoms = usePanelContentsKeyAtoms();
   const renderPanelAtoms = useRenderPanelAtoms();
   const showPanelLoaderAtoms = useShowPanelLoaderAtoms();
+  const showOverridingToolbars = useShowOverridingToolbars();
   const toolbarOverridingContentKeys = useToolbarOverridingContentKeys();
 
   const [focusedPanel, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
@@ -304,7 +305,13 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
       currentBottomToolbarContentsTypeNameRef.current === RegisteredResizePanelsBottomToolbarContentsTypeName);
 
     if (shouldSetBottomToolbarContentsId) {
+      showOverridingToolbars.bottomToolbar.set(true);
       toolbarOverridingContentKeys.bottomToolbar.set(bottomToolbarContentsId);
+
+      if ((bottomToolbarContentsId ?? null) === null && (((currentBottomToolbarContentsId ?? null) === null) ||
+          currentBottomToolbarContentsTypeNameRef.current === RegisteredResizePanelsBottomToolbarContentsTypeName)) {
+        showOverridingToolbars.bottomToolbar.set(false);
+      }
     }
 
     if (isResizingPanels && !allowResizingPanels) {
@@ -320,7 +327,7 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
       actWithValIf(bottomToolbarContentsId, id => overridingBottomToolbarContents.value.unregister(id));
     };
   }, [
-    isResizingPanels,
+      isResizingPanels,
       renderPanelAtoms.leftPanel.value,
       renderPanelAtoms.middlePanel.value,
       renderPanelAtoms.rightPanel.value

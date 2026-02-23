@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 import '../trmrk-react/globals.scss';
 import "../code/components/app-globals.scss";
 
+import { isDebugLoggingEnabled } from "@/src/trmrk/dev";
+isDebugLoggingEnabled.value = true;
+
 import { initialLoaderKillSwitchScript, initialLoaderStyles } from "@/src/trmrk-react/initial-loader";
 import Trmrk3PanelsAppLayout from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayout";
 

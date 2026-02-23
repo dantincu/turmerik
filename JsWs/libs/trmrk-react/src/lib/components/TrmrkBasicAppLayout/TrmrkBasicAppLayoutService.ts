@@ -19,6 +19,7 @@ import { defaultTrmrkAppModalService } from "./TrmrkAppModalService";
 export interface TrmrkToolbarAtoms {
   show: PrimitiveAtom<boolean>;
   contentsKey: PrimitiveAtom<number | null>;
+  showOverriding: PrimitiveAtom<boolean>;
   overridingContentsKey: PrimitiveAtom<number | null>;
 }
 
@@ -57,11 +58,13 @@ export const createUserMessageAtoms = <TContentNode = React.ReactNode>(
 const createToolbarAtoms = (show: boolean): TrmrkToolbarAtoms => ({
   show: atom(show),
   contentsKey: atom<number | null>(null),
+  showOverriding: atom(false),
   overridingContentsKey: atom<number | null>(null),
 });
 
 export const trmrkBasicAppLayoutAtoms = {
   cssClass: atom<string | null>(null),
+  hideHeaderAndFooter: atom(false),
   showToolbars: atom(true),
   appBar: createToolbarAtoms(true),
   topToolbar: createToolbarAtoms(true),
@@ -115,6 +118,14 @@ export const useShowToolbars = (): ToolbarAtoms<boolean> => ({
   appBar: trmrkUseAtom(trmrkBasicAppLayoutAtoms.appBar.show),
   topToolbar: trmrkUseAtom(trmrkBasicAppLayoutAtoms.topToolbar.show),
   bottomToolbar: trmrkUseAtom(trmrkBasicAppLayoutAtoms.bottomToolbar.show),
+});
+
+export const useShowOverridingToolbars = (): ToolbarAtoms<boolean> => ({
+  appBar: trmrkUseAtom(trmrkBasicAppLayoutAtoms.appBar.showOverriding),
+  topToolbar: trmrkUseAtom(trmrkBasicAppLayoutAtoms.topToolbar.showOverriding),
+  bottomToolbar: trmrkUseAtom(
+    trmrkBasicAppLayoutAtoms.bottomToolbar.showOverriding,
+  ),
 });
 
 export const useToolbarContentKeys = (): ToolbarAtoms<number | null> => ({
@@ -178,6 +189,7 @@ export interface InitBasicAppLayoutAppUserMessageArgs {
 export interface UseBasicAppLayoutAtoms {
   showToolbarAtoms: ToolbarAtoms<boolean>;
   toolbarContentKeyAtoms: ToolbarAtoms<number | null>;
+  showOverridingToolbarAtoms: ToolbarAtoms<boolean>;
   overridingToolbarContentKeyAtoms: ToolbarAtoms<number | null>;
   appUserMessageAtoms: UseUserMessageAtoms;
 }
@@ -207,37 +219,37 @@ export const initBasicAppLayout = (args: InitBasicAppLayoutArgs) => {
   const retObj: InitBasicAppLayoutResult = {
     appBarContentsId: initLayoutPart(
       args.appBar,
-      null,
+      args.showToolbarAtoms.appBar,
       appBarContents,
       args.toolbarContentKeyAtoms.appBar,
     ),
     topToolbarContentsId: initLayoutPart(
       args.topToolbar,
-      null,
+      args.showToolbarAtoms.topToolbar,
       topToolbarContents,
       args.toolbarContentKeyAtoms.topToolbar,
     ),
     bottomToolbarContentsId: initLayoutPart(
       args.bottomToolbar,
-      null,
+      args.showToolbarAtoms.bottomToolbar,
       bottomToolbarContents,
       args.toolbarContentKeyAtoms.bottomToolbar,
     ),
     overridingAppBarContentsId: initLayoutPart(
       args.overridingAppBar,
-      null,
+      args.showOverridingToolbarAtoms.appBar,
       overridingAppBarContents,
       args.overridingToolbarContentKeyAtoms.appBar,
     ),
     overridingTopToolbarContentsId: initLayoutPart(
       args.overridingTopToolbar,
-      null,
+      args.showOverridingToolbarAtoms.topToolbar,
       overridingTopToolbarContents,
       args.overridingToolbarContentKeyAtoms.topToolbar,
     ),
     overridingBottomToolbarContentsId: initLayoutPart(
       args.overridingBottomToolbar,
-      null,
+      args.showOverridingToolbarAtoms.bottomToolbar,
       overridingBottomToolbarContents,
       args.overridingToolbarContentKeyAtoms.bottomToolbar,
     ),
@@ -286,6 +298,7 @@ export const cleanupBasicAppLayout = (result: InitBasicAppLayoutResult) => {
 export const useBasicAppLayoutAtoms = (): UseBasicAppLayoutAtoms => ({
   showToolbarAtoms: useShowToolbars(),
   toolbarContentKeyAtoms: useToolbarContentKeys(),
+  showOverridingToolbarAtoms: useShowOverridingToolbars(),
   overridingToolbarContentKeyAtoms: useToolbarOverridingContentKeys(),
   appUserMessageAtoms: useAppUserMessage(),
 });
