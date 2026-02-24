@@ -52,12 +52,15 @@ export interface TrmrkPopoverData<TPopoverData> {
   args: TrmrkPopoverArgs<TPopoverData>;
   data: TPopoverData;
   canCloseManually: PrimitiveAtom<boolean>;
+  placeOnTop: PrimitiveAtom<boolean>;
+  placeOnLeft: PrimitiveAtom<boolean>;
   rootElRef: MtblRefValue<HTMLDivElement | null>;
   rootElResizeObserver: ResizeObserver;
   anchorElRef: MtblRefValue<HTMLElement | null>;
   anchorElResizeObserver: ResizeObserver;
   isPlacingPopover: boolean;
   updatePopoverPositionCallback: () => void;
+  anchorElAtomUnsubscribe: () => void;
 }
 
 export class TrmrkPopoverService extends TrmrkDisposableBase {
@@ -70,6 +73,8 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
   canCloseCurrentPopoverManuallyAtom: Atom<boolean>;
   canCloseAllPopoversManuallyAtom: Atom<boolean>;
   currentPopoverIsFadingOutAtom: PrimitiveAtom<boolean>;
+  currentPopoverIsPlacedOnTop: Atom<boolean>;
+  currentPopoverIsPlacedOnLeft: Atom<boolean>;
 
   readonly store: JotaiStore;
 
@@ -84,21 +89,25 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
     this.isClosingPopovers = atom(false);
     this.store = store ?? getDefaultStore();
 
-    this.canCloseCurrentPopoverManuallyAtom = atom<boolean>((get) => {
+    this.canCloseCurrentPopoverManuallyAtom = atom((get) => {
       let canCloseCurrentModalManuallyAtom = false;
       const currentModalKey = get(this.openPopovers.currentKeyAtom);
 
       if ((currentModalKey ?? null) !== null) {
         const currentPopover =
-          this.openPopovers.keyedMap.map[currentModalKey!].nodeData!;
+          this.openPopovers.keyedMap.map[currentModalKey!]?.nodeData;
 
-        canCloseCurrentModalManuallyAtom = get(currentPopover.canCloseManually);
+        if (currentPopover) {
+          canCloseCurrentModalManuallyAtom = get(
+            currentPopover.canCloseManually,
+          );
+        }
       }
 
       return canCloseCurrentModalManuallyAtom;
     });
 
-    this.canCloseAllPopoversManuallyAtom = atom<boolean>((get) => {
+    this.canCloseAllPopoversManuallyAtom = atom((get) => {
       const keysArr = get(this.openPopovers.keysAtom);
 
       const canCloseAllModalsManually = keysArr
@@ -111,6 +120,38 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
     });
 
     this.currentPopoverIsFadingOutAtom = atom(false);
+
+    this.currentPopoverIsPlacedOnTop = atom<boolean>((get) => {
+      let currentPopoverIsPlacedOnTop = false;
+      const currentModalKey = get(this.openPopovers.currentKeyAtom);
+
+      if ((currentModalKey ?? null) !== null) {
+        const currentPopover =
+          this.openPopovers.keyedMap.map[currentModalKey!]?.nodeData;
+
+        if (currentPopover) {
+          currentPopoverIsPlacedOnTop = get(currentPopover.placeOnTop);
+        }
+      }
+
+      return currentPopoverIsPlacedOnTop;
+    });
+
+    this.currentPopoverIsPlacedOnLeft = atom<boolean>((get) => {
+      let currentPopoverIsPlacedOnLeft = false;
+      const currentModalKey = get(this.openPopovers.currentKeyAtom);
+
+      if ((currentModalKey ?? null) !== null) {
+        const currentPopover =
+          this.openPopovers.keyedMap.map[currentModalKey!]?.nodeData;
+
+        if (currentPopover) {
+          currentPopoverIsPlacedOnLeft = get(currentPopover.placeOnLeft);
+        }
+      }
+
+      return currentPopoverIsPlacedOnLeft;
+    });
   }
 
   disposeCore() {}
@@ -144,6 +185,7 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
 
       nodeData!.anchorElResizeObserver.disconnect();
       nodeData!.rootElResizeObserver.disconnect();
+      nodeData!.anchorElAtomUnsubscribe();
 
       window.removeEventListener(
         "resize",
@@ -174,7 +216,10 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
       value: this.store.get(args.anchorElAtom),
     };
 
-    this.store.sub(args.anchorElAtom, () => {
+    const placeOnTop = atom(false);
+    const placeOnLeft = atom(false);
+
+    const anchorElAtomSubscription = this.store.sub(args.anchorElAtom, () => {
       anchorElResizeObserver.disconnect();
       anchorElRefObj.value = this.store.get(args.anchorElAtom);
 
@@ -196,7 +241,7 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
 
             const anchorElRectangle = anchorEl.getBoundingClientRect();
             let rootElWidth = rootEl.offsetWidth;
-            let rootElHeight = rootEl.offsetWidth;
+            let rootElHeight = rootEl.offsetHeight;
 
             if (args.sameWidthAsAnchorEl) {
               rootElWidth = Math.min(vpWidth, anchorElRectangle.width);
@@ -223,6 +268,9 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
 
             rootEl.style.left = `${left}px`;
             rootEl.style.top = `${top}px`;
+
+            this.store.set(placeOnLeft, shouldPlaceOnLeft);
+            this.store.set(placeOnTop, shouldPlaceOnTop);
 
             setTimeout(() => {
               nodeData.isPlacingPopover = false;
@@ -263,12 +311,15 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
       args,
       data,
       canCloseManually,
+      placeOnTop,
+      placeOnLeft,
       rootElRef: rootElRefObj,
       rootElResizeObserver,
       anchorElRef: anchorElRefObj,
       anchorElResizeObserver,
       isPlacingPopover: false,
       updatePopoverPositionCallback,
+      anchorElAtomUnsubscribe: anchorElAtomSubscription,
     };
 
     this.store.set(this.isClosingPopovers, () => false);
