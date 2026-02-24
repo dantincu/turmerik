@@ -123,9 +123,15 @@
     overflow: hidden;
   }
   
-  .trmrk-modal-content {
+  .trmrk-modal-body {
     display: flex;
     overflow: auto;
+
+    > .trmrk-modal-body-content {
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
+    }
   }
 }
 

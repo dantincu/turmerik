@@ -127,9 +127,9 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
       </div> }
     { (showTopToolbar ?? false) && !showTopBarOnly && <div className="trmrk-horiz-strip trmrk-modal-top-toolbar">{topToolbarContents}</div> }
     </div> }
-    <div className="trmrk-modal-content">{ children }</div>
+    <div className="trmrk-modal-body"><div className="trmrk-modal-body-content">{ children }</div></div>
     { (showFooter ?? false) && !showTopBarOnly && <div className="trmrk-modal-footer">
-      <div className="trmrk-horiz-strip trmrk-modal-top-toolbar">{footerContents}</div>
+      <div className="trmrk-horiz-strip trmrk-modal-bottom-bar">{footerContents}</div>
     </div> }
   </div>;
 }));
