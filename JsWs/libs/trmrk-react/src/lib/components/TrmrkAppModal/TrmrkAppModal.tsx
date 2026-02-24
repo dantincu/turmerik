@@ -1,5 +1,5 @@
 import React from "react";
-import { atom, useAtom, PrimitiveAtom } from "jotai";
+import { useAtom } from "jotai";
 
 import { NullOrUndef } from "@/src/trmrk/core";
 

@@ -10,6 +10,7 @@ import {
 
 import { TrmrkDisposableBase } from "@/src/trmrk/TrmrkDisposableBase";
 import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
+import { defaultAnimationDurationMillis } from "@/src/trmrk-browser/core";
 
 import {
   ParsedUrl,
@@ -30,8 +31,6 @@ import {
   UserMessageAtomsArgs,
   createUserMessageAtoms,
 } from "./TrmrkBasicAppLayoutService";
-
-export const MODAL_FADE_MILLIS = 300;
 
 export interface TrmrkAppModalPropsCore {
   modalTitle: PrimitiveAtom<string>;
@@ -381,7 +380,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
       setTimeout(() => {
         this.store.set(this.currentModalIsFadingOutAtom, () => false);
         this.openModals.register(args.modal, null, modalId, nodeData);
-      }, MODAL_FADE_MILLIS);
+      }, defaultAnimationDurationMillis);
     } else {
       this.openModals.register(args.modal, null, modalId, nodeData);
     }
@@ -405,7 +404,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
       this.store.set(this.currentModalIsFadingOutAtom, () => false);
       this.openModals.unregister(modalId, true);
       callback?.();
-    }, MODAL_FADE_MILLIS);
+    }, defaultAnimationDurationMillis);
   }
 
   closeCurrentModal(
@@ -433,7 +432,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
       setTimeout(() => {
         const replaced = this.openModals.replaceAll({});
         callback?.(replaced);
-      }, MODAL_FADE_MILLIS);
+      }, defaultAnimationDurationMillis);
     }
   }
 
@@ -459,7 +458,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
           const replaced = this.minimizedModals.replaceAll(openModalsMap);
           this.store.set(this.minimizedModals.currentKeyAtom, modalId);
           callback?.(replaced);
-        }, MODAL_FADE_MILLIS);
+        }, defaultAnimationDurationMillis);
       }
     }
   }

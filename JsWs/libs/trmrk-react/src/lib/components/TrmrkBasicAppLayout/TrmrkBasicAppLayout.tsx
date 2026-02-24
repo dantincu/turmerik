@@ -15,6 +15,8 @@ import {
   useCurrentModalUserMessage
 } from "./TrmrkAppModalService";
 
+import { defaultTrmrkPopoverService } from "./TrmrkPopoverService";
+
 import {
   appBarContents,
   bottomToolbarContents,
@@ -57,6 +59,8 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
   const [currentModalStackKey] = useAtom(defaultTrmrkAppModalService.value.stacks.currentKeyAtom);
   const [currentModalKey] = useAtom(defaultTrmrkAppModalService.value.currentModalKey);
   const [isClosingModals] = useAtom(defaultTrmrkAppModalService.value.isClosingModals);
+  const [currentPopoverKey] = useAtom(defaultTrmrkPopoverService.value.openPopovers.currentKeyAtom);
+  const [isClosingPopovers] = useAtom(defaultTrmrkPopoverService.value.isClosingPopovers);
 
   const showToolbarAtoms = useShowToolbars();
   const showOverridingToolbarAtoms = useShowOverridingToolbars();
@@ -160,6 +164,12 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
       modal => modal.node(modal.nodeData!.props))
   }, [currentModalKey, currentModalsStack]);
 
+  const openPopoverNode = React.useMemo(() => {
+    return ((currentPopoverKey ?? null) !== null && withValIf(
+      defaultTrmrkPopoverService.value.openPopovers.keyedMap.map[currentPopoverKey!],
+      popover => popover.node(popover.nodeData!.props)));
+  }, [currentPopoverKey]);
+
   React.useEffect(() => {
     if (isDebugLoggingEnabled.value) {
       console.log("APP LAYOUT MOUNTED", layoutRenderIdRef.current++);
@@ -218,6 +228,13 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
               autoCloseMillis={currentModalUserMessage.autoCloseMillis.value}
               className={[currentModalUserMessage.cssClass.value ?? "", "trmrk-current-modal-user-message-popover-container"].join(' ')}>
                 { currentModalUserMessage.content.value?.() }</TrmrkMessagePopover> }
+          </div> }
+
+          { ((currentPopoverKey ?? null) !== null) && <div className={[
+            "trmrk-popover-backdrop",
+            isClosingPopovers ? "trmrk-opac-fade-out" : "trmrk-opac-fade-in"
+          ].join(" ")}>
+            { openPopoverNode }
           </div> }
           
           { trailingOverlappingContentKeys.map(key => <React.Fragment key={key}>

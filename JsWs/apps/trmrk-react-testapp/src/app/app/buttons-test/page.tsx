@@ -24,7 +24,9 @@ import TrmrkMultiClickable from "@/src/trmrk-react/components/TrmrkMultiClickabl
 import TrmrkLongPressable from "@/src/trmrk-react/components/TrmrkLongPressable/TrmrkLongPressable";
 import { UserMessageLevel } from '@/src/trmrk/core';
 import TrmrkAppModal from "@/src/trmrk-react/components/TrmrkAppModal/TrmrkAppModal";
+import TrmrkPopover from "@/src/trmrk-react/components/TrmrkAppModal/TrmrkPopover";
 import { defaultTrmrkAppModalService, TrmrkAppModalPropsCoreWithData } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkAppModalService";
+import { defaultTrmrkPopoverService, TrmrkPopoverPropsCoreWithData } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkPopoverService";
 
 const AppBar = () => {
   return <TrmrkAppBarContents leadingChildren={() => <TrmrkMultiClickable hoc={{
@@ -112,17 +114,43 @@ const MiddlePanelContents = () => {
   const [messages, dispatch] = React.useReducer(messagesReducer, messagesArr);
   const appUserMessageAtoms = useAppUserMessage();
 
-  const showAppUserMessageBtnClicked = () => {
+  const showAppUserMessageBtnClicked = React.useCallback(() => {
     appUserMessageAtoms.show.set((appUserMessageAtoms.show.value ?? 0) + 1);
     appUserMessageAtoms.level.set(Math.floor(Math.random() * 4));
     appUserMessageAtoms.content.set(<><span className="font-bold">App User Message {appUserMessageAtoms.show.value}<br />asdfasdfasf</span></>);
     appUserMessageAtoms.autoCloseMillis.set(0);
-  }
-
-  const myModalIdRef = React.useRef(0);
+  }, [appUserMessageAtoms.show.value]);
 
   const myModalBackColors = Array.from({length: 10}).map(
     () => `rgba(${Array.from({ length: 3 }).map(() => Math.floor(Math.random() * 256).toString()).join(",")},0.25)`);
+
+  const myModalIdRef = React.useRef(0);
+  const myPopoverIdRef = React.useRef(0);
+
+  const MyPopover = (props: TrmrkPopoverPropsCoreWithData) => {
+    const id = myPopoverIdRef.current++;
+    const backgroundColor = myModalBackColors[id % 10];
+    return <TrmrkPopover {...props} showBar={true}><div style={{backgroundColor}}>
+        <TrmrkBtn borderWidth={2} className="my-[1px] trmrk-btn-filled-primary" onClick={showPopoverBtnClicked}>
+          <span className="trmrk-text">My Button {id}</span></TrmrkBtn>
+        asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
+        asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
+        asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
+        asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
+        asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
+        asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
+        asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdfasdasdfasdf
+        asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf</div></TrmrkPopover>
+  }
+
+  const showPopoverBtnClicked = React.useCallback(() => {
+    defaultTrmrkPopoverService.value.openPopover({
+      props: {
+        popoverTitle: atom("asdfasdf")
+      },
+      popover: MyPopover
+    });
+  }, []);
 
   const MyModal = (props: TrmrkAppModalPropsCoreWithData) => {
     const id = myModalIdRef.current++;
@@ -216,7 +244,7 @@ const MiddlePanelContents = () => {
       <span className="trmrk-icon-wrapper"><TrmrkIcon icon="mdi:home" /></span>
       <span className="trmrk-text">My Button</span>
     </TrmrkBtn>
-    <TrmrkBtn borderWidth={1} className="my-[1px]">
+    <TrmrkBtn borderWidth={1} className="my-[1px]" onClick={showPopoverBtnClicked}>
       <span className="trmrk-text">My Button</span>
       <span className="trmrk-icon-wrapper"><TrmrkIcon icon="mdi:home" /></span>
     </TrmrkBtn>

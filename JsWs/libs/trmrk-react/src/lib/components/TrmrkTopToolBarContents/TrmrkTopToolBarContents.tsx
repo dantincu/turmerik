@@ -407,8 +407,8 @@ export default function TrmrkTopToolBarContents({
     }
   }, []);
 
-  const toolbarContainerElResizeObserver = new ResizeObserver(updateToolbarContentsScrolBtnsVisibility);
-  const toolbarContentsElResizeObserver = new ResizeObserver(updateToolbarContentsScrolBtnsVisibility);
+  const toolbarContainerElResizeObserver = React.useMemo(() => new ResizeObserver(updateToolbarContentsScrolBtnsVisibility), []);
+  const toolbarContentsElResizeObserver = React.useMemo(() => new ResizeObserver(updateToolbarContentsScrolBtnsVisibility), []);
 
   const toolbarContainerElAvailable = React.useCallback((el: HTMLDivElement | null) => {
     toolbarContainerElRef.current = el;
