@@ -43,6 +43,8 @@ export interface TrmrkPopoverArgs<TPopoverData> {
   props: TrmrkPopoverPropsCore;
   data?: TPopoverData | NullOrUndef;
   popover: TrmrkPopoverNodeFactory<TPopoverData>;
+  anchorElAtom: PrimitiveAtom<HTMLElement | null>;
+  sameWidthAsAnchorEl?: boolean | NullOrUndef;
 }
 
 export interface TrmrkPopoverData<TPopoverData> {
@@ -51,6 +53,10 @@ export interface TrmrkPopoverData<TPopoverData> {
   data: TPopoverData;
   canCloseManually: PrimitiveAtom<boolean>;
   rootElRef: MtblRefValue<HTMLDivElement | null>;
+  rootElResizeObserver: ResizeObserver;
+  anchorElRef: MtblRefValue<HTMLElement | null>;
+  anchorElResizeObserver: ResizeObserver;
+  isResizingPopover: boolean;
 }
 
 export class TrmrkPopoverService extends TrmrkDisposableBase {
@@ -64,7 +70,7 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
   canCloseAllPopoversManuallyAtom: Atom<boolean>;
   currentPopoverIsFadingOutAtom: PrimitiveAtom<boolean>;
 
-  private readonly store: JotaiStore;
+  readonly store: JotaiStore;
 
   constructor(store?: JotaiStore | NullOrUndef) {
     super();
@@ -140,13 +146,50 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
       value: null,
     };
 
+    const anchorElRefObj: MtblRefValue<HTMLElement | null> = {
+      value: this.store.get(args.anchorElAtom),
+    };
+
+    this.store.sub(args.anchorElAtom, () => {
+      anchorElResizeObserver.disconnect();
+      anchorElRefObj.value = this.store.get(args.anchorElAtom);
+
+      actWithValIf(anchorElRefObj.value, (anchorEl) => {
+        anchorElResizeObserver.observe(anchorEl);
+        updatePopoverPosition();
+      });
+    });
+
     const updatePopoverPosition = () => {
       actWithValIf(rootElRefObj.value, (rootEl) => {
-        
+        actWithValIf(anchorElRefObj.value, (anchorEl) => {
+          if (!nodeData.isResizingPopover) {
+            const anchorElRectangle = anchorEl.getBoundingClientRect();
+            let rootElWidth = rootEl.clientWidth;
+            let rootElHeight = rootEl.clientHeight;
+
+            if (args.sameWidthAsAnchorEl) {
+              rootElWidth = anchorElRectangle.width;
+              nodeData.isResizingPopover = true;
+              rootEl.style.width = `${rootElWidth}px`;
+
+              setTimeout(() => {
+                nodeData.isResizingPopover = false;
+              });
+            }
+
+            let left = anchorElRectangle.x;
+            let top = anchorElRectangle.y;
+
+            rootEl.style.left = `${left}px`;
+            rootEl.style.top = `${top}px`;
+          }
+        });
       });
     };
 
     const rootElResizeObserver = new ResizeObserver(updatePopoverPosition);
+    const anchorElResizeObserver = new ResizeObserver(updatePopoverPosition);
 
     const rootElAvailable: React.Ref<HTMLDivElement> = (el) => {
       rootElResizeObserver.disconnect();
@@ -171,6 +214,10 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
       data,
       canCloseManually,
       rootElRef: rootElRefObj,
+      rootElResizeObserver,
+      anchorElRef: anchorElRefObj,
+      anchorElResizeObserver,
+      isResizingPopover: false,
     };
 
     this.store.set(this.isClosingPopovers, () => false);

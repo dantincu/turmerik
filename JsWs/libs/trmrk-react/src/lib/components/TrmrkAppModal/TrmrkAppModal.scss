@@ -135,6 +135,10 @@
   }
 }
 
+.trmrk-popover-container {
+  position: absolute;
+}
+
 .light {
   .trmrk-app-modal-container {
     border-color: var(--trmrk-tool-bar_back-color-emph_light);

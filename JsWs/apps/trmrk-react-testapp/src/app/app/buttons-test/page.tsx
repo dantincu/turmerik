@@ -22,7 +22,7 @@ import TrmrkAppBarContents from "@/src/trmrk-react/components/TrmrkAppBarContent
 import TrmrkTopToolBarContents from "@/src/trmrk-react/components/TrmrkTopToolBarContents/TrmrkTopToolBarContents";
 import TrmrkMultiClickable from "@/src/trmrk-react/components/TrmrkMultiClickable/TrmrkMultiClickable";
 import TrmrkLongPressable from "@/src/trmrk-react/components/TrmrkLongPressable/TrmrkLongPressable";
-import { UserMessageLevel } from '@/src/trmrk/core';
+import { UserMessageLevel, actWithValIf } from '@/src/trmrk/core';
 import TrmrkAppModal from "@/src/trmrk-react/components/TrmrkAppModal/TrmrkAppModal";
 import TrmrkPopover from "@/src/trmrk-react/components/TrmrkAppModal/TrmrkPopover";
 import { defaultTrmrkAppModalService, TrmrkAppModalPropsCoreWithData } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkAppModalService";
@@ -143,14 +143,18 @@ const MiddlePanelContents = () => {
         asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf</div></TrmrkPopover>
   }
 
+  const myPopoverBtnAtom = atom<HTMLElement | null>(null);
+
   const showPopoverBtnClicked = React.useCallback(() => {
     defaultTrmrkPopoverService.value.openPopover({
       props: {
         popoverTitle: atom("asdfasdf")
       },
-      popover: MyPopover
+      popover: MyPopover,
+      anchorElAtom: myPopoverBtnAtom,
+      sameWidthAsAnchorEl: true
     });
-  }, []);
+  }, [myPopoverBtnAtom]);
 
   const MyModal = (props: TrmrkAppModalPropsCoreWithData) => {
     const id = myModalIdRef.current++;
@@ -244,7 +248,9 @@ const MiddlePanelContents = () => {
       <span className="trmrk-icon-wrapper"><TrmrkIcon icon="mdi:home" /></span>
       <span className="trmrk-text">My Button</span>
     </TrmrkBtn>
-    <TrmrkBtn borderWidth={1} className="my-[1px]" onClick={showPopoverBtnClicked}>
+    <TrmrkBtn borderWidth={1} className="my-[1px]" onClick={showPopoverBtnClicked} ref={(el) => {
+      defaultTrmrkPopoverService.value.store.set(myPopoverBtnAtom, el);
+    }}>
       <span className="trmrk-text">My Button</span>
       <span className="trmrk-icon-wrapper"><TrmrkIcon icon="mdi:home" /></span>
     </TrmrkBtn>

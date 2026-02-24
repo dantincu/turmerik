@@ -91,7 +91,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
   currentModalUserMessageAtoms: UserMessageAtoms<() => React.ReactNode>;
   refUrl: ParsedUrl;
 
-  private readonly store: JotaiStore;
+  readonly store: JotaiStore;
 
   constructor(
     public args: AppModalsStackArgs,
@@ -491,7 +491,7 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
   hasRestorableMinimizedStacks: PrimitiveAtom<boolean>;
   currentModalUserMessageAtoms: UserMessageAtoms<() => React.ReactNode>;
 
-  private readonly store: JotaiStore;
+  readonly store: JotaiStore;
 
   constructor(store?: JotaiStore | NullOrUndef) {
     super();
