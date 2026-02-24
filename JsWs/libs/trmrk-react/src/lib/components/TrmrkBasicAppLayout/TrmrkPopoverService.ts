@@ -56,7 +56,8 @@ export interface TrmrkPopoverData<TPopoverData> {
   rootElResizeObserver: ResizeObserver;
   anchorElRef: MtblRefValue<HTMLElement | null>;
   anchorElResizeObserver: ResizeObserver;
-  isResizingPopover: boolean;
+  isPlacingPopover: boolean;
+  updatePopoverPositionCallback: () => void;
 }
 
 export class TrmrkPopoverService extends TrmrkDisposableBase {
@@ -133,7 +134,30 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
     return canCloseAllPopoversManually;
   }
 
+  unregisterPopoverEvents<TPopoverData>(
+    nodeData: TrmrkPopoverData<TPopoverData> | number | NullOrUndef,
+  ) {
+    if ((nodeData ?? null) !== null) {
+      if ("number" === typeof nodeData) {
+        nodeData = this.openPopovers.keyedMap.map[nodeData]?.nodeData;
+      }
+
+      nodeData!.anchorElResizeObserver.disconnect();
+      nodeData!.rootElResizeObserver.disconnect();
+
+      window.removeEventListener(
+        "resize",
+        nodeData!.updatePopoverPositionCallback,
+      );
+    }
+  }
+
+  unregisterCurrentPopoverEvents() {
+    this.unregisterPopoverEvents(this.openPopovers.getCurrentKey());
+  }
+
   openPopover<TPopoverData>(args: TrmrkPopoverArgs<TPopoverData>) {
+    this.unregisterCurrentPopoverEvents();
     const popoverId = defaultComponentIdService.value.getNextId();
     const data = args.data ?? ({} as TPopoverData);
     let canCloseManually = args.props.canCloseManually ?? true;
@@ -156,40 +180,66 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
 
       actWithValIf(anchorElRefObj.value, (anchorEl) => {
         anchorElResizeObserver.observe(anchorEl);
-        updatePopoverPosition();
+        updatePopoverPositionCallback();
       });
     });
 
-    const updatePopoverPosition = () => {
+    const updatePopoverPositionCallback = () => {
       actWithValIf(rootElRefObj.value, (rootEl) => {
         actWithValIf(anchorElRefObj.value, (anchorEl) => {
-          if (!nodeData.isResizingPopover) {
+          if (!nodeData.isPlacingPopover) {
+            nodeData.isPlacingPopover = true;
+            const vpWidth = window.innerWidth;
+            const vpHeight = window.innerHeight;
+            const vpHalfWidth = Math.round(vpWidth / 2);
+            const vpHalfHeight = Math.round(vpHeight / 2);
+
             const anchorElRectangle = anchorEl.getBoundingClientRect();
-            let rootElWidth = rootEl.clientWidth;
-            let rootElHeight = rootEl.clientHeight;
+            let rootElWidth = rootEl.offsetWidth;
+            let rootElHeight = rootEl.offsetWidth;
 
             if (args.sameWidthAsAnchorEl) {
-              rootElWidth = anchorElRectangle.width;
-              nodeData.isResizingPopover = true;
+              rootElWidth = Math.min(vpWidth, anchorElRectangle.width);
               rootEl.style.width = `${rootElWidth}px`;
-
-              setTimeout(() => {
-                nodeData.isResizingPopover = false;
-              });
             }
 
             let left = anchorElRectangle.x;
             let top = anchorElRectangle.y;
+            let shouldPlaceOnLeft = left > vpHalfWidth;
+            let shouldPlaceOnTop = top > vpHalfHeight;
+
+            if (shouldPlaceOnLeft) {
+              left -= vpWidth;
+            }
+
+            if (shouldPlaceOnTop) {
+              top -= vpHeight;
+            }
+
+            left = Math.min(left, vpWidth - rootElWidth);
+            top = Math.min(top, vpHeight - rootElHeight);
+            left = Math.max(left, 0);
+            top = Math.max(top, 0);
 
             rootEl.style.left = `${left}px`;
             rootEl.style.top = `${top}px`;
+
+            setTimeout(() => {
+              nodeData.isPlacingPopover = false;
+            });
           }
         });
       });
     };
 
-    const rootElResizeObserver = new ResizeObserver(updatePopoverPosition);
-    const anchorElResizeObserver = new ResizeObserver(updatePopoverPosition);
+    const rootElResizeObserver = new ResizeObserver(
+      updatePopoverPositionCallback,
+    );
+    const anchorElResizeObserver = new ResizeObserver(
+      updatePopoverPositionCallback,
+    );
+
+    window.addEventListener("resize", updatePopoverPositionCallback);
 
     const rootElAvailable: React.Ref<HTMLDivElement> = (el) => {
       rootElResizeObserver.disconnect();
@@ -197,7 +247,7 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
 
       actWithValIf(el, (rootEl) => {
         rootElResizeObserver.observe(rootEl);
-        updatePopoverPosition();
+        updatePopoverPositionCallback();
       });
 
       actWithValIf(args.props.rootElRef, (ref) => updateRef(ref, el));
@@ -217,7 +267,8 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
       rootElResizeObserver,
       anchorElRef: anchorElRefObj,
       anchorElResizeObserver,
-      isResizingPopover: false,
+      isPlacingPopover: false,
+      updatePopoverPositionCallback,
     };
 
     this.store.set(this.isClosingPopovers, () => false);
@@ -251,7 +302,13 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
 
     setTimeout(() => {
       this.store.set(this.currentPopoverIsFadingOutAtom, () => false);
-      this.openPopovers.unregister(popoverId, true);
+
+      const popoverData = this.openPopovers.unregister(
+        popoverId,
+        true,
+      )?.nodeData;
+
+      this.unregisterPopoverEvents(popoverData);
       callback?.();
     }, defaultAnimationDurationMillis);
   }
@@ -279,6 +336,7 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
       this.store.set(this.isClosingPopovers, () => true);
 
       setTimeout(() => {
+        this.unregisterCurrentPopoverEvents();
         const replaced = this.openPopovers.replaceAll({});
         callback?.(replaced);
       }, defaultAnimationDurationMillis);

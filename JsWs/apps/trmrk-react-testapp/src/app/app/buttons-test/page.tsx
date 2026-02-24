@@ -152,7 +152,7 @@ const MiddlePanelContents = () => {
       },
       popover: MyPopover,
       anchorElAtom: myPopoverBtnAtom,
-      sameWidthAsAnchorEl: true
+      sameWidthAsAnchorEl: false
     });
   }, [myPopoverBtnAtom]);
 
