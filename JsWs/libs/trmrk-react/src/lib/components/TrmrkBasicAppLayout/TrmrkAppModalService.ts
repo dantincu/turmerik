@@ -32,6 +32,8 @@ import {
   createUserMessageAtoms,
 } from "./TrmrkBasicAppLayoutService";
 
+import { defaultTrmrkPopoverService } from "./TrmrkPopoverService";
+
 export interface TrmrkAppModalPropsCore {
   modalTitle: PrimitiveAtom<string>;
   canCloseManually?: boolean | PrimitiveAtom<boolean> | NullOrUndef;
@@ -354,6 +356,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
   }
 
   openModal<TModalData>(args: TrmrkAppModalArgs<TModalData>) {
+    defaultTrmrkPopoverService.value.closeAllPopoversManually();
     const modalId = defaultComponentIdService.value.getNextId();
     const data = args.data ?? ({} as TModalData);
     let canCloseManually = args.props.canCloseManually ?? true;
@@ -393,6 +396,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
     isLastModal?: boolean | NullOrUndef,
     callback?: (() => void) | NullOrUndef,
   ) {
+    defaultTrmrkPopoverService.value.closeAllPopoversManually();
     isLastModal ??= this.openModals.getKeys().length === 1;
     this.store.set(this.currentModalIsFadingOutAtom, () => true);
 
@@ -427,6 +431,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
       | NullOrUndef,
   ) {
     if (this.canCloseAllModalsManually()) {
+      defaultTrmrkPopoverService.value.closeAllPopoversManually();
       this.store.set(this.isClosingModals, () => true);
 
       setTimeout(() => {
@@ -447,6 +452,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
       | NullOrUndef,
   ) {
     if (this.canCloseAllModalsManually()) {
+      defaultTrmrkPopoverService.value.closeAllPopoversManually();
       const modalsIdsArr = this.minimizedModals.getKeys();
 
       if (modalsIdsArr.length === 0) {
@@ -467,6 +473,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
     const modalsIdsArr = this.minimizedModals.getKeys();
 
     if (modalsIdsArr.length > 0) {
+      defaultTrmrkPopoverService.value.closeAllPopoversManually();
       const modalId = this.minimizedModals.getCurrentKey();
       const minimizedModals = this.minimizedModals.replaceAll([]);
 
