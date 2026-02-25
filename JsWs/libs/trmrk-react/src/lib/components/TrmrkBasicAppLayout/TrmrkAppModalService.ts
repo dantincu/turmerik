@@ -929,6 +929,11 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
       stack.canActivate(currentUrl),
     );
 
+    this.store.set(
+      this.hasRestorableMinimizedStacks,
+      this.restorableMinimizedStacks.length > 0,
+    );
+
     return this.restorableMinimizedStacks;
   }
 

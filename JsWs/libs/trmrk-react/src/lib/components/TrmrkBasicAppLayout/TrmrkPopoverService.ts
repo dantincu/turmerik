@@ -254,11 +254,11 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
             let shouldPlaceOnTop = top > vpHalfHeight;
 
             if (shouldPlaceOnLeft) {
-              left -= vpWidth;
+              left -= rootElWidth - anchorElRectangle.width;
             }
 
             if (shouldPlaceOnTop) {
-              top -= vpHeight;
+              top -= rootElHeight - anchorElRectangle.height;
             }
 
             left = Math.min(left, vpWidth - rootElWidth);

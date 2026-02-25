@@ -1,5 +1,5 @@
 import React from "react";
-import { useAtom } from "jotai";
+import { useAtom, atom } from "jotai";
 
 import { NullOrUndef, UserMessageLevel } from "@/src/trmrk/core";
 
@@ -11,7 +11,10 @@ import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
 import { trmrk3PanelsAppLayoutAtoms, TrmrkAppLayoutPanel } from "../Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 import { trmrkTopToolBarContentsAtoms } from "./TrmrkTopToolBarContentsService";
 import { defaultTrmrkAppModalService } from "../TrmrkBasicAppLayout/TrmrkAppModalService";
+import { defaultTrmrkPopoverService, TrmrkPopoverPropsCoreWithData} from "../TrmrkBasicAppLayout/TrmrkPopoverService";
+import TrmrkPopover from "../TrmrkAppModal/TrmrkPopover";
 import { useAppUserMessage } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
+import TrmrkMinimizedModalStacksView from "../TrmrkMinimizedModalStacksView/TrmrkMinimizedModalStacksView";
 
 export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showBackBtn?: boolean | NullOrUndef;
@@ -303,6 +306,10 @@ const ResizePanelsBtn = React.memo(() => {
       <TrmrkIcon icon="material-symbols:resize" /></TrmrkBtn>
 });
 
+const TrmrkMinimizedModalStacksViewPopover = (props: TrmrkPopoverPropsCoreWithData) => {
+  return <TrmrkPopover {...props} showBar={true}><TrmrkMinimizedModalStacksView /></TrmrkPopover>;
+};
+
 export default function TrmrkTopToolBarContents({
   children,
   className,
@@ -343,6 +350,9 @@ export default function TrmrkTopToolBarContents({
   const [ toolbarContentsOffset, setToolbarContentsOffset ] = useAtom(trmrkTopToolBarContentsAtoms.toolbarContentsOffset);
   const [ , setShowToolbarContentsScrollBtns ] = useAtom(trmrkTopToolBarContentsAtoms.showToolbarContentsScrollBtns);
   const appUserMessage = useAppUserMessage();
+
+  const [hasRestorableMinimizedStacks] = useAtom(defaultTrmrkAppModalService.value.hasRestorableMinimizedStacks);
+  const [minimizedModalStacksViewPopoverBtnAtom] = React.useState(() => atom<HTMLElement | null>(null));
 
   const toolbarContentsOffsetValue = React.useMemo(
     () => -1 * Math.max(0, Math.min(toolbarContentsMaxOffset, toolbarContentsOffset)), [
@@ -428,10 +438,28 @@ export default function TrmrkTopToolBarContents({
     }
   }, []);
 
+  const showMinimizedModalStacksViewPopover = React.useCallback(() => {
+    defaultTrmrkPopoverService.value.openPopover({
+      props: {
+        popoverTitle: atom("Restore minimized modals")
+      },
+      popover: TrmrkMinimizedModalStacksViewPopover,
+      anchorElAtom: minimizedModalStacksViewPopoverBtnAtom,
+    });
+  }, [minimizedModalStacksViewPopoverBtnAtom]);
+
+  const restoreMinimizedModalsContextMenu = React.useCallback(() => {
+    showMinimizedModalStacksViewPopover();
+  }, []);
+
   const restoreMinimizedModalsClicked = React.useCallback(() => {
-    defaultTrmrkAppModalService.value.restoreMinimizedModals(
-      defaultTrmrkAppModalService.value.minimizedStacks[0]
-    );
+    if (defaultTrmrkAppModalService.value.minimizedStacks.length === 1) {
+      defaultTrmrkAppModalService.value.restoreMinimizedModals(
+        defaultTrmrkAppModalService.value.minimizedStacks[0]
+      );
+    } else {
+      showMinimizedModalStacksViewPopover();
+    }
   }, []);
 
   const showAppMessageBtnCssClass = React.useMemo(() => {
@@ -498,7 +526,9 @@ export default function TrmrkTopToolBarContents({
           { showToggleMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
             <TrmrkIcon icon={`material-symbols:view-column${isMultiPanelMode ? "-outline" : ""}-sharp`} /></TrmrkBtn> }
           { showResizePanelsBtn && <ResizePanelsBtn></ResizePanelsBtn> }
-          { (defaultTrmrkAppModalService.value.restorableMinimizedStacks.length > 0) && <TrmrkBtn className="trmrk-btn-filled-primary" onClick={restoreMinimizedModalsClicked}>
+          { hasRestorableMinimizedStacks && <TrmrkBtn ref={el => defaultTrmrkPopoverService.value.store.set(
+              minimizedModalStacksViewPopoverBtnAtom, el
+            )} className="trmrk-btn-filled-primary" onClick={restoreMinimizedModalsClicked} onContextMenu={restoreMinimizedModalsContextMenu}>
             <TrmrkIcon icon="material-symbols:select-window" /></TrmrkBtn> }
           { ((appUserMessage.level.value ?? null) !== null) && <TrmrkBtn borderWidth={1} className={showAppMessageBtnCssClass} onClick={showAppMessageBtnClicked}><TrmrkIcon icon="mdi:bell-notification" /></TrmrkBtn> }
           <TrmrkBtn><TrmrkIcon icon="material-symbols:tab-group" /></TrmrkBtn>
