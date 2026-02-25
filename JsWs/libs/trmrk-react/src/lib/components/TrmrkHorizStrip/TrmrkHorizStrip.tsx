@@ -1,5 +1,3 @@
-import { NullOrUndef } from "@/src/trmrk/core";
-
 import "./TrmrkHorizStrip.scss";
 
 import { ComponentProps } from "../defs/common";
