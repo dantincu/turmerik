@@ -495,7 +495,7 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
   currentModalKey: Atom<number | null>;
   currentModalIsMaximizedAtom: PrimitiveAtom<boolean>;
   currentModalIsFadingOut: PrimitiveAtom<boolean>;
-  hasRestorableMinimizedStacks: PrimitiveAtom<boolean>;
+  restorableMinimizedStacksCount: PrimitiveAtom<number>;
   currentModalUserMessageAtoms: UserMessageAtoms<() => React.ReactNode>;
 
   readonly store: JotaiStore;
@@ -794,7 +794,7 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
       ),
     };
 
-    this.hasRestorableMinimizedStacks = atom(false);
+    this.restorableMinimizedStacksCount = atom(0);
     this.store = store ?? getDefaultStore();
   }
 
@@ -901,7 +901,11 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
         this.minimizedStacks.push(currentStack);
         this.restorableMinimizedStacks.push(currentStack);
         this.stacks.unregister(currentStack.stackId);
-        this.store.set(this.hasRestorableMinimizedStacks, true);
+
+        this.store.set(
+          this.restorableMinimizedStacksCount,
+          this.restorableMinimizedStacks.length,
+        );
       });
     }
   }
@@ -913,8 +917,8 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
     this.stacks.register(stack, null, stack.stackId);
 
     this.store.set(
-      this.hasRestorableMinimizedStacks,
-      this.restorableMinimizedStacks.length > 0,
+      this.restorableMinimizedStacksCount,
+      this.restorableMinimizedStacks.length,
     );
   }
 
@@ -930,8 +934,8 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
     );
 
     this.store.set(
-      this.hasRestorableMinimizedStacks,
-      this.restorableMinimizedStacks.length > 0,
+      this.restorableMinimizedStacksCount,
+      this.restorableMinimizedStacks.length,
     );
 
     return this.restorableMinimizedStacks;

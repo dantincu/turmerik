@@ -8,6 +8,7 @@ import './page.scss';
 import {
   trmrk3PanelsAppLayoutAtoms,
   useShowPanelAtoms,
+  useShowPanelLoaderAtoms,
   init3PanelsAppLayout,
   cleanup3PanelsAppLayout,
   use3PanelsAppLayoutAtoms
@@ -283,6 +284,7 @@ const MiddlePanelContents = () => {
 export default function ButtonsTestPage() {
   const trmrk3PanelsLayoutAtoms = use3PanelsAppLayoutAtoms();
   const showPanelAtoms = useShowPanelAtoms();
+  const showPanelLoaderAtoms = useShowPanelLoaderAtoms();
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
   const [, setIsMultiPanelMode] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode);
 
@@ -299,7 +301,8 @@ export default function ButtonsTestPage() {
         allowShow: true
       },
       middlePanel: {
-        contents: <MiddlePanelContents />
+        contents: <MiddlePanelContents />,
+        showLoader: true
       },
       rightPanel: {
         allowShow: true

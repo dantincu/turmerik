@@ -139,6 +139,7 @@ export const usePanelContentsKeyAtoms = (): PanelAtoms<number | null> => ({
 export interface Use3PanelsAppLayoutAtoms extends UseBasicAppLayoutAtoms {
   allowShowPanelAtoms: PanelAtoms<boolean>;
   panelContentKeyAtoms: PanelAtoms<number | null>;
+  showPanelLoaderAtoms: PanelAtoms<boolean>;
 }
 
 export interface Init3PanelsAppLayoutArgs
@@ -172,18 +173,21 @@ export const init3PanelsAppLayout = (args: Init3PanelsAppLayoutArgs) => {
       args.allowShowPanelAtoms.leftPanel,
       leftPanelContents,
       args.panelContentKeyAtoms.leftPanel,
+      args.showPanelLoaderAtoms.leftPanel,
     ),
     middlePanelContentsId: initLayoutPart(
       args.middlePanel,
       args.allowShowPanelAtoms.middlePanel,
       middlePanelContents,
       args.panelContentKeyAtoms.middlePanel,
+      args.showPanelLoaderAtoms.middlePanel,
     ),
     rightPanelContentsId: initLayoutPart(
       args.rightPanel,
       args.allowShowPanelAtoms.rightPanel,
       rightPanelContents,
       args.panelContentKeyAtoms.rightPanel,
+      args.showPanelLoaderAtoms.rightPanel,
     ),
   };
 
@@ -229,4 +233,5 @@ export const use3PanelsAppLayoutAtoms = (): Use3PanelsAppLayoutAtoms => ({
   ...useBasicAppLayoutAtoms(),
   allowShowPanelAtoms: useAllowShowPanelAtoms(),
   panelContentKeyAtoms: usePanelContentsKeyAtoms(),
+  showPanelLoaderAtoms: useShowPanelLoaderAtoms(),
 });

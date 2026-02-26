@@ -129,6 +129,8 @@
     overflow: auto;
 
     > .trmrk-modal-body-content {
+      display: flex;
+      min-width: 100%;
       overflow-wrap: break-word;
       word-wrap: break-word;
       word-break: break-word;

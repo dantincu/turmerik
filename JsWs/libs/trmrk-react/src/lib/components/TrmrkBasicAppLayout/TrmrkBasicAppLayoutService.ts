@@ -27,6 +27,7 @@ export interface InitLayoutPartArgs {
   allowShow?: boolean | NullOrUndef;
   contents?: React.ReactNode | NullOrUndef;
   typeName?: string | NullOrUndef;
+  showLoader?: boolean | NullOrUndef;
 }
 
 export interface UserMessageAtoms<TContentNode = React.ReactNode> {
@@ -167,6 +168,7 @@ export const initLayoutPart = (
   allowShowAtom: TrmrkUseAtom<boolean> | NullOrUndef,
   contentsKeyManager: RefLazyValue<IntKeyedComponentsMapManager>,
   contentsKeyAtom: TrmrkUseAtom<number | null>,
+  showLoaderAtom: TrmrkUseAtom<boolean> | NullOrUndef,
 ) => {
   args ??= {};
   const allowShow = args.allowShow ?? (args.contents ?? null) !== null;
@@ -180,6 +182,11 @@ export const initLayoutPart = (
     : null;
 
   contentsKeyAtom.set(contentsId);
+
+  if (showLoaderAtom) {
+    showLoaderAtom.set(args.showLoader ?? false);
+  }
+
   return contentsId;
 };
 
@@ -226,36 +233,42 @@ export const initBasicAppLayout = (args: InitBasicAppLayoutArgs) => {
       args.showToolbarAtoms.appBar,
       appBarContents,
       args.toolbarContentKeyAtoms.appBar,
+      null,
     ),
     topToolbarContentsId: initLayoutPart(
       args.topToolbar,
       args.showToolbarAtoms.topToolbar,
       topToolbarContents,
       args.toolbarContentKeyAtoms.topToolbar,
+      null,
     ),
     bottomToolbarContentsId: initLayoutPart(
       args.bottomToolbar,
       args.showToolbarAtoms.bottomToolbar,
       bottomToolbarContents,
       args.toolbarContentKeyAtoms.bottomToolbar,
+      null,
     ),
     overridingAppBarContentsId: initLayoutPart(
       args.overridingAppBar,
       args.showOverridingToolbarAtoms.appBar,
       overridingAppBarContents,
       args.overridingToolbarContentKeyAtoms.appBar,
+      null,
     ),
     overridingTopToolbarContentsId: initLayoutPart(
       args.overridingTopToolbar,
       args.showOverridingToolbarAtoms.topToolbar,
       overridingTopToolbarContents,
       args.overridingToolbarContentKeyAtoms.topToolbar,
+      null,
     ),
     overridingBottomToolbarContentsId: initLayoutPart(
       args.overridingBottomToolbar,
       args.showOverridingToolbarAtoms.bottomToolbar,
       overridingBottomToolbarContents,
       args.overridingToolbarContentKeyAtoms.bottomToolbar,
+      null,
     ),
   };
 

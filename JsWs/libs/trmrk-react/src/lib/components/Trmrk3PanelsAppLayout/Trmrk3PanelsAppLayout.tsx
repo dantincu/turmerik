@@ -4,7 +4,6 @@ import React from "react";
 import { useAtom } from "jotai";
 import { atomEffect } from 'jotai-effect';
 
-import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
 import { actWithValIf } from "@/src/trmrk/core";
 import { joinNames } from "@/src/trmrk/name-generators";
 import { PointerDragEvent, DragEventData } from "@/src/trmrk-browser/domUtils/PointerDragService";
@@ -15,7 +14,7 @@ import { ComponentProps } from "../defs/common";
 import TrmrkBasicAppLayout from "../TrmrkBasicAppLayout/TrmrkBasicAppLayout";
 import { overridingBottomToolbarContents, useToolbarOverridingContentKeys, useShowOverridingToolbars } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 import TrmrkSplitContainerCore from "../TrmrkSplitContainerCore/TrmrkSplitContainerCore";
-import TrmrkLoader from "../TrmrkLoader/TrmrkLoader";
+import TrmrkThinLoader from "../TrmrkThinLoader/TrmrkThinLoader";
 import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
 import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
 import TrmrkPointerDraggable from "../TrmrkPointerDraggable/TrmrkPointerDraggable";
@@ -355,7 +354,7 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
               onMouseDownCapture={leftPanelPointerDown}
               onTouchStartCapture={leftPanelPointerDown}><div className="trmrk-panel-body">{
               contentsKeyPanelAtoms.leftPanel.value && leftPanelContents.value.keyedMap.map[contentsKeyPanelAtoms.leftPanel.value]?.node }</div></div>
-            { showPanelLoaderAtoms.leftPanel.value && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }
+            <div className="trmrk-panel-loader-container"> { showPanelLoaderAtoms.leftPanel.value && <TrmrkThinLoader></TrmrkThinLoader> } </div></> }
         panel2Content={
           <TrmrkSplitContainerCore ref={middlePanelContainerElAvailable}
             panel1CssClass={[ focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-is-focused" : "" ].join(" ")}
@@ -366,13 +365,13 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
               onMouseDownCapture={middlePanelPointerDown}
               onTouchStartCapture={middlePanelPointerDown}><div className="trmrk-panel-body">{ 
               contentsKeyPanelAtoms.middlePanel.value && middlePanelContents.value.keyedMap.map[contentsKeyPanelAtoms.middlePanel.value]?.node }</div></div>
-              { showPanelLoaderAtoms.middlePanel.value && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }
+              <div className="trmrk-panel-loader-container"> { showPanelLoaderAtoms.middlePanel.value && <TrmrkThinLoader></TrmrkThinLoader> } </div></> }
             panel2Content={renderPanelAtoms.rightPanel.value && <>
               <div className="trmrk-panel-body-container"
                 onMouseDownCapture={rightPanelPointerDown}
                 onTouchStartCapture={rightPanelPointerDown}><div className="trmrk-panel-body">{
                 contentsKeyPanelAtoms.rightPanel.value && rightPanelContents.value.keyedMap.map[contentsKeyPanelAtoms.rightPanel.value]?.node }</div></div>
-              { showPanelLoaderAtoms.rightPanel.value && <div className="trmrk-panel-header"><TrmrkLoader></TrmrkLoader></div> }</> }>
+              <div className="trmrk-panel-loader-container">{ showPanelLoaderAtoms.rightPanel.value && <TrmrkThinLoader></TrmrkThinLoader> }</div></> }>
           </TrmrkSplitContainerCore>}>
       </TrmrkSplitContainerCore>
       { children }

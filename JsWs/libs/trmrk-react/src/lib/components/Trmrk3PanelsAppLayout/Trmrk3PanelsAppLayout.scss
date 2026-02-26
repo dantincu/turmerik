@@ -19,11 +19,11 @@
     }
 
     .trmrk-split-container {
-      .trmrk-panel-header {
+      .trmrk-panel-loader-container {
         display: flex;
         position: relative;
-        height: 40px;
-        min-height: 40px;
+        height: 4px;
+        min-height: 4px;
       }
 
       .trmrk-panel-body-container, .trmrk-panel-body {

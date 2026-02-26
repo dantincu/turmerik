@@ -351,7 +351,7 @@ export default function TrmrkTopToolBarContents({
   const [ , setShowToolbarContentsScrollBtns ] = useAtom(trmrkTopToolBarContentsAtoms.showToolbarContentsScrollBtns);
   const appUserMessage = useAppUserMessage();
 
-  const [hasRestorableMinimizedStacks] = useAtom(defaultTrmrkAppModalService.value.hasRestorableMinimizedStacks);
+  const [restorableMinimizedStacksCount] = useAtom(defaultTrmrkAppModalService.value.restorableMinimizedStacksCount);
   const [minimizedModalStacksViewPopoverBtnAtom] = React.useState(() => atom<HTMLElement | null>(null));
 
   const toolbarContentsOffsetValue = React.useMemo(
@@ -448,19 +448,20 @@ export default function TrmrkTopToolBarContents({
     });
   }, [minimizedModalStacksViewPopoverBtnAtom]);
 
-  const restoreMinimizedModalsContextMenu = React.useCallback(() => {
+  const restoreMinimizedModalsContextMenu = React.useCallback((event: React.MouseEvent) => {
+    event.preventDefault();
     showMinimizedModalStacksViewPopover();
   }, []);
 
   const restoreMinimizedModalsClicked = React.useCallback(() => {
-    if (defaultTrmrkAppModalService.value.minimizedStacks.length === 1) {
+    if (restorableMinimizedStacksCount === 1) {
       defaultTrmrkAppModalService.value.restoreMinimizedModals(
         defaultTrmrkAppModalService.value.minimizedStacks[0]
       );
     } else {
       showMinimizedModalStacksViewPopover();
     }
-  }, []);
+  }, [restorableMinimizedStacksCount]);
 
   const showAppMessageBtnCssClass = React.useMemo(() => {
     let cssClass: string;
@@ -518,7 +519,7 @@ export default function TrmrkTopToolBarContents({
           { (showClearCacheBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:notification-clear-all" /></TrmrkBtn> }
           { (showPrimaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-outline" /></TrmrkBtn> }
           { (showSecondaryCustomActionBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="solar:command-bold" /></TrmrkBtn> }
-          {children}
+          { children }
           { (showOptionsBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:dots-vertical" /></TrmrkBtn> }
           { showToggleLeftPanelBtn && <ToggleLeftPanelBtn></ToggleLeftPanelBtn> }
           { showToggleMiddlePanelBtn && <ToggleMiddlePanelBtn></ToggleMiddlePanelBtn> }
@@ -526,7 +527,7 @@ export default function TrmrkTopToolBarContents({
           { showToggleMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
             <TrmrkIcon icon={`material-symbols:view-column${isMultiPanelMode ? "-outline" : ""}-sharp`} /></TrmrkBtn> }
           { showResizePanelsBtn && <ResizePanelsBtn></ResizePanelsBtn> }
-          { hasRestorableMinimizedStacks && <TrmrkBtn ref={el => defaultTrmrkPopoverService.value.store.set(
+          { restorableMinimizedStacksCount > 0 && <TrmrkBtn ref={el => defaultTrmrkPopoverService.value.store.set(
               minimizedModalStacksViewPopoverBtnAtom, el
             )} className="trmrk-btn-filled-primary" onClick={restoreMinimizedModalsClicked} onContextMenu={restoreMinimizedModalsContextMenu}>
             <TrmrkIcon icon="material-symbols:select-window" /></TrmrkBtn> }
