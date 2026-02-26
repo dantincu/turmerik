@@ -158,6 +158,7 @@
     border-color: var(--trmrk-tool-bar_back-color-emph_light);
     background-color: var(--trmrk-tool-bar_back-color_light);
     color: var(--trmrk-tool-bar_fore-color_light);
+    box-shadow: 0 0 20px 10px var(--trmrk-tool-bar_back-color-emph_light);
   }
 }
 
@@ -177,5 +178,6 @@
     border-color: var(--trmrk-tool-bar_back-color-emph_dark);
     background-color: var(--trmrk-tool-bar_back-color_dark);
     color: var(--trmrk-tool-bar_fore-color_dark);
+    box-shadow: 0 0 20px 10px var(--trmrk-tool-bar_back-color-emph_dark);
   }
 }

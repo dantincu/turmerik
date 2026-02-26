@@ -159,15 +159,21 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
     [currentModalStackKey]);
 
   const openModalNode = React.useMemo(() => {
-    return (currentModalKey ?? null) !== null && (currentModalsStack ?? null) !== null && withValIf(
+    return ((currentModalKey ?? null) !== null && (currentModalsStack ?? null) !== null) ? withValIf(
       currentModalsStack!.openModals.keyedMap.map[currentModalKey!],
-      modal => modal.node(modal.nodeData!.props))
+      modal => modal.node(modal.nodeData!.props)) : null;
   }, [currentModalKey, currentModalsStack]);
 
   const openPopoverNode = React.useMemo(() => {
-    return ((currentPopoverKey ?? null) !== null && withValIf(
+    return (((currentPopoverKey ?? null) !== null) ? withValIf(
       defaultTrmrkPopoverService.value.openPopovers.keyedMap.map[currentPopoverKey!],
-      popover => popover.node(popover.nodeData!.props)));
+      popover => popover.node(popover.nodeData!.props)) : null);
+  }, [currentPopoverKey]);
+
+  const openPopoverBackdropCssClass = React.useMemo(() => {
+    return (((currentPopoverKey ?? null) !== null) ? withValIf(
+      defaultTrmrkPopoverService.value.openPopovers.keyedMap.map[currentPopoverKey!],
+      popover => popover.nodeData!.args.backdropCssClass ?? ""): null);
   }, [currentPopoverKey]);
 
   React.useEffect(() => {
@@ -232,7 +238,8 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
 
           { ((currentPopoverKey ?? null) !== null) && <div className={[
             "trmrk-popover-backdrop",
-            isClosingPopovers ? "trmrk-opac-fade-out" : "trmrk-opac-fade-in"
+            isClosingPopovers ? "trmrk-opac-fade-out" : "trmrk-opac-fade-in",
+            openPopoverBackdropCssClass
           ].join(" ")}>
             { openPopoverNode }
           </div> }

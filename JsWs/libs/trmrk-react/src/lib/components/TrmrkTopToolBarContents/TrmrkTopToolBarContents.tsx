@@ -38,7 +38,7 @@ export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showOptionsBtn?: boolean | NullOrUndef
 }
 
-const toolbarHorizPaddingPx = 6;
+const toolbarHorizPaddingPx = 2;
 const totalButtonWidthPx = 42;
 const toolbarAdditionalOffsetPx = totalButtonWidthPx * 2;
 
@@ -531,8 +531,8 @@ export default function TrmrkTopToolBarContents({
               minimizedModalStacksViewPopoverBtnAtom, el
             )} className="trmrk-btn-filled-primary" onClick={restoreMinimizedModalsClicked} onContextMenu={restoreMinimizedModalsContextMenu}>
             <TrmrkIcon icon="material-symbols:select-window" /></TrmrkBtn> }
-          { ((appUserMessage.level.value ?? null) !== null) && <TrmrkBtn borderWidth={1} className={showAppMessageBtnCssClass} onClick={showAppMessageBtnClicked}><TrmrkIcon icon="mdi:bell-notification" /></TrmrkBtn> }
           <TrmrkBtn><TrmrkIcon icon="material-symbols:tab-group" /></TrmrkBtn>
+          { ((appUserMessage.level.value ?? null) !== null) && <TrmrkBtn borderWidth={1} className={showAppMessageBtnCssClass} onClick={showAppMessageBtnClicked}><TrmrkIcon icon="mdi:bell-notification" /></TrmrkBtn> }
         </div>
       </div>
       <ContentsShiftRightBtn />

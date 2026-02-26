@@ -45,6 +45,7 @@ export interface TrmrkPopoverArgs<TPopoverData> {
   popover: TrmrkPopoverNodeFactory<TPopoverData>;
   anchorElAtom: PrimitiveAtom<HTMLElement | null>;
   sameWidthAsAnchorEl?: boolean | NullOrUndef;
+  backdropCssClass?: string | NullOrUndef;
 }
 
 export interface TrmrkPopoverData<TPopoverData> {
