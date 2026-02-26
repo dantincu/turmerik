@@ -298,14 +298,16 @@ export default function ButtonsTestPage() {
         contents: <TopToolbar />,
       },
       leftPanel: {
-        allowShow: true
+        allowShow: true,
+        showLoader: true
       },
       middlePanel: {
         contents: <MiddlePanelContents />,
         showLoader: true
       },
       rightPanel: {
-        allowShow: true
+        allowShow: true,
+        showLoader: true
       },
       setFocusedPanel,
     });
