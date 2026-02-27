@@ -285,7 +285,6 @@ const MiddlePanelContents = () => {
 export default function ButtonsTestPage() {
   const trmrk3PanelsLayoutAtoms = use3PanelsAppLayoutAtoms();
   const showPanelAtoms = useShowPanelAtoms();
-  const showPanelLoaderAtoms = useShowPanelLoaderAtoms();
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
   const [, setIsMultiPanelMode] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode);
 

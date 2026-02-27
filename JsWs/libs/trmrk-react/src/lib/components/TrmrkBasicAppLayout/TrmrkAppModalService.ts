@@ -545,7 +545,7 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
           key: stackId,
           value: withValIf(
             this.stacks.keyedMap.map[stackId],
-            (stackNode) => get(stackNode.node.openModals.keysAtom),
+            (stackNode) => get(stackNode.node.minimizedModals.keysAtom),
             () => [],
           ),
         })),
@@ -567,7 +567,7 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
                 modalIdsArr.map((modalId) => ({
                   key: modalId,
                   value: withValIf(
-                    stackNode.node.openModals.keyedMap.map[modalId],
+                    stackNode.node.minimizedModals.keyedMap.map[modalId],
                     (modalNode) =>
                       get(modalNode.nodeData!.args.props.modalTitle),
                   ),
@@ -590,9 +590,13 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
         restorableMinimizedStackIds.map((stackId) => ({
           key: stackId,
           value: withValIf(
-            this.stacks.keyedMap.map[stackId],
-            (stackNode) => get(stackNode.node.openModals.keysAtom),
-            () => [],
+            this.restorableMinimizedStacks.filter(
+              (stack) => stack.stackId === stackId,
+            )[0],
+            (stackNode) => get(stackNode.minimizedModals.keysAtom),
+            () => {
+              return [];
+            },
           ),
         })),
       );
@@ -601,21 +605,30 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
     });
 
     this.restorableMinimizedStacksModalTitles = atom((get) => {
-      const restorableMinimizedStacksModalIds = get(this.restorableMinimizedStacksModalIds);
+      const restorableMinimizedStacksModalIds = get(
+        this.restorableMinimizedStacksModalIds,
+      );
 
       const restorableMinimizedStacksModalTitles = mapNumMap(
         restorableMinimizedStacksModalIds,
         (modalIdsArr, stackId) =>
           withValIf(
-            this.stacks.keyedMap.map[stackId],
+            this.restorableMinimizedStacks.filter(
+              (stack) => stack.stackId === stackId,
+            )[0],
             (stackNode) =>
               toNumMap(
                 modalIdsArr.map((modalId) => ({
                   key: modalId,
                   value: withValIf(
-                    stackNode.node.openModals.keyedMap.map[modalId],
-                    (modalNode) =>
-                      get(modalNode.nodeData!.args.props.modalTitle),
+                    stackNode.minimizedModals.keyedMap.map[modalId],
+                    (modalNode) => {
+                      const retVal = get(
+                        modalNode.nodeData!.args.props.modalTitle,
+                      );
+
+                      return retVal;
+                    },
                   ),
                 })),
               ),
@@ -1020,8 +1033,12 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
 
     if (currentStack) {
       currentStack.minimizeAllModals(() => {
-        this.minimizedStacks.push(currentStack);
-        this.restorableMinimizedStacks.push(currentStack);
+        const idx = this.minimizedStacks.indexOf(currentStack);
+
+        if (idx < 0) {
+          this.minimizedStacks.push(currentStack);
+        }
+
         this.stacks.unregister(currentStack.stackId);
 
         this.store.set(
@@ -1029,10 +1046,7 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
           this.minimizedStacks.map((stack) => stack.stackId),
         );
 
-        this.store.set(
-          this.restorableMinimizedStackIds,
-          this.restorableMinimizedStacks.map((stack) => stack.stackId),
-        );
+        this.updateRestorableMinimizedStacks();
       });
     }
   }
@@ -1049,12 +1063,8 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
     );
   }
 
-  updateRestorableMinimizedStacks(
-    stackKeys?: number[] | NullOrUndef,
-    currentUrl?: ParsedUrl | NullOrUndef,
-  ) {
+  updateRestorableMinimizedStacks(currentUrl?: ParsedUrl | NullOrUndef) {
     currentUrl ??= defaultUrlSerializer.value.deserializeUrl(location.href);
-    stackKeys ??= this.stacks.getKeys();
 
     this.restorableMinimizedStacks = this.minimizedStacks.filter((stack) =>
       stack.canActivate(currentUrl),

@@ -52,6 +52,10 @@
       border-width: 2px;
     }
   }
+
+  &.trmrk-height-unset {
+    height: unset;
+  }
 }
 
 .trmrk-btn {
