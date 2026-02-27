@@ -30,6 +30,8 @@ import keyboardArrowUp from "@iconify-icons/mdi/keyboard-arrow-up";
 import keyboardArrowLeft from "@iconify-icons/mdi/keyboard-arrow-left";
 import keyboardArrowDown from "@iconify-icons/mdi/keyboard-arrow-down";
 import keyboardArrowRight from "@iconify-icons/mdi/keyboard-arrow-right";
+import expandMore from "@iconify-icons/mdi/expand-more";
+import expandLess from "@iconify-icons/mdi/expand-less";
 
 import undo from "@iconify-icons/material-symbols/undo";
 import redo from "@iconify-icons/material-symbols/redo";
@@ -87,6 +89,8 @@ export const registerIconifyIcons = () => {
     ["keyboard-arrow-left"]: keyboardArrowLeft,
     ["keyboard-arrow-down"]: keyboardArrowDown,
     ["keyboard-arrow-right"]: keyboardArrowRight,
+    ["expand-more"]: expandMore,
+    ["expand-less"]: expandLess,
   });
 
   registerIconifyIconsCore("material-symbols", {

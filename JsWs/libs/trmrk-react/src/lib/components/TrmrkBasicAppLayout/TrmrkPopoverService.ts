@@ -76,6 +76,7 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
   currentPopoverIsFadingOutAtom: PrimitiveAtom<boolean>;
   currentPopoverIsPlacedOnTop: Atom<boolean>;
   currentPopoverIsPlacedOnLeft: Atom<boolean>;
+  currentPopoverAnchorEl: PrimitiveAtom<HTMLElement | null>;
 
   readonly store: JotaiStore;
 
@@ -153,6 +154,38 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
 
       return currentPopoverIsPlacedOnLeft;
     });
+
+    this.currentPopoverAnchorEl = atom(
+      (get) => {
+        const currentModalKey = get(this.openPopovers.currentKeyAtom);
+
+        if ((currentModalKey ?? null) !== null) {
+          const currentPopover =
+            this.openPopovers.keyedMap.map[currentModalKey!];
+
+          if (currentPopover) {
+            const currentPopoverAnchorEl = get(
+              currentPopover.nodeData!.args.anchorElAtom,
+            );
+            return currentPopoverAnchorEl;
+          }
+        }
+
+        return null;
+      },
+      (get, set, newValue) => {
+        const currentModalKey = get(this.openPopovers.currentKeyAtom);
+
+        if ((currentModalKey ?? null) !== null) {
+          const currentPopover =
+            this.openPopovers.keyedMap.map[currentModalKey!];
+
+          if (currentPopover) {
+            set(currentPopover.nodeData!.args.anchorElAtom, newValue);
+          }
+        }
+      },
+    );
   }
 
   disposeCore() {}

@@ -47,7 +47,7 @@ export const forEachProp = <TObj extends Object>(
   ) => void,
 ) => {
   const objMap = obj as { [key: string]: any };
-  const objPropNames = Object.getOwnPropertyNames(obj);
+  const objPropNames = Object.keys(obj);
 
   for (let propName of objPropNames) {
     const propVal = objMap[propName];

@@ -8,6 +8,8 @@ import {
   withVal,
 } from "@/src/trmrk/core";
 
+import { toNumMap, mapNumMap } from "@/src/trmrk/map";
+
 import { TrmrkDisposableBase } from "@/src/trmrk/TrmrkDisposableBase";
 import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
 import { defaultAnimationDurationMillis } from "@/src/trmrk-browser/core";
@@ -92,6 +94,8 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
   currentModalIsFadingOutAtom: PrimitiveAtom<boolean>;
   currentModalUserMessageAtoms: UserMessageAtoms<() => React.ReactNode>;
   refUrl: ParsedUrl;
+
+  minimizedModalTitlesAtom: Atom<string[]>;
 
   readonly store: JotaiStore;
 
@@ -320,6 +324,18 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
       ),
     };
 
+    this.minimizedModalTitlesAtom = atom((get) => {
+      const minimizedModalKeysArr = get(this.minimizedModals.keysAtom);
+
+      const minimizedModalTitles = minimizedModalKeysArr.map((key) =>
+        withValIf(this.minimizedModals.keyedMap.map[key], (node) =>
+          get(node.nodeData!.props.modalTitle),
+        ),
+      );
+
+      return minimizedModalTitles;
+    });
+
     this.refUrl = defaultUrlSerializer.value.deserializeUrl(location.href);
     this.refUrl = args.urlTransformer?.(this.refUrl) ?? this.refUrl;
   }
@@ -487,7 +503,20 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
 export class TrmrkAppModalService extends TrmrkDisposableBase {
   stacks: IntKeyedComponentsMapManager<TrmrkAppModalsStackService>;
   minimizedStacks: TrmrkAppModalsStackService[] = [];
+  minimizedStackIds: PrimitiveAtom<number[]>;
+  minimizedStacksModalIds: Atom<{ [key: number]: number[] }>;
+
+  minimizedStacksModalTitles: Atom<{
+    [key: number]: { [key: number]: string };
+  }>;
+
   restorableMinimizedStacks: TrmrkAppModalsStackService[] = [];
+  restorableMinimizedStackIds: PrimitiveAtom<number[]>;
+  restorableMinimizedStacksModalIds: Atom<{ [key: number]: number[] }>;
+
+  restorableMinimizedStacksModalTitles: Atom<{
+    [key: number]: { [key: number]: string };
+  }>;
 
   isClosingModals: Atom<boolean>;
   canCloseCurrentModalManuallyAtom: Atom<boolean>;
@@ -495,7 +524,6 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
   currentModalKey: Atom<number | null>;
   currentModalIsMaximizedAtom: PrimitiveAtom<boolean>;
   currentModalIsFadingOut: PrimitiveAtom<boolean>;
-  restorableMinimizedStacksCount: PrimitiveAtom<number>;
   currentModalUserMessageAtoms: UserMessageAtoms<() => React.ReactNode>;
 
   readonly store: JotaiStore;
@@ -505,6 +533,101 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
 
     this.stacks =
       createIntKeyedComponentsMapManager<TrmrkAppModalsStackService>();
+
+    this.minimizedStackIds = atom<number[]>([]);
+    this.restorableMinimizedStackIds = atom<number[]>([]);
+
+    this.minimizedStacksModalIds = atom((get) => {
+      const minimizedStackIdsArr = get(this.minimizedStackIds);
+
+      const minimizedStacksModalIds = toNumMap(
+        minimizedStackIdsArr.map((stackId) => ({
+          key: stackId,
+          value: withValIf(
+            this.stacks.keyedMap.map[stackId],
+            (stackNode) => get(stackNode.node.openModals.keysAtom),
+            () => [],
+          ),
+        })),
+      );
+
+      return minimizedStacksModalIds;
+    });
+
+    this.minimizedStacksModalTitles = atom((get) => {
+      const minimizedStacksModalIds = get(this.minimizedStacksModalIds);
+
+      const minimizedStacksModalTitles = mapNumMap(
+        minimizedStacksModalIds,
+        (modalIdsArr, stackId) =>
+          withValIf(
+            this.stacks.keyedMap.map[stackId],
+            (stackNode) =>
+              toNumMap(
+                modalIdsArr.map((modalId) => ({
+                  key: modalId,
+                  value: withValIf(
+                    stackNode.node.openModals.keyedMap.map[modalId],
+                    (modalNode) =>
+                      get(modalNode.nodeData!.args.props.modalTitle),
+                  ),
+                })),
+              ),
+            () =>
+              ({}) as {
+                [key: number]: string;
+              },
+          ),
+      );
+
+      return minimizedStacksModalTitles;
+    });
+
+    this.restorableMinimizedStacksModalIds = atom((get) => {
+      const restorableMinimizedStackIds = get(this.restorableMinimizedStackIds);
+
+      const restorableMinimizedStacksModalIds = toNumMap(
+        restorableMinimizedStackIds.map((stackId) => ({
+          key: stackId,
+          value: withValIf(
+            this.stacks.keyedMap.map[stackId],
+            (stackNode) => get(stackNode.node.openModals.keysAtom),
+            () => [],
+          ),
+        })),
+      );
+
+      return restorableMinimizedStacksModalIds;
+    });
+
+    this.restorableMinimizedStacksModalTitles = atom((get) => {
+      const restorableMinimizedStacksModalIds = get(this.restorableMinimizedStacksModalIds);
+
+      const restorableMinimizedStacksModalTitles = mapNumMap(
+        restorableMinimizedStacksModalIds,
+        (modalIdsArr, stackId) =>
+          withValIf(
+            this.stacks.keyedMap.map[stackId],
+            (stackNode) =>
+              toNumMap(
+                modalIdsArr.map((modalId) => ({
+                  key: modalId,
+                  value: withValIf(
+                    stackNode.node.openModals.keyedMap.map[modalId],
+                    (modalNode) =>
+                      get(modalNode.nodeData!.args.props.modalTitle),
+                  ),
+                })),
+              ),
+            () =>
+              ({}) as {
+                [key: number]: string;
+              },
+          ),
+      );
+
+      return restorableMinimizedStacksModalTitles;
+    });
 
     this.isClosingModals = atom<boolean>((get) => {
       let isClosingModals = false;
@@ -794,7 +917,6 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
       ),
     };
 
-    this.restorableMinimizedStacksCount = atom(0);
     this.store = store ?? getDefaultStore();
   }
 
@@ -903,8 +1025,13 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
         this.stacks.unregister(currentStack.stackId);
 
         this.store.set(
-          this.restorableMinimizedStacksCount,
-          this.restorableMinimizedStacks.length,
+          this.minimizedStackIds,
+          this.minimizedStacks.map((stack) => stack.stackId),
+        );
+
+        this.store.set(
+          this.restorableMinimizedStackIds,
+          this.restorableMinimizedStacks.map((stack) => stack.stackId),
         );
       });
     }
@@ -917,8 +1044,8 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
     this.stacks.register(stack, null, stack.stackId);
 
     this.store.set(
-      this.restorableMinimizedStacksCount,
-      this.restorableMinimizedStacks.length,
+      this.restorableMinimizedStackIds,
+      this.restorableMinimizedStacks.map((stack) => stack.stackId),
     );
   }
 
@@ -934,8 +1061,8 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
     );
 
     this.store.set(
-      this.restorableMinimizedStacksCount,
-      this.restorableMinimizedStacks.length,
+      this.restorableMinimizedStackIds,
+      this.restorableMinimizedStacks.map((stack) => stack.stackId),
     );
 
     return this.restorableMinimizedStacks;
@@ -943,6 +1070,7 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
 
   clearRestorableMinimizedStacks() {
     this.restorableMinimizedStacks = [];
+    this.store.set(this.restorableMinimizedStackIds, []);
   }
 
   disposeCore() {}

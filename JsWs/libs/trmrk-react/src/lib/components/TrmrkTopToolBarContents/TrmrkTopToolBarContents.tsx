@@ -351,7 +351,7 @@ export default function TrmrkTopToolBarContents({
   const [ , setShowToolbarContentsScrollBtns ] = useAtom(trmrkTopToolBarContentsAtoms.showToolbarContentsScrollBtns);
   const appUserMessage = useAppUserMessage();
 
-  const [restorableMinimizedStacksCount] = useAtom(defaultTrmrkAppModalService.value.restorableMinimizedStacksCount);
+  const [restorableMinimizedStackIds] = useAtom(defaultTrmrkAppModalService.value.restorableMinimizedStackIds);
   const [minimizedModalStacksViewPopoverBtnAtom] = React.useState(() => atom<HTMLElement | null>(null));
 
   const toolbarContentsOffsetValue = React.useMemo(
@@ -454,14 +454,14 @@ export default function TrmrkTopToolBarContents({
   }, []);
 
   const restoreMinimizedModalsClicked = React.useCallback(() => {
-    if (restorableMinimizedStacksCount === 1) {
+    if (restorableMinimizedStackIds.length === 1) {
       defaultTrmrkAppModalService.value.restoreMinimizedModals(
         defaultTrmrkAppModalService.value.minimizedStacks[0]
       );
     } else {
       showMinimizedModalStacksViewPopover();
     }
-  }, [restorableMinimizedStacksCount]);
+  }, [restorableMinimizedStackIds]);
 
   const showAppMessageBtnCssClass = React.useMemo(() => {
     let cssClass: string;
@@ -527,7 +527,7 @@ export default function TrmrkTopToolBarContents({
           { showToggleMultiPanelMode && <TrmrkBtn onClick={toggleMultiPanelModeClicked}>
             <TrmrkIcon icon={`material-symbols:view-column${isMultiPanelMode ? "-outline" : ""}-sharp`} /></TrmrkBtn> }
           { showResizePanelsBtn && <ResizePanelsBtn></ResizePanelsBtn> }
-          { restorableMinimizedStacksCount > 0 && <TrmrkBtn ref={el => defaultTrmrkPopoverService.value.store.set(
+          { restorableMinimizedStackIds.length > 0 && <TrmrkBtn ref={el => defaultTrmrkPopoverService.value.store.set(
               minimizedModalStacksViewPopoverBtnAtom, el
             )} className="trmrk-btn-filled-primary" onClick={restoreMinimizedModalsClicked} onContextMenu={restoreMinimizedModalsContextMenu}>
             <TrmrkIcon icon="material-symbols:select-window" /></TrmrkBtn> }

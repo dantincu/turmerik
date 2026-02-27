@@ -23,7 +23,7 @@ import TrmrkAppBarContents from "@/src/trmrk-react/components/TrmrkAppBarContent
 import TrmrkTopToolBarContents from "@/src/trmrk-react/components/TrmrkTopToolBarContents/TrmrkTopToolBarContents";
 import TrmrkMultiClickable from "@/src/trmrk-react/components/TrmrkMultiClickable/TrmrkMultiClickable";
 import TrmrkLongPressable from "@/src/trmrk-react/components/TrmrkLongPressable/TrmrkLongPressable";
-import { UserMessageLevel, actWithValIf } from '@/src/trmrk/core';
+import { UserMessageLevel, actWithVal } from '@/src/trmrk/core';
 import TrmrkAppModal from "@/src/trmrk-react/components/TrmrkAppModal/TrmrkAppModal";
 import TrmrkPopover from "@/src/trmrk-react/components/TrmrkAppModal/TrmrkPopover";
 import { defaultTrmrkAppModalService, TrmrkAppModalPropsCoreWithData } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkAppModalService";
@@ -144,7 +144,7 @@ const MiddlePanelContents = () => {
         asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf asdasdfasdf</div></TrmrkPopover>
   }
 
-  const myPopoverBtnAtom = atom<HTMLElement | null>(null);
+  const myPopoverBtnElRef = React.useRef<HTMLElement>(null);
 
   const showPopoverBtnClicked = React.useCallback(() => {
     defaultTrmrkPopoverService.value.openPopover({
@@ -152,10 +152,10 @@ const MiddlePanelContents = () => {
         popoverTitle: atom("asdfasdf")
       },
       popover: MyPopover,
-      anchorElAtom: myPopoverBtnAtom,
+      anchorElAtom: atom(myPopoverBtnElRef.current),
       sameWidthAsAnchorEl: false
     });
-  }, [myPopoverBtnAtom]);
+  }, []);
 
   const MyModal = (props: TrmrkAppModalPropsCoreWithData) => {
     const id = myModalIdRef.current++;
@@ -250,7 +250,8 @@ const MiddlePanelContents = () => {
       <span className="trmrk-text">My Button</span>
     </TrmrkBtn>
     <TrmrkBtn borderWidth={1} className="my-[1px]" onClick={showPopoverBtnClicked} ref={(el) => {
-      defaultTrmrkPopoverService.value.store.set(myPopoverBtnAtom, el);
+      myPopoverBtnElRef.current = el;
+      actWithVal(defaultTrmrkPopoverService.value, svc => svc.store.set(svc.currentPopoverAnchorEl, el));
     }}>
       <span className="trmrk-text">My Button</span>
       <span className="trmrk-icon-wrapper"><TrmrkIcon icon="mdi:home" /></span>
