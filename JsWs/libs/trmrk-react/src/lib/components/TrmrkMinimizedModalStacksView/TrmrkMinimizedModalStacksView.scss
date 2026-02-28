@@ -7,7 +7,7 @@
   align-items: stretch;
 
   .trmrk-modals-stack {
-    border: 2px solid;
+    /* border: 1px solid; */
     margin: 0 0 2px 2px;
     border-radius: var(--trmrk-panel-border-radius);
     display: flex;
@@ -17,13 +17,18 @@
     width: auto;
     min-width: 100%;
     min-height: 44px;
+
+    > .trmrk-btn {
+      margin-top: 2px;
+    }
   }
 }
 
 .light {
   .trmrk-minimized-modal-stacks-view {
     .trmrk-modals-stack {
-      border-color: #0004;
+      /* border-color: #0004; */
+      background-color: #0002;
     }
   }
 }
@@ -31,7 +36,8 @@
 .dark {
   .trmrk-minimized-modal-stacks-view {
     .trmrk-modals-stack {
-      border-color: #FFF4;
+      /* border-color: #FFF4; */
+      background-color: #FFF1;
     }
   }
 }

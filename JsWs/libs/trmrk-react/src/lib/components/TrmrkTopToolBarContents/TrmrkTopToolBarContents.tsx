@@ -456,7 +456,7 @@ export default function TrmrkTopToolBarContents({
   const restoreMinimizedModalsClicked = React.useCallback(() => {
     if (restorableMinimizedStackIds.length === 1) {
       defaultTrmrkAppModalService.value.restoreMinimizedModals(
-        defaultTrmrkAppModalService.value.minimizedStacks[0]
+        defaultTrmrkAppModalService.value.minimizedStacks[0].stackId
       );
     } else {
       showMinimizedModalStacksViewPopover();

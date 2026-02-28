@@ -1051,16 +1051,29 @@ export class TrmrkAppModalService extends TrmrkDisposableBase {
     }
   }
 
-  restoreMinimizedModals(stack: TrmrkAppModalsStackService) {
-    stack.restoreMinimizedModals();
-    const idx = this.restorableMinimizedStacks.indexOf(stack);
-    this.restorableMinimizedStacks.splice(idx, 1);
-    this.stacks.register(stack, null, stack.stackId);
-
-    this.store.set(
-      this.restorableMinimizedStackIds,
-      this.restorableMinimizedStacks.map((stack) => stack.stackId),
+  restoreMinimizedModals(stackId: number) {
+    const stack = this.restorableMinimizedStacks.find(
+      (stack) => stack.stackId === stackId,
     );
+
+    if (stack) {
+      stack.restoreMinimizedModals();
+      const restorableidx = this.restorableMinimizedStacks.indexOf(stack);
+      this.restorableMinimizedStacks.splice(restorableidx, 1);
+      const idx = this.minimizedStacks.indexOf(stack);
+      this.minimizedStacks.splice(idx, 1);
+      this.stacks.register(stack, null, stack.stackId);
+
+      this.store.set(
+        this.restorableMinimizedStackIds,
+        this.restorableMinimizedStacks.map((stack) => stack.stackId),
+      );
+
+      this.store.set(
+        this.minimizedStackIds,
+        this.minimizedStacks.map((stack) => stack.stackId),
+      );
+    }
   }
 
   updateRestorableMinimizedStacks(currentUrl?: ParsedUrl | NullOrUndef) {
