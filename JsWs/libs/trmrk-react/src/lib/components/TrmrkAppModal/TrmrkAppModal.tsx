@@ -110,7 +110,7 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
           </TrmrkBtn> }
         </div>
         <div className="trmrk-content flex grow content-center ml-[2px]">
-          {topBarContents ?? <h2 className="text-center grow">{modalTitleVal}</h2>}
+          {topBarContents ?? <h2 className="text-center grow leading-[40px]">{modalTitleVal}</h2>}
         </div>
         <div className="trmrk-trailing-content flex mr-[2px]">
           { (canMinimizeManually ?? true) && canCloseAllManuallyVal && <TrmrkBtn className="trmrk-btn-filled-system"

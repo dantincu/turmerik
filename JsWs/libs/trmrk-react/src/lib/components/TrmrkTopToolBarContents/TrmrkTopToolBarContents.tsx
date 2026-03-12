@@ -1,5 +1,5 @@
 import React from "react";
-import { useAtom, atom } from "jotai";
+import { useAtom, atom, PrimitiveAtom } from "jotai";
 
 import { NullOrUndef, UserMessageLevel } from "@/src/trmrk/core";
 
@@ -15,6 +15,7 @@ import { defaultTrmrkPopoverService, TrmrkPopoverPropsCoreWithData} from "../Trm
 import TrmrkPopover from "../TrmrkAppModal/TrmrkPopover";
 import { useAppUserMessage } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 import TrmrkMinimizedModalStacksView from "../TrmrkMinimizedModalStacksView/TrmrkMinimizedModalStacksView";
+import TrmrkListPager from "../TrmrkListPager/TrmrkListPager";
 
 export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showBackBtn?: boolean | NullOrUndef;
@@ -25,6 +26,10 @@ export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showEditDoneBtn?: boolean | NullOrUndef;
   showSaveBtn?: boolean | NullOrUndef;
   saveBtnEnabled?: boolean | NullOrUndef;
+  showListPager?: boolean | NullOrUndef;
+  listPagerItemsCountAtom?: PrimitiveAtom<number>;
+  listPagerSkipItemsAtom?: PrimitiveAtom<number>;
+  listPagerSkipItemsQueryParamName?: string | NullOrUndef;
   showSearchBtn?: boolean | NullOrUndef;
   searchBtnIsOn?: boolean | NullOrUndef;
   showFilterBtn?: boolean | NullOrUndef;
@@ -320,6 +325,10 @@ export default function TrmrkTopToolBarContents({
   showEditBtn,
   showEditDoneBtn,
   showSaveBtn,
+  showListPager,
+  listPagerItemsCountAtom,
+  listPagerSkipItemsAtom,
+  listPagerSkipItemsQueryParamName,
   showSearchBtn,
   searchBtnIsOn,
   showFilterBtn,
@@ -512,6 +521,7 @@ export default function TrmrkTopToolBarContents({
           { (showEditBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:edit" /></TrmrkBtn> }
           { (showEditDoneBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:done" /></TrmrkBtn> }
           { (showSaveBtn ?? false) && <TrmrkBtn disabled={saveBtnEnabled === false}><TrmrkIcon icon="mdi:content-save" /></TrmrkBtn> }
+          { (showListPager ?? false) && <TrmrkListPager itemsCount={listPagerItemsCountAtom!} skipItems={listPagerSkipItemsAtom!} pageSize={100}></TrmrkListPager> }
           { (showSearchBtn ?? false) && <TrmrkBtn borderWidth={searchBtnIsOn ? 1 : 0}><TrmrkIcon icon="mdi:search" /></TrmrkBtn>}
           { (showFilterBtn ?? false) && <TrmrkBtn borderWidth={filterBtnIsOn ? 1 : 0}><TrmrkIcon icon="mdi:filter" /></TrmrkBtn>}
           { (showSortBtn ?? false) && <TrmrkBtn borderWidth={sortBtnIsOn ? 1 : 0}><TrmrkIcon icon="mdi:sort" /></TrmrkBtn>}

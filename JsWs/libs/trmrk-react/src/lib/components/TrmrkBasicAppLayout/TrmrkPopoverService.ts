@@ -31,7 +31,7 @@ export interface TrmrkPopoverPropsCore {
 export interface TrmrkPopoverPropsCoreWithData<
   TPopoverData = any,
 > extends TrmrkPopoverPropsCore {
-  data: () => TPopoverData;
+  data: TPopoverData;
   popoverId: number;
 }
 
@@ -338,7 +338,7 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
     const nodeData: TrmrkPopoverData<TPopoverData> = {
       props: {
         popoverId,
-        data: () => data,
+        data,
         popoverTitle: args.props.popoverTitle,
         rootElRef: rootElAvailable,
       },

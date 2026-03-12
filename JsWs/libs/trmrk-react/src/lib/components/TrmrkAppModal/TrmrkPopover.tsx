@@ -78,7 +78,7 @@ const TrmrkPopover = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalPr
             </TrmrkBtn> }
           </div>
           <div className="trmrk-content flex grow content-center ml-[2px]">
-            {barContents ?? <h2 className="text-center grow">{popoverTitleVal}</h2>}</div>
+            {barContents ?? <h2 className="text-center grow leading-[40px]">{popoverTitleVal}</h2>}</div>
           <div className="trmrk-trailing-content flex mr-[2px]">
             { canCloseManuallyVal && canCloseAllManuallyVal && <TrmrkBtn className="trmrk-btn-filled-system" onClick={closeAllBtnClicked}>
               <TrmrkIcon icon="mdi:close"></TrmrkIcon>

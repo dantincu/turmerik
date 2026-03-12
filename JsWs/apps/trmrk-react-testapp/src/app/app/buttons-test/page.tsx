@@ -46,6 +46,9 @@ const AppBar = () => {
 }
 
 const TopToolbar = () => {
+  const [itemsCountAtom] = React.useState(() => atom(Number.MAX_SAFE_INTEGER));
+  const [skipItems] = React.useState(() => atom(0));
+
   return <TrmrkTopToolBarContents
     showGoToParentBtn={true}
     showPrimaryCustomActionBtn={true}
@@ -55,6 +58,9 @@ const TopToolbar = () => {
     showEditBtn={true}
     showEditDoneBtn={true}
     showSaveBtn={true}
+    showListPager={true}
+    listPagerItemsCountAtom={itemsCountAtom}
+    listPagerSkipItemsAtom={skipItems}
     showSearchBtn={true}
     searchBtnIsOn={true}
     showFilterBtn={true}

@@ -44,7 +44,7 @@ export interface TrmrkAppModalPropsCore {
 export interface TrmrkAppModalPropsCoreWithData<
   TModalData = any,
 > extends TrmrkAppModalPropsCore {
-  data: () => TModalData;
+  data: TModalData;
   modalId: number;
 }
 
@@ -382,7 +382,7 @@ export class TrmrkAppModalsStackService extends TrmrkDisposableBase {
     }
 
     const nodeData: TrmrkAppModalData<TModalData> = {
-      props: { modalId, data: () => data, modalTitle: args.props.modalTitle },
+      props: { modalId, data, modalTitle: args.props.modalTitle },
       args,
       data,
       canCloseManually,

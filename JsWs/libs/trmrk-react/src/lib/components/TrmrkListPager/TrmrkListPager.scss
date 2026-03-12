@@ -1,0 +1,30 @@
+.trmrk-list-pager-container {
+  display: flex;
+  width: max-content;
+  box-sizing: border-box;
+  border: 1px solid;
+  border-radius: var(--trmrk-button-border-radius);
+
+  .trmrk-btn {
+    height: 38px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.light {
+  .trmrk-list-pager-container {
+    border-color: #0002;
+  }
+}
+
+.dark {
+  .trmrk-list-pager-container {
+    border-color: #FFF2;
+  }
+}
+
+.trmrk-list-pager-full-container {
+}
