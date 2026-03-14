@@ -4,7 +4,6 @@ import { PrimitiveAtom, atom } from "jotai";
 import { NullOrUndef } from "@/src/trmrk/core";
 
 import TrmrkScrollBar, { TrmrkScrollbarThumbPosition } from "../TrmrkScrollBar/TrmrkScrollBar";
-import TrmrkResizeObservable, { ResizeCallbackArgs } from "../TrmrkResizeObservable/TrmrkResizeObservable";
 import "./TrmrkListPager.scss";
 
 export interface TrmrkListPagerFullProps {
@@ -23,7 +22,9 @@ export default function TrmrkListPagerFull({
   const containerIsWideRefVal = React.useRef(false);
 
   const [position] = React.useState(() => atom({
-    ratio: 0
+    ratio: 0,
+    px: 0,
+    trackLengthPx: 0
   } as TrmrkScrollbarThumbPosition));
 
   const updateContainerIsWideFlag = React.useCallback(() => {

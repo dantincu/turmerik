@@ -1,11 +1,14 @@
 .trmrk-scrollbar-container {
   display: flex;
+  flex: 1 1 auto;
 
   .trmrk-scrollbar-track {
-
+    border-radius: var(--trmrk-button-border-radius);
+    flex: 1 1 auto;
   }
 
   .trmrk-scrollbar-thumb {
+    margin-left: 0;
   }
 
   &.trmrk-is-horizontal {
@@ -30,10 +33,11 @@
 .light {
   .trmrk-scrollbar-container {
     .trmrk-scrollbar-track {
+      background-color: #0002;
     }
 
     .trmrk-scrollbar-thumb {
-      background-color: var(--trmrk-tool-bar_back-color-emph_light);
+      background-color: #0004;
     }
   }
 }
@@ -41,10 +45,11 @@
 .dark {
   .trmrk-scrollbar-container {
     .trmrk-scrollbar-track {
+      background-color: #FFF2;
     }
 
     .trmrk-scrollbar-thumb {
-      background-color: var(--trmrk-tool-bar_back-color-emph_dark);
+      background-color: #FFF4;
     }
   }
 }
