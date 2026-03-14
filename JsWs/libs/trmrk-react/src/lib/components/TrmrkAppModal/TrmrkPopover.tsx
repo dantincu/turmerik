@@ -13,6 +13,7 @@ import { updateRef } from "../../services/utils";
 export interface TrmrkAppModalProps<TPopoverData = any> extends React.ComponentPropsWithRef<'div'>, TrmrkPopoverPropsCoreWithData<TPopoverData> {
   showBar?: boolean | NullOrUndef;
   barContents?: React.ReactNode | NullOrUndef;
+  canMaximizeManually?: boolean | NullOrUndef;
   width?: TrmrkAppModalWidth | NullOrUndef;
 }
 
@@ -25,10 +26,12 @@ const TrmrkPopover = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalPr
   data,
   showBar,
   barContents,
+  canMaximizeManually,
   width,
   ...props
 }, ref) => {
   const [placeOnTop] = useAtom(defaultTrmrkPopoverService.value.currentPopoverIsPlacedOnTop);
+    const [currentPopoverIsMaximized, setCurrentPopoverIsMaximized] = useAtom(defaultTrmrkPopoverService.value.currentPopoverIsMaximizedAtom);
 
   const widthCssClass = React.useMemo(() => {
     switch (width) {
@@ -50,6 +53,10 @@ const TrmrkPopover = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalPr
   const closeAllBtnClicked = React.useCallback(() => {
     defaultTrmrkPopoverService.value.closeAllPopoversManually();
   }, []);
+
+  const maximizeBtnClicked = React.useCallback(() => {
+    setCurrentPopoverIsMaximized(!currentPopoverIsMaximized);
+  }, [currentPopoverIsMaximized]);
 
   const refElAvailable = React.useCallback((el: HTMLDivElement | null) => {
     actWithValIf(rootElRef, (r) => updateRef(r, el));
@@ -80,6 +87,9 @@ const TrmrkPopover = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalPr
           <div className="trmrk-content flex grow content-center ml-[2px]">
             {barContents ?? <h2 className="text-center grow leading-[40px]">{popoverTitleVal}</h2>}</div>
           <div className="trmrk-trailing-content flex mr-[2px]">
+          { (canMaximizeManually ?? false) && <TrmrkBtn className="trmrk-btn-filled-system" onClick={maximizeBtnClicked}>
+            <TrmrkIcon icon={`mdi:${currentPopoverIsMaximized ? "window-maximize" : "maximize"}`}></TrmrkIcon>
+          </TrmrkBtn> }
             { canCloseManuallyVal && canCloseAllManuallyVal && <TrmrkBtn className="trmrk-btn-filled-system" onClick={closeAllBtnClicked}>
               <TrmrkIcon icon="mdi:close"></TrmrkIcon>
             </TrmrkBtn> }
@@ -89,7 +99,8 @@ const TrmrkPopover = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalPr
     });
 
   return <div ref={refElAvailable} className={[
-      className ?? "", 
+      className ?? "",
+      currentPopoverIsMaximized ? "trmrk-is-maximized" : "",
       widthCssClass,
       "trmrk-popover-container"].join(' ')} {...props}>
     { !placeOnTop && <PopoverBar { ...{popoverTitle, showBar, barContents} } /> }

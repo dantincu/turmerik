@@ -47,6 +47,15 @@ export const updateRef = <TVal>(
   }
 };
 
+export const updateFwdRef = <TVal>(
+  refObj: React.ForwardedRef<TVal>,
+  val: TVal | null,
+) => {
+  if (refObj) {
+    updateRef(refObj, val);
+  }
+};
+
 export const performInitialization = (
   alreadyInitialized: React.RefObject<boolean>,
   initializer: () => void,

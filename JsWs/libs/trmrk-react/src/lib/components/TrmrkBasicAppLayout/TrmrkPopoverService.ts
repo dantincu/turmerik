@@ -53,6 +53,7 @@ export interface TrmrkPopoverData<TPopoverData> {
   args: TrmrkPopoverArgs<TPopoverData>;
   data: TPopoverData;
   canCloseManually: PrimitiveAtom<boolean>;
+  isMaximized: PrimitiveAtom<boolean>;
   placeOnTop: PrimitiveAtom<boolean>;
   placeOnLeft: PrimitiveAtom<boolean>;
   rootElRef: MtblRefValue<HTMLDivElement | null>;
@@ -73,6 +74,7 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
   isClosingPopovers: PrimitiveAtom<boolean>;
   canCloseCurrentPopoverManuallyAtom: Atom<boolean>;
   canCloseAllPopoversManuallyAtom: Atom<boolean>;
+  currentPopoverIsMaximizedAtom: PrimitiveAtom<boolean>;
   currentPopoverIsFadingOutAtom: PrimitiveAtom<boolean>;
   currentPopoverIsPlacedOnTop: Atom<boolean>;
   currentPopoverIsPlacedOnLeft: Atom<boolean>;
@@ -120,6 +122,37 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
 
       return canCloseAllModalsManually;
     });
+
+    this.currentPopoverIsMaximizedAtom = atom(
+      (get) => {
+        const currentModalKey = get(this.openPopovers.currentKeyAtom);
+
+        if ((currentModalKey ?? null) !== null) {
+          const currentPopover =
+            this.openPopovers.keyedMap.map[currentModalKey!];
+
+          if (currentPopover) {
+            const isMaximized = get(currentPopover.nodeData!.isMaximized);
+
+            return isMaximized;
+          }
+        }
+
+        return false;
+      },
+      (get, set, newValue) => {
+        const currentModalKey = get(this.openPopovers.currentKeyAtom);
+
+        if ((currentModalKey ?? null) !== null) {
+          const currentPopover =
+            this.openPopovers.keyedMap.map[currentModalKey!];
+
+          if (currentPopover) {
+            set(currentPopover.nodeData!.isMaximized, newValue);
+          }
+        }
+      },
+    );
 
     this.currentPopoverIsFadingOutAtom = atom(false);
 
@@ -344,6 +377,7 @@ export class TrmrkPopoverService extends TrmrkDisposableBase {
       },
       args,
       data,
+      isMaximized: atom(false),
       canCloseManually,
       placeOnTop,
       placeOnLeft,

@@ -140,10 +140,6 @@ const ResizePanelsBottomToolbarContents = ({
     updateMiddlePanelContainerElWidth(middlePanelContainerElRef, showRightPanelValue);
   }, [showLeftPanelValue, showRightPanelValue]);
 
-  const eventDataAvailable = React.useCallback((data: DragEventData, isForMouseUp: boolean) => {
-      data.isValid ||= pointerIsTouchOrLeftMouseBtn(data.event as PointerEvent, isForMouseUp);
-    }, []);
-
   const resizeLeftPanelBtnDragStart = React.useCallback((_: PointerEvent) => {
     const leftPanelContainerEl = leftPanelContainerElRef.current;
 
@@ -207,13 +203,11 @@ const ResizePanelsBottomToolbarContents = ({
   const leftPanelResizeDraggableSvcArgs = React.useMemo(() => ({
       drag: resizeLeftPanelBtnDrag,
       dragStart: resizeLeftPanelBtnDragStart,
-      eventDataAvailable
     }), []);
 
   const middlePanelResizeDraggableSvcArgs = React.useMemo(() => ({
       drag: resizeMiddlePanelBtnDrag,
       dragStart: resizeMiddlePanelBtnDragStart,
-      eventDataAvailable
     }), []);
 
   React.useEffect(() => {

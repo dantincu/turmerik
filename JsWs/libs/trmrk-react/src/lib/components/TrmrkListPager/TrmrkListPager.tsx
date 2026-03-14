@@ -7,6 +7,7 @@ import { defaultTrmrkPopoverService, TrmrkPopoverPropsCoreWithData } from "../Tr
 import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
 import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
 import TrmrkPopover from "../TrmrkAppModal/TrmrkPopover";
+import { TrmrkAppModalWidth } from "../TrmrkAppModal/TrmrkAppModal";
 import TrmrkListPagerFull from "./TrmrkListPagerFull";
 
 import "./TrmrkListPager.scss";
@@ -24,7 +25,8 @@ const FullPagerPopover = ({
 }: TrmrkPopoverPropsCoreWithData<TrmrkListPagerProps>) => {
   const { pageSize, itemsCount, skipItems } = data;
 
-  return (<TrmrkPopover data={data} {...props} showBar={true}>
+  return (<TrmrkPopover className="trmrk-list-pager-full-popover" canMaximizeManually={true}
+        data={data} {...props} showBar={true} width={TrmrkAppModalWidth.Stretch}>
       <TrmrkListPagerFull {...{pageSize, itemsCount, skipItems}}></TrmrkListPagerFull>
     </TrmrkPopover>);
 };
