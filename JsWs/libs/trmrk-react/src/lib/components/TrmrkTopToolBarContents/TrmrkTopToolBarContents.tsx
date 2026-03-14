@@ -16,6 +16,7 @@ import TrmrkPopover from "../TrmrkAppModal/TrmrkPopover";
 import { useAppUserMessage } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 import TrmrkMinimizedModalStacksView from "../TrmrkMinimizedModalStacksView/TrmrkMinimizedModalStacksView";
 import TrmrkListPager from "../TrmrkListPager/TrmrkListPager";
+import TrmrkResizeObservable, { ResizeCallbackArgs } from "../TrmrkResizeObservable/TrmrkResizeObservable";
 
 export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showBackBtn?: boolean | NullOrUndef;
@@ -426,25 +427,12 @@ export default function TrmrkTopToolBarContents({
     }
   }, []);
 
-  const toolbarContainerElResizeObserver = React.useMemo(() => new ResizeObserver(updateToolbarContentsScrolBtnsVisibility), []);
-  const toolbarContentsElResizeObserver = React.useMemo(() => new ResizeObserver(updateToolbarContentsScrolBtnsVisibility), []);
-
   const toolbarContainerElAvailable = React.useCallback((el: HTMLDivElement | null) => {
     toolbarContainerElRef.current = el;
-
-    if (el) {
-      toolbarContainerElResizeObserver.observe(el);
-      updateToolbarContentsScrolBtnsVisibility();
-    }
   }, []);
 
   const toolbarContentsElAvailable = React.useCallback((el: HTMLDivElement | null) => {
     toolbarContentsElRef.current = el;
-
-    if (el) {
-      toolbarContentsElResizeObserver.observe(el);
-      updateToolbarContentsScrolBtnsVisibility();
-    }
   }, []);
 
   const showMinimizedModalStacksViewPopover = React.useCallback(() => {
@@ -501,19 +489,17 @@ export default function TrmrkTopToolBarContents({
     appUserMessage.show.set(appUserMessage.show.value + 1);
   }, [appUserMessage.show.value]);
 
-  React.useEffect(() => {
-    return () => {
-      toolbarContainerElResizeObserver.disconnect();
-      toolbarContentsElResizeObserver.disconnect();
-      toolbarContainerElRef.current = null;
-      toolbarContentsElRef.current = null;
-    }
-  }, []);
-
-  return <div className={["trmrk-toolbar-container", className].join(" ")} ref={toolbarContainerElAvailable}>
+  return <TrmrkResizeObservable
+        className={["trmrk-toolbar-container", className].join(" ")}
+        ref={toolbarContainerElAvailable}
+        resized={updateToolbarContentsScrolBtnsVisibility}>
       <ContentsShiftLeftBtn />
       <div className="trmrk-toolbar-contents-wrapper">
-        <div className="trmrk-toolbar-contents" style={{ left: `${toolbarContentsOffsetValue}px` }} ref={toolbarContentsElAvailable}>
+        <TrmrkResizeObservable
+            className="trmrk-toolbar-contents"
+            style={{ left: `${toolbarContentsOffsetValue}px` }}
+            ref={toolbarContentsElAvailable}
+            resized={updateToolbarContentsScrolBtnsVisibility}>
           { (showBackBtn ?? true) && <TrmrkBtn><TrmrkIcon icon="mdi:arrow-back" /></TrmrkBtn> }
           { (showGoToParentBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="mdi:arrow-up" /></TrmrkBtn> }
           { (showUndoBtn ?? false) && <TrmrkBtn><TrmrkIcon icon="material-symbols:undo" /></TrmrkBtn> }
@@ -542,9 +528,11 @@ export default function TrmrkTopToolBarContents({
             )} className="trmrk-btn-filled-primary" onClick={restoreMinimizedModalsClicked} onContextMenu={restoreMinimizedModalsContextMenu}>
             <TrmrkIcon icon="material-symbols:select-window" /></TrmrkBtn> }
           <TrmrkBtn><TrmrkIcon icon="material-symbols:tab-group" /></TrmrkBtn>
-          { ((appUserMessage.level.value ?? null) !== null) && <TrmrkBtn borderWidth={1} className={showAppMessageBtnCssClass} onClick={showAppMessageBtnClicked}><TrmrkIcon icon="mdi:bell-notification" /></TrmrkBtn> }
-        </div>
+          { ((appUserMessage.level.value ?? null) !== null) && <TrmrkBtn
+            borderWidth={1} className={showAppMessageBtnCssClass} onClick={showAppMessageBtnClicked}>
+              <TrmrkIcon icon="mdi:bell-notification" /></TrmrkBtn> }
+        </TrmrkResizeObservable>
       </div>
       <ContentsShiftRightBtn />
-    </div>;
+    </TrmrkResizeObservable>;
 }
