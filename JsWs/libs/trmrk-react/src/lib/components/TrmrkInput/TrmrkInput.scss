@@ -1,0 +1,31 @@
+.trmrk-textbox {
+  border-radius: var(--trmrk-textbox-border-radius);
+  border: 1px solid;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 10px;
+
+  &:not(.trmrk-show-spinners) {
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    -moz-appearance: textfield;
+  }
+}
+
+.light {
+  .trmrk-textbox {
+    background-color: inherit;
+    border-color: #0008;
+  }
+}
+
+.dark {
+  .trmrk-textbox {
+    background-color: inherit;
+    border-color: #FFF8;    
+  }  
+}

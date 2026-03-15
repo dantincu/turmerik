@@ -11,22 +11,8 @@
     margin-left: 0;
   }
 
-  &.trmrk-is-horizontal {
-    .trmrk-scrollbar-track {
-    }
-
-    .trmrk-scrollbar-thumb {
-    }
-  }
-
   &.trmrk-is-vertical {
     flex-direction: column;
-
-    .trmrk-scrollbar-track {
-    }
-
-    .trmrk-scrollbar-thumb {
-    }
   }
 }
 

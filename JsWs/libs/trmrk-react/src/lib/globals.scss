@@ -36,15 +36,17 @@ body, input, select, option {
 
 .light {
   body, input, select, option {
-    background: var(--trmrk-default-back-color-light);
+    background-color: var(--trmrk-default-back-color-light);
     color: var(--trmrk-default-fore-color-light);
+    border-color: var(--trmrk-default-fore-color-light);
   }
 }
 
 .dark {
   body, input, select, option {
-    background: var(--trmrk-default-back-color-dark);
+    background-color: var(--trmrk-default-back-color-dark);
     color: var(--trmrk-default-fore-color-dark);
+    border-color: var(--trmrk-default-fore-color-dark);
   }
 }
 

@@ -3,6 +3,7 @@ import { PrimitiveAtom, atom } from "jotai";
 
 import { NullOrUndef } from "@/src/trmrk/core";
 
+import TrmrkTextBox from "../TrmrkInput/TrmrkTextBox";
 import TrmrkScrollBar, { TrmrkScrollbarThumbPosition } from "../TrmrkScrollBar/TrmrkScrollBar";
 import "./TrmrkListPager.scss";
 
@@ -45,6 +46,14 @@ export default function TrmrkListPagerFull({
     }
   }, []);
 
+  const onScrollBarDrag = React.useCallback((event: TrmrkScrollbarThumbPosition) => {
+
+  }, []);
+
+  const onScrollBarDragEnd = React.useCallback((event: TrmrkScrollbarThumbPosition) => {
+
+  }, []);
+
   React.useEffect(() => {
     window.addEventListener("resize", updateContainerIsWideFlag);
     updateContainerIsWideFlag();
@@ -57,7 +66,10 @@ export default function TrmrkListPagerFull({
   return <div className={["trmrk-list-pager-full-container",
         containerIsWide ? "trmrk-is-wide" : "",
         cssClass ?? ""].join(" ")}>
-    <div className="trmrk-main-container"></div>
-    <TrmrkScrollBar position={position} isHorizontal={containerIsWide} />
+    <div className="trmrk-main-container">
+      <TrmrkTextBox type="number" />
+    </div>
+    <TrmrkScrollBar position={position} isHorizontal={containerIsWide}
+      onThumbDrag={onScrollBarDrag} onThumbDragEnd={onScrollBarDragEnd} />
   </div>;
 }
