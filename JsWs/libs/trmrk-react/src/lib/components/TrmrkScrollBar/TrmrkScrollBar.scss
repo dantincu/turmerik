@@ -11,8 +11,14 @@
     margin-left: 0;
   }
 
-  &.trmrk-is-vertical {
+  &.trmrk-is-vertical.trmrk-is-vertical.trmrk-is-vertical.trmrk-is-vertical {
     flex-direction: column;
+    width: 40px;
+  }
+
+  &.trmrk-is-horizontal.trmrk-is-horizontal.trmrk-is-horizontal.trmrk-is-horizontal {
+    flex-direction: row;
+    height: 40px;
   }
 }
 

@@ -7,6 +7,7 @@ export const tailwindClassesCore = [
   "flex-col",
   "flex-grow-[1]",
   "flex-shrink-[0]",
+  "font-bold",
   "justify-end",
   "justify-self-center",
   "h-full",
@@ -15,7 +16,9 @@ export const tailwindClassesCore = [
   "max-h-full",
   "ml-[2px]",
   "mr-[2px]",
+  "pl-[10px]",
+  "pr-[10px]",
   "relative",
   "right-[-25px]",
-  "font-bold",
+  "w-full",
 ];

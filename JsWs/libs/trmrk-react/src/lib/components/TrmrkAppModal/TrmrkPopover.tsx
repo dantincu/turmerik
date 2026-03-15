@@ -85,7 +85,7 @@ const TrmrkPopover = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalPr
             </TrmrkBtn> }
           </div>
           <div className="trmrk-content flex grow content-center ml-[2px]">
-            {barContents ?? <h2 className="text-center grow leading-[40px]">{popoverTitleVal}</h2>}</div>
+            {barContents ?? <h2 className="text-center grow leading-[40px] pl-[10px] pr-[10px]">{popoverTitleVal}</h2>}</div>
           <div className="trmrk-trailing-content flex mr-[2px]">
           { (canMaximizeManually ?? false) && <TrmrkBtn className="trmrk-btn-filled-system" onClick={maximizeBtnClicked}>
             <TrmrkIcon icon={`mdi:${currentPopoverIsMaximized ? "window-maximize" : "maximize"}`}></TrmrkIcon>

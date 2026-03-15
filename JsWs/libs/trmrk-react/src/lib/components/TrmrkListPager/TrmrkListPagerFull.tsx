@@ -67,7 +67,7 @@ export default function TrmrkListPagerFull({
         containerIsWide ? "trmrk-is-wide" : "",
         cssClass ?? ""].join(" ")}>
     <div className="trmrk-main-container">
-      <TrmrkTextBox type="number" />
+      <TrmrkTextBox type="number" className="w-full trmrk-skip-items-textbox" />
     </div>
     <TrmrkScrollBar position={position} isHorizontal={containerIsWide}
       onThumbDrag={onScrollBarDrag} onThumbDragEnd={onScrollBarDragEnd} />
