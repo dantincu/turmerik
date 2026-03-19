@@ -21,4 +21,5 @@ export const tailwindClassesCore = [
   "relative",
   "right-[-25px]",
   "w-full",
+  "whitespace-nowrap",
 ];

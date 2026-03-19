@@ -10,6 +10,7 @@ import TrmrkPointerDraggable from "../TrmrkPointerDraggable/TrmrkPointerDraggabl
 import { updateFwdRef, updateRef } from "../../services/utils";
 
 import "./TrmrkScrollBar.scss";
+import { TouchOrMouseCoords } from "@/src/trmrk-browser/domUtils/touchAndMouseEvents";
 
 export interface TrmrkScrollbarThumbPosition {
   ratio: number;
@@ -21,7 +22,7 @@ export interface TrmrkScrollBarProps {
   cssClass?: string | NullOrUndef;
   isHorizontal?: boolean | NullOrUndef;
   position: PrimitiveAtom<TrmrkScrollbarThumbPosition>;
-  onThumbDragStart?: ((pos: PointerEvent) => void) | NullOrUndef;
+  onThumbDragStart?: ((pos: TouchOrMouseCoords) => void) | NullOrUndef;
   onThumbDrag?: ((pos: TrmrkScrollbarThumbPosition) => void) | NullOrUndef;
   onThumbDragEnd?: ((pos: TrmrkScrollbarThumbPosition) => void) | NullOrUndef;
 }
@@ -93,12 +94,12 @@ export default function TrmrkScrollBar({
         top: `${positionVal.px}px`
       }}>&nbsp;</TrmrkBtn>, [isHorizontal, positionVal]);
 
-  const onThumbElDragStart = React.useCallback((event: PointerEvent) => {
+  const onThumbElDragStart = React.useCallback((event: TouchOrMouseCoords) => {
     actWithValIf(onThumbDragStart, f => f(event));
   }, []);
 
   const onThumbElDrag = React.useCallback((event: PointerDragEvent) => {
-    const diffPx = isHorizontal ? event.event.screenX - event.pointerDownEvent.screenX : event.event.screenY - event.pointerDownEvent.screenY;
+    const diffPx = isHorizontal ? event.coords.screenX - event.pointerDownCoords.screenX : event.coords.screenY - event.pointerDownCoords.screenY;
 
     const thumbPos = updatePositionCore(diffPx);
     actWithValIf(onThumbDrag, f => f(thumbPos));

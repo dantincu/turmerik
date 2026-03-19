@@ -7,7 +7,7 @@ import { atomEffect } from 'jotai-effect';
 import { actWithValIf } from "@/src/trmrk/core";
 import { joinNames } from "@/src/trmrk/name-generators";
 import { PointerDragEvent, DragEventData } from "@/src/trmrk-browser/domUtils/PointerDragService";
-import { pointerIsTouchOrLeftMouseBtn } from "@/src/trmrk-browser/domUtils/touchAndMouseEvents";
+import { pointerIsTouchOrLeftMouseBtn, TouchOrMouseCoords } from "@/src/trmrk-browser/domUtils/touchAndMouseEvents";
 
 import "./Trmrk3PanelsAppLayout.scss";
 import { ComponentProps } from "../defs/common";
@@ -140,7 +140,7 @@ const ResizePanelsBottomToolbarContents = ({
     updateMiddlePanelContainerElWidth(middlePanelContainerElRef, showRightPanelValue);
   }, [showLeftPanelValue, showRightPanelValue]);
 
-  const resizeLeftPanelBtnDragStart = React.useCallback((_: PointerEvent) => {
+  const resizeLeftPanelBtnDragStart = React.useCallback((_: TouchOrMouseCoords) => {
     const leftPanelContainerEl = leftPanelContainerElRef.current;
 
     if (leftPanelContainerEl) {
@@ -148,7 +148,7 @@ const ResizePanelsBottomToolbarContents = ({
     }
   }, []);
 
-  const resizeMiddlePanelBtnDragStart = React.useCallback((_: PointerEvent) => {
+  const resizeMiddlePanelBtnDragStart = React.useCallback((_: TouchOrMouseCoords) => {
     const middlePanelContainerEl = middlePanelContainerElRef.current;
 
     if (middlePanelContainerEl) {
@@ -161,7 +161,7 @@ const ResizePanelsBottomToolbarContents = ({
 
     if (leftPanelContainerEl) {
       const containerWidthPx = leftPanelContainerEl.offsetWidth;
-      const diffPx = event.event.screenX - event.pointerDownEvent.screenX;
+      const diffPx = event.coords.screenX - event.pointerDownCoords.screenX;
       const diffPercent = (diffPx * 100.0) / containerWidthPx;
       const newLeftPanelWidthRatio = leftPanelPointerDownWidthRatioRef.current + diffPercent;
       trmrk3PanelsAppLayoutVars.leftPanelWidthRatio = newLeftPanelWidthRatio;
@@ -174,7 +174,7 @@ const ResizePanelsBottomToolbarContents = ({
 
     if (middlePanelContainerEl) {
       const containerWidthPx = middlePanelContainerEl.offsetWidth;
-      const diffPx = event.event.screenX - event.pointerDownEvent.screenX;
+      const diffPx = event.coords.screenX - event.pointerDownCoords.screenX;
       const diffPercent = (diffPx * 100.0) / containerWidthPx;
       const newMiddlePanelWidthRatio = middlePanelPointerDownWidthRatioRef.current + diffPercent;
       trmrk3PanelsAppLayoutVars.middlePanelWidthRatio = newMiddlePanelWidthRatio;

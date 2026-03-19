@@ -29,6 +29,7 @@
 .trmrk-list-pager-full-container {
   display: flex;
   width: 100%;
+  padding: 10px;
 
   .trmrk-main-container {
     display: flex;
@@ -62,16 +63,24 @@
     &.trmrk-is-wide {
       flex-direction: row;
 
+      .trmrk-main-container {
+        padding-bottom: 10px;
+      }
+
       .trmrk-scrollbar-container {
-        width: calc(100dvw - var(--trmrk-modal-container-offset-x) - 10px);
+        width: calc(100dvw - var(--trmrk-modal-container-offset-x) - 30px);
       }
     }
 
     &:not(.trmrk-is-wide) {
       flex-direction: column;
+
+      .trmrk-main-container {
+        padding-right: 10px;
+      }
       
       .trmrk-scrollbar-container {
-        height: calc(100dvh - var(--trmrk-modal-container-offset-y) - 50px);
+        height: calc(100dvh - var(--trmrk-modal-container-offset-y) - 70px);
       }
     }
   }

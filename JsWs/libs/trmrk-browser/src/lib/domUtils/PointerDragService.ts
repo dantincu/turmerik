@@ -1,7 +1,12 @@
 import { NullOrUndef, actWithValIf } from "@/src/trmrk/core";
 import { TrmrkDisposableBase } from "@/src/trmrk/TrmrkDisposableBase";
 
-import { pointerIsTouchOrLeftMouseBtn } from "./touchAndMouseEvents";
+import {
+  TouchOrMouseCoords,
+  getSingleTouchOrClick,
+  MouseButton,
+} from "./touchAndMouseEvents";
+
 import { LongPressOrRightClickEventData } from "./LongPressService";
 
 export interface PointerDragServiceInitArgs {
@@ -9,29 +14,23 @@ export interface PointerDragServiceInitArgs {
     | ((eventData: DragEventData, isForMouseUp: boolean) => void)
     | NullOrUndef;
   drag?: ((event: PointerDragEvent) => void) | NullOrUndef;
-  dragStart?: ((event: PointerEvent) => void) | NullOrUndef;
+  dragStart?: ((event: TouchOrMouseCoords) => void) | NullOrUndef;
   dragEnd?: ((event: PointerDragEvent) => void) | NullOrUndef;
 }
 
 export interface PointerDragEvent {
-  pointerDownEvent: PointerEvent;
-  event: PointerEvent;
-}
-
-export interface DragStartPosition {
-  clientTop: number;
-  clientLeft: number;
-  offsetTop: number;
-  offsetLeft: number;
+  pointerDownCoords: TouchOrMouseCoords;
+  coords: TouchOrMouseCoords;
+  event: MouseEvent | TouchEvent;
 }
 
 export interface DragEventData extends LongPressOrRightClickEventData {
-  dragStartPosition: DragStartPosition | null;
+  coords: TouchOrMouseCoords | null;
 }
 
 export class PointerDragService extends TrmrkDisposableBase {
   private args: PointerDragServiceInitArgs | null = null;
-  private pointerDownEvent: PointerEvent | null = null;
+  private pointerDownCoords: TouchOrMouseCoords | null = null;
   private hostElem: HTMLElement | null = null;
 
   constructor() {
@@ -46,7 +45,8 @@ export class PointerDragService extends TrmrkDisposableBase {
     const elem = this.hostElem;
 
     if (elem) {
-      elem.removeEventListener("pointerdown", this.pointerDown);
+      elem.removeEventListener("mousedown", this.pointerDown);
+      elem.removeEventListener("touchend", this.pointerDown);
     }
 
     this.reset();
@@ -54,30 +54,40 @@ export class PointerDragService extends TrmrkDisposableBase {
     this.args = null;
   }
 
-  pointerDown(event: PointerEvent) {
+  pointerDown(event: MouseEvent | TouchEvent) {
     this.reset();
-    this.pointerDownEvent = event;
     const data = this.getEventData(event);
 
     if (data.isValid) {
-      document.addEventListener("pointermove", this.pointerMove, {
+      this.pointerDownCoords = data.coords;
+
+      document.addEventListener("mousemove", this.pointerMove, {
         capture: true,
         passive: false,
       });
 
-      document.addEventListener("pointerup", this.pointerUp, {
+      document.addEventListener("touchmove", this.pointerMove, {
+        capture: true,
+        passive: false,
+      });
+
+      document.addEventListener("mouseup", this.pointerUp, {
         capture: true,
       });
 
-      actWithValIf(this.args!.dragStart, (f) => f(event));
+      document.addEventListener("touchend", this.pointerUp, {
+        capture: true,
+      });
+
+      actWithValIf(this.args!.dragStart, (f) => f(data.coords!));
     } else {
-      this.pointerDownEvent = null;
+      this.pointerDownCoords = null;
     }
 
     return event;
   }
 
-  pointerMove(event: PointerEvent) {
+  pointerMove(event: MouseEvent | TouchEvent) {
     const data = this.getEventData(event);
 
     if (!data.isValid) {
@@ -87,7 +97,7 @@ export class PointerDragService extends TrmrkDisposableBase {
     }
   }
 
-  pointerUp(event: PointerEvent) {
+  pointerUp(event: MouseEvent | TouchEvent) {
     const data = this.getEventData(event, true);
     actWithValIf(this.args!.dragEnd, (f) => f(this.getDragEvent(data)));
     this.reset();
@@ -100,51 +110,55 @@ export class PointerDragService extends TrmrkDisposableBase {
   }
 
   setHostElem(hostElem: HTMLElement | null) {
-    this.hostElem?.removeEventListener("pointerdown", this.pointerDown);
+    this.hostElem?.removeEventListener("mousedown", this.pointerDown);
+    this.hostElem?.removeEventListener("touchstart", this.pointerDown);
     this.hostElem = hostElem;
-    this.hostElem?.addEventListener("pointerdown", this.pointerDown);
+    this.hostElem?.addEventListener("mousedown", this.pointerDown);
+    this.hostElem?.addEventListener("touchstart", this.pointerDown);
   }
 
-  private getDragEvent(data: LongPressOrRightClickEventData) {
+  private getDragEvent(data: DragEventData) {
     const event: PointerDragEvent = {
-      pointerDownEvent: this.pointerDownEvent!,
-      event: data.event as PointerEvent,
+      pointerDownCoords: this.pointerDownCoords!,
+      coords: data.coords!,
+      event: data.event,
     };
 
     return event;
   }
 
-  private getEventData(event: PointerEvent, isForMouseUp = false) {
+  private getEventData(event: MouseEvent | TouchEvent, isForMouseUp = false) {
     event.preventDefault();
     const elem = this.hostElem;
 
-    const data: DragEventData = {
+    const data = {
       elem: elem!,
       event,
       composedPath: null,
-      isValid: pointerIsTouchOrLeftMouseBtn(event, isForMouseUp) && !!elem,
-      dragStartPosition: elem
-        ? {
-            clientTop: elem.clientTop,
-            clientLeft: elem.clientLeft,
-            offsetTop: elem.offsetTop,
-            offsetLeft: elem.offsetLeft,
-          }
-        : null,
-    };
+      coords: getSingleTouchOrClick(event, MouseButton.Left, false),
+    } as DragEventData;
 
+    data.isValid = !!data.coords;
     actWithValIf(this.args?.eventDataAvailable, (f) => f(data, isForMouseUp));
     return data;
   }
 
   private reset() {
-    this.pointerDownEvent = null;
+    this.pointerDownCoords = null;
 
-    document.removeEventListener("pointerup", this.pointerUp, {
+    document.removeEventListener("mouseup", this.pointerUp, {
       capture: true,
     });
 
-    document.removeEventListener("pointermove", this.pointerMove, {
+    document.removeEventListener("touchend", this.pointerUp, {
+      capture: true,
+    });
+
+    document.removeEventListener("mousemove", this.pointerMove, {
+      capture: true,
+    });
+
+    document.removeEventListener("touchmove", this.pointerMove, {
       capture: true,
     });
   }
