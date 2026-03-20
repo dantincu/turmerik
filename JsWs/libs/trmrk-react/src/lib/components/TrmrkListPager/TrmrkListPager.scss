@@ -29,7 +29,7 @@
 .trmrk-list-pager-full-container {
   display: flex;
   width: 100%;
-  padding: 10px;
+  padding: 2px;
 
   .trmrk-main-container {
     display: flex;
@@ -64,11 +64,11 @@
       flex-direction: row;
 
       .trmrk-main-container {
-        padding-bottom: 10px;
+        padding-bottom: 2px;
       }
 
       .trmrk-scrollbar-container {
-        width: calc(100dvw - var(--trmrk-modal-container-offset-x) - 30px);
+        width: calc(100dvw - var(--trmrk-modal-container-offset-x) - 14px);
       }
     }
 
@@ -76,11 +76,11 @@
       flex-direction: column;
 
       .trmrk-main-container {
-        padding-right: 10px;
+        padding-right: 2px;
       }
       
       .trmrk-scrollbar-container {
-        height: calc(100dvh - var(--trmrk-modal-container-offset-y) - 70px);
+        height: calc(100dvh - var(--trmrk-modal-container-offset-y) - 54px);
       }
     }
   }
@@ -89,13 +89,13 @@
     .trmrk-list-pager-full-container {
       &.trmrk-is-wide {
         .trmrk-scrollbar-container {
-          width: calc(100dvw - 10px);
+          width: calc(100dvw - 8px);
         }
       }
 
       &:not(.trmrk-is-wide) {
         .trmrk-scrollbar-container {
-          height: calc(100dvh - 50px);
+          height: calc(100dvh - 52px);
         }
       }
     }

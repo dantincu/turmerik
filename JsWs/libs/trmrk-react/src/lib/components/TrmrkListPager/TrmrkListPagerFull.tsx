@@ -17,25 +17,6 @@ export interface TrmrkListPagerFullProps {
 
 const containerIsWideDiffThresholdPx = 0;
 
-const TrmrkListPagerFullScrollBar = React.memo(({
-  position,
-  cssClass,
-  isHorizontal,
-  onThumbDrag,
-  onThumbDragEnd,
-  onThumbDragStart,
-}: TrmrkScrollBarProps) => {
-  console.log("TrmrkListPagerFullScrollBar");
-
-  return <TrmrkScrollBar
-    position={position}
-    cssClass={cssClass}
-    isHorizontal={isHorizontal}
-    onThumbDrag={onThumbDrag}
-    onThumbDragEnd={onThumbDragEnd}
-    onThumbDragStart={onThumbDragStart} />
-  });
-
 export default function TrmrkListPagerFull({
   cssClass,
   pageSize,
@@ -50,6 +31,7 @@ export default function TrmrkListPagerFull({
   const [skipItemsVal, setSkipItemsVal] = useAtom(skipItems);
   const [skipItemsStateVal, setSkipItemsStateVal] = React.useState(skipItemsVal);
   const [skipItemsStrVal, setSkipItemsStrVal] = React.useState(skipItemsVal.toString());
+  const skipItemsValRef = React.useRef(skipItemsVal);
 
   const getPositionRatio = React.useCallback(
     (skipItemsStateNewVal: number) => {
@@ -77,15 +59,19 @@ export default function TrmrkListPagerFull({
 
   const [positionAtomVal, setPositionAtomVal] = useAtom(positionAtom);
 
-  const updatePositionAtomVal = React.useCallback((skipItemsStateNewVal: number) => {
+  const updatePositionAtomVal = React.useCallback((skipItemsStateNewVal: number, event: TrmrkScrollbarThumbPosition) => {
     const newRatio = getPositionRatio(skipItemsStateNewVal);
 
-    setPositionAtomVal({
-      px: Math.round(newRatio * positionAtomVal.trackLengthPx),
+    const positionAtomNewVal: TrmrkScrollbarThumbPosition = {
+      px: Math.round(newRatio * event.trackLengthPx),
       ratio: newRatio,
-      trackLengthPx: positionAtomVal.trackLengthPx,
-    });
-  }, [positionAtomVal, pageSize, itemsCountVal]);
+      trackLengthPx: event.trackLengthPx,
+    };
+
+    setPositionAtomVal(positionAtomNewVal);
+    setSkipItemsStateVal(skipItemsStateNewVal);
+    setSkipItemsStrVal(skipItemsStateNewVal.toString());
+  }, [positionAtomVal, pageSize, itemsCountVal, skipItemsStateVal, skipItemsStrVal]);
 
   const updateContainerIsWideFlag = React.useCallback(() => {
     const width = window.innerWidth;
@@ -111,29 +97,30 @@ export default function TrmrkListPagerFull({
 
   const onScrollBarDrag = React.useCallback((event: TrmrkScrollbarThumbPosition) => {
     const skipItemsStateNewVal = getNormalizedSkipItemsStateVal((itemsCountVal - pageSize) * event.ratio);
+    skipItemsValRef.current = skipItemsStateNewVal;
     setSkipItemsStateVal(skipItemsStateNewVal);
     setSkipItemsStrVal(skipItemsStateNewVal.toString());
-  }, [itemsCountVal, pageSize]);
+  }, [itemsCountVal, pageSize, skipItemsStateVal, skipItemsStrVal]);
 
   const onScrollBarDragEnd = React.useCallback((event: TrmrkScrollbarThumbPosition) => {
     setIsScrolling(false);
-    updatePositionAtomVal(skipItemsStateVal);
+    updatePositionAtomVal(skipItemsValRef.current, event);
   }, [isScrolling, skipItemsStateVal]);
 
   const onskipItemsTextBoxBlur = React.useCallback((event: React.FocusEvent<HTMLInputElement>) => {
     if (!isScrolling) {
       const skipItemsStateNewVal = getNormalizedSkipItemsStateVal(parseInt(event.target.value));
 
-      if (skipItemsStrVal !== skipItemsStateNewVal.toString()) {
-        setSkipItemsStateVal(skipItemsStateNewVal);
-        setSkipItemsStrVal(skipItemsStateNewVal.toString());
-        updatePositionAtomVal(skipItemsStateNewVal);
+      if (skipItemsStrVal !== skipItemsValRef.current.toString()) {
+        skipItemsValRef.current = skipItemsStateNewVal;
+        updatePositionAtomVal(skipItemsStateNewVal, positionAtomVal);
       }
     }
-  }, [isScrolling, skipItemsStateVal, skipItemsStrVal]);
+  }, [isScrolling, skipItemsStateVal, skipItemsStrVal, positionAtomVal]);
 
   const scrollBarJsx = React.useMemo(() => <TrmrkScrollBar position={positionAtom} isHorizontal={containerIsWide}
-    onThumbDragStart={onScrollBarDragStart} onThumbDrag={onScrollBarDrag} onThumbDragEnd={onScrollBarDragEnd} />, [positionAtom, containerIsWide]);
+    onThumbDragStart={onScrollBarDragStart} onThumbDrag={onScrollBarDrag} onThumbDragEnd={onScrollBarDragEnd} />, [
+      positionAtom, containerIsWide]);
 
   React.useEffect(() => {
     window.addEventListener("resize", updateContainerIsWideFlag);
