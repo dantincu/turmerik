@@ -48,14 +48,14 @@ export default function TrmrkScrollBar({
     let thumbPos: TrmrkScrollbarThumbPosition = {...positionRef.current};
 
     if (trackEl && thumbEl) {
-      thumbPos.trackLengthPx = (isHorizontal ? trackEl.offsetWidth : trackEl.offsetHeight) - thumbEl.offsetWidth;
+      thumbPos.trackLengthPx = (isHorizontal ? trackEl.offsetWidth : trackEl.offsetHeight) - (isHorizontal ? thumbEl.offsetWidth : thumbEl.offsetHeight);
 
       if (thumbPos.trackLengthPx > 0) {
         const normalizePx = () => thumbPos.px = Math.max(
           0, Math.min(thumbPos.trackLengthPx, thumbPos.px));
 
         if ((diffPx ?? null) !== null) {
-          thumbPos.px = thumbPos!.px + diffPx!;
+          thumbPos.px = thumbPos.px + diffPx!;
           normalizePx();
           thumbPos.ratio = thumbPos.px / thumbPos.trackLengthPx;
         } else {
@@ -74,7 +74,7 @@ export default function TrmrkScrollBar({
     }
 
     return thumbPos;
-  }, [isHorizontal]);
+  }, [isHorizontal, positionVal]);
 
   const updatePosition = React.useCallback(() => {
     const thumbPos = updatePositionCore();
@@ -100,7 +100,6 @@ export default function TrmrkScrollBar({
 
   const onThumbElDrag = React.useCallback((event: PointerDragEvent) => {
     const diffPx = isHorizontal ? event.coords.screenX - event.pointerDownCoords.screenX : event.coords.screenY - event.pointerDownCoords.screenY;
-
     const thumbPos = updatePositionCore(diffPx);
     actWithValIf(onThumbDrag, f => f(thumbPos));
     return thumbPos;

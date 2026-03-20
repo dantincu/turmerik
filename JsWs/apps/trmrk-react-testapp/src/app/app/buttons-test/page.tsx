@@ -18,6 +18,7 @@ import { useAppUserMessage } from "@/src/trmrk-react/components/TrmrkBasicAppLay
 import TrmrkBtn from "@/src/trmrk-react/components/TrmrkBtn/TrmrkBtn";
 import TrmrkMessagePopover from "@/src/trmrk-react/components/TrmrkMessagePopover/TrmrkMessagePopover";
 import TrmrkIcon from "@/src/trmrk-react/components/TrmrkIcon/TrmrkIcon";
+import TrmrkScrollBar, { TrmrkScrollBarProps, TrmrkScrollbarThumbPosition } from "@/src/trmrk-react/components/TrmrkScrollBar/TrmrkScrollBar";
 import { Placement } from '@/src/trmrk-browser/core';
 import TrmrkAppBarContents from "@/src/trmrk-react/components/TrmrkAppBarContents/TrmrkAppBarContents";
 import TrmrkTopToolBarContents from "@/src/trmrk-react/components/TrmrkTopToolBarContents/TrmrkTopToolBarContents";
@@ -28,6 +29,7 @@ import TrmrkAppModal from "@/src/trmrk-react/components/TrmrkAppModal/TrmrkAppMo
 import TrmrkPopover from "@/src/trmrk-react/components/TrmrkAppModal/TrmrkPopover";
 import { defaultTrmrkAppModalService, TrmrkAppModalPropsCoreWithData } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkAppModalService";
 import { defaultTrmrkPopoverService, TrmrkPopoverPropsCoreWithData } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkPopoverService";
+import { TouchOrMouseCoords } from '@/src/trmrk-browser/domUtils/touchAndMouseEvents';
 
 const AppBar = () => {
   return <TrmrkAppBarContents leadingChildren={() => <TrmrkMultiClickable hoc={{
@@ -47,7 +49,10 @@ const AppBar = () => {
 
 const TopToolbar = () => {
   const [itemsCountAtom] = React.useState(() => atom(Number.MAX_SAFE_INTEGER));
-  const [skipItems] = React.useState(() => atom(0));
+
+  const [skipItems] = React.useState(() => {
+    return atom(Math.round(Math.round(Number.MAX_SAFE_INTEGER / 200) * 100))
+  });
 
   return <TrmrkTopToolBarContents
     showGoToParentBtn={true}
@@ -116,6 +121,53 @@ const MessageButton = React.memo(({ msg, dispatch }: {
     <TrmrkMessagePopover show={msg.show} msgLevel={msg.idx % 5} autoCloseMillis={ (msg.idx + 1) * 1000 } arrowPlacement={Placement.Top}>
       {msg.text}</TrmrkMessagePopover>
   </React.Fragment>));
+
+const LeftPanelContentsScrollBar = React.memo(({
+  position,
+  cssClass,
+  isHorizontal,
+  onThumbDrag,
+  onThumbDragEnd,
+  onThumbDragStart,
+}: TrmrkScrollBarProps) => <TrmrkScrollBar
+    position={position}
+    cssClass={cssClass}
+    isHorizontal={isHorizontal}
+    onThumbDrag={onThumbDrag}
+    onThumbDragEnd={onThumbDragEnd}
+    onThumbDragStart={onThumbDragStart} />);
+
+const LeftPanelContents = () => {
+  const [position] = React.useState(() => atom({
+    px: 0,
+    ratio: 0.5,
+    trackLengthPx: 0
+  } as TrmrkScrollbarThumbPosition));
+
+  const [text, setText] = React.useState("");
+  const [positionVal, setPositionVal] = useAtom(position);
+
+  const onDragStart = React.useCallback((event: TouchOrMouseCoords) => {
+    setText(JSON.stringify({
+      ...event,
+      evt: null
+    }, null, "  "));
+  }, []);
+
+  const onDrag = React.useCallback((event: TrmrkScrollbarThumbPosition) => {
+    setText(JSON.stringify(event, null, "  "));
+  }, []);
+
+  const onDragEnd = React.useCallback((event: TrmrkScrollbarThumbPosition) => {
+    setText(JSON.stringify(event, null, "  "));
+    setPositionVal(event);
+  }, []);
+
+  return <div className="flex">
+    <LeftPanelContentsScrollBar isHorizontal={false} position={position} cssClass="trmrk-buttons-test-page-scroll-bar"
+      onThumbDrag={onDrag} onThumbDragEnd={onDragEnd} onThumbDragStart={onDragStart} />
+    <pre><code>{text}</code></pre></div>;
+}
 
 const MiddlePanelContents = () => {
   const [messages, dispatch] = React.useReducer(messagesReducer, messagesArr);
@@ -305,7 +357,8 @@ export default function ButtonsTestPage() {
       },
       leftPanel: {
         allowShow: true,
-        showLoader: true
+        showLoader: true,
+        contents: <LeftPanelContents />
       },
       middlePanel: {
         contents: <MiddlePanelContents />,
