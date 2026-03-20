@@ -24,13 +24,17 @@ const TrmrkListPagerFullScrollBar = React.memo(({
   onThumbDrag,
   onThumbDragEnd,
   onThumbDragStart,
-}: TrmrkScrollBarProps) => <TrmrkScrollBar
+}: TrmrkScrollBarProps) => {
+  console.log("TrmrkListPagerFullScrollBar");
+
+  return <TrmrkScrollBar
     position={position}
     cssClass={cssClass}
     isHorizontal={isHorizontal}
     onThumbDrag={onThumbDrag}
     onThumbDragEnd={onThumbDragEnd}
-    onThumbDragStart={onThumbDragStart} />);
+    onThumbDragStart={onThumbDragStart} />
+  });
 
 export default function TrmrkListPagerFull({
   cssClass,
@@ -120,13 +124,16 @@ export default function TrmrkListPagerFull({
     if (!isScrolling) {
       const skipItemsStateNewVal = getNormalizedSkipItemsStateVal(parseInt(event.target.value));
 
-      if (skipItemsStateVal !== skipItemsStateNewVal) {
+      if (skipItemsStrVal !== skipItemsStateNewVal.toString()) {
         setSkipItemsStateVal(skipItemsStateNewVal);
         setSkipItemsStrVal(skipItemsStateNewVal.toString());
         updatePositionAtomVal(skipItemsStateNewVal);
       }
     }
-  }, [isScrolling, skipItemsStateVal]);
+  }, [isScrolling, skipItemsStateVal, skipItemsStrVal]);
+
+  const scrollBarJsx = React.useMemo(() => <TrmrkScrollBar position={positionAtom} isHorizontal={containerIsWide}
+    onThumbDragStart={onScrollBarDragStart} onThumbDrag={onScrollBarDrag} onThumbDragEnd={onScrollBarDragEnd} />, [positionAtom, containerIsWide]);
 
   React.useEffect(() => {
     window.addEventListener("resize", updateContainerIsWideFlag);
@@ -144,7 +151,6 @@ export default function TrmrkListPagerFull({
       <TrmrkTextBox className="w-full trmrk-skip-items-textbox" onBlur={onskipItemsTextBoxBlur} onChange={(event) => {setSkipItemsStrVal(event.target.value)}}
         type="number" value={skipItemsStrVal} min={0} max={itemsCountVal - pageSize} step={1} />
     </div>
-    <TrmrkListPagerFullScrollBar position={positionAtom} isHorizontal={containerIsWide}
-      onThumbDragStart={onScrollBarDragStart} onThumbDrag={onScrollBarDrag} onThumbDragEnd={onScrollBarDragEnd} />
+    { scrollBarJsx }
   </div>;
 }
