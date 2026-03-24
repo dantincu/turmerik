@@ -1,10 +1,40 @@
 import { atom, getDefaultStore } from "jotai";
 
 import { NullOrUndef } from "@/src/trmrk/core";
+import { arrsAreEqual } from "@/src/trmrk/arr";
 
 import { IntKeyedNodesMap, IntKeyedNode } from "../components/defs/common";
 import { JotaiStore } from "./jotai/core";
 import { defaultComponentIdService } from "@/src/trmrk/services/ComponentIdService";
+
+export const shouldShowContents = (
+  currentKeysArr: number[] | NullOrUndef,
+  keyToBeRemoved: number | NullOrUndef,
+  keyToBeAdded: number | NullOrUndef,
+) => {
+  let retVal = (keyToBeAdded ?? null) !== null;
+
+  if (!retVal) {
+    retVal = (currentKeysArr ?? []).length > 0;
+
+    if (retVal) {
+      retVal = (keyToBeRemoved ?? null) === null;
+
+      if (!retVal) {
+        retVal = !arrsAreEqual(currentKeysArr!, [keyToBeRemoved]);
+      }
+    }
+  }
+
+  console.log(
+    "shouldShowContents",
+    retVal,
+    currentKeysArr,
+    keyToBeRemoved,
+    keyToBeAdded,
+  );
+  return retVal;
+};
 
 export class IntKeyedComponentsMapManager<
   TNode = React.ReactNode,

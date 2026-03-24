@@ -21,9 +21,13 @@ export interface TrmrkToolbarAtoms {
   showOverriding: PrimitiveAtom<boolean>;
 }
 
+export type ContentsComponentType =
+  | (() => React.ReactNode)
+  | React.MemoExoticComponent<() => React.ReactNode>;
+
 export interface InitLayoutPartArgs {
   allowShow?: boolean | NullOrUndef;
-  contents?: (() => React.ReactNode) | NullOrUndef;
+  contents?: ContentsComponentType | NullOrUndef;
   typeName?: string | NullOrUndef;
   showLoader?: boolean | NullOrUndef;
 }
@@ -165,7 +169,7 @@ export const initLayoutPart = (
   args: InitLayoutPartArgs | NullOrUndef,
   allowShowAtom: TrmrkUseAtom<boolean> | NullOrUndef,
   contentsKeyManager: RefLazyValue<
-    IntKeyedComponentsMapManager<() => React.ReactNode>
+    IntKeyedComponentsMapManager<ContentsComponentType>
   >,
   contentsKeyAtom: TrmrkUseAtom<number | null>,
   showLoaderAtom: TrmrkUseAtom<boolean> | NullOrUndef,

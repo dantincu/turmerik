@@ -5,7 +5,6 @@ import { useAtom } from "jotai";
 import { atomEffect } from 'jotai-effect';
 
 import { actWithValIf, actWithVal } from "@/src/trmrk/core";
-import { arrsAreEqual } from "@/src/trmrk/arr";
 import { joinNames } from "@/src/trmrk/name-generators";
 import { PointerDragEvent } from "@/src/trmrk-browser/domUtils/PointerDragService";
 import { TouchOrMouseCoords } from "@/src/trmrk-browser/domUtils/touchAndMouseEvents";
@@ -26,6 +25,7 @@ import TrmrkThinLoader from "../TrmrkThinLoader/TrmrkThinLoader";
 import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
 import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
 import TrmrkPointerDraggable from "../TrmrkPointerDraggable/TrmrkPointerDraggable";
+import { shouldShowContents } from "../../services/IntKeyedComponentsMapManager";
 
 import {
   trmrk3PanelsAppLayoutAtoms,
@@ -249,8 +249,8 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
   useAtom(lifecycleEffect);
   const leftPanelContainerElRef = React.useRef<HTMLDivElement | null>(null);
   const middlePanelContainerElRef = React.useRef<HTMLDivElement | null>(null);
-  const currentBottomToolbarContentsIdRef = React.useRef<number | null>(null);
-  const currentBottomToolbarContentKeysArrRef = React.useRef<number[]>(null);
+  const overridingBottomToolbarContentsIdRef = React.useRef<number | null>(null);
+  const overridingBottomToolbarContentKeysArrRef = React.useRef<number[]>(null);
 
   const contentsKeyPanelAtoms = usePanelContentsKeyAtoms();
   const renderPanelAtoms = useRenderPanelAtoms();
@@ -326,7 +326,7 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
       renderPanelAtoms.middlePanel.value,
       renderPanelAtoms.rightPanel.value].filter(show => show).length > 1;
 
-    const bottomToolbarContentsId = allowResizingPanels && isResizingPanels ? overridingBottomToolbarContents.value.register(
+    const overridingBottomToolbarContentsId = allowResizingPanels && isResizingPanels ? overridingBottomToolbarContents.value.register(
       () => <ResizePanelsBottomToolbarContents
         showLeftPanelValue={renderPanelAtoms.leftPanel.value}
         showMiddlePanelValue={renderPanelAtoms.middlePanel.value}
@@ -336,13 +336,11 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
         RegisteredResizePanelsBottomToolbarContentsTypeName
     ).key : null;
 
-    actWithVal(
-      (bottomToolbarContentsId ?? null) !== null && !arrsAreEqual(
-        currentBottomToolbarContentKeysArrRef.current ?? [],
-        [bottomToolbarContentsId]),
-      shouldShowBottomToolbar => {
-        showOverridingToolbars.bottomToolbar.set(shouldShowBottomToolbar);
-      });
+    showOverridingToolbars.bottomToolbar.set(
+      shouldShowContents(
+        overridingBottomToolbarContentKeysArrRef.current,
+        overridingBottomToolbarContentsIdRef.current,
+        overridingBottomToolbarContentsId));
 
     if (isResizingPanels && !allowResizingPanels) {
       setIsResizingPanels(false);
@@ -354,7 +352,7 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
     return () => {
       updateLeftPanelContainerElWidth(leftPanelContainerElRef, renderPanelAtoms.rightPanel.value);
       updateMiddlePanelContainerElWidth(middlePanelContainerElRef, renderPanelAtoms.rightPanel.value);
-      actWithValIf(bottomToolbarContentsId, id => overridingBottomToolbarContents.value.unregister(id));
+      actWithValIf(overridingBottomToolbarContentsId, id => overridingBottomToolbarContents.value.unregister(id));
     };
   }, [
       isResizingPanels,
@@ -364,8 +362,8 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
   ]);
 
   React.useEffect(() => {
-    currentBottomToolbarContentsIdRef.current = toolbarOverridingContentKeys.bottomToolbar.value;
-    currentBottomToolbarContentKeysArrRef.current = toolbarOverridingContentKeyArrs.bottomToolbar.value;
+    overridingBottomToolbarContentsIdRef.current = toolbarOverridingContentKeys.bottomToolbar.value;
+    overridingBottomToolbarContentKeysArrRef.current = toolbarOverridingContentKeyArrs.bottomToolbar.value;
   }, [
     toolbarOverridingContentKeys.bottomToolbar.value,
     toolbarOverridingContentKeyArrs.bottomToolbar.value
