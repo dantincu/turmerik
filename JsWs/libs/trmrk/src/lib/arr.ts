@@ -1,8 +1,16 @@
-import { Kvp, MtblRefValue, ValueOrAny, NullOrUndef, AnyOrUnknown } from './core';
+import {
+  Kvp,
+  MtblRefValue,
+  ValueOrAny,
+  NullOrUndef,
+  AnyOrUnknown,
+} from "./core";
 
 export interface CollectionFilterArgs<TColl, TIn, TOut = TIn> {
   collection: TColl;
-  predicate: (args: CollectionFilterPredicateArgs<TIn, TOut>) => boolean | AnyOrUnknown;
+  predicate: (
+    args: CollectionFilterPredicateArgs<TIn, TOut>,
+  ) => boolean | AnyOrUnknown;
   selector?: (input: TIn, i: number) => TOut;
   startIdx?: number | NullOrUndef;
   incrementIdx?: number | NullOrUndef;
@@ -33,7 +41,11 @@ export const toArray = <T>(itrbl: Iterable<T>) => {
 
 export const findKvp = <TValue>(
   arr: TValue[] | readonly TValue[],
-  predicate: (value: TValue, idx: number, array: TValue[] | readonly TValue[]) => boolean
+  predicate: (
+    value: TValue,
+    idx: number,
+    array: TValue[] | readonly TValue[],
+  ) => boolean,
 ) => {
   let retIdx = -1;
   let retVal: TValue | null = null;
@@ -58,7 +70,7 @@ export const findKvp = <TValue>(
 
 export const forEach = <T>(
   arr: T[],
-  callback: (item: T, idx: number, arr: T[]) => boolean | void
+  callback: (item: T, idx: number, arr: T[]) => boolean | void,
 ) => {
   for (let i = 0; i < arr.length; i++) {
     if (callback(arr[i], i, arr) === false) {
@@ -69,13 +81,15 @@ export const forEach = <T>(
 
 export const contains = <T>(arr: T[], item: T) => arr.indexOf(item) >= 0;
 
-export const any = <T>(arr: T[], predicate: (item: T, idx: number, array: T[]) => boolean) =>
-  arr.filter(predicate).length >= 0;
+export const any = <T>(
+  arr: T[],
+  predicate: (item: T, idx: number, array: T[]) => boolean,
+) => arr.filter(predicate).length >= 0;
 
 export const containsAnyOfArr = (
   inStr: string,
   strArr: string[] | readonly string[],
-  matching?: MtblRefValue<Kvp<number, string | NullOrUndef>> | NullOrUndef
+  matching?: MtblRefValue<Kvp<number, string | NullOrUndef>> | NullOrUndef,
 ) => {
   matching ??= {
     value: {
@@ -97,7 +111,9 @@ export const containsAnyOfArr = (
 export const containsAnyOfMx = (
   inStr: string,
   strMx: (string[] | readonly string[])[],
-  matching?: MtblRefValue<Kvp<number, Kvp<number, string | NullOrUndef>>> | NullOrUndef
+  matching?:
+    | MtblRefValue<Kvp<number, Kvp<number, string | NullOrUndef>>>
+    | NullOrUndef,
 ) => {
   matching ??= {
     value: {
@@ -111,7 +127,9 @@ export const containsAnyOfMx = (
 
   const innerMatching = {} as MtblRefValue<Kvp<number, string | NullOrUndef>>;
 
-  const kvp = findKvp(strMx, (strArr) => containsAnyOfArr(inStr, strArr, innerMatching));
+  const kvp = findKvp(strMx, (strArr) =>
+    containsAnyOfArr(inStr, strArr, innerMatching),
+  );
 
   const retVal = kvp.key >= 0;
 
@@ -127,7 +145,7 @@ export const containsAnyOfMx = (
 
 export const distinct = <T>(
   arr: T[],
-  areEqualPredicate: ((a: T, b: T) => boolean) | null = null
+  areEqualPredicate: ((a: T, b: T) => boolean) | null = null,
 ) => {
   areEqualPredicate ??= (a, b) => a === b;
   let i = 0;
@@ -148,7 +166,11 @@ export const distinct = <T>(
 
 export const filterAsync = async <TIn>(
   inArr: TIn[],
-  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean | AnyOrUnknown>
+  predicate: (
+    inVal: TIn,
+    idx?: number,
+    arr?: TIn[],
+  ) => Promise<boolean | AnyOrUnknown>,
 ) => {
   const outArr: TIn[] = [];
   const syncLock = new Uint32Array(new SharedArrayBuffer(32));
@@ -165,7 +187,7 @@ export const filterAsync = async <TIn>(
 
 export const mapAsync = async <TIn, TOut>(
   inArr: TIn[],
-  factory: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<TOut>
+  factory: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<TOut>,
 ) => {
   const outArr: TOut[] = [];
 
@@ -178,7 +200,11 @@ export const mapAsync = async <TIn, TOut>(
 
 export const findIdxAsync = async <TIn>(
   inArr: TIn[],
-  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean | AnyOrUnknown>
+  predicate: (
+    inVal: TIn,
+    idx?: number,
+    arr?: TIn[],
+  ) => Promise<boolean | AnyOrUnknown>,
 ) => {
   let idx = -1;
 
@@ -196,7 +222,11 @@ export const findIdxAsync = async <TIn>(
 
 export const findAsync = async <TIn>(
   inArr: TIn[],
-  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean | AnyOrUnknown>
+  predicate: (
+    inVal: TIn,
+    idx?: number,
+    arr?: TIn[],
+  ) => Promise<boolean | AnyOrUnknown>,
 ) => {
   const idx = await findIdxAsync(inArr, predicate);
   let retVal: TIn | null = null;
@@ -210,7 +240,11 @@ export const findAsync = async <TIn>(
 
 export const someAsync = async <TIn>(
   inArr: TIn[],
-  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean | AnyOrUnknown>
+  predicate: (
+    inVal: TIn,
+    idx?: number,
+    arr?: TIn[],
+  ) => Promise<boolean | AnyOrUnknown>,
 ) => {
   for (let i = 0; i < inArr.length; i++) {
     if (await predicate(inArr[i], i, inArr)) {
@@ -223,7 +257,11 @@ export const someAsync = async <TIn>(
 
 export const allAsync = async <TIn>(
   inArr: TIn[],
-  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean | AnyOrUnknown>
+  predicate: (
+    inVal: TIn,
+    idx?: number,
+    arr?: TIn[],
+  ) => Promise<boolean | AnyOrUnknown>,
 ) => {
   for (let i = 0; i < inArr.length; i++) {
     if (!(await predicate(inArr[i], i, inArr))) {
@@ -237,7 +275,7 @@ export const allAsync = async <TIn>(
 export const flatten = <T>(
   mx: T[][],
   removeDupplicates = false,
-  areEqualPredicate: ((a: T, b: T) => boolean) | null = null
+  areEqualPredicate: ((a: T, b: T) => boolean) | null = null,
 ) => {
   areEqualPredicate ??= (a, b) => a === b;
 
@@ -253,12 +291,13 @@ export const flatten = <T>(
   return retArr;
 };
 
-export const freezeMx = <T>(mx: T[][]) => Object.freeze(mx.map((arr) => Object.freeze(arr)));
+export const freezeMx = <T>(mx: T[][]) =>
+  Object.freeze(mx.map((arr) => Object.freeze(arr)));
 
 export const removeAllIdxes = <T>(
   inputArr: T[],
   idxesArr: number[],
-  spreadAndSortIdxesFirst = true
+  spreadAndSortIdxesFirst = true,
 ) => {
   if (spreadAndSortIdxesFirst) {
     idxesArr = [...idxesArr];
@@ -281,9 +320,9 @@ export const removeAllIdxes = <T>(
 export const removeAll = <T>(
   inputArr: T[],
   predicate: T[] | ((item: T, idx: number, inArr: T[]) => ValueOrAny<boolean>),
-  eqCompr: ((val1: T, val2: T) => number) | NullOrUndef = null
+  eqCompr: ((val1: T, val2: T) => number) | NullOrUndef = null,
 ) => {
-  if (typeof predicate === 'object') {
+  if (typeof predicate === "object") {
     const arr = predicate as T[];
 
     for (let i = 0; i < arr.length; i++) {
@@ -301,7 +340,11 @@ export const removeAll = <T>(
       }
     }
   } else {
-    const predicateFunc = predicate as (item: T, idx: number, inArr: T[]) => ValueOrAny<boolean>;
+    const predicateFunc = predicate as (
+      item: T,
+      idx: number,
+      inArr: T[],
+    ) => ValueOrAny<boolean>;
 
     const idxesArr = inputArr
       .map(
@@ -309,7 +352,7 @@ export const removeAll = <T>(
           ({
             key: idx,
             value: item,
-          } as Kvp<number, T>)
+          }) as Kvp<number, T>,
       )
       .filter((kvp) => predicateFunc(kvp.value, kvp.key, inputArr))
       .map((kvp) => kvp.key);
@@ -320,7 +363,8 @@ export const removeAll = <T>(
   return inputArr;
 };
 
-export const removeNullOrUndef = <T>(arr: T[]) => arr.filter((val) => (val ?? false) !== false);
+export const removeNullOrUndef = <T>(arr: T[]) =>
+  arr.filter((val) => (val ?? false) !== false);
 
 export interface Iterator<T = any> {
   [Symbol.iterator]: () => { next: () => { value: T; done: boolean } };
@@ -333,7 +377,7 @@ export interface PseudoArray {
 export const queryMx = <T>(
   mx: Iterator<T> | PseudoArray,
   childNodesPropName: string,
-  path: number[]
+  path: number[],
 ): T | undefined => {
   const idx = path[0];
   let i = 0;
@@ -341,7 +385,7 @@ export const queryMx = <T>(
   const mxAsArr = mx as PseudoArray;
   let retVal: T | undefined = undefined;
 
-  if (typeof mxAsArr.length === 'number') {
+  if (typeof mxAsArr.length === "number") {
     if (mxAsArr.length > idx) {
       found = true;
       retVal = (mxAsArr as T[])[idx];
@@ -356,7 +400,9 @@ export const queryMx = <T>(
   }
 
   if (found && path.length > 1) {
-    const childMx = (retVal as { [prop: string]: Iterator<T> | PseudoArray })[childNodesPropName];
+    const childMx = (retVal as { [prop: string]: Iterator<T> | PseudoArray })[
+      childNodesPropName
+    ];
 
     retVal = queryMx(childMx, childNodesPropName, path.slice(1));
   }
@@ -364,11 +410,14 @@ export const queryMx = <T>(
   return retVal;
 };
 
-export const filterKvp = <TColl, TIn, TOut = TIn>(args: CollectionFilterArgs<TColl, TIn, TOut>) => {
+export const filterKvp = <TColl, TIn, TOut = TIn>(
+  args: CollectionFilterArgs<TColl, TIn, TOut>,
+) => {
   const retArr: Kvp<number, TOut>[] = [];
   const incIdx = args.incrementIdx ?? 1;
 
-  const collectionItemRetriever = args.collectionItemRetriever ?? ((coll, i) => (coll as any)[i]);
+  const collectionItemRetriever =
+    args.collectionItemRetriever ?? ((coll, i) => (coll as any)[i]);
 
   const selector = args.selector ?? ((value, i) => value as unknown as TOut);
 
@@ -383,7 +432,11 @@ export const filterKvp = <TColl, TIn, TOut = TIn>(args: CollectionFilterArgs<TCo
     break: false,
   };
 
-  for (let i = args.startIdx ?? 0; incIdx > 0 ? i <= endIdx : i >= endIdx; i += incIdx) {
+  for (
+    let i = args.startIdx ?? 0;
+    incIdx > 0 ? i <= endIdx : i >= endIdx;
+    i += incIdx
+  ) {
     const inVal = collectionItemRetriever(args.collection, i);
     const value = selector(inVal, i);
 
@@ -416,4 +469,25 @@ export const splice = <T>(
 ) => {
   arr.splice(startIdx, deleteCount, ...itemsToAppend);
   return arr;
+};
+
+export const arrsAreEqual = <T>(
+  arr1: T[],
+  arr2: T[],
+  eqPred?: ((item1: T, item2: T) => boolean) | NullOrUndef,
+) => {
+  eqPred ??= (item1, item2) => item1 === item2;
+  let areEqual = arr1.length === arr2.length;
+
+  if (areEqual) {
+    for (let i = 0; i < arr1.length; i++) {
+      areEqual = eqPred(arr1[i], arr2[i]);
+
+      if (!areEqual) {
+        break;
+      }
+    }
+  }
+
+  return areEqual;
 };

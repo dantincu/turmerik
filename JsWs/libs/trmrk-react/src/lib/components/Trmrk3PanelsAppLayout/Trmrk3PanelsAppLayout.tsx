@@ -4,15 +4,23 @@ import React from "react";
 import { useAtom } from "jotai";
 import { atomEffect } from 'jotai-effect';
 
-import { actWithValIf } from "@/src/trmrk/core";
+import { actWithValIf, actWithVal } from "@/src/trmrk/core";
+import { arrsAreEqual } from "@/src/trmrk/arr";
 import { joinNames } from "@/src/trmrk/name-generators";
-import { PointerDragEvent, DragEventData } from "@/src/trmrk-browser/domUtils/PointerDragService";
-import { pointerIsTouchOrLeftMouseBtn, TouchOrMouseCoords } from "@/src/trmrk-browser/domUtils/touchAndMouseEvents";
+import { PointerDragEvent } from "@/src/trmrk-browser/domUtils/PointerDragService";
+import { TouchOrMouseCoords } from "@/src/trmrk-browser/domUtils/touchAndMouseEvents";
 
 import "./Trmrk3PanelsAppLayout.scss";
 import { ComponentProps } from "../defs/common";
 import TrmrkBasicAppLayout from "../TrmrkBasicAppLayout/TrmrkBasicAppLayout";
-import { overridingBottomToolbarContents, useToolbarOverridingContentKeys, useShowOverridingToolbars } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
+
+import {
+  overridingBottomToolbarContents,
+  useToolbarOverridingContentKeys,
+  useToolbarOverridingContentKeyArrs,
+  useShowOverridingToolbars
+} from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
+
 import TrmrkSplitContainerCore from "../TrmrkSplitContainerCore/TrmrkSplitContainerCore";
 import TrmrkThinLoader from "../TrmrkThinLoader/TrmrkThinLoader";
 import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
@@ -242,13 +250,14 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
   const leftPanelContainerElRef = React.useRef<HTMLDivElement | null>(null);
   const middlePanelContainerElRef = React.useRef<HTMLDivElement | null>(null);
   const currentBottomToolbarContentsIdRef = React.useRef<number | null>(null);
-  const currentBottomToolbarContentsTypeNameRef = React.useRef<string | null>(null);
+  const currentBottomToolbarContentKeysArrRef = React.useRef<number[]>(null);
 
   const contentsKeyPanelAtoms = usePanelContentsKeyAtoms();
   const renderPanelAtoms = useRenderPanelAtoms();
   const showPanelLoaderAtoms = useShowPanelLoaderAtoms();
   const showOverridingToolbars = useShowOverridingToolbars();
   const toolbarOverridingContentKeys = useToolbarOverridingContentKeys();
+  const toolbarOverridingContentKeyArrs = useToolbarOverridingContentKeyArrs();
 
   const [focusedPanel, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
   const [isResizingPanels, setIsResizingPanels] = useAtom(trmrk3PanelsAppLayoutAtoms.isResizingPanels);
@@ -327,21 +336,13 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
         RegisteredResizePanelsBottomToolbarContentsTypeName
     ).key : null;
 
-    const currentBottomToolbarContentsId = currentBottomToolbarContentsIdRef.current;
-    let shouldSetBottomToolbarContentsId = (bottomToolbarContentsId ?? null) !== null;
-
-    shouldSetBottomToolbarContentsId ||= ((currentBottomToolbarContentsId ?? null) !== null &&
-      currentBottomToolbarContentsTypeNameRef.current === RegisteredResizePanelsBottomToolbarContentsTypeName);
-
-    if (shouldSetBottomToolbarContentsId) {
-      showOverridingToolbars.bottomToolbar.set(true);
-      toolbarOverridingContentKeys.bottomToolbar.set(bottomToolbarContentsId);
-
-      if ((bottomToolbarContentsId ?? null) === null && (((currentBottomToolbarContentsId ?? null) === null) ||
-          currentBottomToolbarContentsTypeNameRef.current === RegisteredResizePanelsBottomToolbarContentsTypeName)) {
-        showOverridingToolbars.bottomToolbar.set(false);
-      }
-    }
+    actWithVal(
+      (bottomToolbarContentsId ?? null) !== null && !arrsAreEqual(
+        currentBottomToolbarContentKeysArrRef.current ?? [],
+        [bottomToolbarContentsId]),
+      shouldShowBottomToolbar => {
+        showOverridingToolbars.bottomToolbar.set(shouldShowBottomToolbar);
+      });
 
     if (isResizingPanels && !allowResizingPanels) {
       setIsResizingPanels(false);
@@ -359,18 +360,16 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
       isResizingPanels,
       renderPanelAtoms.leftPanel.value,
       renderPanelAtoms.middlePanel.value,
-      renderPanelAtoms.rightPanel.value
+      renderPanelAtoms.rightPanel.value,
   ]);
 
   React.useEffect(() => {
-    const currentBottomToolbarContentsId = currentBottomToolbarContentsIdRef.current = toolbarOverridingContentKeys.bottomToolbar.value;
-
-    if ((currentBottomToolbarContentsId ?? null) !== null) {
-      currentBottomToolbarContentsTypeNameRef.current = overridingBottomToolbarContents.value.keyedMap.map[currentBottomToolbarContentsId!]?.typeName ?? null;
-    } else {
-      currentBottomToolbarContentsTypeNameRef.current = null;
-    }
-  }, [toolbarOverridingContentKeys.bottomToolbar.value]);
+    currentBottomToolbarContentsIdRef.current = toolbarOverridingContentKeys.bottomToolbar.value;
+    currentBottomToolbarContentKeysArrRef.current = toolbarOverridingContentKeyArrs.bottomToolbar.value;
+  }, [
+    toolbarOverridingContentKeys.bottomToolbar.value,
+    toolbarOverridingContentKeyArrs.bottomToolbar.value
+  ]);
 
   return (
     <TrmrkBasicAppLayout className={cssClass}>

@@ -18,9 +18,7 @@ import { defaultTrmrkAppModalService } from "./TrmrkAppModalService";
 
 export interface TrmrkToolbarAtoms {
   show: PrimitiveAtom<boolean>;
-  contentsKey: PrimitiveAtom<number | null>;
   showOverriding: PrimitiveAtom<boolean>;
-  overridingContentsKey: PrimitiveAtom<number | null>;
 }
 
 export interface InitLayoutPartArgs {
@@ -58,9 +56,7 @@ export const createUserMessageAtoms = <TContentNode = React.ReactNode>(
 
 const createToolbarAtoms = (show: boolean): TrmrkToolbarAtoms => ({
   show: atom(show),
-  contentsKey: atom<number | null>(null),
   showOverriding: atom(false),
-  overridingContentsKey: atom<number | null>(null),
 });
 
 export const trmrkBasicAppLayoutAtoms = {
@@ -126,23 +122,33 @@ export const useShowOverridingToolbars = (): ToolbarAtoms<boolean> => ({
 });
 
 export const useToolbarContentKeys = (): ToolbarAtoms<number | null> => ({
-  appBar: trmrkUseAtom(trmrkBasicAppLayoutAtoms.appBar.contentsKey),
-  topToolbar: trmrkUseAtom(trmrkBasicAppLayoutAtoms.topToolbar.contentsKey),
-  bottomToolbar: trmrkUseAtom(
-    trmrkBasicAppLayoutAtoms.bottomToolbar.contentsKey,
-  ),
+  appBar: trmrkUseAtom(appBarContents.value.currentKeyAtom),
+  topToolbar: trmrkUseAtom(topToolbarContents.value.currentKeyAtom),
+  bottomToolbar: trmrkUseAtom(bottomToolbarContents.value.currentKeyAtom),
 });
 
 export const useToolbarOverridingContentKeys = (): ToolbarAtoms<
   number | null
 > => ({
-  appBar: trmrkUseAtom(trmrkBasicAppLayoutAtoms.appBar.overridingContentsKey),
-  topToolbar: trmrkUseAtom(
-    trmrkBasicAppLayoutAtoms.topToolbar.overridingContentsKey,
-  ),
+  appBar: trmrkUseAtom(overridingAppBarContents.value.currentKeyAtom),
+  topToolbar: trmrkUseAtom(overridingTopToolbarContents.value.currentKeyAtom),
   bottomToolbar: trmrkUseAtom(
-    trmrkBasicAppLayoutAtoms.bottomToolbar.overridingContentsKey,
+    overridingBottomToolbarContents.value.currentKeyAtom,
   ),
+});
+
+export const useToolbarContentKeyArrs = (): ToolbarAtoms<number[]> => ({
+  appBar: trmrkUseAtom(appBarContents.value.keysAtom),
+  topToolbar: trmrkUseAtom(topToolbarContents.value.keysAtom),
+  bottomToolbar: trmrkUseAtom(bottomToolbarContents.value.keysAtom),
+});
+
+export const useToolbarOverridingContentKeyArrs = (): ToolbarAtoms<
+  number[]
+> => ({
+  appBar: trmrkUseAtom(overridingAppBarContents.value.keysAtom),
+  topToolbar: trmrkUseAtom(overridingTopToolbarContents.value.keysAtom),
+  bottomToolbar: trmrkUseAtom(overridingBottomToolbarContents.value.keysAtom),
 });
 
 export const useAppUserMessage = (): UseUserMessageAtoms => ({

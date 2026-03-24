@@ -39,7 +39,6 @@ export interface TrmrkPanelAtoms {
   allowShow: PrimitiveAtom<boolean>;
   render: Atom<boolean>;
   showLoader: PrimitiveAtom<boolean>;
-  contentsKey: PrimitiveAtom<number | null>;
 }
 
 const createPanelAtoms = (panel: TrmrkAppLayoutPanel): TrmrkPanelAtoms => {
@@ -48,7 +47,6 @@ const createPanelAtoms = (panel: TrmrkAppLayoutPanel): TrmrkPanelAtoms => {
     show: atom(false),
     allowShow: atom(false),
     showLoader: atom(false),
-    contentsKey: atom<number | null>(null),
   };
 
   retObj.render = atom((get) => {
@@ -131,9 +129,9 @@ export const useShowPanelLoaderAtoms = (): PanelAtoms<boolean> => ({
 });
 
 export const usePanelContentsKeyAtoms = (): PanelAtoms<number | null> => ({
-  leftPanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.leftPanel.contentsKey),
-  middlePanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.middlePanel.contentsKey),
-  rightPanel: trmrkUseAtom(trmrk3PanelsAppLayoutAtoms.rightPanel.contentsKey),
+  leftPanel: trmrkUseAtom(leftPanelContents.value.currentKeyAtom),
+  middlePanel: trmrkUseAtom(middlePanelContents.value.currentKeyAtom),
+  rightPanel: trmrkUseAtom(rightPanelContents.value.currentKeyAtom),
 });
 
 export interface Use3PanelsAppLayoutAtoms extends UseBasicAppLayoutAtoms {
