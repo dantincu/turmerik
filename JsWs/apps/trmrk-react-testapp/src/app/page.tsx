@@ -31,13 +31,13 @@ export default function Landing() {
     const layoutInitResult = init3PanelsAppLayout({
       ...trmrk3PanelsLayoutAtoms,
       appBar: {
-        contents: <AppBar />,
+        contents: AppBar
       },
       topToolbar: {
-        contents: <TopToolbar />,
+        contents: TopToolbar
       },
       middlePanel: {
-        contents: <><h2>Welcome to Turmerik Notes app</h2><TrmrkLink href="/app">app</TrmrkLink></>
+        contents: () => <><h2>Welcome to Turmerik Notes app</h2><TrmrkLink href="/app">app</TrmrkLink></>
       },
       setFocusedPanel
     });

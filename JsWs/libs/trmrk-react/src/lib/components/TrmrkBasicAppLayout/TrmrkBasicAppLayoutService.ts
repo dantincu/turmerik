@@ -25,7 +25,7 @@ export interface TrmrkToolbarAtoms {
 
 export interface InitLayoutPartArgs {
   allowShow?: boolean | NullOrUndef;
-  contents?: React.ReactNode | NullOrUndef;
+  contents?: (() => React.ReactNode) | NullOrUndef;
   typeName?: string | NullOrUndef;
   showLoader?: boolean | NullOrUndef;
 }
@@ -74,35 +74,35 @@ export const trmrkBasicAppLayoutAtoms = {
 };
 
 export const appBarContents = new RefLazyValue(() =>
-  createIntKeyedComponentsMapManager(),
+  createIntKeyedComponentsMapManager<() => React.ReactNode>(),
 );
 
 export const overridingAppBarContents = new RefLazyValue(() =>
-  createIntKeyedComponentsMapManager(),
+  createIntKeyedComponentsMapManager<() => React.ReactNode>(),
 );
 
 export const topToolbarContents = new RefLazyValue(() =>
-  createIntKeyedComponentsMapManager(),
+  createIntKeyedComponentsMapManager<() => React.ReactNode>(),
 );
 
 export const overridingTopToolbarContents = new RefLazyValue(() =>
-  createIntKeyedComponentsMapManager(),
+  createIntKeyedComponentsMapManager<() => React.ReactNode>(),
 );
 
 export const bottomToolbarContents = new RefLazyValue(() =>
-  createIntKeyedComponentsMapManager(),
+  createIntKeyedComponentsMapManager<() => React.ReactNode>(),
 );
 
 export const overridingBottomToolbarContents = new RefLazyValue(() =>
-  createIntKeyedComponentsMapManager(),
+  createIntKeyedComponentsMapManager<() => React.ReactNode>(),
 );
 
 export const appLeadingOverlappingContents = new RefLazyValue(() =>
-  createIntKeyedComponentsMapManager(),
+  createIntKeyedComponentsMapManager<React.ReactNode>(),
 );
 
 export const appTrailingOverlappingContents = new RefLazyValue(() =>
-  createIntKeyedComponentsMapManager(),
+  createIntKeyedComponentsMapManager<React.ReactNode>(),
 );
 
 export interface ToolbarAtoms<Value> {
@@ -166,7 +166,9 @@ export const useAppUserMessage = (): UseUserMessageAtoms => ({
 export const initLayoutPart = (
   args: InitLayoutPartArgs | NullOrUndef,
   allowShowAtom: TrmrkUseAtom<boolean> | NullOrUndef,
-  contentsKeyManager: RefLazyValue<IntKeyedComponentsMapManager>,
+  contentsKeyManager: RefLazyValue<
+    IntKeyedComponentsMapManager<() => React.ReactNode>
+  >,
   contentsKeyAtom: TrmrkUseAtom<number | null>,
   showLoaderAtom: TrmrkUseAtom<boolean> | NullOrUndef,
 ) => {
@@ -178,7 +180,7 @@ export const initLayoutPart = (
   }
 
   const contentsId = allowShow
-    ? contentsKeyManager.value.register(args.contents, args.typeName).key
+    ? contentsKeyManager.value.register(args.contents!, args.typeName).key
     : null;
 
   contentsKeyAtom.set(contentsId);

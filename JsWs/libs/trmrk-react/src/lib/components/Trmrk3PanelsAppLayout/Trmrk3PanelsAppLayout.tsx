@@ -275,6 +275,42 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
     updateMiddlePanelContainerElWidth(middlePanelContainerElRef, renderPanelAtoms.rightPanel.value);
   }, [renderPanelAtoms.rightPanel.value]);
 
+  const LeftPanelContents = React.useMemo(() => {
+    let contents: () => React.ReactNode;
+
+    if (contentsKeyPanelAtoms.leftPanel.value) {
+      contents = leftPanelContents.value.keyedMap.map[contentsKeyPanelAtoms.leftPanel.value]?.node ?? (() => null);
+    } else {
+      contents = () => null;
+    }
+
+    return contents;
+  }, [contentsKeyPanelAtoms.leftPanel.value]);
+
+  const MiddlePanelContents = React.useMemo(() => {
+    let contents: () => React.ReactNode;
+
+    if (contentsKeyPanelAtoms.middlePanel.value) {
+      contents = middlePanelContents.value.keyedMap.map[contentsKeyPanelAtoms.middlePanel.value]?.node ?? (() => null);
+    } else {
+      contents = () => null;
+    }
+
+    return contents;
+  }, [contentsKeyPanelAtoms.middlePanel.value]);
+
+  const RightPanelContents = React.useMemo(() => {
+    let contents: () => React.ReactNode;
+
+    if (contentsKeyPanelAtoms.rightPanel.value) {
+      contents = rightPanelContents.value.keyedMap.map[contentsKeyPanelAtoms.rightPanel.value]?.node ?? (() => null);
+    } else {
+      contents = () => null;
+    }
+
+    return contents;
+  }, [contentsKeyPanelAtoms.rightPanel.value]);
+
   React.useEffect(() => {
     const allowResizingPanels = [
       renderPanelAtoms.leftPanel.value,
@@ -282,7 +318,7 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
       renderPanelAtoms.rightPanel.value].filter(show => show).length > 1;
 
     const bottomToolbarContentsId = allowResizingPanels && isResizingPanels ? overridingBottomToolbarContents.value.register(
-      <ResizePanelsBottomToolbarContents
+      () => <ResizePanelsBottomToolbarContents
         showLeftPanelValue={renderPanelAtoms.leftPanel.value}
         showMiddlePanelValue={renderPanelAtoms.middlePanel.value}
         showRightPanelValue={renderPanelAtoms.rightPanel.value}
@@ -346,8 +382,8 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
           renderPanelAtoms.leftPanel.value && <>
             <div className="trmrk-panel-body-container"
               onMouseDownCapture={leftPanelPointerDown}
-              onTouchStartCapture={leftPanelPointerDown}><div className="trmrk-panel-body">{
-              contentsKeyPanelAtoms.leftPanel.value && leftPanelContents.value.keyedMap.map[contentsKeyPanelAtoms.leftPanel.value]?.node }</div></div>
+              onTouchStartCapture={leftPanelPointerDown}><div className="trmrk-panel-body">
+                <LeftPanelContents /></div></div>
             <div className="trmrk-panel-loader-container"> { showPanelLoaderAtoms.leftPanel.value && <TrmrkThinLoader></TrmrkThinLoader> } </div></> }
         panel2Content={
           <TrmrkSplitContainerCore ref={middlePanelContainerElAvailable}
@@ -357,14 +393,14 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
             showPanel2={renderPanelAtoms.rightPanel.value}
             panel1Content={renderPanelAtoms.middlePanel.value && <><div className="trmrk-panel-body-container"
               onMouseDownCapture={middlePanelPointerDown}
-              onTouchStartCapture={middlePanelPointerDown}><div className="trmrk-panel-body">{ 
-              contentsKeyPanelAtoms.middlePanel.value && middlePanelContents.value.keyedMap.map[contentsKeyPanelAtoms.middlePanel.value]?.node }</div></div>
+              onTouchStartCapture={middlePanelPointerDown}><div className="trmrk-panel-body">
+                <MiddlePanelContents /></div></div>
               <div className="trmrk-panel-loader-container"> { showPanelLoaderAtoms.middlePanel.value && <TrmrkThinLoader></TrmrkThinLoader> } </div></> }
             panel2Content={renderPanelAtoms.rightPanel.value && <>
               <div className="trmrk-panel-body-container"
                 onMouseDownCapture={rightPanelPointerDown}
-                onTouchStartCapture={rightPanelPointerDown}><div className="trmrk-panel-body">{
-                contentsKeyPanelAtoms.rightPanel.value && rightPanelContents.value.keyedMap.map[contentsKeyPanelAtoms.rightPanel.value]?.node }</div></div>
+                onTouchStartCapture={rightPanelPointerDown}><div className="trmrk-panel-body">
+                  <RightPanelContents /></div></div>
               <div className="trmrk-panel-loader-container">{ showPanelLoaderAtoms.rightPanel.value && <TrmrkThinLoader></TrmrkThinLoader> }</div></> }>
           </TrmrkSplitContainerCore>}>
       </TrmrkSplitContainerCore>

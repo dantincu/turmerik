@@ -29,13 +29,13 @@ export default function NotFound() {
     const layoutInitResult = init3PanelsAppLayout({
       ...trmrk3PanelsLayoutAtoms,
       appBar: {
-        contents: <AppBar />,
+        contents: AppBar
       },
       topToolbar: {
-        contents: <TopToolbar />,
+        contents: TopToolbar
       },
       middlePanel: {
-        contents: <div className="flex flex-col items-center justify-center py-2">
+        contents: () => <div className="flex flex-col items-center justify-center py-2">
             <h2>Not found</h2>
             <p className="text-zinc-500 mt-2">
               Sorry, we couldn't find the page you're looking for.

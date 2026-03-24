@@ -29,13 +29,13 @@ export default function Home() {
     const layoutInitResult = init3PanelsAppLayout({
       ...trmrk3PanelsLayoutAtoms,
       appBar: {
-        contents: <AppBar />,
+        contents: AppBar
       },
       topToolbar: {
-        contents: <TopToolbar />,
+        contents: TopToolbar
       },
       middlePanel: {
-        contents: <h2>Home</h2>
+        contents: () => <h2>Home</h2>
       },
       setFocusedPanel
     });

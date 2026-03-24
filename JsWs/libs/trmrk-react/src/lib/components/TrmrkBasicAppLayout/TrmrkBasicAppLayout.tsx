@@ -100,13 +100,15 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
     hideHeaderAndFooter
   ]);
 
-  const appBarContentsNode = React.useMemo(() => {
-    let retVal: React.ReactNode = null;
+  const AppBarContents = React.useMemo(() => {
+    let retVal: (() => React.ReactNode);
 
     if (showOverridingToolbarAtoms.appBar.value) {
-      retVal = overridingAppBarContents.value.keyedMap.map[overridingToolbarContentKeys.appBar.value!]?.node;
+      retVal = overridingAppBarContents.value.keyedMap.map[overridingToolbarContentKeys.appBar.value!]?.node ?? (() => null);
     } else if (!hideHeaderAndFooter && showToolbarAtoms.appBar.value) {
-      retVal = appBarContents.value.keyedMap.map[toolbarContentKeys.appBar.value!]?.node;
+      retVal = appBarContents.value.keyedMap.map[toolbarContentKeys.appBar.value!]?.node ?? (() => null);
+    } else {
+      retVal = () => null;
     }
 
     return retVal;
@@ -118,13 +120,15 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
     hideHeaderAndFooter
   ]);
 
-  const topToolbarContentsNode = React.useMemo(() => {
-    let retVal: React.ReactNode = null;
+  const TopToolbarContents = React.useMemo(() => {
+    let retVal: (() => React.ReactNode);
 
     if (showOverridingToolbarAtoms.topToolbar.value) {
-      retVal = overridingTopToolbarContents.value.keyedMap.map[overridingToolbarContentKeys.topToolbar.value!]?.node;
+      retVal = overridingTopToolbarContents.value.keyedMap.map[overridingToolbarContentKeys.topToolbar.value!]?.node ?? (() => null);
     } else if (!hideHeaderAndFooter && showToolbars && showToolbarAtoms.topToolbar.value) {
-      retVal = topToolbarContents.value.keyedMap.map[toolbarContentKeys.topToolbar.value!]?.node;
+      retVal = topToolbarContents.value.keyedMap.map[toolbarContentKeys.topToolbar.value!]?.node ?? (() => null);
+    } else {
+      retVal = () => null;
     }
 
     return retVal;
@@ -136,13 +140,15 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
     hideHeaderAndFooter
   ]);
 
-  const bottomToolbarContentsNode = React.useMemo(() => {
-    let retVal: React.ReactNode = null;
+  const BottomToolbarContents = React.useMemo(() => {
+    let retVal: (() => React.ReactNode);
 
     if (showOverridingToolbarAtoms.bottomToolbar.value) {
-      retVal = overridingBottomToolbarContents.value.keyedMap.map[overridingToolbarContentKeys.bottomToolbar.value!]?.node;
+      retVal = overridingBottomToolbarContents.value.keyedMap.map[overridingToolbarContentKeys.bottomToolbar.value!]?.node ?? (() => null);
     } else if (!hideHeaderAndFooter && showToolbars && showToolbarAtoms.bottomToolbar.value) {
-      retVal = bottomToolbarContents.value.keyedMap.map[toolbarContentKeys.bottomToolbar.value!]?.node;
+      retVal = bottomToolbarContents.value.keyedMap.map[toolbarContentKeys.bottomToolbar.value!]?.node ?? (() => null);
+    } else {
+      retVal = () => null;
     }
 
     return retVal;
@@ -188,8 +194,8 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
 
       { /* **** **** **** **** **** **** **** **** APP_BAR START **** **** **** **** **** **** **** **** */
         (showAppBar || showTopToolbar) && <div className="trmrk-app-header">
-          { showAppBar && <TrmrkHorizStrip className="trmrk-app-bar">{ appBarContentsNode }</TrmrkHorizStrip> }
-          { showTopToolbar && <TrmrkHorizStrip className="trmrk-top-toolbar">{ topToolbarContentsNode }</TrmrkHorizStrip> }
+          { showAppBar && <TrmrkHorizStrip className="trmrk-app-bar"><AppBarContents /></TrmrkHorizStrip> }
+          { showTopToolbar && <TrmrkHorizStrip className="trmrk-top-toolbar"><TopToolbarContents /></TrmrkHorizStrip> }
         </div>
       /* **** **** **** **** **** **** **** **** APP_BAR END **** **** **** **** **** **** **** **** */ }
 
@@ -205,7 +211,7 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
 
       { /* **** **** **** **** **** **** **** **** FOOTER START **** **** **** **** **** **** **** **** */
         showBottomToolbar && <div className="trmrk-app-footer">
-          <TrmrkHorizStrip className="trmrk-bottom-toolbar">{ bottomToolbarContentsNode }</TrmrkHorizStrip>
+          <TrmrkHorizStrip className="trmrk-bottom-toolbar"><BottomToolbarContents /></TrmrkHorizStrip>
         </div>
       /* **** **** **** **** **** **** **** **** FOOTER END **** **** **** **** **** **** **** **** */ }
 

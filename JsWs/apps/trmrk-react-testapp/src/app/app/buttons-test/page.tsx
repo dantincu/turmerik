@@ -176,7 +176,7 @@ const MiddlePanelContents = () => {
   const showAppUserMessageBtnClicked = React.useCallback(() => {
     appUserMessageAtoms.show.set((appUserMessageAtoms.show.value ?? 0) + 1);
     appUserMessageAtoms.level.set(Math.floor(Math.random() * 4));
-    appUserMessageAtoms.content.set(<><span className="font-bold">App User Message {appUserMessageAtoms.show.value}<br />asdfasdfasf</span></>);
+    appUserMessageAtoms.content.set(<><span className="font-bold">App User Message {appUserMessageAtoms.show.value}<br />asdfasdfas</span></>);
     appUserMessageAtoms.autoCloseMillis.set(0);
   }, [appUserMessageAtoms.show.value]);
 
@@ -350,18 +350,18 @@ export default function ButtonsTestPage() {
     const layoutInitResult = init3PanelsAppLayout({
       ...trmrk3PanelsLayoutAtoms,
       appBar: {
-        contents: <AppBar />,
+        contents: AppBar
       },
       topToolbar: {
-        contents: <TopToolbar />,
+        contents: TopToolbar,
       },
       leftPanel: {
         allowShow: true,
         showLoader: true,
-        contents: <LeftPanelContents />
+        contents: LeftPanelContents
       },
       middlePanel: {
-        contents: <MiddlePanelContents />,
+        contents: MiddlePanelContents,
         showLoader: true
       },
       rightPanel: {

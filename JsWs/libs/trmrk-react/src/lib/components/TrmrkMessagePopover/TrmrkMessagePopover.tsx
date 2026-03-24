@@ -19,7 +19,7 @@ export interface TrmrkMessagePopoverProps extends ComponentProps {
   autoCloseMillis?: number | NullOrUndef;
 }
 
-const CloseIcon = React.memo(({
+const CloseIconBtn = React.memo(({
     closeBtnLongPressOrRightClick,
     closeBtnClick,
     ref,
@@ -160,7 +160,7 @@ export default function TrmrkMessagePopover(
       <path className="trmrk-arrow-border" strokeWidth="1" d="M 0 10 L 10 0 L 20 10" fill="none" />
     </svg> }</div>
     <div className={['trmrk-message-popover'].join(' ')}>
-      <CloseIcon closeBtnLongPressOrRightClick={closeBtnLongPressOrRightClick} closeBtnClick={closeBtnClick} ref={closeBtnElRef} />
+      <CloseIconBtn closeBtnLongPressOrRightClick={closeBtnLongPressOrRightClick} closeBtnClick={closeBtnClick} ref={closeBtnElRef} />
       { children }
     </div>
   </div>;

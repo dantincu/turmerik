@@ -89,15 +89,15 @@ export const trmrk3PanelsAppLayoutAtoms = {
 };
 
 export const leftPanelContents = new RefLazyValue(() =>
-  createIntKeyedComponentsMapManager(),
+  createIntKeyedComponentsMapManager<() => React.ReactNode>(),
 );
 
 export const middlePanelContents = new RefLazyValue(() =>
-  createIntKeyedComponentsMapManager(),
+  createIntKeyedComponentsMapManager<() => React.ReactNode>(),
 );
 
 export const rightPanelContents = new RefLazyValue(() =>
-  createIntKeyedComponentsMapManager(),
+  createIntKeyedComponentsMapManager<() => React.ReactNode>(),
 );
 
 export interface PanelAtoms<Value> {

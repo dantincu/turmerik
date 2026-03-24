@@ -45,16 +45,16 @@ export default function AppSettingsPage() {
     const layoutInitResult = init3PanelsAppLayout({
       ...trmrk3PanelsLayoutAtoms,
       appBar: {
-        contents: <AppBar />,
+        contents: AppBar
       },
       topToolbar: {
-        contents: <TopToolbar />,
+        contents: TopToolbar
       },
       leftPanel: {
         allowShow: true,
       },
       middlePanel: {
-        contents: <ThemeToggle />
+        contents: ThemeToggle
       },
       rightPanel: {
         allowShow: true,
