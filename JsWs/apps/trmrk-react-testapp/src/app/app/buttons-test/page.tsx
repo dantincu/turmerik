@@ -31,7 +31,7 @@ import { defaultTrmrkAppModalService, TrmrkAppModalPropsCoreWithData } from "@/s
 import { defaultTrmrkPopoverService, TrmrkPopoverPropsCoreWithData } from "@/src/trmrk-react/components/TrmrkBasicAppLayout/TrmrkPopoverService";
 import { TouchOrMouseCoords } from '@/src/trmrk-browser/domUtils/touchAndMouseEvents';
 
-const AppBar = () => {
+const AppBar = React.memo(() => {
   return <TrmrkAppBarContents leadingChildren={() => <TrmrkMultiClickable hoc={{
         node: (props, ref) => <TrmrkBtn {...props} ref={ref as React.Ref<HTMLButtonElement>}><TrmrkIcon icon="mdi:dice" /></TrmrkBtn>,
         props: {}
@@ -45,9 +45,9 @@ const AppBar = () => {
         multiClickEnded: () => console.log("multiClickEnded")
       });
     }}></TrmrkMultiClickable>}><span className="leading-[40px] text-[15px] font-bold">Buttons Test</span></TrmrkAppBarContents>;
-}
+});
 
-const TopToolbar = () => {
+const TopToolbar = React.memo(() => {
   const [itemsCountAtom] = React.useState(() => atom(Number.MAX_SAFE_INTEGER));
 
   const [skipItems] = React.useState(() => {
@@ -83,7 +83,7 @@ const TopToolbar = () => {
       longPressOrRightClick: (e) => console.log("longPressOrRightClick", e),
       shortPressOrLeftClick: (e) => console.log("shortPressOrLeftClick", e)
     })}></TrmrkLongPressable></TrmrkTopToolBarContents>;
-}
+});
 
 const messagesArr: UserMessage[] = Array.from({ length: 100 }).map((_, i) => ({
   idx: i,

@@ -18,7 +18,7 @@ import {
 } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 
 const AppBar = () => {
-  return <TrmrkAppBarContents><h1 className="text-center grow">App Settings</h1></TrmrkAppBarContents>;
+  return <TrmrkAppBarContents><h1>App Settings</h1></TrmrkAppBarContents>;
 }
 
 const TopToolbar = () => {
