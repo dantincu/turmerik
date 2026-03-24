@@ -31,7 +31,7 @@ import {
   useAppUserMessage
 } from "./TrmrkBasicAppLayoutService";
 
-import { trmrkBasicAppLayoutAtoms, appLeadingOverlappingContents, appTrailingOverlappingContents } from "./TrmrkBasicAppLayoutService";
+import { trmrkBasicAppLayoutAtoms } from "./TrmrkBasicAppLayoutService";
 import TrmrkMessagePopover from "../TrmrkMessagePopover/TrmrkMessagePopover";
 
 export interface TrmrkBasicAppLayoutProps extends ComponentProps {}
@@ -51,8 +51,6 @@ const lifecycleEffect = atomEffect((get, set) => {
 export default function TrmrkBasicAppLayout({children, className: cssClass}: Readonly<TrmrkBasicAppLayoutProps>) {
   useAtom(lifecycleEffect);
   const layoutRenderIdRef = React.useRef(0);
-  const [ leadingOverlappingContentKeys ] = useAtom(appLeadingOverlappingContents.value.keysAtom);
-  const [ trailingOverlappingContentKeys ] = useAtom(appTrailingOverlappingContents.value.keysAtom);
   const [cssClassValue] = useAtom(trmrkBasicAppLayoutAtoms.cssClass);
   const [hideHeaderAndFooter] = useAtom(trmrkBasicAppLayoutAtoms.hideHeaderAndFooter);
   const [showToolbars] = useAtom(trmrkBasicAppLayoutAtoms.showToolbars);
@@ -219,10 +217,6 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
 
       { /* **** **** **** **** **** **** **** **** OVERLAPPING_CONTENTS START **** **** **** **** **** **** **** **** */
         <div className="trmrk-overlapping-contents">
-          { leadingOverlappingContentKeys.map(key => <React.Fragment key={key}>
-            { appLeadingOverlappingContents.value.keyedMap.map[key]?.node }
-          </React.Fragment>) }
-          
           { ((appUserMessageAtoms.level.value ?? null) !== null) && <TrmrkMessagePopover
             show={appUserMessageAtoms.show.value}
             msgLevel={appUserMessageAtoms.level.value}
@@ -249,10 +243,6 @@ export default function TrmrkBasicAppLayout({children, className: cssClass}: Rea
           ].join(" ")}>
             { openPopoverNode }
           </div> }
-          
-          { trailingOverlappingContentKeys.map(key => <React.Fragment key={key}>
-            { appTrailingOverlappingContents.value.keyedMap.map[key]?.node }
-          </React.Fragment>) }
         </div>
       /* **** **** **** **** **** **** **** **** OVERLAPPING_CONTENTS END **** **** **** **** **** **** **** **** */ }
 

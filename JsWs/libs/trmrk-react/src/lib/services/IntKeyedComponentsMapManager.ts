@@ -68,7 +68,7 @@ export class IntKeyedComponentsMapManager<
         const idx = arr.indexOf(key);
 
         if (idx >= 0) {
-          isCurrent = true;
+          isCurrent = idx === arr.length - 1;
           arr = [...arr];
           arr.splice(idx, 1);
           prevKey = arr[arr.length - 1] ?? null;

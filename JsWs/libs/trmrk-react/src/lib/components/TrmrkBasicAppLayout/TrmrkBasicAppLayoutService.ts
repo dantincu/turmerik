@@ -97,14 +97,6 @@ export const overridingBottomToolbarContents = new RefLazyValue(() =>
   createIntKeyedComponentsMapManager<() => React.ReactNode>(),
 );
 
-export const appLeadingOverlappingContents = new RefLazyValue(() =>
-  createIntKeyedComponentsMapManager<React.ReactNode>(),
-);
-
-export const appTrailingOverlappingContents = new RefLazyValue(() =>
-  createIntKeyedComponentsMapManager<React.ReactNode>(),
-);
-
 export interface ToolbarAtoms<Value> {
   appBar: TrmrkUseAtom<Value>;
   topToolbar: TrmrkUseAtom<Value>;
