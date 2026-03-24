@@ -61,6 +61,9 @@
           "CloneDirPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net10.0"
         },
         {
+          "CloneDirPath": "Bin\\Turmerik.UpdateNoteChildren.ConsoleApp\\Release\\net10.0"
+        },
+        {
           "CloneDirPath": "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net10.0-windows7.0"
         }
       ]
@@ -123,6 +126,9 @@
           "CloneDirPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net10.0"
         },
         {
+          "CloneDirPath": "Bin\\Turmerik.UpdateNoteChildren.ConsoleApp\\Release\\net10.0"
+        },
+        {
           "CloneDirPath": "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net10.0-windows7.0"
         }
       ]
@@ -183,6 +189,9 @@
           "CloneDirPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net10.0"
         },
         {
+          "CloneDirPath": "Bin\\Turmerik.UpdateNoteChildren.ConsoleApp\\Release\\net10.0"
+        },
+        {
           "CloneDirPath": "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net10.0-windows7.0"
         }
       ]
@@ -241,6 +250,9 @@
         },
         {
           "CloneDirPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net10.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.UpdateNoteChildren.ConsoleApp\\Release\\net10.0"
         },
         {
           "CloneDirPath": "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net10.0-windows7.0"

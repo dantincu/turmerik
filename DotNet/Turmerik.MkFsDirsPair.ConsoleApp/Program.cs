@@ -5,6 +5,7 @@ using Turmerik.Core.Helpers;
 using Turmerik.Dependencies;
 using Turmerik.NetCore.ConsoleApps.MkFsDirPairs;
 using Turmerik.NetCore.Dependencies;
+using UpdateNoteChildren = Turmerik.NetCore.ConsoleApps.UpdateNoteChildren;
 
 Console.ForegroundColor = ConsoleColor.DarkYellow;
 Console.WriteLine("Turmerik.MkFsDirsPair.ConsoleApp");
@@ -20,6 +21,8 @@ TrmrkNetCoreServices.RegisterAll(services);
 DriveExplorerH.AddFsRetrieverAndExplorer(
     services, null, true);
 
+services.AddTransient<UpdateNoteChildren.IProgramComponent, UpdateNoteChildren.ProgramComponent>();
+services.AddNoteChildrenUpdaterServices();
 services.AddTransient<IProgramComponent, ProgramComponent>();
 services.AddTransient<PdfCreatorFactory>();
 var svcProv = services.BuildServiceProvider();

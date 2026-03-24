@@ -29,6 +29,7 @@
               "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.SyncLocalFiles\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.UpdFsDirPairsIdxes\\.ConsoleApp\\/.*",
+              "^\\/Bin\\/Turmerik\\.UpdateNoteChildren\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.Utility.WinFormsApp\\/.*",
               "^\\/Config\\/.*",
               "^\\/Content\\/.*",

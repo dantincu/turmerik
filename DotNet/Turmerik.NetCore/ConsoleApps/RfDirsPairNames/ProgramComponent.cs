@@ -22,6 +22,7 @@ using Turmerik.Core.Utility;
 using Turmerik.DirsPair;
 using Turmerik.Html;
 using Turmerik.Md;
+using Turmerik.NetCore.ConsoleApps.UpdateNoteChildren;
 using Turmerik.Notes.Core;
 using static Turmerik.NetCore.ConsoleApps.RfDirsPairNames.ProgramComponent;
 
@@ -51,6 +52,8 @@ namespace Turmerik.NetCore.ConsoleApps.RfDirsPairNames
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
         private readonly ITextMacrosReplacer textMacrosReplacer;
         private readonly IHtmlDocTitleRetriever htmlDocTitleRetriever;
+        private readonly UpdateNoteChildren.IProgramComponent updateNoteChildrenProgramComponent;
+        private readonly INoteChildrenUpdater noteChildrenUpdater;
         private readonly DirsPairConfig config;
         private readonly IDirsPairConfigLoader dirsPairConfigLoader;
         private readonly NotesAppConfigMtbl notesConfig;
@@ -69,6 +72,8 @@ namespace Turmerik.NetCore.ConsoleApps.RfDirsPairNames
             ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever,
             ITextMacrosReplacer textMacrosReplacer,
             IHtmlDocTitleRetriever htmlDocTitleRetriever,
+            UpdateNoteChildren.IProgramComponent updateNoteChildrenProgramComponent,
+            INoteChildrenUpdater noteChildrenUpdater,
             IDirsPairConfigLoader dirsPairConfigLoader,
             INotesAppConfigLoader notesAppConfigLoader)
         {
@@ -101,6 +106,12 @@ namespace Turmerik.NetCore.ConsoleApps.RfDirsPairNames
 
             this.htmlDocTitleRetriever = htmlDocTitleRetriever ?? throw new ArgumentNullException(
                 nameof(htmlDocTitleRetriever));
+
+            this.updateNoteChildrenProgramComponent = updateNoteChildrenProgramComponent ?? throw new ArgumentNullException(
+                nameof(updateNoteChildrenProgramComponent));
+
+            this.noteChildrenUpdater = noteChildrenUpdater ?? throw new ArgumentNullException(
+                nameof(noteChildrenUpdater));
 
             this.dirsPairConfigLoader = dirsPairConfigLoader ?? throw new ArgumentNullException(
                 nameof(dirsPairConfigLoader));
@@ -146,6 +157,14 @@ namespace Turmerik.NetCore.ConsoleApps.RfDirsPairNames
             bool normalizeArgs = true)
         {
             (var stopSkipping, var newFullDirNamePart) = await RunCoreAsync(wka, normalizeArgs);
+
+            await updateNoteChildrenProgramComponent.RunAsync(
+                new UpdateNoteChildren.ProgramArgs
+                {
+                    WorkDir = Path.GetDirectoryName(
+                        wka.Args.ShortNameDirPath)!
+                });
+
             return newFullDirNamePart;
         }
 
@@ -418,17 +437,27 @@ namespace Turmerik.NetCore.ConsoleApps.RfDirsPairNames
                         RecursiveMatchingDirNamesArr = args.RecursiveMatchingDirNamesArr
                     }).ToArray();
 
-                foreach (var subFolderPgArgs in subFolderPgArgsArr)
+                if (subFoldersArr.Length > 0)
                 {
-                    if (stopSkipping)
+                    foreach (var subFolderPgArgs in subFolderPgArgsArr)
                     {
-                        subFolderPgArgs.SkipUntilPath = null;
+                        if (stopSkipping)
+                        {
+                            subFolderPgArgs.SkipUntilPath = null;
+                        }
+
+                        (stopSkipping, _) = await RunCoreAsync(new WorkArgs
+                        {
+                            Args = subFolderPgArgs
+                        }, true);
                     }
 
-                    (stopSkipping, _) = await RunCoreAsync(new WorkArgs
-                    {
-                        Args = subFolderPgArgs
-                    }, true);
+                    await updateNoteChildrenProgramComponent.RunAsync(
+                        new UpdateNoteChildren.ProgramArgs
+                        {
+                            WorkDir = Path.GetDirectoryName(
+                                wka.Args.ShortNameDirPath)!
+                        });
                 }
             }
 

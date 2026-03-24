@@ -14,7 +14,7 @@ using Turmerik.Core.TextSerialization;
 using Turmerik.DirsPair;
 using Turmerik.Md;
 using Turmerik.Notes.Core;
-using UpdFsDirPairsIdxes = Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes;
+using UpdFsDirPairsIdxes = Turmerik.NetCore.ConsoleApps.UpdFsDirPairsIdxes;
 using Turmerik.Core.Helpers;
 using Turmerik.NetCore.ConsoleApps.RfDirsPairNames;
 
@@ -38,7 +38,7 @@ namespace Turmerik.ConcatenateNotes.ConsoleApp
         private readonly IDirsPairConfigLoader dirsPairConfigLoader;
         private readonly NotesAppConfigMtbl notesConfig;
         private readonly INotesAppConfigLoader notesAppConfigLoader;
-        private readonly UpdFsDirPairsIdxes.IProgramComponent updFsDirPairsIdxes;
+        private readonly NetCore.ConsoleApps.UpdFsDirPairsIdxes.IProgramComponent updFsDirPairsIdxes;
         private readonly IProgramComponent rfDirsPairNames;
         private readonly LocalDevicePathMacrosMapMtbl localDevicePathMacrosMapMtbl;
 
@@ -52,7 +52,7 @@ namespace Turmerik.ConcatenateNotes.ConsoleApp
             IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory,
             IDirsPairConfigLoader dirsPairConfigLoader,
             INotesAppConfigLoader notesAppConfigLoader,
-            UpdFsDirPairsIdxes.IProgramComponent updFsDirPairsIdxes,
+            NetCore.ConsoleApps.UpdFsDirPairsIdxes.IProgramComponent updFsDirPairsIdxes,
             IProgramComponent rfDirsPairNames)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(

@@ -5,7 +5,7 @@ using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.TextParsing.IndexesFilter;
 using Turmerik.Notes.Core;
 
-namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
+namespace Turmerik.NetCore.ConsoleApps.UpdFsDirPairsIdxes
 {
     public class ProgramArgs
     {

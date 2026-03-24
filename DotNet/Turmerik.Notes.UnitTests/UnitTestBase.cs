@@ -8,8 +8,8 @@ using Turmerik.Testing;
 using Turmerik.Notes.UnitTests;
 using Turmerik.Core.Dependencies;
 using Turmerik.Notes.Core;
-using Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes;
 using Turmerik.Core.DriveExplorer;
+using Turmerik.NetCore.ConsoleApps.UpdFsDirPairsIdxes;
 
 namespace Turmerik.Notes.UnitTests
 {

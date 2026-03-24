@@ -120,6 +120,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.Code.CSharp.UnitTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.ListDirsDeep.ConsoleApp", "Turmerik.ListDirsDeep.ConsoleApp\Turmerik.ListDirsDeep.ConsoleApp.csproj", "{90F707D6-6976-475E-A06D-129D88F777ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.UpdateNoteChildren.ConsoleApp", "Turmerik.UpdateNoteChildren.ConsoleApp\Turmerik.UpdateNoteChildren.ConsoleApp.csproj", "{9AFAF8AE-536A-44D2-99FC-19BABB35C34F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -318,6 +320,10 @@ Global
 		{90F707D6-6976-475E-A06D-129D88F777ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90F707D6-6976-475E-A06D-129D88F777ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90F707D6-6976-475E-A06D-129D88F777ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AFAF8AE-536A-44D2-99FC-19BABB35C34F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AFAF8AE-536A-44D2-99FC-19BABB35C34F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AFAF8AE-536A-44D2-99FC-19BABB35C34F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AFAF8AE-536A-44D2-99FC-19BABB35C34F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -375,6 +381,7 @@ Global
 		{63AF0D7F-B9A7-4AA9-9983-61D95FD7A66E} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
 		{ABAE4427-F485-4273-A649-4BE893376F78} = {2020DE95-DD87-4F1F-8BBB-CCCCF6ABB095}
 		{90F707D6-6976-475E-A06D-129D88F777ED} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
+		{9AFAF8AE-536A-44D2-99FC-19BABB35C34F} = {52B63410-2581-4146-9484-89D300FAE7B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

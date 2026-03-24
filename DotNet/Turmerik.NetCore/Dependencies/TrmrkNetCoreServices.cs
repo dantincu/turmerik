@@ -15,6 +15,7 @@ using LocalFilesCloner = Turmerik.NetCore.ConsoleApps.LocalFilesCloner;
 using MkFiles = Turmerik.NetCore.ConsoleApps.MkFiles;
 using MkScripts = Turmerik.NetCore.ConsoleApps.MkScripts;
 using SyncLocalFiles = Turmerik.NetCore.ConsoleApps.SyncLocalFiles;
+using UpdateNoteChildren = Turmerik.NetCore.ConsoleApps.UpdateNoteChildren;
 
 namespace Turmerik.NetCore.Dependencies
 {
@@ -100,5 +101,15 @@ namespace Turmerik.NetCore.Dependencies
 
             return services;
         }
+
+        public static IServiceCollection AddNoteChildrenUpdaterServices(
+            this IServiceCollection services)
+        {
+            services.AddSingleton<UpdateNoteChildren.INoteChildrenFetcher, UpdateNoteChildren.NoteChildrenFetcher>();
+            services.AddSingleton<UpdateNoteChildren.INoteChildrenUpdater, UpdateNoteChildren.NoteChildrenUpdater>();
+
+            return services;
+        }
     }
 }
+

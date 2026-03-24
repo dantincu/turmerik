@@ -14,7 +14,7 @@ using Turmerik.Core.TextSerialization;
 using Turmerik.DirsPair;
 using Turmerik.Md;
 using Turmerik.Notes.Core;
-using UpdFsDirPairsIdxes = Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes;
+using UpdFsDirPairsIdxes = Turmerik.NetCore.ConsoleApps.UpdFsDirPairsIdxes;
 using Turmerik.Core.Helpers;
 using Markdig;
 using PuppeteerSharp;

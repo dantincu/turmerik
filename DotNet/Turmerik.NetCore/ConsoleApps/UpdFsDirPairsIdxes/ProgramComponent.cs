@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps;
@@ -15,10 +16,11 @@ using Turmerik.Core.TextParsing;
 using Turmerik.Core.TextParsing.IndexesFilter;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
+using Turmerik.DirsPair;
 using Turmerik.Notes.Core;
-using static Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes.ProgramComponent;
+using static Turmerik.NetCore.ConsoleApps.UpdFsDirPairsIdxes.ProgramComponent;
 
-namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
+namespace Turmerik.NetCore.ConsoleApps.UpdFsDirPairsIdxes
 {
     public interface IProgramComponent
     {
@@ -27,7 +29,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         Task RunAsync(
             ProgramArgs args);
 
-        void Run(WorkArgs wka);
+        Task RunAsync(WorkArgs wka);
     }
 
     public class ProgramComponent : IProgramComponent
@@ -38,6 +40,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
         private readonly IIdxesFilterParser idxesFilterParser;
         private readonly IdxesUpdater idxesUpdater;
+        private readonly UpdateNoteChildren.IProgramComponent updateNoteChildrenProgramComponent;
         private readonly IExistingDirPairsRetriever existingDirPairsRetriever;
         private readonly DirsPairConfig config;
         private readonly IDirsPairConfigLoader dirsPairConfigLoader;
@@ -53,6 +56,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             IConsoleMsgPrinter consoleMsgPrinter,
             IIdxesFilterParser idxesFilterParser,
             IdxesUpdater idxesUpdater,
+            UpdateNoteChildren.IProgramComponent updateNoteChildrenProgramComponent,
             IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory,
             IDirsPairConfigLoader dirsPairConfigLoader,
             INotesAppConfigLoader notesAppConfigLoader)
@@ -74,6 +78,9 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 
             this.idxesUpdater = idxesUpdater ?? throw new ArgumentNullException(
                 nameof(idxesUpdater));
+
+            this.updateNoteChildrenProgramComponent = updateNoteChildrenProgramComponent ?? throw new ArgumentNullException(
+                nameof(updateNoteChildrenProgramComponent));
 
             this.dirsPairConfigLoader = dirsPairConfigLoader ?? throw new ArgumentNullException(
                 nameof(dirsPairConfigLoader));
@@ -131,12 +138,12 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 
                 if (!userCancelledExecution)
                 {
-                    Run(wka);
+                    RunAsync(wka);
                 }
             }
         }
 
-        public void Run(
+        public async Task RunAsync(
             WorkArgs wka)
         {
             Console.ForegroundColor = ConsoleColor.Black;
@@ -158,6 +165,12 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             PrintActionName(
                 "Successfully renamed dir pairs to final names",
                 ConsoleColor.Green);
+
+            await updateNoteChildrenProgramComponent.RunAsync(new UpdateNoteChildren.ProgramArgs
+            {
+                WorkDir = wka.Args.WorkDir,
+                OnlyRunIfValidJsonAlreadyExists = false
+            });
         }
 
         private void PrintHelpMessage(

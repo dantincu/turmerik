@@ -53,6 +53,7 @@ namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
         private readonly PdfCreatorFactory pdfCreatorFactory;
         private readonly ITimeStampHelper timeStampHelper;
         private readonly IClipboardService clipboardService;
+        private readonly UpdateNoteChildren.IProgramComponent updateNoteChildrenProgramComponent;
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
@@ -66,7 +67,8 @@ namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
             INotesAppConfigLoader notesAppConfigLoader,
             PdfCreatorFactory pdfCreatorFactory,
             ITimeStampHelper timeStampHelper,
-            IClipboardService clipboardService)
+            IClipboardService clipboardService,
+            UpdateNoteChildren.IProgramComponent updateNoteChildrenProgramComponent)
         {
             this.consoleMsgPrinter = consoleMsgPrinter ?? throw new ArgumentNullException(
                 nameof(consoleMsgPrinter));
@@ -97,6 +99,9 @@ namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
 
             this.clipboardService = clipboardService ?? throw new ArgumentNullException(
                 nameof(clipboardService));
+
+            this.updateNoteChildrenProgramComponent = updateNoteChildrenProgramComponent ?? throw new ArgumentNullException(
+                nameof(updateNoteChildrenProgramComponent));
         }
 
         public async Task RunAsync(
@@ -122,6 +127,11 @@ namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
                     await RunAsync(
                         args.WorkDir, nodeArgs);
                 }
+
+                await updateNoteChildrenProgramComponent.RunAsync(new UpdateNoteChildren.ProgramArgs
+                {
+                    WorkDir = args.WorkDir,
+                });
             }
         }
 
@@ -603,6 +613,12 @@ namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
                     childNodesWorkDir,
                     childNodeArgs);
             }
+
+            await updateNoteChildrenProgramComponent.RunAsync(new UpdateNoteChildren.ProgramArgs
+            {
+                WorkDir = childNodesWorkDir,
+                OnlyRunIfValidJsonAlreadyExists = false
+            });
         }
 
         private bool ShouldCreatePdfFile(

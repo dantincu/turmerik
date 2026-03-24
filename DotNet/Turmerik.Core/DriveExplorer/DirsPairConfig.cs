@@ -79,6 +79,7 @@ namespace Turmerik.Core.DriveExplorer
         {
             public string MdFileName { get; set; }
             public string JsonFileName { get; set; }
+            public string NoteChildrenJsonFileName { get; set; }
             public string MdFileNamePfx { get; set; }
             public bool? PrependTitleToNoteMdFileName { get; set; }
             public string KeepFileName { get; set; }

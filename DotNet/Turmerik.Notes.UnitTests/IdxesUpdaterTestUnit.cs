@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.TextParsing.IndexesFilter;
-using Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes;
+using Turmerik.NetCore.ConsoleApps.UpdFsDirPairsIdxes;
 
 namespace Turmerik.Notes.UnitTests
 {

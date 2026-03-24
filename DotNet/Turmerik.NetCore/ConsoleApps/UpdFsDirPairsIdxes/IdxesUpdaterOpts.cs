@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Turmerik.Core.TextParsing.IndexesFilter;
 
-namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
+namespace Turmerik.NetCore.ConsoleApps.UpdFsDirPairsIdxes
 {
     public class IdxesUpdaterOpts
     {

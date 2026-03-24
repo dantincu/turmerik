@@ -15,6 +15,7 @@
   },
   "FileNames": {
     "MdFileName": "[note].md",
-    "JsonFileName": "[note].json"
+    "JsonFileName": "[note].json",
+    "NoteChildrenJsonFileName": "[note-children].json"
   }
 }
