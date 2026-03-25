@@ -25,6 +25,6 @@ namespace Turmerik.Notes.Core
 
     public class NoteItem : NoteItemCore
     {
-        public Dictionary<int, NoteItem> ChildNotes { get; set; }
+        public Dictionary<int, NoteItemSummary> ChildNotes { get; set; }
     }
 }

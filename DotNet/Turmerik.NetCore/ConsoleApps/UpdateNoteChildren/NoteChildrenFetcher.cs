@@ -63,7 +63,7 @@ namespace Turmerik.NetCore.ConsoleApps.UpdateNoteChildren
             var notesTuple = await existingDirPairsRetriever.GetNoteDirPairsAsync(
                 opts.PrNoteDirPath);
 
-            var notesMap = new Dictionary<int, NoteItem>();
+            var notesMap = new Dictionary<int, NoteItemSummary>();
             bool? @continue = null;
 
             foreach (var pair in notesTuple.DirsPairTuples.Where(

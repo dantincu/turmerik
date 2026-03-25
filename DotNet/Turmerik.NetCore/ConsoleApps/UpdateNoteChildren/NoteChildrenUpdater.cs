@@ -61,7 +61,7 @@ namespace Turmerik.NetCore.ConsoleApps.UpdateNoteChildren
             {
                 ChildNotes = noteItem.ChildNotes?.ToDictionary(
                     kvp => kvp.Key,
-                    kvp => new NoteItem
+                    kvp => new NoteItemSummary
                     {
                         Title = kvp.Value.Title,
                         CreatedAt = kvp.Value.CreatedAt,
