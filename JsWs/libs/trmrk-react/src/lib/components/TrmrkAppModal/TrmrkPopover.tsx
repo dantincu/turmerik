@@ -34,7 +34,6 @@ const TrmrkPopover = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalPr
 }, ref) => {
   const [placeOnTop] = useAtom(defaultTrmrkPopoverService.value.currentPopoverIsPlacedOnTop);
   const [currentPopoverIsMaximized, setCurrentPopoverIsMaximized] = useAtom(defaultTrmrkPopoverService.value.currentPopoverIsMaximizedAtom);
-  const [currentPopoverId] = useAtom(defaultTrmrkPopoverService.value.openPopovers.currentKeyAtom);
 
   const widthCssClass = React.useMemo(() => {
     switch (width) {
@@ -102,10 +101,10 @@ const TrmrkPopover = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalPr
     });
 
   React.useEffect(() => {
-    defaultTrmrkPopoverService.value.openPopovers.keyedMap.map[currentPopoverId!]?.nodeData?.updatePopoverPositionCallback();
+    defaultTrmrkPopoverService.value.openPopovers.keyedMap.map[popoverId]?.nodeData?.updatePopoverPositionCallback();
 
     setTimeout(() => {
-      defaultTrmrkPopoverService.value.openPopovers.keyedMap.map[currentPopoverId!]?.nodeData?.updatePopoverPositionCallback();
+      defaultTrmrkPopoverService.value.openPopovers.keyedMap.map[popoverId]?.nodeData?.updatePopoverPositionCallback();
     });
   }, []);
 
