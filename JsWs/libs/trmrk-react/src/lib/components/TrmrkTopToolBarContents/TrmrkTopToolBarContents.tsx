@@ -16,7 +16,7 @@ import TrmrkPopover from "../TrmrkAppModal/TrmrkPopover";
 import { useAppUserMessage } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 import TrmrkMinimizedModalStacksView from "../TrmrkMinimizedModalStacksView/TrmrkMinimizedModalStacksView";
 import TrmrkListPager from "../TrmrkListPager/TrmrkListPager";
-import TrmrkResizeObservable, { ResizeCallbackArgs } from "../TrmrkResizeObservable/TrmrkResizeObservable";
+import TrmrkResizeObservable from "../TrmrkResizeObservable/TrmrkResizeObservable";
 
 export interface TrmrkTopToolBarContentsProps extends ComponentProps {
   showBackBtn?: boolean | NullOrUndef;

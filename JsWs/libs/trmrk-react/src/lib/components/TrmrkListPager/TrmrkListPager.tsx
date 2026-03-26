@@ -72,11 +72,15 @@ export default function TrmrkListPager({
   }, []);
 
   return (itemsCountVal > pageSize) && <div className={["trmrk-list-pager-container flex-grow-[1]", cssClass ?? ""].join(" ")}>
-    <TrmrkBtn onClick={goToPrevPageBtnClicked} disabled={skipItemsVal < pageSize}><TrmrkIcon icon="mdi:keyboard-arrow-up" /></TrmrkBtn>
+    <TrmrkBtn onClick={goToPrevPageBtnClicked} disabled={skipItemsVal < pageSize}>
+      <TrmrkIcon className="rotate-270 top-[9px]" icon="material-symbols:play-arrow" />
+    </TrmrkBtn>
     <TrmrkBtn onClick={mainBtnClicked} className="flex-shrink-[0]" ref={el => {
       mainBtnEl.current = el;
       actWithVal(defaultTrmrkPopoverService.value, svc => svc.store.set(svc.currentPopoverAnchorEl, el));
     }}>{ skipItemsVal } <br /> Skipped Items</TrmrkBtn>
-    <TrmrkBtn onClick={goToNextPageBtnClicked} disabled={skipItemsVal + pageSize >= itemsCountVal}><TrmrkIcon icon="mdi:keyboard-arrow-down" /></TrmrkBtn>
+    <TrmrkBtn onClick={goToNextPageBtnClicked} disabled={skipItemsVal + pageSize >= itemsCountVal}>
+      <TrmrkIcon className="rotate-90 top-[6px]" icon="material-symbols:play-arrow" />
+    </TrmrkBtn>
   </div>;
 }

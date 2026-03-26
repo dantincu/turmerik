@@ -16,8 +16,6 @@ export const tailwindClassesCore = [
   "justify-self-center",
   "leading-[40px]",
   "left-[0]",
-  /* "left-[7px]",
-  "left-[14px]", */
   "overflow-hidden",
   "min-h-full",
   "max-h-full",
@@ -28,6 +26,7 @@ export const tailwindClassesCore = [
   "pr-[10px]",
   "pt-[2px]",
   "relative",
+  "right-[0]",
   "right-[-25px]",
   "rotate-45",
   "rotate-90",
@@ -38,6 +37,11 @@ export const tailwindClassesCore = [
   "rotate-415",
   "text-center",
   "text-[15px]",
+  "top-[0]",
+  "top-[6px]",
+  "top-[7px]",
+  "top-[8px]",
+  "top-[9px]",
   "w-full",
   "whitespace-nowrap",
 ];

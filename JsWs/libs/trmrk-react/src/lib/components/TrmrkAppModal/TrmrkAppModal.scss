@@ -162,6 +162,16 @@
     background-color: var(--trmrk-tool-bar_back-color_light);
     color: var(--trmrk-tool-bar_fore-color_light);
     box-shadow: 0 0 20px 10px var(--trmrk-tool-bar_back-color-emph_light);
+      
+    body, input, select, option {
+      color: var(--trmrk-tool-bar_fore-color-light);
+      border-color: var(--trmrk-tool-bar_fore-color-light);
+    }
+
+    .trmrk-textbox {
+      background-color: inherit;
+      border-color: #0008;
+    }
   }
 }
 
@@ -183,4 +193,14 @@
     color: var(--trmrk-tool-bar_fore-color_dark);
     box-shadow: 0 0 20px 10px var(--trmrk-tool-bar_back-color-emph_dark);
   }
+      
+    body, input, select, option {
+      color: var(--trmrk-tool-bar_fore-color-dark);
+      border-color: var(--trmrk-tool-bar_fore-color-dark);
+    }
+
+    .trmrk-textbox {
+      background-color: inherit;
+      border-color: #FFF8;
+    }
 }

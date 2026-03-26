@@ -3,11 +3,16 @@ import { PrimitiveAtom, atom, useAtom } from "jotai";
 
 import { NullOrUndef } from "@/src/trmrk/core";
 import { TouchOrMouseCoords } from "@/src/trmrk-browser/domUtils/touchAndMouseEvents";
+import { MultiClickServiceInitArgs } from "@/src/trmrk-browser/domUtils/MultiClickService";
 
 import TrmrkTextBox from "../TrmrkInput/TrmrkTextBox";
 import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
 import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
 import TrmrkScrollBar, { TrmrkScrollbarThumbPosition } from "../TrmrkScrollBar/TrmrkScrollBar";
+import TrmrkMultiClickable from "../TrmrkMultiClickable/TrmrkMultiClickable";
+import { HOCArgs } from "../defs/HOC";
+import { updateFwdRef } from "../../services/utils";
+import { defaultTrmrkPopoverService } from "../TrmrkBasicAppLayout/TrmrkPopoverService";
 import "./TrmrkListPager.scss";
 
 export interface TrmrkListPagerFullProps {
@@ -18,6 +23,14 @@ export interface TrmrkListPagerFullProps {
 }
 
 const containerIsWideDiffThresholdPx = 0;
+
+const MultiClickable = React.memo(({
+  hoc,
+  args
+}: {
+  hoc: HOCArgs<HTMLButtonElement, {}>,
+  args: (hostElem: HTMLButtonElement) => MultiClickServiceInitArgs
+}) => <TrmrkMultiClickable hoc={hoc} args={args} />);
 
 export default function TrmrkListPagerFull({
   cssClass,
@@ -34,6 +47,11 @@ export default function TrmrkListPagerFull({
   const [skipItemsStateVal, setSkipItemsStateVal] = React.useState(skipItemsVal);
   const [skipItemsStrVal, setSkipItemsStrVal] = React.useState(skipItemsVal.toString());
   const skipItemsValRef = React.useRef(skipItemsVal);
+
+  const fastRewindBtnElRef = React.useRef<HTMLButtonElement>(null);
+  const pageUpBtnElRef = React.useRef<HTMLButtonElement>(null);
+  const pageDownBtnElRef = React.useRef<HTMLButtonElement>(null);
+  const fastForwardBtnElRef = React.useRef<HTMLButtonElement>(null);
 
   const getPositionRatio = React.useCallback(
     (skipItemsStateNewVal: number) => {
@@ -61,6 +79,12 @@ export default function TrmrkListPagerFull({
 
   const [positionAtomVal, setPositionAtomVal] = useAtom(positionAtom);
 
+  const updateSkipItemsStateVal = React.useCallback((skipItemsStateNewVal: number) => {
+    skipItemsValRef.current = skipItemsStateNewVal;
+    setSkipItemsStateVal(skipItemsStateNewVal);
+    setSkipItemsStrVal(skipItemsStateNewVal.toString());
+  }, []);
+
   const updatePositionAtomVal = React.useCallback((skipItemsStateNewVal: number, event: TrmrkScrollbarThumbPosition) => {
     const newRatio = getPositionRatio(skipItemsStateNewVal);
 
@@ -71,8 +95,7 @@ export default function TrmrkListPagerFull({
     };
 
     setPositionAtomVal(positionAtomNewVal);
-    setSkipItemsStateVal(skipItemsStateNewVal);
-    setSkipItemsStrVal(skipItemsStateNewVal.toString());
+    updateSkipItemsStateVal(skipItemsStateNewVal);
   }, [positionAtomVal, pageSize, itemsCountVal, skipItemsStateVal, skipItemsStrVal]);
 
   const updateContainerIsWideFlag = React.useCallback(() => {
@@ -99,9 +122,7 @@ export default function TrmrkListPagerFull({
 
   const onScrollBarDrag = React.useCallback((event: TrmrkScrollbarThumbPosition) => {
     const skipItemsStateNewVal = getNormalizedSkipItemsStateVal((itemsCountVal - pageSize) * event.ratio);
-    skipItemsValRef.current = skipItemsStateNewVal;
-    setSkipItemsStateVal(skipItemsStateNewVal);
-    setSkipItemsStrVal(skipItemsStateNewVal.toString());
+    updateSkipItemsStateVal(skipItemsStateNewVal);
   }, [itemsCountVal, pageSize, skipItemsStateVal, skipItemsStrVal]);
 
   const onScrollBarDragEnd = React.useCallback((event: TrmrkScrollbarThumbPosition) => {
@@ -124,6 +145,111 @@ export default function TrmrkListPagerFull({
     onThumbDragStart={onScrollBarDragStart} onThumbDrag={onScrollBarDrag} onThumbDragEnd={onScrollBarDragEnd} />, [
       positionAtom, containerIsWide]);
 
+  const fastRewindBtnPointerDownOrPressAndHold = React.useCallback(() => {
+    const skipItemsStateNewVal = getNormalizedSkipItemsStateVal(skipItemsValRef.current - 10 * pageSize);
+    updateSkipItemsStateVal(skipItemsStateNewVal);
+  }, []);
+
+  const pageUpBtnPointerDownOrPressAndHold = React.useCallback(() => {
+    const skipItemsStateNewVal = getNormalizedSkipItemsStateVal(skipItemsValRef.current - pageSize);
+    updateSkipItemsStateVal(skipItemsStateNewVal);
+  }, []);
+
+  const pageDownBtnPointerDownOrPressAndHold = React.useCallback(() => {
+    const skipItemsStateNewVal = getNormalizedSkipItemsStateVal(skipItemsValRef.current + pageSize);
+    updateSkipItemsStateVal(skipItemsStateNewVal);
+  }, []);
+
+  const fastForwardBtnPointerDownOrPressAndHold = React.useCallback(() => {
+    const skipItemsStateNewVal = getNormalizedSkipItemsStateVal(skipItemsValRef.current + 10 * pageSize);
+    updateSkipItemsStateVal(skipItemsStateNewVal);
+  }, []);
+
+  const fastRewindBtnMultiClickArgs = React.useCallback((hostElem: HTMLButtonElement) => ({
+    hostElem,
+    multiClickPointerDown: fastRewindBtnPointerDownOrPressAndHold,
+    multiClickPressAndHold: fastRewindBtnPointerDownOrPressAndHold
+  } as MultiClickServiceInitArgs), []);
+
+  const pageUpBtnMultiClickArgs = React.useCallback((hostElem: HTMLButtonElement) => ({
+    hostElem,
+    multiClickPointerDown: pageUpBtnPointerDownOrPressAndHold,
+    multiClickPressAndHold: pageUpBtnPointerDownOrPressAndHold
+  } as MultiClickServiceInitArgs), []);
+
+  const pageDownBtnMultiClickArgs = React.useCallback((hostElem: HTMLButtonElement) => ({
+    hostElem,
+    multiClickPointerDown: pageDownBtnPointerDownOrPressAndHold,
+    multiClickPressAndHold: pageDownBtnPointerDownOrPressAndHold
+  } as MultiClickServiceInitArgs), []);
+
+  const fastForwardBtnMultiClickArgs = React.useCallback((hostElem: HTMLButtonElement) => ({
+    hostElem,
+    multiClickPointerDown: fastForwardBtnPointerDownOrPressAndHold,
+    multiClickPressAndHold: fastForwardBtnPointerDownOrPressAndHold
+  } as MultiClickServiceInitArgs), []);
+
+  const fastRewindBtnHOCArgs = React.useMemo(() => {
+    const fastRewindBtnHOCArgs: HOCArgs<HTMLButtonElement, {}> = {
+      node: (props, ref) => <TrmrkBtn {...props} ref={el => {
+              fastRewindBtnElRef.current = el;
+              updateFwdRef(ref, el);
+            }}>
+          <TrmrkIcon className="absolute rotate-90 top-[7px]" icon="material-symbols:fast-rewind" />
+        </TrmrkBtn>,
+      props: {}
+    };
+
+    return fastRewindBtnHOCArgs;
+  }, []);
+
+  const pageUpBtnHOCArgs = React.useMemo(() => {
+    const pageUpBtnHOCArgs: HOCArgs<HTMLButtonElement, {}> = {
+      node: (props, ref) => <TrmrkBtn {...props} ref={el => {
+              pageUpBtnElRef.current = el;
+              updateFwdRef(ref, el);
+            }}>
+          <TrmrkIcon className="absolute rotate-270 top-[9px]" icon="material-symbols:play-arrow" />
+        </TrmrkBtn>,
+      props: {}
+    };
+
+    return pageUpBtnHOCArgs;
+  }, []);
+
+  const pageDownBtnHOCArgs = React.useMemo(() => {
+    const pageDownBtnHOCArgs: HOCArgs<HTMLButtonElement, {}> = {
+      node: (props, ref) => <TrmrkBtn {...props} ref={el => {
+              pageDownBtnElRef.current = el;
+              updateFwdRef(ref, el);
+            }}>
+          <TrmrkIcon className="absolute rotate-90 top-[6px]" icon="material-symbols:play-arrow" />
+        </TrmrkBtn>,
+      props: {}
+    };
+
+    return pageDownBtnHOCArgs;
+  }, []);
+
+  const fastForwardBtnHOCArgs = React.useMemo(() => {
+    const fastForwardBtnHOCArgs: HOCArgs<HTMLButtonElement, {}> = {
+      node: (props, ref) => <TrmrkBtn {...props} ref={el => {
+              fastForwardBtnElRef.current = el;
+              updateFwdRef(ref, el);
+            }}>
+          <TrmrkIcon className="absolute rotate-90 top-[8px]" icon="material-symbols:fast-forward" />
+        </TrmrkBtn>,
+      props: {}
+    };
+
+    return fastForwardBtnHOCArgs;
+  }, []);
+
+  const doneBtnClicked = React.useCallback(() => {
+    setSkipItemsVal(skipItemsStateVal);
+    defaultTrmrkPopoverService.value.closeCurrentPopover();
+  }, [skipItemsStateVal]);
+
   React.useEffect(() => {
     window.addEventListener("resize", updateContainerIsWideFlag);
     updateContainerIsWideFlag();
@@ -140,22 +266,13 @@ export default function TrmrkListPagerFull({
       <div className="flex flex-row">
         <TrmrkTextBox className="w-full trmrk-skip-items-textbox" onBlur={onskipItemsTextBoxBlur} onChange={(event) => {setSkipItemsStrVal(event.target.value)}}
           type="number" value={skipItemsStrVal} min={0} max={itemsCountVal - pageSize} step={1} />
+        <TrmrkBtn className="trmrk-btn-filled-accept" onClick={doneBtnClicked}><TrmrkIcon icon="mdi:done" /></TrmrkBtn>
       </div>
       <div className="flex flex-row pt-[2px]">
-        { /* <TrmrkBtn className="trmrk-is-first">
-          <TrmrkIcon className="absolute rotate-180 left-[0]" icon="material-symbols:play-arrow" />
-          <TrmrkIcon className="absolute rotate-180 left-[7px]" icon="material-symbols:play-arrow" />
-          <TrmrkIcon className="absolute rotate-180 left-[14px]" icon="material-symbols:play-arrow" />
-        </TrmrkBtn> */ }
-        <TrmrkBtn><TrmrkIcon icon="material-symbols:fast-rewind" /></TrmrkBtn>
-        <TrmrkBtn><TrmrkIcon className="rotate-180" icon="material-symbols:play-arrow" /></TrmrkBtn>
-        <TrmrkBtn><TrmrkIcon icon="material-symbols:play-arrow" /></TrmrkBtn>
-        <TrmrkBtn><TrmrkIcon icon="material-symbols:fast-forward" /></TrmrkBtn>
-        { /* <TrmrkBtn>
-          <TrmrkIcon className="absolute left-[0]" icon="material-symbols:play-arrow" />
-          <TrmrkIcon className="absolute left-[7px]" icon="material-symbols:play-arrow" />
-          <TrmrkIcon className="absolute left-[14px]" icon="material-symbols:play-arrow" />
-        </TrmrkBtn> */ }
+        <MultiClickable hoc={fastRewindBtnHOCArgs} args={fastRewindBtnMultiClickArgs} />
+        <MultiClickable hoc={pageUpBtnHOCArgs} args={pageUpBtnMultiClickArgs} />
+        <MultiClickable hoc={pageDownBtnHOCArgs} args={pageDownBtnMultiClickArgs} />
+        <MultiClickable hoc={fastForwardBtnHOCArgs} args={fastForwardBtnMultiClickArgs} />
       </div>
     </div>
     { scrollBarJsx }
