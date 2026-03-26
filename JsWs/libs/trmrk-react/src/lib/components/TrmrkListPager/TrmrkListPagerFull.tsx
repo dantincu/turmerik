@@ -63,10 +63,11 @@ export default function TrmrkListPagerFull({
 
   const getNormalizedSkipItemsStateVal = React.useCallback(
     (skipItemsStateNewVal: number) => {
+      skipItemsStateNewVal = Math.max(0, Math.min(skipItemsStateNewVal, itemsCountVal - pageSize));
       skipItemsStateNewVal = Math.round(skipItemsStateNewVal / pageSize) * pageSize;
       skipItemsStateNewVal = Math.round(skipItemsStateNewVal);
       return skipItemsStateNewVal;
-    }, [pageSize]
+    }, [pageSize, itemsCountVal]
   )
 
   const [positionAtom] = React.useState(() => {
