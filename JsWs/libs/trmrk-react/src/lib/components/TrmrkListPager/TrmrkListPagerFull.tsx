@@ -5,7 +5,9 @@ import { NullOrUndef } from "@/src/trmrk/core";
 import { TouchOrMouseCoords } from "@/src/trmrk-browser/domUtils/touchAndMouseEvents";
 
 import TrmrkTextBox from "../TrmrkInput/TrmrkTextBox";
-import TrmrkScrollBar, { TrmrkScrollbarThumbPosition, TrmrkScrollBarProps } from "../TrmrkScrollBar/TrmrkScrollBar";
+import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
+import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
+import TrmrkScrollBar, { TrmrkScrollbarThumbPosition } from "../TrmrkScrollBar/TrmrkScrollBar";
 import "./TrmrkListPager.scss";
 
 export interface TrmrkListPagerFullProps {
@@ -135,8 +137,26 @@ export default function TrmrkListPagerFull({
         containerIsWide ? "trmrk-is-wide" : "",
         cssClass ?? ""].join(" ")}>
     <div className="trmrk-main-container">
-      <TrmrkTextBox className="w-full trmrk-skip-items-textbox" onBlur={onskipItemsTextBoxBlur} onChange={(event) => {setSkipItemsStrVal(event.target.value)}}
-        type="number" value={skipItemsStrVal} min={0} max={itemsCountVal - pageSize} step={1} />
+      <div className="flex flex-row">
+        <TrmrkTextBox className="w-full trmrk-skip-items-textbox" onBlur={onskipItemsTextBoxBlur} onChange={(event) => {setSkipItemsStrVal(event.target.value)}}
+          type="number" value={skipItemsStrVal} min={0} max={itemsCountVal - pageSize} step={1} />
+      </div>
+      <div className="flex flex-row pt-[2px]">
+        { /* <TrmrkBtn className="trmrk-is-first">
+          <TrmrkIcon className="absolute rotate-180 left-[0]" icon="material-symbols:play-arrow" />
+          <TrmrkIcon className="absolute rotate-180 left-[7px]" icon="material-symbols:play-arrow" />
+          <TrmrkIcon className="absolute rotate-180 left-[14px]" icon="material-symbols:play-arrow" />
+        </TrmrkBtn> */ }
+        <TrmrkBtn><TrmrkIcon icon="material-symbols:fast-rewind" /></TrmrkBtn>
+        <TrmrkBtn><TrmrkIcon className="rotate-180" icon="material-symbols:play-arrow" /></TrmrkBtn>
+        <TrmrkBtn><TrmrkIcon icon="material-symbols:play-arrow" /></TrmrkBtn>
+        <TrmrkBtn><TrmrkIcon icon="material-symbols:fast-forward" /></TrmrkBtn>
+        { /* <TrmrkBtn>
+          <TrmrkIcon className="absolute left-[0]" icon="material-symbols:play-arrow" />
+          <TrmrkIcon className="absolute left-[7px]" icon="material-symbols:play-arrow" />
+          <TrmrkIcon className="absolute left-[14px]" icon="material-symbols:play-arrow" />
+        </TrmrkBtn> */ }
+      </div>
     </div>
     { scrollBarJsx }
   </div>;

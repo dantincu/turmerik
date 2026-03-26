@@ -35,6 +35,10 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+
+    .trmrk-btn.trmrk-is-first {
+      margin-left: 0;
+    }
   }
 
   &.trmrk-is-wide.trmrk-is-wide.trmrk-is-wide {

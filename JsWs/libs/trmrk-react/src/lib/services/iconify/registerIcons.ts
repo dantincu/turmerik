@@ -32,6 +32,8 @@ import keyboardArrowDown from "@iconify-icons/mdi/keyboard-arrow-down";
 import keyboardArrowRight from "@iconify-icons/mdi/keyboard-arrow-right";
 import expandMore from "@iconify-icons/mdi/expand-more";
 import expandLess from "@iconify-icons/mdi/expand-less";
+import firstPage from "@iconify-icons/mdi/first-page";
+import lastPage from "@iconify-icons/mdi/last-page";
 
 import undo from "@iconify-icons/material-symbols/undo";
 import redo from "@iconify-icons/material-symbols/redo";
@@ -49,6 +51,12 @@ import viewColumnOutlineSharp from "@iconify-icons/material-symbols/view-column-
 import refresh from "@iconify-icons/material-symbols/refresh";
 import tabGroup from "@iconify-icons/material-symbols/tab-group";
 import selectWindow from "@iconify-icons/material-symbols/select-window";
+import playArrowRounded from "@iconify-icons/material-symbols/play-arrow-rounded";
+import fastForwardRounded from "@iconify-icons/material-symbols/fast-forward-rounded";
+import fastRewindRounded from "@iconify-icons/material-symbols/fast-rewind-rounded";
+import playArrow from "@iconify-icons/material-symbols/play-arrow";
+import fastForward from "@iconify-icons/material-symbols/fast-forward";
+import fastRewind from "@iconify-icons/material-symbols/fast-rewind";
 
 import commandOutline from "@iconify-icons/solar/command-outline";
 import commandBold from "@iconify-icons/solar/command-bold";
@@ -91,6 +99,8 @@ export const registerIconifyIcons = () => {
     ["keyboard-arrow-right"]: keyboardArrowRight,
     ["expand-more"]: expandMore,
     ["expand-less"]: expandLess,
+    ["first-page"]: firstPage,
+    ["last-page"]: lastPage,
   });
 
   registerIconifyIconsCore("material-symbols", {
@@ -110,6 +120,12 @@ export const registerIconifyIcons = () => {
     refresh,
     ["tab-group"]: tabGroup,
     ["select-window"]: selectWindow,
+    ["play-arrow-rounded"]: playArrowRounded,
+    ["fast-forward-rounded"]: fastForwardRounded,
+    ["fast-rewind-rounded"]: fastRewindRounded,
+    ["play-arrow"]: playArrow,
+    ["fast-forward"]: fastForward,
+    ["fast-rewind"]: fastRewind,
   });
 
   registerIconifyIconsCore("solar", {

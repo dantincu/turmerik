@@ -26,13 +26,6 @@ export const shouldShowContents = (
     }
   }
 
-  console.log(
-    "shouldShowContents",
-    retVal,
-    currentKeysArr,
-    keyToBeRemoved,
-    keyToBeAdded,
-  );
   return retVal;
 };
 

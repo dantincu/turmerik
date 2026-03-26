@@ -15,6 +15,7 @@ export interface TrmrkAppModalProps<TPopoverData = any> extends React.ComponentP
   barContents?: React.ReactNode | NullOrUndef;
   canMaximizeManually?: boolean | NullOrUndef;
   width?: TrmrkAppModalWidth | NullOrUndef;
+  useDefaultLayout?: boolean | NullOrUndef;
 }
 
 const TrmrkPopover = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalProps>(({
@@ -28,10 +29,12 @@ const TrmrkPopover = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalPr
   barContents,
   canMaximizeManually,
   width,
+  useDefaultLayout,
   ...props
 }, ref) => {
   const [placeOnTop] = useAtom(defaultTrmrkPopoverService.value.currentPopoverIsPlacedOnTop);
-    const [currentPopoverIsMaximized, setCurrentPopoverIsMaximized] = useAtom(defaultTrmrkPopoverService.value.currentPopoverIsMaximizedAtom);
+  const [currentPopoverIsMaximized, setCurrentPopoverIsMaximized] = useAtom(defaultTrmrkPopoverService.value.currentPopoverIsMaximizedAtom);
+  const [currentPopoverId] = useAtom(defaultTrmrkPopoverService.value.openPopovers.currentKeyAtom);
 
   const widthCssClass = React.useMemo(() => {
     switch (width) {
@@ -98,9 +101,18 @@ const TrmrkPopover = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalPr
       </div>;
     });
 
+  React.useEffect(() => {
+    defaultTrmrkPopoverService.value.openPopovers.keyedMap.map[currentPopoverId!]?.nodeData?.updatePopoverPositionCallback();
+
+    setTimeout(() => {
+      defaultTrmrkPopoverService.value.openPopovers.keyedMap.map[currentPopoverId!]?.nodeData?.updatePopoverPositionCallback();
+    });
+  }, []);
+
   return <div ref={refElAvailable} className={[
       className ?? "",
       currentPopoverIsMaximized ? "trmrk-is-maximized" : "",
+      (useDefaultLayout ?? true) ? "trmrk-use-default-layout" : "",
       widthCssClass,
       "trmrk-popover-container"].join(' ')} {...props}>
     { !placeOnTop && <PopoverBar { ...{popoverTitle, showBar, barContents} } /> }

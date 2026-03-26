@@ -19,7 +19,7 @@ import {
 } from "../../services/IntKeyedComponentsMapManager";
 
 import { IntKeyedNode } from "../defs/common";
-import { JotaiStore, trmrkUseAtom } from "../../services/jotai/core";
+import { JotaiStore } from "../../services/jotai/core";
 import { updateRef } from "../../services/utils";
 
 export interface TrmrkPopoverPropsCore {

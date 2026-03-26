@@ -107,8 +107,6 @@
   }
 
   margin: auto; /* Centers it if it's smaller than the screen */
-  border-radius: var(--trmrk-panel-border-radius);
-  border: 2px solid;
 
   .trmrk-modal-header,
   .trmrk-modal-footer {
@@ -138,6 +136,11 @@
   }
 }
 
+.trmrk-app-modal-container, .trmrk-popover-container.trmrk-use-default-layout {
+  border-radius: var(--trmrk-panel-border-radius);
+  border: 2px solid;
+}
+
 .trmrk-popover-container {
   position: absolute;
 }
@@ -154,7 +157,7 @@
     }
   }
 
-  .trmrk-popover-container {
+  .trmrk-popover-container.trmrk-use-default-layout {
     border-color: var(--trmrk-tool-bar_back-color-emph_light);
     background-color: var(--trmrk-tool-bar_back-color_light);
     color: var(--trmrk-tool-bar_fore-color_light);
@@ -174,7 +177,7 @@
     }
   }
   
-  .trmrk-popover-container {
+  .trmrk-popover-container.trmrk-use-default-layout {
     border-color: var(--trmrk-tool-bar_back-color-emph_dark);
     background-color: var(--trmrk-tool-bar_back-color_dark);
     color: var(--trmrk-tool-bar_fore-color_dark);
