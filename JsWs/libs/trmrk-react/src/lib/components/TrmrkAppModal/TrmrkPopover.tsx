@@ -18,7 +18,7 @@ export interface TrmrkAppModalProps<TPopoverData = any> extends React.ComponentP
   useDefaultLayout?: boolean | NullOrUndef;
 }
 
-const TrmrkPopover = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalProps>(({
+const TrmrkPopover = (React.forwardRef<HTMLDivElement, TrmrkAppModalProps>(({
   rootElRef,
   popoverTitle,
   popoverId,
@@ -121,3 +121,4 @@ const TrmrkPopover = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalPr
 }));
 
 export default TrmrkPopover;
+export const TrmrkPopoverMM = React.memo(TrmrkPopover);

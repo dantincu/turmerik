@@ -29,7 +29,7 @@ export interface TrmrkAppModalProps<TModalData = any> extends React.ComponentPro
   width?: TrmrkAppModalWidth | NullOrUndef;
 }
 
-const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalProps>(({
+const TrmrkAppModal = (React.forwardRef<HTMLDivElement, TrmrkAppModalProps>(({
   modalId,
   modalTitle,
   data,
@@ -135,3 +135,4 @@ const TrmrkAppModal = React.memo(React.forwardRef<HTMLDivElement, TrmrkAppModalP
 }));
 
 export default TrmrkAppModal;
+export const TrmrkAppModalMM = React.memo(TrmrkAppModal);

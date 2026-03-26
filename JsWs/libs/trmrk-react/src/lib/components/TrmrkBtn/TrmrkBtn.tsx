@@ -7,13 +7,12 @@ import "./TrmrkBtn.scss";
 import { NullOrUndef, actWithValIf } from "@/src/trmrk/core";
 
 import { clearRefVal, updateRef } from "../../services/utils";
-import { ComponentProps } from "../defs/common";
 
 export interface TrmrkBtnProps extends React.ComponentPropsWithRef<'button'> {
   borderWidth?: number | NullOrUndef;
 }
 
-const TrmrkBtn = React.memo(React.forwardRef<HTMLButtonElement, TrmrkBtnProps>(({ className, children, borderWidth, onPointerDown, ...props }, ref) => {
+const TrmrkBtn = (React.forwardRef<HTMLButtonElement, TrmrkBtnProps>(({ className, children, borderWidth, onPointerDown, ...props }, ref) => {
   const rootElRef = React.useRef<HTMLButtonElement | null>(null);
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const [ showIsPressedCssClass, setShowIsPressedCssClass ] = React.useState(false);
@@ -53,3 +52,4 @@ const TrmrkBtn = React.memo(React.forwardRef<HTMLButtonElement, TrmrkBtnProps>((
 }));
 
 export default TrmrkBtn;
+export const TrmrkBtnMM = React.memo(TrmrkBtn);
