@@ -34,5 +34,8 @@ export default function TrmrkAppInitializer({
     });
   }, []);
 
-  return initIsOk ? children : <TrmrkLoader></TrmrkLoader>;
+  return initIsOk ? children : <div
+      className="flex flex-col h-full items-center justify-center">
+    <div className="flex-row"><TrmrkLoader></TrmrkLoader></div>
+  </div>;
 }
