@@ -3,22 +3,29 @@
 import React from "react";
 import { useAtom } from "jotai";
 
-import TrmrkLoader from "../TrmrkLoader/TrmrkLoader";
+import { NullOrUndef, actWithValIf } from "@/src/trmrk/core";
 
+import TrmrkLoader from "../TrmrkLoader/TrmrkLoader";
 import { appInitializerAtoms } from "./TrmrkAppInitializerService";
 
 export default function TrmrkAppInitializer({
   children,
-  initialize
+  initialize,
+  appInitialLoaderElId = "trmrk-app-initial-loader"
 }: Readonly<{
   children: React.ReactNode;
-  initialize: () => Promise<void>
+  initialize: () => Promise<void>,
+  appInitialLoaderElId?: string | NullOrUndef
 }>) {
   const [, setInitStarted] = useAtom(appInitializerAtoms.initStarted);
   const [, setInitEnded] = useAtom(appInitializerAtoms.initEnded);
   const [initIsOk, setInitIsOk] = useAtom(appInitializerAtoms.initIsOk);
 
   React.useEffect(() => {
+    actWithValIf(appInitialLoaderElId, id => {
+      actWithValIf(document.getElementById(id), el => el.style.display = "none");
+    }, null, id => (id ?? "") === "");
+
     setInitStarted(true);
 
     initialize().then(() => {
