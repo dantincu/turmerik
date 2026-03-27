@@ -293,6 +293,7 @@ const MiddlePanelContents = () => {
   const openModal = React.useCallback(() => {
     defaultTrmrkAppModalService.value.openModal({
       props: {
+        // modalTitle: atom("asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf")
         modalTitle: atom("asdfasdf")
       },
       modal: MyModal

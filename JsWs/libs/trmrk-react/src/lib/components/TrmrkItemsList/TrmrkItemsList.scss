@@ -1,0 +1,15 @@
+.trmrk-items-list {
+  &ul {
+    list-style-type: none;
+  }
+
+  .trmrk-list-item {
+
+  }
+
+  &.trmrk-items-are-outlined {
+    .trmrk-list-item {
+
+    }
+  }
+}

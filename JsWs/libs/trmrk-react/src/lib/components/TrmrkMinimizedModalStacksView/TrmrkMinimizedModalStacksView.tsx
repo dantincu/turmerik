@@ -49,17 +49,19 @@ export default function TrmrkMinimizedModalStacksView(
 
   return <div className={["trmrk-minimized-modal-stacks-view", cssClass ?? ""].join(" ")}>
     { restorableMinimizedStacksArr.map(stack => <div className="trmrk-modals-stack" key={stack.stackId}>
-      { stack.modals.length > 1 && <TrmrkBtn onClick={() => toggleExpandStackClicked(stack.stackId, !stack.isExpanded)} className="trmrk-toggle-expand-btn" borderWidth={1}>
+      { stack.modals.length > 1 && <TrmrkBtn onClick={() => toggleExpandStackClicked(stack.stackId, !stack.isExpanded)}
+          className="trmrk-toggle-expand-btn" borderWidth={1}>
         <TrmrkIcon icon={stack.isExpanded ? "mdi:expand-less" : 'mdi:expand-more'} /></TrmrkBtn> }
 
-      { (!stack.isExpanded || stack.modals.length === 1) && <TrmrkBtn onClick={() => restoreMinimizedModalsClicked(stack.stackId)}>
-        <span className="grow leading-[40px] text-[15px] font-bold">
+      { (!stack.isExpanded || stack.modals.length === 1) && <TrmrkBtn onClick={() => restoreMinimizedModalsClicked(stack.stackId)}
+          className="trmrk-content-btn trmrk-collapsed-btn">
+        <span className="trmrk-text leading-[40px] text-[15px] font-bold">
           { stack.modals[stack.modals.length - 1]?.modalTitle }</span></TrmrkBtn> }
 
       { (stack.isExpanded && stack.modals.length > 1) && <TrmrkBtn onClick={() => restoreMinimizedModalsClicked(stack.stackId)}
-            className="trmrk-height-unset flex flex-col">
+            className="trmrk-content-btn trmrk-expanded-btn trmrk-height-unset">
           { stack.modals.map(
-            (modal, idx) => <span key={modal.modalId} className={[idx === 0 ? "text-[15px] font-bold" : ""].join(" ")}>
+            (modal, idx) => <span key={modal.modalId} className={["trmrk-text", idx === 0 ? "text-[15px] font-bold" : ""].join(" ")}>
               { modal.modalTitle }
             </span>) }</TrmrkBtn> }
     </div>) }
