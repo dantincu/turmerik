@@ -13,8 +13,6 @@ import {
   use3PanelsAppLayoutAtoms
 } from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayoutService";
 
-import TrmrkLink from "@/src/trmrk-react/components/TrmrkLink/TrmrkLink";
-
 const AppBar = () => {
   return <TrmrkAppBarContents><h1 className="text-center grow">Turmerik Notes</h1></TrmrkAppBarContents>;
 }
@@ -23,7 +21,7 @@ const TopToolbar = () => {
   return <TrmrkTopToolBarContents></TrmrkTopToolBarContents>;
 }
 
-export default function Landing() {
+export default function Home() {
   const trmrk3PanelsLayoutAtoms = use3PanelsAppLayoutAtoms();
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
 
@@ -37,7 +35,7 @@ export default function Landing() {
         contents: TopToolbar
       },
       middlePanel: {
-        contents: () => <><h2>Welcome to Turmerik Notes app</h2><TrmrkLink href="/app">app</TrmrkLink></>
+        contents: () => <h2>Home</h2>
       },
       setFocusedPanel
     });

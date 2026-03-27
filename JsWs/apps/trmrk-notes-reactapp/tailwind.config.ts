@@ -1,0 +1,24 @@
+// tailwind.config.ts
+import type { Config } from "tailwindcss";
+
+import { tailwindClassesCore } from "./src/trmrk-react-KEEP/tailwind-classes-core.ts";
+import { notesLibTailwindClasses } from "./src/trmrk-react-KEEP/react-apps/notes-reactapp/notes-lib-tailwind-classes.ts";
+import { notesAppTailwindClasses } from "./src/trmrk-react-KEEP/react-apps/notes-reactapp/notes-app-tailwind-classes.ts";
+
+/** @type {import('tailwindcss').Config} */
+const config: Config = {
+  darkMode: "selector", // or 'class' for Tailwind v3
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx,mdx}", // This covers everything inside src
+  ],
+  safelist: [
+    tailwindClassesCore,
+    notesLibTailwindClasses,
+    notesAppTailwindClasses,
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+export default config;
