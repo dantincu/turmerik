@@ -16,7 +16,7 @@ export default function ThemeToggle() {
   return (<div className="flex-row">
       <TrmrkBtn
         onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-        className="trmrk-btn-filled-ternary mr-[2px] mt-[2px]"
+        className="trmrk-btn-filled-warn mr-[2px] mt-[2px]"
       >
         {resolvedTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode"}
       </TrmrkBtn>
