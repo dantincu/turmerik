@@ -58,6 +58,104 @@
   }
 }
 
+.light .trmrk-btn,
+.dark .trmrk-btn.trmrk-btn-filled-opposite {
+  .trmrk-btn-overlay {
+    border-color: #0004;
+  }
+
+  &:disabled {
+    .trmrk-btn-overlay {
+      background-color: #FFF2;
+    }
+  }
+
+  &:not(:disabled) {
+    .trmrk-btn-overlay {
+      &:hover {
+        background-color: #0002;
+        border-color: #0006;
+      }
+    }
+
+    &.trmrk-btn-pressed {
+      .trmrk-btn-overlay {
+        background-color: #0004;
+        border-color: #0008;
+      }
+    }
+  }
+}
+
+.dark .trmrk-btn,
+.light .trmrk-btn.trmrk-btn-filled-opposite,
+.trmrk-btn.trmrk-btn-filled-primary,
+.trmrk-btn.trmrk-btn-filled-secondary,
+.trmrk-btn.trmrk-btn-filled-accept,
+.trmrk-btn.trmrk-btn-filled-reject {
+  .trmrk-btn-overlay {
+    border-color: #FFF2;
+  }
+
+  &:disabled {
+    .trmrk-btn-overlay {
+      background-color: #0004;
+    }
+  }
+
+  &:not(:disabled) {
+    .trmrk-btn-overlay {
+      &:hover {
+        background-color: #FFF2;
+        border-color: #FFF4;
+      }
+    }
+
+    &.trmrk-btn-pressed {
+      .trmrk-btn-overlay {
+        background-color: #FFF4;
+        border-color: #FFF6;
+      }
+    }
+  }
+}
+
+.light {
+  .trmrk-btn {
+    &.trmrk-btn-filled-opposite {
+      background-color: var(--trmrk-default-back-color-dark);
+      color: var(--trmrk-tool-bar_fore-color_dark);
+    }
+
+    &.trmrk-btn-filled-system {
+      background-color: var(--trmrk-tool-bar_back-color-emph_light);
+    }
+
+    &.trmrk-btn-filled-ternary {
+      background-color: var(--trmrk-ternary-back-color-theme-light);
+      color: var(--trmrk-tool-bar_fore-color_light);
+    }
+  }
+}
+
+.dark {
+  .trmrk-btn {
+    &.trmrk-btn-filled-opposite {
+      background-color: var(--trmrk-default-back-color-light);
+      color: var(--trmrk-tool-bar_fore-color_light);
+    }
+
+    &.trmrk-btn-filled-system {
+      background-color: var(--trmrk-tool-bar_back-color-emph_dark);
+    }
+
+    &.trmrk-btn-filled-ternary {
+      background-color: var(--trmrk-ternary-back-color-theme-dark);
+      color: var(--trmrk-tool-bar_fore-color_dark);
+    }
+  }
+}
+
 .trmrk-btn {
   &.trmrk-btn-filled-primary,
   &.trmrk-btn-filled-secondary,
@@ -69,12 +167,9 @@
 
   &.trmrk-btn-filled-warn {
     color: var(--trmrk-tool-bar_fore-color_light);
-  }
-
-  &.trmrk-btn-filled-warn {
     background-color: var(--trmrk-warn-back-color);
   }
-    
+
   &.trmrk-btn-filled-primary {
     background-color: var(--trmrk-primary-back-color);
   }
@@ -90,161 +185,4 @@
   &.trmrk-btn-filled-reject {
     background-color: var(--trmrk-reject-back-color);
   }
-}
-
-.light {
-  .trmrk-btn {
-    .trmrk-btn-overlay {
-      border-color: #0004;
-    }
-
-    &:disabled {
-      .trmrk-btn-overlay {
-        background-color: #FFF2;
-      }
-    }
-
-    &:not(:disabled) {
-      .trmrk-btn-overlay {
-        &:hover {
-          background-color: #0002;
-          border-color: #0006;
-        }
-      }
-
-      &.trmrk-btn-pressed {
-        .trmrk-btn-overlay {
-          background-color: #0004;
-          border-color: #0008;
-        }
-      }
-    }
-
-    &.trmrk-btn-filled-opposite, .trmrk-background-color-opposite {
-      background-color: var(--trmrk-default-back-color-dark);
-      color: var(--trmrk-tool-bar_fore-color_dark);
-    }
-
-    &.trmrk-btn-filled-primary,
-    &.trmrk-btn-filled-secondary,
-    &.trmrk-btn-filled-accept,
-    &.trmrk-btn-filled-reject,
-    &.trmrk-btn-filled-system,
-    &.trmrk-btn-filled-opposite {
-      .trmrk-btn-overlay {
-        border-color: #FFF2;
-
-        &:hover {
-          background-color: #FFF2;
-          border-color: #FFF4;
-        }
-      }
-
-      &.trmrk-btn-pressed {
-        .trmrk-btn-overlay {
-          background-color: #FFF4;
-          border-color: #FFF6;
-        }
-      }
-    }
-
-    &.trmrk-btn-filled-system, .trmrk-background-color-system {
-      background-color: var(--trmrk-tool-bar_back-color-emph_light);
-    }
-
-    &.trmrk-btn-filled-ternary {
-      background-color: var(--trmrk-ternary-back-color-theme-light);
-      color: var(--trmrk-tool-bar_fore-color_light);
-    }
-  }
-}
-
-.dark {
-  .trmrk-btn {
-    .trmrk-btn-overlay {
-      border-color: #FFF2;
-    }
-
-    &:disabled {
-      .trmrk-btn-overlay {
-        background-color: #0004;
-      }
-    }
-
-    &:not(:disabled) {
-      .trmrk-btn-overlay {
-        &:hover {
-          background-color: #FFF2;
-          border-color: #FFF4;
-        }
-      }
-
-      &.trmrk-btn-pressed {
-        .trmrk-btn-overlay {
-          background-color: #FFF4;
-          border-color: #FFF6;
-        }
-      }
-    }
-
-    &.trmrk-btn-filled-opposite, .trmrk-background-color-opposite {
-      background-color: var(--trmrk-default-back-color-light);
-      color: var(--trmrk-tool-bar_fore-color_light);
-    }
-
-    &.trmrk-btn-filled-opposite {
-      .trmrk-btn-overlay {
-        border-color: #0004;
-
-        &:hover {
-          background-color: #0002;
-          border-color: #0006;
-        }
-      }
-
-      &.trmrk-btn-pressed {
-        .trmrk-btn-overlay {
-          background-color: #0004;
-          border-color: #0008;
-        }
-      }
-    }
-
-    &.trmrk-btn-filled-system, .trmrk-background-color-system {
-      background-color: var(--trmrk-tool-bar_back-color-emph_dark);
-    }
-
-    &.trmrk-btn-filled-ternary {
-      background-color: var(--trmrk-ternary-back-color-theme-dark);
-      color: var(--trmrk-tool-bar_fore-color_dark);
-    }
-  }
-}
-
-.trmrk-background-color-primary,
-.trmrk-background-color-secondary,
-.trmrk-background-color-accept,
-.trmrk-background-color-reject {
-  color: var(--trmrk-tool-bar_fore-color_dark);
-}
-
-.trmrk-background-color-warn {
-  color: var(--trmrk-tool-bar_fore-color_light);
-  background-color: var(--trmrk-warn-back-color);
-}
-
-.trmrk-background-color-primary {
-  background-color: var(--trmrk-primary-back-color);
-}
-
-.trmrk-background-color-secondary {
-  background-color: var(--trmrk-secondary-back-color);
-}
-
-.trmrk-background-color-accept {
-  background-color: var(--trmrk-accept-back-color);
-}
-
-.trmrk-background-color-reject {
-  background-color: var(--trmrk-reject-back-color);
 }

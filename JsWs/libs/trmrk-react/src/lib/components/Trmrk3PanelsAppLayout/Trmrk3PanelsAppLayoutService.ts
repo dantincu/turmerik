@@ -26,6 +26,8 @@ import {
   useBasicAppLayoutAtoms,
 } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
+import { KeyboardShortcutMatchState } from "../../services/keyboardShortcuts/KeyboardShortcutsServiceDefs";
+
 export enum TrmrkAppLayoutPanel {
   None = 0,
   Left,
@@ -84,6 +86,9 @@ export const trmrk3PanelsAppLayoutAtoms = {
   focusedPanel: atom(TrmrkAppLayoutPanel.Middle),
   isMultiPanelMode: atom(false),
   isResizingPanels: atom(false),
+  keyboardShortcutMatchState: atom<KeyboardShortcutMatchState>(
+    KeyboardShortcutMatchState.None,
+  ),
 };
 
 export const leftPanelContents = new RefLazyValue(() =>

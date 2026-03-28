@@ -2,30 +2,35 @@
   .trmrk-app-body {
     > .trmrk-split-container {
       > .trmrk-split-panel1 {
-        flex-direction: column-reverse;
+        flex-direction: column;
       }
 
       > .trmrk-split-panel2 {
         > .trmrk-split-container {
           > .trmrk-split-panel1 {
-            flex-direction: column-reverse;
+            flex-direction: column;
           }
 
           > .trmrk-split-panel2 {
-            flex-direction: column-reverse;
+            flex-direction: column;
           }
         }
       }
     }
 
     .trmrk-split-container {
-      .trmrk-panel-loader-container {
+      .trmrk-panel-loader-container,
+      .trmrk-shortcut-notification-thin-strip {
         display: flex;
         position: relative;
         height: 4px;
         min-height: 4px;
         border-radius: 2px;
         overflow: hidden;
+      }
+
+      .trmrk-shortcut-notification-thin-strip {
+        transition: background-color 0.2s;
       }
 
       .trmrk-panel-body-container, .trmrk-panel-body {

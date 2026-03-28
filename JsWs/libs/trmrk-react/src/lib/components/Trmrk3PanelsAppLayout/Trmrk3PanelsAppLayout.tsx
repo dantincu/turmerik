@@ -4,7 +4,7 @@ import React from "react";
 import { useAtom } from "jotai";
 import { atomEffect } from 'jotai-effect';
 
-import { actWithValIf, actWithVal } from "@/src/trmrk/core";
+import { actWithValIf } from "@/src/trmrk/core";
 import { joinNames } from "@/src/trmrk/name-generators";
 import { PointerDragEvent } from "@/src/trmrk-browser/domUtils/PointerDragService";
 import { TouchOrMouseCoords } from "@/src/trmrk-browser/domUtils/touchAndMouseEvents";
@@ -17,7 +17,9 @@ import {
   overridingBottomToolbarContents,
   useToolbarOverridingContentKeys,
   useToolbarOverridingContentKeyArrs,
-  useShowOverridingToolbars
+  useShowOverridingToolbars,
+  trmrkBasicAppLayoutAtoms,
+  useShowToolbars,
 } from "../TrmrkBasicAppLayout/TrmrkBasicAppLayoutService";
 
 import TrmrkSplitContainerCore from "../TrmrkSplitContainerCore/TrmrkSplitContainerCore";
@@ -26,6 +28,8 @@ import TrmrkBtn from "../TrmrkBtn/TrmrkBtn";
 import TrmrkIcon from "../TrmrkIcon/TrmrkIcon";
 import TrmrkPointerDraggable from "../TrmrkPointerDraggable/TrmrkPointerDraggable";
 import { shouldShowContents } from "../../services/IntKeyedComponentsMapManager";
+
+import { KeyboardShortcutMatchState } from "../../services/keyboardShortcuts/KeyboardShortcutsServiceDefs";
 
 import {
   trmrk3PanelsAppLayoutAtoms,
@@ -258,9 +262,45 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
   const showOverridingToolbars = useShowOverridingToolbars();
   const toolbarOverridingContentKeys = useToolbarOverridingContentKeys();
   const toolbarOverridingContentKeyArrs = useToolbarOverridingContentKeyArrs();
+  const [hideHeaderAndFooter] = useAtom(trmrkBasicAppLayoutAtoms.hideHeaderAndFooter);
 
+  const [showToolbars] = useAtom(trmrkBasicAppLayoutAtoms.showToolbars);
   const [focusedPanel, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
   const [isResizingPanels, setIsResizingPanels] = useAtom(trmrk3PanelsAppLayoutAtoms.isResizingPanels);
+  const [keyboardShortcutMatchState] = useAtom(trmrk3PanelsAppLayoutAtoms.keyboardShortcutMatchState);
+  const showToolbarAtoms = useShowToolbars();
+  const showOverridingToolbarAtoms = useShowOverridingToolbars();
+
+  const showAppBar = React.useMemo(() => {
+    const retVal = (!hideHeaderAndFooter && showToolbarAtoms.appBar.value) || showOverridingToolbarAtoms.appBar.value;
+    return retVal;
+  }, [
+    showToolbarAtoms.appBar.value,
+    showOverridingToolbarAtoms.appBar.value,
+    hideHeaderAndFooter
+  ]);
+
+  const showTopToolbar = React.useMemo(() => {
+    let retVal = !hideHeaderAndFooter && showToolbars && showToolbarAtoms.topToolbar.value;
+    retVal ||= showOverridingToolbarAtoms.topToolbar.value;
+    return retVal;
+  }, [
+    showToolbars,
+    showToolbarAtoms.topToolbar.value,
+    showOverridingToolbarAtoms.topToolbar.value,
+    hideHeaderAndFooter
+  ]);
+
+  const showBottomToolbar = React.useMemo(() => {
+    let retVal = !hideHeaderAndFooter && showToolbars && showToolbarAtoms.bottomToolbar.value;
+    retVal ||= showOverridingToolbarAtoms.bottomToolbar.value;
+    return retVal;
+  }, [
+    showToolbars,
+    showToolbarAtoms.bottomToolbar.value,
+    showOverridingToolbarAtoms.bottomToolbar.value,
+    hideHeaderAndFooter
+  ]);
 
   const leftPanelPointerDown = React.useCallback(() => {
     setFocusedPanel(TrmrkAppLayoutPanel.Left);
@@ -320,6 +360,30 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
     return contents;
   }, [contentsKeyPanelAtoms.rightPanel.value]);
 
+  const ShortcutNotificationStrip = React.useMemo(
+    () => () => {
+        let cssClass: string;
+
+        switch (keyboardShortcutMatchState) {
+          case KeyboardShortcutMatchState.Partial:
+            cssClass = "trmrk-back-color-system";
+          case KeyboardShortcutMatchState.Exact:
+            cssClass = "trmrk-back-color-accept";
+          case KeyboardShortcutMatchState.Miss:
+            cssClass = "trmrk-back-color-reject";
+          default:
+            cssClass = "";
+        }
+
+        return (showBottomToolbar && <div className={[
+            "trmrk-shortcut-notification-thin-strip",
+            cssClass
+          ].join(" ")}></div> );
+      }, [
+      showBottomToolbar,
+      keyboardShortcutMatchState
+    ]);
+
   React.useEffect(() => {
     const allowResizingPanels = [
       renderPanelAtoms.leftPanel.value,
@@ -377,28 +441,32 @@ export default function Trmrk3PanelsAppLayout({ className: cssClass, children }:
         showPanel2={renderPanelAtoms.middlePanel.value || renderPanelAtoms.rightPanel.value}
         panel1Content={
           renderPanelAtoms.leftPanel.value && <>
+            { (showAppBar || showTopToolbar) && <div className="trmrk-panel-loader-container"> { showPanelLoaderAtoms.leftPanel.value && <TrmrkThinLoader></TrmrkThinLoader> } </div> }
             <div className="trmrk-panel-body-container"
               onMouseDownCapture={leftPanelPointerDown}
               onTouchStartCapture={leftPanelPointerDown}><div className="trmrk-panel-body">
                 <LeftPanelContents /></div></div>
-            <div className="trmrk-panel-loader-container"> { showPanelLoaderAtoms.leftPanel.value && <TrmrkThinLoader></TrmrkThinLoader> } </div></> }
+                <ShortcutNotificationStrip /></> }
         panel2Content={
           <TrmrkSplitContainerCore ref={middlePanelContainerElAvailable}
             panel1CssClass={[ focusedPanel === TrmrkAppLayoutPanel.Middle ? "trmrk-is-focused" : "" ].join(" ")}
             panel2CssClass={[ focusedPanel === TrmrkAppLayoutPanel.Right ? "trmrk-is-focused" : "" ].join(" ")}
             showPanel1={renderPanelAtoms.middlePanel.value}
             showPanel2={renderPanelAtoms.rightPanel.value}
-            panel1Content={renderPanelAtoms.middlePanel.value && <><div className="trmrk-panel-body-container"
+            panel1Content={renderPanelAtoms.middlePanel.value && <>
+              { (showAppBar || showTopToolbar) && <div className="trmrk-panel-loader-container"> { showPanelLoaderAtoms.middlePanel.value && <TrmrkThinLoader></TrmrkThinLoader> } </div> }
+              <div className="trmrk-panel-body-container"
               onMouseDownCapture={middlePanelPointerDown}
               onTouchStartCapture={middlePanelPointerDown}><div className="trmrk-panel-body">
                 <MiddlePanelContents /></div></div>
-              <div className="trmrk-panel-loader-container"> { showPanelLoaderAtoms.middlePanel.value && <TrmrkThinLoader></TrmrkThinLoader> } </div></> }
+                <ShortcutNotificationStrip /></> }
             panel2Content={renderPanelAtoms.rightPanel.value && <>
+              { (showAppBar || showTopToolbar) && <div className="trmrk-panel-loader-container">{ showPanelLoaderAtoms.rightPanel.value && <TrmrkThinLoader></TrmrkThinLoader> }</div> }
               <div className="trmrk-panel-body-container"
                 onMouseDownCapture={rightPanelPointerDown}
                 onTouchStartCapture={rightPanelPointerDown}><div className="trmrk-panel-body">
                   <RightPanelContents /></div></div>
-              <div className="trmrk-panel-loader-container">{ showPanelLoaderAtoms.rightPanel.value && <TrmrkThinLoader></TrmrkThinLoader> }</div></> }>
+                  <ShortcutNotificationStrip /></> }>
           </TrmrkSplitContainerCore>}>
       </TrmrkSplitContainerCore>
       { children }

@@ -94,6 +94,10 @@ body, input, select, option {
   .trmrk-required-text {
     color: var(--trmrk-reject-color-theme-light);
   }
+
+  .trmrk-back-color-system {
+    background-color: var(--trmrk-tool-bar_back-color-emph_light);
+  }
 }
 
 .dark {
@@ -132,6 +136,46 @@ body, input, select, option {
   .trmrk-required-text {
     color: var(--trmrk-reject-color-theme-dark);
   }
+
+  .trmrk-back-color-system {
+    background-color: var(--trmrk-tool-bar_back-color-emph_dark);
+  }
+
+  .trmrk-back-color-warn {
+    color: var(--trmrk-tool-bar_fore-color_light);
+  }
+}
+
+.trmrk-back-color-primary,
+.trmrk-back-color-secondary,
+.trmrk-back-color-accept,
+.trmrk-back-color-reject,
+.trmrk-back-color-system {
+  color: var(--trmrk-tool-bar_fore-color_dark);
+}
+
+.trmrk-back-color-warn {
+  color: var(--trmrk-tool-bar_fore-color_light);
+}
+
+.trmrk-back-color-primary {
+  background-color: var(--trmrk-primary-back-color);
+}
+
+.trmrk-back-color-secondary {
+  background-color: var(--trmrk-secondary-back-color);
+}
+
+.trmrk-back-color-accept {
+  background-color: var(--trmrk-accept-back-color);
+}
+
+.trmrk-back-color-reject {
+  background-color: var(--trmrk-reject-back-color);
+}
+
+.trmrk-back-color-warn {
+  background-color: var(--trmrk-warn-back-color);
 }
 
 .trmrk-wrap-content {

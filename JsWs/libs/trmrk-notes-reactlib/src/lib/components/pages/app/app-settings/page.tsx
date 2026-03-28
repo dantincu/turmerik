@@ -27,10 +27,7 @@ const TopToolbar = () => {
 
 export default function AppSettingsPageCore() {
   const trmrk3PanelsLayoutAtoms = use3PanelsAppLayoutAtoms();
-  const showPanelAtoms = useShowPanelAtoms();
   const [, setFocusedPanel] = useAtom(trmrk3PanelsAppLayoutAtoms.focusedPanel);
-  const [, setIsResizingPanels] = useAtom(trmrk3PanelsAppLayoutAtoms.isResizingPanels);
-  const [, setIsMultiPanelMode] = useAtom(trmrk3PanelsAppLayoutAtoms.isMultiPanelMode);
 
   React.useEffect(() => {
     const layoutInitResult = init3PanelsAppLayout({
@@ -42,16 +39,10 @@ export default function AppSettingsPageCore() {
         contents: TopToolbar
       },
       middlePanel: {
-        contents: ThemeToggle
+        contents: ThemeToggle,
       },
       setFocusedPanel
     });
-
-    showPanelAtoms.leftPanel.set(true);
-    showPanelAtoms.middlePanel.set(true);
-    showPanelAtoms.rightPanel.set(true);
-    setIsResizingPanels(true);
-    setIsMultiPanelMode(true);
 
     return () => {
       cleanup3PanelsAppLayout(layoutInitResult);
