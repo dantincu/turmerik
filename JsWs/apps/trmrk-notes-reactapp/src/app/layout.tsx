@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
-import '../trmrk-react/globals.scss';
+import '@/src/trmrk-react/globals.scss';
 import "../code/components/app-globals.scss";
 
 import { isDebugLoggingEnabled } from "@/src/trmrk/dev";
 isDebugLoggingEnabled.value = true;
 
-import { initialLoaderHtml, initialLoaderStyles, initialLoaderKillSwitchScript } from "@/src/trmrk-react/initial-loader";
+import { initialLoaderHtml, initialLoaderStyles } from "@/src/trmrk-react/initial-loader";
 import Trmrk3PanelsAppLayout from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayout";
 
 import { ThemeProvider } from "@/src/code/components/theme-provider";
@@ -14,8 +14,8 @@ import IconRegistration from '@/src/code/services/iconify/IconRegistration';
 import AppInitializer from "@/src/code/components/AppInitializer";
 
 export const metadata: Metadata = {
-  title: "Turmerik React Test App",
-  description: "Test app for Turmerik React components",
+  title: "Turmerik Notes",
+  description: "Turmerik Notes App",
 };
 
 export default function RootLayout({

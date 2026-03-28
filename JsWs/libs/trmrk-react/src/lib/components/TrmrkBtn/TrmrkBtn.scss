@@ -67,24 +67,27 @@
     color: var(--trmrk-tool-bar_fore-color_dark);
   }
 
-  &.trmrk-btn-filled-warn, .trmrk-background-color-warn {
+  &.trmrk-btn-filled-warn {
     color: var(--trmrk-tool-bar_fore-color_light);
+  }
+
+  &.trmrk-btn-filled-warn {
     background-color: var(--trmrk-warn-back-color);
   }
     
-  &.trmrk-btn-filled-primary, .trmrk-background-color-primary {
+  &.trmrk-btn-filled-primary {
     background-color: var(--trmrk-primary-back-color);
   }
 
-  &.trmrk-btn-filled-secondary, .trmrk-background-color-secondary {
+  &.trmrk-btn-filled-secondary {
     background-color: var(--trmrk-secondary-back-color);
   }
 
-  &.trmrk-btn-filled-accept, .trmrk-background-color-accept {
+  &.trmrk-btn-filled-accept {
     background-color: var(--trmrk-accept-back-color);
   }
 
-  &.trmrk-btn-filled-reject, .trmrk-background-color-reject {
+  &.trmrk-btn-filled-reject {
     background-color: var(--trmrk-reject-back-color);
   }
 }
@@ -148,6 +151,11 @@
     &.trmrk-btn-filled-system, .trmrk-background-color-system {
       background-color: var(--trmrk-tool-bar_back-color-emph_light);
     }
+
+    &.trmrk-btn-filled-ternary {
+      background-color: var(--trmrk-ternary-back-color-theme-light);
+      color: var(--trmrk-tool-bar_fore-color_light);
+    }
   }
 }
 
@@ -205,5 +213,38 @@
     &.trmrk-btn-filled-system, .trmrk-background-color-system {
       background-color: var(--trmrk-tool-bar_back-color-emph_dark);
     }
+
+    &.trmrk-btn-filled-ternary {
+      background-color: var(--trmrk-ternary-back-color-theme-dark);
+      color: var(--trmrk-tool-bar_fore-color_dark);
+    }
   }
+}
+
+.trmrk-background-color-primary,
+.trmrk-background-color-secondary,
+.trmrk-background-color-accept,
+.trmrk-background-color-reject {
+  color: var(--trmrk-tool-bar_fore-color_dark);
+}
+
+.trmrk-background-color-warn {
+  color: var(--trmrk-tool-bar_fore-color_light);
+  background-color: var(--trmrk-warn-back-color);
+}
+
+.trmrk-background-color-primary {
+  background-color: var(--trmrk-primary-back-color);
+}
+
+.trmrk-background-color-secondary {
+  background-color: var(--trmrk-secondary-back-color);
+}
+
+.trmrk-background-color-accept {
+  background-color: var(--trmrk-accept-back-color);
+}
+
+.trmrk-background-color-reject {
+  background-color: var(--trmrk-reject-back-color);
 }
