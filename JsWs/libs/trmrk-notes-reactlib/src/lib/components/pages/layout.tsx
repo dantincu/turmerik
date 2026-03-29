@@ -1,0 +1,35 @@
+import '@/src/trmrk-react/globals.scss';
+import '@/src/trmrk-notes-reactlib/lib-globals.scss';
+
+import { initialLoaderHtml, initialLoaderStyles } from "@/src/trmrk-react/initial-loader";
+import Trmrk3PanelsAppLayout from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayout";
+
+import { ThemeProvider } from "@/src/code/components/theme-provider";
+import IconRegistration from '@/src/code/services/iconify/IconRegistration';
+import AppInitializer from "@/src/code/components/AppInitializer";
+
+export default function RootLayoutCore({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <body className={`antialiased`}>
+      <IconRegistration />
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+
+        <style dangerouslySetInnerHTML={{
+          __html: initialLoaderStyles}}>
+        </style>
+
+        <div id="trmrk-app-initial-loader" dangerouslySetInnerHTML={{
+          __html: initialLoaderHtml
+        }}></div>
+
+        <AppInitializer>
+          <Trmrk3PanelsAppLayout>{children}</Trmrk3PanelsAppLayout>
+        </AppInitializer>
+      </ThemeProvider>
+    </body>
+  );
+}

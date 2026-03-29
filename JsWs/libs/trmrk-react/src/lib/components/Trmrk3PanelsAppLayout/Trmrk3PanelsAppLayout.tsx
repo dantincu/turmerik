@@ -4,6 +4,7 @@ import React from "react";
 import { useAtom } from "jotai";
 import { atomEffect } from 'jotai-effect';
 
+import { isDebugLoggingEnabled } from "@/src/trmrk/dev";
 import { actWithValIf } from "@/src/trmrk/core";
 import { joinNames } from "@/src/trmrk/name-generators";
 import { PointerDragEvent } from "@/src/trmrk-browser/domUtils/PointerDragService";
@@ -242,10 +243,14 @@ const ResizePanelsBottomToolbarContents = ({
 export interface Trmrk3PanelsAppLayoutProps extends ComponentProps {}
 
 const lifecycleEffect = atomEffect((get, set) => {
-  console.log('3PanelsAppLayout HAS BEEN MOUNTED');
+  if (isDebugLoggingEnabled.value) {
+    console.log('3PanelsAppLayout HAS BEEN MOUNTED');
+  }
 
   return () => {
-    console.log('3PanelsAppLayout HAS BEEN UNMOUNTED');
+    if (isDebugLoggingEnabled.value) {
+      console.log('3PanelsAppLayout HAS BEEN UNMOUNTED');
+    }
   };
 });
 
