@@ -35,16 +35,18 @@ export class AppSessionService {
   session!: AppSession;
 
   async initialize() {
+    let url = new URL(window.location.href);
+    let sessionId = url.searchParams.get(sessionUrlQueryKeys.sessionId);
+
     while (!this.session) {
-      await this.initializeCore();
+      await this.initializeCore(sessionId);
     }
 
-    const url = new URL(window.location.href);
     url.searchParams.set(sessionUrlQueryKeys.sessionId, this.session.sessionId);
     window.history.replaceState(null, "", url.href);
   }
 
-  async initializeCore() {
+  async initializeCore(sessionId: string | null) {
     const appSessionsDbAdapter = basicDbAggregator.value.appSessions.value;
     const db = await openDbRequestToPromise(appSessionsDbAdapter.open());
 
@@ -58,31 +60,44 @@ export class AppSessionService {
       appSessionsStore.getAll(),
     );
 
-    if (appSessions.value.length) {
-      let defaultAppSessions = appSessions.value.filter(
-        (s) => (s.defaultAsOf ?? null) !== null,
-      );
+    let session: AppSession | null = null;
 
-      if (defaultAppSessions.length) {
-        defaultAppSessions.sort(
-          (a, b) => (b.defaultAsOf ?? 0) - (a.defaultAsOf ?? 0),
+    if (appSessions.value.length) {
+      session =
+        (sessionId ?? null) !== null
+          ? (appSessions.value.find((s) => s.sessionId === sessionId) ?? null)
+          : null;
+
+      if (session) {
+        this.session = session;
+      } else {
+        let defaultAppSessions = appSessions.value.filter(
+          (s) => (s.defaultAsOf ?? null) !== null,
         );
 
-        this.session = defaultAppSessions[0];
-      } else {
-        appSessions.value.sort((a, b) => b.createdAtMillis - a.createdAtMillis);
-        this.session = appSessions.value[0];
+        if (defaultAppSessions.length) {
+          defaultAppSessions.sort(
+            (a, b) => (b.defaultAsOf ?? 0) - (a.defaultAsOf ?? 0),
+          );
+
+          this.session = defaultAppSessions[0];
+        } else {
+          appSessions.value.sort(
+            (a, b) => b.createdAtMillis - a.createdAtMillis,
+          );
+          this.session = appSessions.value[0];
+        }
       }
     } else {
       const timeStamp = defaultTimeStampGenerator.value.millis();
 
-      const newSession: AppSession = {
+      session = {
         sessionId: defaultStrIdGenerator.value.newId(),
         createdAtMillis: timeStamp,
         defaultAsOf: timeStamp,
       };
 
-      await dbRequestToPromise(appSessionsStore.add(newSession));
+      await dbRequestToPromise(appSessionsStore.add(session));
 
       appSessions = await dbRequestToPromise<AppSession[]>(
         appSessionsStore.getAll(),
@@ -93,7 +108,7 @@ export class AppSessionService {
           appSessionsStore.delete(appSessions.value[0].sessionId),
         );
       } else {
-        this.session = newSession;
+        this.session = session;
       }
     }
   }
