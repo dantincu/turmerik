@@ -5,20 +5,17 @@ import {
   letterRegex,
   NullOrUndef,
   UnifiedMap,
-  StrMap,
-  Kvp,
-  AnyOrUnknown,
-} from './core';
+} from "./core";
 
-import { numIsBetween } from './math';
+import { numIsBetween } from "./math";
 
 export const isNonEmptyStr = (
   arg: string | any,
   allWsSameAsEmpty = false,
-  checkIsTypeOfString = true
+  checkIsTypeOfString = true,
 ) => {
-  let retVal = !checkIsTypeOfString || 'string' === typeof arg;
-  retVal = retVal && arg !== '';
+  let retVal = !checkIsTypeOfString || "string" === typeof arg;
+  retVal = retVal && arg !== "";
 
   if (retVal && allWsSameAsEmpty) {
     retVal = !allWsRegex().test(arg);
@@ -29,20 +26,25 @@ export const isNonEmptyStr = (
 
 export const isDigit = (char: string) => digitRegex().test(char);
 export const isLetter = (char: string) => letterRegex().test(char);
-export const isUnicodeLetter = (char: string) => unicodeLetterRegex().test(char);
+export const isUnicodeLetter = (char: string) =>
+  unicodeLetterRegex().test(char);
 
-export const isAsciiChar = (char: string, idx: number = 0) => char.charCodeAt(idx) <= 127;
+export const isAsciiChar = (char: string, idx: number = 0) =>
+  char.charCodeAt(idx) <= 127;
 
 export const isPrintableAsciiChar = (char: string, idx: number = 0) =>
   numIsBetween(char.charCodeAt(idx), 32, 126);
 
-export const errToString = (error: Error | any, nullifyEmptyStr?: boolean | NullOrUndef) => {
+export const errToString = (
+  error: Error | any,
+  nullifyEmptyStr?: boolean | NullOrUndef,
+) => {
   let errMsg: string | null = null;
   const errTypeOf = typeof error;
 
-  if (errTypeOf === 'string') {
+  if (errTypeOf === "string") {
     errMsg = error;
-  } else if (errTypeOf === 'object') {
+  } else if (errTypeOf === "object") {
     errMsg = error.message ?? error.cause;
   } else {
     errMsg = error?.toString();
@@ -51,7 +53,7 @@ export const errToString = (error: Error | any, nullifyEmptyStr?: boolean | Null
   errMsg ??= null;
   nullifyEmptyStr ??= true;
 
-  if (nullifyEmptyStr && typeof errMsg === 'string' && errMsg.length === 0) {
+  if (nullifyEmptyStr && typeof errMsg === "string" && errMsg.length === 0) {
     errMsg = null;
   }
 
@@ -63,7 +65,7 @@ export const subStr = (
   opts: {
     stIdx?: number | NullOrUndef;
     endIdx?: number | NullOrUndef;
-  }
+  },
 ) => {
   opts ??= {};
   const stIdx = opts.stIdx ?? 0;
@@ -86,19 +88,19 @@ export const trimStr = (
         trimStart?: boolean | NullOrUndef;
         trimEnd?: boolean | NullOrUndef;
       }
-    | NullOrUndef
+    | NullOrUndef,
 ) => {
   trimOpts ??= {
-    trimStr: ' ',
+    trimStr: " ",
   };
 
   let trimStr = trimOpts.trimStr;
 
-  if ((trimStr ?? '') === '') {
-    trimStr = ' ';
+  if ((trimStr ?? "") === "") {
+    trimStr = " ";
   }
 
-  if ('string' === typeof trimStr) {
+  if ("string" === typeof trimStr) {
     trimStr = [trimStr];
   }
 
@@ -148,14 +150,17 @@ export const capitalizeFirstLetter = (str: string) => {
 
 export const transformStr = (
   inStr: string,
-  convertor: (chr: string, idx: number) => string | null
-) => [...inStr].map(convertor).join('');
+  convertor: (chr: string, idx: number) => string | null,
+) => [...inStr].map(convertor).join("");
 
-export const extractDigits = (inStr: string, allowedNonDigits?: string[] | NullOrUndef) => {
-  allowedNonDigits ??= ['.'];
+export const extractDigits = (
+  inStr: string,
+  allowedNonDigits?: string[] | NullOrUndef,
+) => {
+  allowedNonDigits ??= ["."];
 
   const outStr = transformStr(inStr, (chr) =>
-    digitRegex().test(chr) || allowedNonDigits.indexOf(chr) >= 0 ? chr : null
+    digitRegex().test(chr) || allowedNonDigits.indexOf(chr) >= 0 ? chr : null,
   );
 
   return outStr;
@@ -168,7 +173,10 @@ export interface SerializeMapOpts<T> {
   propsJoinFactory: (prop1: string, prop2: string) => string;
 }
 
-export const serializeMap = <T>(map: UnifiedMap<T>, opts: SerializeMapOpts<T>) => {
+export const serializeMap = <T>(
+  map: UnifiedMap<T>,
+  opts: SerializeMapOpts<T>,
+) => {
   const mapKeys = Object.keys(map);
   let retStr: string;
 
@@ -177,10 +185,10 @@ export const serializeMap = <T>(map: UnifiedMap<T>, opts: SerializeMapOpts<T>) =
       .map((key) => opts.keyValueJoinFactory(key, (map as any)[key]))
       .reduce((prop1, prop2) => opts.propsJoinFactory(prop1, prop2));
   } else {
-    retStr = '';
+    retStr = "";
   }
 
-  retStr = [opts.startStr ?? '', retStr, opts.endStr ?? ''].join('');
+  retStr = [opts.startStr ?? "", retStr, opts.endStr ?? ""].join("");
   return retStr;
 };
 
@@ -239,14 +247,14 @@ export const tryDigest = <T = any>(
   predicate: (char: string, idx: number) => number,
   callback: (newStr: string, strIdx: number, newStrStartIdx: number) => T,
   sliceAfter = true,
-  startPosition = 0
+  startPosition = 0,
 ) => {
   let strLen = 0;
 
   const strIdx = [...inputStr]
     .slice(startPosition)
     .findIndex((char, idx) => (strLen = predicate(char, idx)) >= 0);
-    
+
   let newStr: string;
   let newStrStartIdx: number;
 
@@ -272,12 +280,12 @@ export const tryDigestStr = <T = any>(
   str: string,
   callback: (newStr: string, strIdx: number, newStrStartIdx: number) => T,
   sliceAfter = true,
-  startPosition = 0
+  startPosition = 0,
 ) =>
   tryDigest(
     inputStr,
     (_, idx) => (inputStr.startsWith(str, idx) ? str.length : -1),
     callback,
     sliceAfter,
-    startPosition
+    startPosition,
   );

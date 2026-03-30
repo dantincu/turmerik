@@ -13,10 +13,14 @@ import {
 } from "@/src/trmrk-browser/indexedDB/core";
 
 import { basicDbAggregator } from "@/src/trmrk-browser/indexedDB/dbAggregators/BasicDbAggregator";
+
 import {
   mapPropNamesToThemselves,
   PropNameWordsConvention,
 } from "@/src/trmrk/propNames";
+
+import { defaultTimeStampGenerator } from "@/src/trmrk/services/TimeStampGenerator";
+import { defaultStrIdGenerator } from "@/src/trmrk/services/TrmrkStrIdGenerator";
 
 export const sessionUrlQueryKeys = mapPropNamesToThemselves(
   {
@@ -55,13 +59,25 @@ export class AppSessionService {
     );
 
     if (appSessions.value.length) {
-      appSessions.value.sort((a, b) => b.createdAtMillis - a.createdAtMillis);
-      this.session = appSessions.value[0];
+      let defaultAppSessions = appSessions.value.filter(
+        (s) => (s.defaultAsOf ?? null) !== null,
+      );
+
+      if (defaultAppSessions.length) {
+        defaultAppSessions.sort(
+          (a, b) => (b.defaultAsOf ?? 0) - (a.defaultAsOf ?? 0),
+        );
+
+        this.session = defaultAppSessions[0];
+      } else {
+        appSessions.value.sort((a, b) => b.createdAtMillis - a.createdAtMillis);
+        this.session = appSessions.value[0];
+      }
     } else {
-      const timeStamp = Date.now();
+      const timeStamp = defaultTimeStampGenerator.value.millis();
 
       const newSession: AppSession = {
-        sessionId: crypto.randomUUID(),
+        sessionId: defaultStrIdGenerator.value.newId(),
         createdAtMillis: timeStamp,
         defaultAsOf: timeStamp,
       };
