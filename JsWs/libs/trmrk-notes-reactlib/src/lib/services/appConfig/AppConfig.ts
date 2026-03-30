@@ -15,6 +15,6 @@ export const appConfig =
   globalThis.__appConfigSingleton ?? new Singleton<AppConfig>();
 
 // 3. In development mode, save it to globalThis so it survives hot-reloads.
-if (process.env.NODE_ENV !== "production") {
+if (process.env.APP_ENV !== "prod") {
   globalThis.__appConfigSingleton = appConfig;
 }

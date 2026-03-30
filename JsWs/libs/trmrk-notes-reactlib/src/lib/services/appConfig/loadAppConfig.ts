@@ -25,7 +25,11 @@ export const loadAppConfig = async () => {
 
       appConfig = normalizeAppConfigCore(appConfig);
       appConfig.appName ??= "trmrk-notes-reactapp";
-      appConfig.dbObjAppName ??= appConfig.appName;
+
+      if (appConfig.dbObjAppName === "") {
+        appConfig.dbObjAppName = appConfig.appName;
+      }
+
       return appConfig;
     },
   );
