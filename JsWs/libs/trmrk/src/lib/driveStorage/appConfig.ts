@@ -1,23 +1,7 @@
-import { NullOrUndef } from '../core';
+import { AppConfigCore } from "@/src/trmrk/app-config";
 
-export enum DriveStorageType {
-  IndexedDb = 0,
-  FileSystemApi = 1,
-  RestApi = 2,
-  PostMessage = 3,
-}
+import { DriveStorageOption } from "../driveStorage/DriveStorageOption";
 
-export interface DriveStorageOption {
-  key?: string | NullOrUndef;
-  displayName: string;
-  description?: string | NullOrUndef;
-  storageType: DriveStorageType;
-  isEnabled?: boolean | NullOrUndef;
-  mainApiBaseUri?: string | NullOrUndef;
-  itemIdnfIsPath?: boolean | NullOrUndef;
-  cacheValidIntervalMillis?: number | NullOrUndef;
-}
-
-export interface AppConfig {
+export interface AppConfig extends AppConfigCore {
   driveStorageOptions: DriveStorageOption[];
 }

@@ -13,7 +13,7 @@ export interface DbStoreDefinition extends DbStoreDefinitionCore {
 
 export interface ActiveDataItemCore {
   createdAtMillis: number;
-  lastAccessedAtMillis: number;
+  lastAccessedAtMillis?: number | NullOrUndef;
 }
 
 export interface CachedItemCore {

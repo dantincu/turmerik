@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --experimental-https -p 4000",
-    "build": "next build",
-    "start": "next start",
+    "dev": "cross-env APP_ENV=dev next dev --experimental-https -p 4000",
+    "build": "cross-env APP_ENV=prod next build",
+    "start": "cross-env APP_ENV=prod next start",
     "lint": "eslint"
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "@types/node": "^25",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^10.1.0",
     "eslint": "^10",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4.2.2",

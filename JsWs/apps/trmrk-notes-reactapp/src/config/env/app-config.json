@@ -1,0 +1,11 @@
+{
+  "dbObjAppName": "",
+  "driveStorageOptions": [
+    {
+      "key": "google-drive",
+      "displayName": "Google Drive",
+      "description": "requires access to your Google Drive",
+      "storageType": 2
+    }
+  ]
+}

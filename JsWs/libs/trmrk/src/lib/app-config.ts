@@ -2,6 +2,7 @@ export interface AppConfigCore {
   isProdEnv: boolean;
   isWebApp: boolean;
   appName: string;
+  dbObjAppName: string;
   routeBasePath: string;
   requiresSetup: boolean;
   maxSimultaneousRequestsCount: number;

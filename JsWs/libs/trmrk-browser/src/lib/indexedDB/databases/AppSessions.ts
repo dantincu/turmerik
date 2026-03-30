@@ -1,10 +1,10 @@
-import { cast, NullOrUndef, withVal } from '../../../trmrk/core';
-import { DbAdapterBase, DbStoreAdapter } from '../DbAdapterBase';
-import { createDbStoreIfNotExists, createIndexIfNotExists } from '../core';
-import { mapObjProps } from '../../../trmrk/obj';
-import { nameOf, namesOf } from '../../../trmrk/Reflection/core';
+import { cast, NullOrUndef, withVal } from "../../../trmrk/core";
+import { DbAdapterBase, DbStoreAdapter } from "../DbAdapterBase";
+import { createDbStoreIfNotExists, createIndexIfNotExists } from "../core";
+import { mapObjProps } from "../../../trmrk/obj";
+import { nameOf, namesOf } from "../../../trmrk/Reflection/core";
 
-import { ActiveDataItemCore } from '../core';
+import { ActiveDataItemCore } from "../core";
 
 export interface AppSession extends ActiveDataItemCore {
   sessionId: string;
@@ -17,59 +17,65 @@ export interface AppSessionTab extends ActiveDataItemCore {
 }
 
 export class AppSessionsDbStores {
-  public readonly appSessions = new DbStoreAdapter(AppSessionsDbAdapter.DB_STORES.AppSessions.name);
+  public readonly appSessions = new DbStoreAdapter(
+    AppSessionsDbAdapter.DB_STORES.AppSessions.name,
+  );
 
   public readonly appSessionTabs = new DbStoreAdapter(
-    AppSessionsDbAdapter.DB_STORES.AppSessionTabs.name
+    AppSessionsDbAdapter.DB_STORES.AppSessionTabs.name,
   );
 }
 
 export class AppSessionsDbAdapter extends DbAdapterBase {
-  public static readonly DB_NAME = 'AppSessions';
+  public static readonly DB_NAME = "AppSessions";
   public static readonly DB_VERSION = 1;
 
   public static readonly DB_STORES = Object.freeze(
     mapObjProps(
       {
         AppSessions: {
-          name: '',
+          name: "",
           keyPath: Object.freeze(
             nameOf(
               () => cast<AppSession>(),
-              (v) => v.sessionId
-            )
+              (v) => v.sessionId,
+            ),
           ),
         },
         AppSessionTabs: {
-          name: '',
+          name: "",
           keyPath: Object.freeze(
             nameOf(
               () => cast<AppSessionTab>(),
-              (v) => v.tabId
-            )
+              (v) => v.tabId,
+            ),
           ),
           indexes: Object.freeze(
             mapObjProps(
               {
                 sessionId: {
-                  name: '',
+                  name: "",
                   keyPath: Object.freeze(
-                    namesOf(() => cast<AppSessionTab>(), [(v) => v.sessionId])
+                    namesOf(() => cast<AppSessionTab>(), [(v) => v.sessionId]),
                   ),
                 },
               },
-              (propVal, propName) => Object.freeze({ ...propVal, name: propName })
-            )
+              (propVal, propName) =>
+                Object.freeze({ ...propVal, name: propName }),
+            ),
           ),
         },
       },
-      (propVal, propName) => Object.freeze({ ...propVal, name: propName })
-    )
+      (propVal, propName) => Object.freeze({ ...propVal, name: propName }),
+    ),
   );
 
   public readonly stores = new AppSessionsDbStores();
 
-  constructor(appName: string, version: number = AppSessionsDbAdapter.DB_VERSION) {
+  constructor(
+    appName: string,
+    version: number = AppSessionsDbAdapter.DB_VERSION,
+  ) {
     super({
       appName,
       version,
@@ -77,7 +83,10 @@ export class AppSessionsDbAdapter extends DbAdapterBase {
     });
   }
 
-  override onUpgradeNeeded(event: IDBVersionChangeEvent, db: IDBDatabase): void {
+  override onUpgradeNeeded(
+    event: IDBVersionChangeEvent,
+    db: IDBDatabase,
+  ): void {
     const dbStores = AppSessionsDbAdapter.DB_STORES;
 
     createDbStoreIfNotExists(db, dbStores.AppSessions.name, () => ({
@@ -92,9 +101,11 @@ export class AppSessionsDbAdapter extends DbAdapterBase {
       }),
       (dbStore) => {
         withVal(dbStores.AppSessionTabs.indexes.sessionId, (sessionIdIdx) => {
-          createIndexIfNotExists(dbStore, sessionIdIdx.name, [...sessionIdIdx.keyPath]);
+          createIndexIfNotExists(dbStore, sessionIdIdx.name, [
+            ...sessionIdIdx.keyPath,
+          ]);
         });
-      }
+      },
     );
   }
 }

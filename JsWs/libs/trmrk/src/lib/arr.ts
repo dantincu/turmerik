@@ -278,11 +278,11 @@ export const flatten = <T>(
   areEqualPredicate: ((a: T, b: T) => boolean) | null = null,
 ) => {
   areEqualPredicate ??= (a, b) => a === b;
+  const retArr: T[] = [];
 
-  const retArr: T[] = mx.reduce((a, b) => {
-    a.splice(a.length, 0, ...b);
-    return a;
-  }, []);
+  for (let arr of mx) {
+    retArr.push(...arr);
+  }
 
   if (removeDupplicates) {
     distinct(retArr, areEqualPredicate);

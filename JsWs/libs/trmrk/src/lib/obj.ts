@@ -116,6 +116,17 @@ export const merge = <TTrgObj extends Object>(
   return trgObj;
 };
 
+export const mergeShallow = <TTrgObj extends Object>(
+  trgObj: TTrgObj,
+  srcObjsArr: Object[],
+) => {
+  for (let srcObj of srcObjsArr) {
+    trgObj = { ...trgObj, ...srcObj };
+  }
+
+  return trgObj;
+};
+
 export const mapObjProps = <TObj extends Object>(
   obj: TObj,
   propValFactory: (
