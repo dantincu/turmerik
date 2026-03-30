@@ -9,6 +9,7 @@ import { ActiveDataItemCore } from "../core";
 export interface AppSession extends ActiveDataItemCore {
   sessionId: string;
   displayName?: string | NullOrUndef;
+  defaultAsOf?: number | NullOrUndef;
 }
 
 export interface AppSessionTab extends ActiveDataItemCore {
@@ -73,11 +74,11 @@ export class AppSessionsDbAdapter extends DbAdapterBase {
   public readonly stores = new AppSessionsDbStores();
 
   constructor(
-    appName: string,
+    dbObjAppName: string,
     version: number = AppSessionsDbAdapter.DB_VERSION,
   ) {
     super({
-      appName,
+      dbObjAppName,
       version,
       dbName: AppSessionsDbAdapter.DB_NAME,
     });

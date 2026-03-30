@@ -48,7 +48,7 @@ export default async function RootLayoutCore({
           __html: initialLoaderHtml
         }}></div>
 
-        <AppInitializer>
+        <AppInitializer data={{ appConfig }}>
           <Trmrk3PanelsAppLayout>{children}</Trmrk3PanelsAppLayout>
         </AppInitializer>
       </ThemeProvider>

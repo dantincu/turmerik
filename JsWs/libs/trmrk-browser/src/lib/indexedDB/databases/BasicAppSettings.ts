@@ -1,9 +1,9 @@
-import { NullOrUndef, cast } from '../../../trmrk/core';
-import { DbAdapterBase, DbStoreAdapter } from '../DbAdapterBase';
-import { createDbStoreIfNotExists } from '../core';
-import { mapObjProps } from '../../../trmrk/obj';
-import { mapPropNamesToThemselves } from '../../../trmrk/propNames';
-import { namesOf, nameOf } from '../../../trmrk/Reflection/core';
+import { NullOrUndef, cast } from "../../../trmrk/core";
+import { DbAdapterBase, DbStoreAdapter } from "../DbAdapterBase";
+import { createDbStoreIfNotExists } from "../core";
+import { mapObjProps } from "../../../trmrk/obj";
+import { mapPropNamesToThemselves } from "../../../trmrk/propNames";
+import { namesOf, nameOf } from "../../../trmrk/Reflection/core";
 
 export interface AppTheme {
   id: number;
@@ -17,12 +17,15 @@ export interface AppSettingsChoice<TValue = any> {
   value: TValue;
 }
 
-export interface AppSessionSettingsChoice<TValue = any> extends AppSettingsChoice<TValue> {
+export interface AppSessionSettingsChoice<
+  TValue = any,
+> extends AppSettingsChoice<TValue> {
   sessionId: string;
 }
 
-export interface AppSessionTabSettingsChoice<TValue = any>
-  extends AppSessionSettingsChoice<TValue> {
+export interface AppSessionTabSettingsChoice<
+  TValue = any,
+> extends AppSessionSettingsChoice<TValue> {
   tabId: string;
 }
 
@@ -50,110 +53,125 @@ export interface KeyboardShortcut extends KeyboardShortcutCore {
 }
 
 export const commonAppSettingsChoiceCatKeys = mapPropNamesToThemselves({
-  appPanelsLayout: '',
-  infiniteHeightPanelScrollControl: '',
+  appPanelsLayout: "",
+  infiniteHeightPanelScrollControl: "",
 });
 
 export const commonAppSettingsChoiceKeys = mapPropNamesToThemselves({
-  panelWidthRatios: '',
-  panelVisibilities: '',
-  isExpanded: '',
+  panelWidthRatios: "",
+  panelVisibilities: "",
+  isExpanded: "",
 });
 
 export class BasicAppSettingsDbStores {
-  public readonly choices = new DbStoreAdapter(BasicAppSettingsDbAdapter.DB_STORES.Choices.name);
+  public readonly choices = new DbStoreAdapter(
+    BasicAppSettingsDbAdapter.DB_STORES.Choices.name,
+  );
 
   public readonly sessionChoices = new DbStoreAdapter(
-    BasicAppSettingsDbAdapter.DB_STORES.SessionChoices.name
+    BasicAppSettingsDbAdapter.DB_STORES.SessionChoices.name,
   );
 
   public readonly sessionTabChoices = new DbStoreAdapter(
-    BasicAppSettingsDbAdapter.DB_STORES.SessionTabChoices.name
+    BasicAppSettingsDbAdapter.DB_STORES.SessionTabChoices.name,
   );
 
   public readonly appThemes = new DbStoreAdapter(
-    BasicAppSettingsDbAdapter.DB_STORES.AppThemes.name
+    BasicAppSettingsDbAdapter.DB_STORES.AppThemes.name,
   );
 
   public readonly keyboardShortcuts = new DbStoreAdapter(
-    BasicAppSettingsDbAdapter.DB_STORES.KeyboardShortcuts.name
+    BasicAppSettingsDbAdapter.DB_STORES.KeyboardShortcuts.name,
   );
 }
 
 export class BasicAppSettingsDbAdapter extends DbAdapterBase {
-  public static readonly DB_NAME = 'BasicAppSettings';
+  public static readonly DB_NAME = "BasicAppSettings";
   public static readonly DB_VERSION = 1;
 
   public static readonly DB_STORES = Object.freeze(
     mapObjProps(
       {
         Choices: {
-          name: '',
+          name: "",
           keyPath: Object.freeze(
-            namesOf(() => cast<AppSettingsChoice>(), [(v) => v.catKey, (v) => v.key])
+            namesOf(
+              () => cast<AppSettingsChoice>(),
+              [(v) => v.catKey, (v) => v.key],
+            ),
           ),
         },
         SessionChoices: {
-          name: '',
+          name: "",
           keyPath: Object.freeze(
             namesOf(
               () => cast<AppSessionSettingsChoice>(),
-              [(v) => v.catKey, (v) => v.key, (v) => v.sessionId]
-            )
+              [(v) => v.catKey, (v) => v.key, (v) => v.sessionId],
+            ),
           ),
         },
         SessionTabChoices: {
-          name: '',
+          name: "",
           keyPath: Object.freeze(
             namesOf(
               () => cast<AppSessionTabSettingsChoice>(),
-              [(v) => v.catKey, (v) => v.key, (v) => v.tabId]
-            )
+              [(v) => v.catKey, (v) => v.key, (v) => v.tabId],
+            ),
           ),
           indexes: Object.freeze(
             mapObjProps(
               {
                 sessionId: {
-                  name: '',
+                  name: "",
                   keyPath: Object.freeze(
-                    namesOf(() => cast<AppSessionTabSettingsChoice>(), [(v) => v.tabId])
+                    namesOf(
+                      () => cast<AppSessionTabSettingsChoice>(),
+                      [(v) => v.tabId],
+                    ),
                   ),
                 },
               },
-              (propVal, propName) => Object.freeze({ ...propVal, name: propName })
-            )
+              (propVal, propName) =>
+                Object.freeze({ ...propVal, name: propName }),
+            ),
           ),
         },
         AppThemes: {
-          name: '',
+          name: "",
           keyPath: nameOf(
             () => cast<AppTheme>(),
-            (v) => v.id
+            (v) => v.id,
           ),
         },
         KeyboardShortcuts: {
-          name: '',
+          name: "",
           keyPath: nameOf(
             () => cast<KeyboardShortcutSrlzbl>(),
-            (v) => v.name
+            (v) => v.name,
           ),
         },
       },
-      (propVal, propName) => Object.freeze({ ...propVal, name: propName })
-    )
+      (propVal, propName) => Object.freeze({ ...propVal, name: propName }),
+    ),
   );
 
   public readonly stores = new BasicAppSettingsDbStores();
 
-  constructor(appName: string, version: number = BasicAppSettingsDbAdapter.DB_VERSION) {
+  constructor(
+    dbObjAppName: string,
+    version: number = BasicAppSettingsDbAdapter.DB_VERSION,
+  ) {
     super({
-      appName,
+      dbObjAppName,
       version,
       dbName: BasicAppSettingsDbAdapter.DB_NAME,
     });
   }
 
-  override onUpgradeNeeded(event: IDBVersionChangeEvent, db: IDBDatabase): void {
+  override onUpgradeNeeded(
+    event: IDBVersionChangeEvent,
+    db: IDBDatabase,
+  ): void {
     const dbStores = BasicAppSettingsDbAdapter.DB_STORES;
 
     createDbStoreIfNotExists(db, dbStores.Choices.name, () => ({

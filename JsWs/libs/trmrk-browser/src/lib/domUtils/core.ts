@@ -1,4 +1,6 @@
 import trmrk from "../../trmrk";
+import { RefLazyValue } from "../../trmrk/core";
+
 import {
   mapPropNamesToThemselves,
   PropNameWordsConvention,
@@ -12,7 +14,9 @@ import {
 } from "../../trmrk/core";
 
 export const supportedFeatures = {
-  fileSystemApi: !!(window as any).showDirectoryPicker,
+  fileSystemApi: new RefLazyValue<boolean>(
+    () => !!(window as any).showDirectoryPicker,
+  ),
 };
 
 export const localStorageKeys = Object.freeze(

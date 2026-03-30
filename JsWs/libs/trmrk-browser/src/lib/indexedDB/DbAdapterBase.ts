@@ -1,19 +1,19 @@
-import { NullOrUndef, VoidOrAny } from '../../trmrk/core';
-import { mapPropNamesToThemselves } from '../../trmrk/propNames';
+import { NullOrUndef, VoidOrAny } from "../../trmrk/core";
+import { mapPropNamesToThemselves } from "../../trmrk/propNames";
 
-import { getDbObjName } from './core';
+import { getDbObjName } from "./core";
 
 export const commonDbNamePrefixes = Object.freeze(
   mapPropNamesToThemselves({
-    cache: '',
-    shared: '',
-  })
+    cache: "",
+    shared: "",
+  }),
 );
 
 export interface DbAdapterOpts {
   fullName?: string | string[] | NullOrUndef;
   dbName?: string | NullOrUndef;
-  appName?: string | NullOrUndef;
+  dbObjAppName?: string | NullOrUndef;
   version?: number | NullOrUndef;
   dbNamePfx?: string | NullOrUndef;
   isCacheDb?: boolean | NullOrUndef;
@@ -37,14 +37,14 @@ export abstract class DbAdapterBase {
     let dbNameStr: string;
 
     if ((opts.fullName ?? null) !== null) {
-      if (typeof opts.fullName === 'string') {
+      if (typeof opts.fullName === "string") {
         dbNameStr = opts.fullName;
       } else {
         dbNameStr = getDbObjName(opts.fullName!);
       }
     } else {
       dbNameStr = getDbObjName([
-        opts.appName,
+        opts.dbObjAppName,
         opts.isCacheDb ? commonDbNamePrefixes.cache : null,
         opts.isSharedDb ? commonDbNamePrefixes.shared : null,
         opts.dbNamePfx,
@@ -55,10 +55,14 @@ export abstract class DbAdapterBase {
     return dbNameStr;
   }
 
-  open = (
-    onSuccess: ((event: Event, db: IDBDatabase) => VoidOrAny) | NullOrUndef = null,
-    onError: ((event: Event, error: DOMException | null) => VoidOrAny) | NullOrUndef = null
-  ) => {
+  open(
+    onSuccess:
+      | ((event: Event, db: IDBDatabase) => VoidOrAny)
+      | NullOrUndef = null,
+    onError:
+      | ((event: Event, error: DOMException | null) => VoidOrAny)
+      | NullOrUndef = null,
+  ) {
     const request = indexedDB.open(this.dbNameStr, this.version);
 
     request.onupgradeneeded = (event) => {
@@ -81,7 +85,7 @@ export abstract class DbAdapterBase {
     }
 
     return request;
-  };
+  }
 }
 
 export class DbStoreAdapter {
@@ -90,8 +94,8 @@ export class DbStoreAdapter {
   store(
     db: IDBDatabase | null = null,
     tran: IDBTransaction | null = null,
-    mode: 'readonly' | 'readwrite' | 'versionchange' = 'readonly',
-    options?: IDBTransactionOptions
+    mode: "readonly" | "readwrite" | "versionchange" = "readonly",
+    options?: IDBTransactionOptions,
   ): IDBObjectStore {
     tran ??= db!.transaction(this.dbStoreName, mode, options);
     return tran.objectStore(this.dbStoreName);

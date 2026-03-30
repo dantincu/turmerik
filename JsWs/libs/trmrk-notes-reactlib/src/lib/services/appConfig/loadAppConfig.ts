@@ -8,12 +8,10 @@ import {
   defaultConfigNormalizer,
 } from "@/src/trmrk-react/services/appConfig/loadAppConfigCore";
 
-import { AppConfig } from "./AppConfig";
-
-export const appConfig = new Singleton<AppConfig>();
+import { AppConfig, appConfig } from "./AppConfig";
 
 export const loadAppConfig = async () => {
-  const appConfigCore = await loadAppConfigCore<AppConfig>(
+  const appConfigObj = await loadAppConfigCore<AppConfig>(
     (env) => [
       defaultConfigFilePathFactory(""),
       defaultConfigFilePathFactory(env),
@@ -32,6 +30,9 @@ export const loadAppConfig = async () => {
     },
   );
 
-  appConfig.register(appConfigCore);
-  return appConfigCore;
+  try {
+    appConfig.register(appConfigObj);
+  } catch (err) {}
+
+  return appConfigObj;
 };

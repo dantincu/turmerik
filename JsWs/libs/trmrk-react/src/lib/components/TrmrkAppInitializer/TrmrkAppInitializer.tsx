@@ -11,11 +11,13 @@ import { appInitializerAtoms } from "./TrmrkAppInitializerService";
 export default function TrmrkAppInitializer({
   children,
   initialize,
-  appInitialLoaderElId = "trmrk-app-initial-loader"
+  appInitialLoaderElId = "trmrk-app-initial-loader",
+  data
 }: Readonly<{
   children: React.ReactNode;
-  initialize: () => Promise<void>,
-  appInitialLoaderElId?: string | NullOrUndef
+  initialize: (data: any) => Promise<void>,
+  appInitialLoaderElId?: string | NullOrUndef,
+  data?: any;
 }>) {
   const [, setInitStarted] = useAtom(appInitializerAtoms.initStarted);
   const [, setInitEnded] = useAtom(appInitializerAtoms.initEnded);
@@ -28,7 +30,7 @@ export default function TrmrkAppInitializer({
 
     setInitStarted(true);
 
-    initialize().then(() => {
+    initialize(data).then(() => {
       setInitEnded(true);
       setInitIsOk(true);
     });

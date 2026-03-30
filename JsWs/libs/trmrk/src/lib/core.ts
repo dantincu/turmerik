@@ -38,11 +38,11 @@ export class RefLazyValue<T> {
 }
 
 export class Singleton<T> {
+  public initialized = false;
   private _value: T | null = null;
-  private _initialized = false;
 
   get value() {
-    if (!this._initialized) {
+    if (!this.initialized) {
       throw new Error(
         "Singleton must be registered before its value can be used",
       );
@@ -52,13 +52,42 @@ export class Singleton<T> {
   }
 
   register(value: T) {
-    if (this._initialized) {
+    if (this.initialized) {
       throw new Error(
         "Singleton has already been registered and cannot be registered twice",
       );
     }
 
     this._value = value;
+    this.initialized = true;
+  }
+}
+
+export class FactorySingleton<T, TArgs> {
+  public initialized = false;
+  private _value: T | null = null;
+
+  constructor(public factory: (args: TArgs) => T) {}
+
+  get value() {
+    if (!this.initialized) {
+      throw new Error(
+        "Singleton must be registered before its value can be used",
+      );
+    }
+
+    return this._value as T;
+  }
+
+  register(args: TArgs) {
+    if (this.initialized) {
+      throw new Error(
+        "Singleton has already been registered and cannot be registered twice",
+      );
+    }
+
+    this._value = this.factory(args);
+    this.initialized = true;
   }
 }
 
