@@ -37,8 +37,9 @@ export class RefLazyValue<T> {
   }
 }
 
-export class Singleton<T> {
+export abstract class SingletonBase<T, TArgs = T> {
   public initialized = false;
+
   private _value: T | null = null;
 
   get value() {
@@ -51,43 +52,33 @@ export class Singleton<T> {
     return this._value as T;
   }
 
-  register(value: T) {
-    if (this.initialized) {
+  register(value: TArgs, force = false) {
+    if (!force && this.initialized) {
       throw new Error(
         "Singleton has already been registered and cannot be registered twice",
       );
     }
 
-    this._value = value;
+    this._value = this.createValue(value);
     this.initialized = true;
+  }
+
+  abstract createValue(args: TArgs): T;
+}
+
+export class Singleton<T> extends SingletonBase<T> {
+  override createValue(value: T) {
+    return value;
   }
 }
 
-export class FactorySingleton<T, TArgs> {
-  public initialized = false;
-  private _value: T | null = null;
-
-  constructor(public factory: (args: TArgs) => T) {}
-
-  get value() {
-    if (!this.initialized) {
-      throw new Error(
-        "Singleton must be registered before its value can be used",
-      );
-    }
-
-    return this._value as T;
+export class FactorySingleton<T, TArgs> extends SingletonBase<T, TArgs> {
+  constructor(public factory: (args: TArgs) => T) {
+    super();
   }
 
-  register(args: TArgs) {
-    if (this.initialized) {
-      throw new Error(
-        "Singleton has already been registered and cannot be registered twice",
-      );
-    }
-
-    this._value = this.factory(args);
-    this.initialized = true;
+  override createValue(args: TArgs) {
+    return this.factory(args);
   }
 }
 

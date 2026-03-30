@@ -122,6 +122,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.ListDirsDeep.Conso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.UpdateNoteChildren.ConsoleApp", "Turmerik.UpdateNoteChildren.ConsoleApp\Turmerik.UpdateNoteChildren.ConsoleApp.csproj", "{9AFAF8AE-536A-44D2-99FC-19BABB35C34F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.AspNetCore", "Turmerik.AspNetCore\Turmerik.AspNetCore.csproj", "{BF4FFB08-CA2F-44F5-BBB9-2FA1FEDAB8B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.GoogleDriveNotes.WebApi", "Turmerik.GoogleDriveNotes.WebApi\Turmerik.GoogleDriveNotes.WebApi.csproj", "{F89BEAFF-3438-40A8-9384-2C28FEE06905}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -324,6 +328,14 @@ Global
 		{9AFAF8AE-536A-44D2-99FC-19BABB35C34F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AFAF8AE-536A-44D2-99FC-19BABB35C34F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AFAF8AE-536A-44D2-99FC-19BABB35C34F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF4FFB08-CA2F-44F5-BBB9-2FA1FEDAB8B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF4FFB08-CA2F-44F5-BBB9-2FA1FEDAB8B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF4FFB08-CA2F-44F5-BBB9-2FA1FEDAB8B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF4FFB08-CA2F-44F5-BBB9-2FA1FEDAB8B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F89BEAFF-3438-40A8-9384-2C28FEE06905}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F89BEAFF-3438-40A8-9384-2C28FEE06905}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F89BEAFF-3438-40A8-9384-2C28FEE06905}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F89BEAFF-3438-40A8-9384-2C28FEE06905}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -382,6 +394,8 @@ Global
 		{ABAE4427-F485-4273-A649-4BE893376F78} = {2020DE95-DD87-4F1F-8BBB-CCCCF6ABB095}
 		{90F707D6-6976-475E-A06D-129D88F777ED} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
 		{9AFAF8AE-536A-44D2-99FC-19BABB35C34F} = {52B63410-2581-4146-9484-89D300FAE7B5}
+		{BF4FFB08-CA2F-44F5-BBB9-2FA1FEDAB8B1} = {A5B8430F-B64C-4AE7-B315-72686C296100}
+		{F89BEAFF-3438-40A8-9384-2C28FEE06905} = {0C1E39CA-0DD7-4275-B038-92AE53485381}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}
