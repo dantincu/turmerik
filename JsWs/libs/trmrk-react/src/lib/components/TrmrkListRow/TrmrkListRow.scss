@@ -1,0 +1,129 @@
+.trmrk-row-list {
+  &ul {
+    list-style-type: none;
+  }
+
+  &.trmrk-rows-are-outlined {
+    padding: 1px;
+  }
+
+  &.trmrk-rows-are-inlined {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #0000;
+  }
+}
+
+.trmrk-list-row {
+  display: flex;
+  position: relative;
+  height: 44px;
+  min-width: 40px;
+  box-sizing: border-box;
+
+  .trmrk-row-overlay, .trmrk-row-content {
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--trmrk-button-border-radius);
+  }
+
+  .trmrk-row-overlay {
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
+  }
+
+  .trmrk-row-content {
+    position: relative;
+    padding: 2px;
+  }
+
+  &.trmrk-border {
+    .trmrk-row-content {
+      border-style: solid;
+      border-color: #0000;
+    }
+  }
+  
+  &.trmrk-border-x1 {
+    .trmrk-row-content {
+      border-width: 1px;
+      padding: 1px;
+    }
+  }
+  
+  &.trmrk-border-x2 {
+    .trmrk-row-content {
+      border-width: 2px;
+      padding: 0;
+    }
+  }
+  
+  &.trmrk-is-outlined {
+    margin: 1px;
+    border-radius: var(--trmrk-button-border-radius);
+  }
+}
+
+.light {
+  .trmrk-row-list {
+    border-color: #0004;
+  }
+
+  .trmrk-list-row {
+    .trmrk-row-content {
+      border-color: #0004;
+    }
+
+    &:disabled {
+      .trmrk-row-overlay {
+        background-color: #FFF2;
+      }
+    }
+
+    &:not(:disabled):hover {
+      .trmrk-row-overlay {
+        background-color: #0003;
+      }
+      
+      &.trmrk-row-pressed {
+        .trmrk-row-overlay {
+          background-color: #0006;
+        }
+      }
+    }
+  }
+}
+
+.dark {
+  .trmrk-row-list {
+    border-color: #FFF2;
+  }
+
+  .trmrk-list-row {
+    .trmrk-row-content {
+      border-color: #FFF2;
+    }
+
+    &:disabled {
+      .trmrk-row-overlay {
+        background-color: #0004;
+      }
+    }
+
+    &:not(:disabled):hover {
+      .trmrk-row-overlay {
+        background-color: #FFF3;
+      }
+
+      &.trmrk-row-pressed {
+        .trmrk-row-overlay {
+          background-color: #FFF6;
+        }
+      }
+    } 
+  }
+}
