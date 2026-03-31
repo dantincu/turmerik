@@ -52,8 +52,8 @@ export abstract class SingletonBase<T, TArgs = T> {
     return this._value as T;
   }
 
-  register(value: TArgs, force = false) {
-    if (!force && this.initialized) {
+  register(value: TArgs, skipCheck = false) {
+    if (!skipCheck && this.initialized) {
       throw new Error(
         "Singleton has already been registered and cannot be registered twice",
       );

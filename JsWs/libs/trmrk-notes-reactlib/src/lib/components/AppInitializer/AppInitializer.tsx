@@ -13,8 +13,8 @@ export default function AppInitializer({
   data: { appConfig: AppConfig }
 }>) {
   return <TrmrkAppInitializer data={data} initialize={async () => {
-    appConfig.register(data.appConfig);
-    basicDbAggregator.register(data.appConfig.dbObjAppName);
+    appConfig.register(data.appConfig, true);
+    basicDbAggregator.register(data.appConfig.dbObjAppName, true);
     await defaultAppSessionService.value.initialize();    
   }}>{children}</TrmrkAppInitializer>  
 }

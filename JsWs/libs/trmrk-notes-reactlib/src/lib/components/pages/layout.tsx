@@ -16,24 +16,10 @@ export const initializerCore = async (appConfig: AppConfig) => {
 
 export default async function RootLayoutCore({
   children,
-  beforeInitialized,
-  afterInitialized,
 }: Readonly<{
   children: React.ReactNode;
-  beforeInitialized?: ((appConfig: AppConfig) => Promise<void>) | NullOrUndef;
-  afterInitialized?: ((appConfig: AppConfig) => Promise<void>) | NullOrUndef;
 }>) {
   const appConfig = await loadAppConfig();
-
-  if (beforeInitialized) {
-    await beforeInitialized(appConfig);
-  }
-
-  await initializerCore(appConfig);
-
-  if (afterInitialized) {
-    await afterInitialized(appConfig);
-  }
 
   return (
     <body className={`antialiased`}>

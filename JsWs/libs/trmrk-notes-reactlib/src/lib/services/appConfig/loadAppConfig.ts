@@ -34,9 +34,6 @@ export const loadAppConfig = async () => {
     },
   );
 
-  try {
-    appConfig.register(appConfigObj);
-  } catch (err) {}
-
+  appConfig.register(appConfigObj, true);
   return appConfigObj;
 };
