@@ -47,7 +47,7 @@ const TrmrkBtn = (React.forwardRef<HTMLButtonElement, TrmrkBtnProps>(({ classNam
         className ?? ''
       ].join(' ')}
       onPointerDown={handleOnPointerDown}
-    >{children}<div className="trmrk-btn-overlay"></div></button>
+    ><div className="trmrk-btn-content">{children}</div><div className="trmrk-btn-overlay"></div></button>
   );
 }));
 

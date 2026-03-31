@@ -56,7 +56,7 @@ export default function AppSettingsPage() {
     showPanelAtoms.leftPanel.set(true);
     showPanelAtoms.middlePanel.set(true);
     showPanelAtoms.rightPanel.set(true);
-    setIsResizingPanels(true);
+    // setIsResizingPanels(true);
     setIsMultiPanelMode(true);
 
     return () => {
