@@ -1,24 +1,21 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
 import TrmrkBtn from "@/src/trmrk-react/components/TrmrkBtn/TrmrkBtn";
+import TrmrkIcon from "@/src/trmrk-react/components/TrmrkIcon/TrmrkIcon";
 
 export default function ThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
 
-  // Avoid hydration mismatch by only rendering after mounting
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
+  const isDarkMode = resolvedTheme === "dark";
 
   return (<div className="flex-row">
       <TrmrkBtn
         onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
         className="trmrk-btn-filled-ternary mr-[2px] mt-[2px]"
       >
-        {resolvedTheme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode"}
+        <TrmrkIcon icon={`material-symbols:${isDarkMode ? "light-mode" : "dark-mode"}`} /> {isDarkMode ? "Light" : "Dark"} Mode
       </TrmrkBtn>
     </div>
   );

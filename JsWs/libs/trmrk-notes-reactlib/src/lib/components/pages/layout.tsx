@@ -3,7 +3,7 @@ import '@/src/trmrk-notes-reactlib/lib-globals.scss';
 
 import { initialLoaderHtml, initialLoaderStyles } from "@/src/trmrk-react/initial-loader";
 import Trmrk3PanelsAppLayout from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayout";
-import IconRegistration from '@/src/code/services/iconify/IconRegistration';
+import IconRegistration from '../../services/iconify/IconRegistration';
 
 import ThemeProvider from "../ThemeProvider/ThemeProvider";
 import AppInitializer from "../AppInitializer/AppInitializer";

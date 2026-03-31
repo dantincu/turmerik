@@ -11,7 +11,6 @@ import TrmrkTopToolBarContents from "@/src/trmrk-react/components/TrmrkTopToolBa
 
 import {
   trmrk3PanelsAppLayoutAtoms,
-  useShowPanelAtoms,
   init3PanelsAppLayout,
   cleanup3PanelsAppLayout,
   use3PanelsAppLayoutAtoms
@@ -24,6 +23,10 @@ const AppBar = () => {
 const TopToolbar = () => {
   return <TrmrkTopToolBarContents></TrmrkTopToolBarContents>;
 }
+
+const MiddlePanel = React.memo(() => {
+  return <div className="flex"><ThemeToggle /></div>;
+});
 
 export default function AppSettingsPageCore() {
   const trmrk3PanelsLayoutAtoms = use3PanelsAppLayoutAtoms();
@@ -39,7 +42,7 @@ export default function AppSettingsPageCore() {
         contents: TopToolbar
       },
       middlePanel: {
-        contents: ThemeToggle,
+        contents: MiddlePanel,
       },
       setFocusedPanel
     });
