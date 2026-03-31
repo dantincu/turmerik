@@ -44,8 +44,8 @@ const TrmrkListRow = (React.forwardRef<HTMLDivElement, TrmrkListRowProps>(({ cla
 
   return (
     <Component {...props} ref={refElAvailable} className={[
-        'trmrk-btn',
-        showIsPressedCssClass ? 'trmrk-btn-pressed' : '',
+        'trmrk-list-row',
+        showIsPressedCssClass ? 'trmrk-row-pressed' : '',
         ((borderWidth ?? null) !== null ? `trmrk-border trmrk-border-${borderWidth}px` : ''),
         className ?? ''
       ].join(' ')}
