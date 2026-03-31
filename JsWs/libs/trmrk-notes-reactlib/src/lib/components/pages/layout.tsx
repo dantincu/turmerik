@@ -1,7 +1,6 @@
 import '@/src/trmrk-react/globals.scss';
 import '@/src/trmrk-notes-reactlib/lib-globals.scss';
 
-import { NullOrUndef } from '@/src/trmrk/core';
 import { initialLoaderHtml, initialLoaderStyles } from "@/src/trmrk-react/initial-loader";
 import Trmrk3PanelsAppLayout from "@/src/trmrk-react/components/Trmrk3PanelsAppLayout/Trmrk3PanelsAppLayout";
 import IconRegistration from '@/src/code/services/iconify/IconRegistration';
@@ -9,10 +8,6 @@ import IconRegistration from '@/src/code/services/iconify/IconRegistration';
 import ThemeProvider from "../ThemeProvider/ThemeProvider";
 import AppInitializer from "../AppInitializer/AppInitializer";
 import { loadAppConfig } from "../../services/appConfig/loadAppConfig";
-import { AppConfig } from '../../services/appConfig/AppConfig';
-
-export const initializerCore = async (appConfig: AppConfig) => {
-};
 
 export default async function RootLayoutCore({
   children,
