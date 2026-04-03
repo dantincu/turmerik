@@ -14,9 +14,4 @@
     <ProjectReference Include="..\Turmerik.NetCore\Turmerik.NetCore.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dependencies\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>

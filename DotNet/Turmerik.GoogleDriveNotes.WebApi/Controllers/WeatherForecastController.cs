@@ -5,7 +5,7 @@ namespace Turmerik.GoogleDriveNotes.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ApiControllerBase
+    public class WeatherForecastController : ApiControllerCoreBase
     {
         private static readonly string[] Summaries =
         [
