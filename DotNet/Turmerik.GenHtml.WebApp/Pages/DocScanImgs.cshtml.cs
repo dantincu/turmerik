@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Turmerik.GenHtml.WebApp.Pages
 {
+    [IgnoreAntiforgeryToken]
     public class DocScanImgsModel : PageModel
     {
         public string[] DocScanImgUrls { get; set; } = [];
