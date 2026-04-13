@@ -1,0 +1,25 @@
+{
+  "ProfileName": "arch-ayran-dotnet-util-dirs",
+  "FileGroups": [
+    {
+      "CloneArchiveDirPath": "|$LARGEFILESCSDRIVE_DIR|\\|$LARGEFILESCSDRIVE_AYRAN_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|",
+      "CloneArchiveFileNameTpl": "AppsEnv[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
+      "BeforeArchiveCleanupFilter": {
+        "IncludedRelPathRegexes": [
+          "^\\/AppsEnv\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
+        ]
+      },
+      "Folders": [
+        {
+          "InputDirPath": "|$AYRAN_DOTNET_UTILITY_APPS_ENV_DIR|",
+          "CloneDirPath": "|$TURMERIK_TEMP_DIR|",
+          "InputDirFilter": {
+            "IncludedRelPathRegexes": [
+              "^\\/Bin\\/docs\\-converter\\/ayran\\-docs\\-converter\\-cmd\\/AyranDocsConverter\\/.*"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

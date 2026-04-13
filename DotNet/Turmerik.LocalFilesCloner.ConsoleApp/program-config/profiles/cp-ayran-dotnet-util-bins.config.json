@@ -1,0 +1,15 @@
+{
+  "ProfileName": "cp-ayran-dotnet-util-bins",
+  "FileGroups": [
+    {
+      "InputDirPath": "|$AYRAN_REPO_DIR|\\DotNet\\apps",
+      "CloneDirPath": "|$USER_PROFILE_DIR|\\AppData\\Roaming\\Ayran\\Apps",
+      "Folders": [
+        {
+          "InputDirPath": "docs-converter\\ayran-docs-converter-cmd\\AyranDocsConverter\\bin\\Release\\net10.0",
+          "CloneDirPath": "Bin\\docs-converter\\ayran-docs-converter-cmd\\AyranDocsConverter\\Release\\net10.0"
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,9 @@
 {
   "Profiles": [
     {
+      "ProfileRelFilePath": "profiles\\arch-ayran-dotnet-util-dirs.config.json"
+    },
+    {
       "ProfileRelFilePath": "profiles\\arch-dotnet-util-cfg-dirs.config.json"
     },
     {
@@ -17,6 +20,9 @@
     },
     {
       "ProfileRelFilePath": "profiles\\arch-scripts-dir.config.json"
+    },
+    {
+      "ProfileRelFilePath": "profiles\\cp-ayran-dotnet-util-bins.config.json"
     },
     {
       "ProfileRelFilePath": "profiles\\cp-dotnet-bkp-bins.config.json"

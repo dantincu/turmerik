@@ -4,11 +4,14 @@
     "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|": "<TurmerikDotnetUtilityAppsEnvDir>",
     "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DEV_DIR|": "<TurmerikDotnetUtilityAppsEnvDevDir>",
     "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_PROD_DIR|": "<TurmerikDotnetUtilityAppsEnvProdDir>",
+    "|$AYRAN_REPO_DIR|": "<AyranRepoDir>",
     "|$MAINCSDRIVE_DIR|": "<MainCsDriveDir>",
     "|$LARGEFILESCSDRIVE_DIR|": "<LargeFilesCsDriveDir>",
     "|$LARGEFILESCSDRIVE_PROJECTS_RELDIR|": "<LargeFilesCsDriveProjectsReldir>",
     "|$MAINCSDRIVE_PROJECTS_RELDIR|": "<MainCsDriveProjectsReldir>",
     "|$LARGEFILESCSDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|": "<LargeFilesCsDriveTurmerikDotNetUtilityAppsArchiveReldir>",
-    "|$MAINCSDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|": "<MainCsDriveTurmerikDotNetUtilityAppsArchiveReldir>"
+    "|$MAINCSDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|": "<MainCsDriveTurmerikDotNetUtilityAppsArchiveReldir>",
+    "|$LARGEFILESCSDRIVE_AYRAN_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|": "<LargeFilesCsDriveAyranDotNetUtilityAppsArchiveReldir>",
+    "|$MAINCSDRIVE_AYRAN_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|": "<MainCsDriveAyranDotNetUtilityAppsArchiveReldir>"
   }
 }
