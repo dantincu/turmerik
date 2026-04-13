@@ -1,0 +1,41 @@
+﻿@page
+@model Turmerik.GenHtml.WebApp.Pages.DocScanImgsModel
+
+@section Styles {
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    @@page {
+      margin: 0;
+      padding: 0;
+    }
+
+    .imgs-container {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .imgs-container .img {
+      display: block;
+      max-width: 100%;
+      max-height: 100vh;
+      width: auto;
+      height: auto;
+    }
+  </style>
+}
+
+@{
+}
+
+<div class="imgs-container">
+  @foreach (var imgUrl in Model.DocScanImgUrls)
+  {
+    <img class="img" src="@imgUrl" class="img" />
+  }
+</div>

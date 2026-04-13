@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.GenHtml.WebApp", "Turmerik.GenHtml.WebApp.csproj", "{3B8BBA76-984C-C247-C751-A82930684FBB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B8BBA76-984C-C247-C751-A82930684FBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B8BBA76-984C-C247-C751-A82930684FBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B8BBA76-984C-C247-C751-A82930684FBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B8BBA76-984C-C247-C751-A82930684FBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {01519C93-0E44-472B-97D6-1A1D61A46043}
+	EndGlobalSection
+EndGlobal
