@@ -4,6 +4,9 @@
     {
       "InputDirPath": "|$AYRAN_REPO_DIR|\\DotNet\\apps",
       "CloneDirPath": "|$USER_PROFILE_DIR|\\AppData\\Roaming\\Ayran\\Apps",
+      "DfBeforeCloneDestnCleanupFilter": {
+        "ExcludedRelPathRegexes": []
+      },
       "Folders": [
         {
           "InputDirPath": "docs-converter\\ayran-docs-converter-cmd\\AyranDocsConverter\\bin\\Release\\net10.0",
