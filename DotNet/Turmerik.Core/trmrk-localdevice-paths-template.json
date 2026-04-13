@@ -5,6 +5,7 @@
     "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DEV_DIR|": "<TurmerikDotnetUtilityAppsEnvDevDir>",
     "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_PROD_DIR|": "<TurmerikDotnetUtilityAppsEnvProdDir>",
     "|$AYRAN_REPO_DIR|": "<AyranRepoDir>",
+    "|$AYRAN_DOTNET_UTILITY_APPS_ENV_DIR|": "<AyranDotnetUtilityAppsEnvDir>",
     "|$MAINCSDRIVE_DIR|": "<MainCsDriveDir>",
     "|$LARGEFILESCSDRIVE_DIR|": "<LargeFilesCsDriveDir>",
     "|$LARGEFILESCSDRIVE_PROJECTS_RELDIR|": "<LargeFilesCsDriveProjectsReldir>",
