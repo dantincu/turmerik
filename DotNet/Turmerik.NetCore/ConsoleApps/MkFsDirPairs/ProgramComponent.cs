@@ -614,11 +614,15 @@ namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
                     childNodeArgs);
             }
 
-            await updateNoteChildrenProgramComponent.RunAsync(new UpdateNoteChildren.ProgramArgs
+            if (nodeArgs.CreateNote == true || nodeArgs.CreateNoteBook == true ||
+                nodeArgs.CreateNoteSection == true)
             {
-                WorkDir = childNodesWorkDir,
-                OnlyRunIfValidJsonAlreadyExists = false
-            });
+                await updateNoteChildrenProgramComponent.RunAsync(new UpdateNoteChildren.ProgramArgs
+                {
+                    WorkDir = childNodesWorkDir,
+                    OnlyRunIfValidJsonAlreadyExists = false
+                });
+            }
         }
 
         private bool ShouldCreatePdfFile(
