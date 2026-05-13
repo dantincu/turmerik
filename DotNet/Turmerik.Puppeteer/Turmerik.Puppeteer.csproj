@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PuppeteerSharp" Version="20.2.4" />
-    <PackageReference Include="System.Text.Json" Version="10.0.0" />
+    <PackageReference Include="PuppeteerSharp" />
+    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
 
   <ItemGroup>
