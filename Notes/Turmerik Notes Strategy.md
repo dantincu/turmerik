@@ -52,3 +52,15 @@ So each note can contain nested notes structured as pairs of folders. Besides th
 - notebook internals folder pair: the full name part will always be "[note-book]"
 
 The note files folder pair will contain files and folders attached to the current note (parent for the rest of the folder pairs in the current directory) - they will be directly accessed by the user, who can upload, create, edit and delete them as they wish.
+
+The root folder that contains the top-level notes is "the notebook folder". In this folder there should be a json file named "[note-book].json" that has the following structure:
+
+```json
+{
+  "Title": "My Primary Note Book"
+}
+```
+
+This will be "the notebook json file" and will serve as an entry point for the notebook (like when an app functions as a file explorer and a notes explorer 2-in-1 this file will be used to open a notebook from the app's file explorer).
+
+The notebook folder will also contain the notebook internal folders pair (mentioned above).
