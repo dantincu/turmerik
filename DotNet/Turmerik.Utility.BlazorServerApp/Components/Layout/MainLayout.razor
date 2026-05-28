@@ -1,0 +1,63 @@
+@inherits LayoutComponentBase
+@inject AppNotificationService NotificationService
+@inject IJSRuntime JS
+@implements IDisposable
+
+<div class="app-container" id="app-root">
+    <div class="app-header">
+        <h1>Turmerik Utility</h1>
+        <button class="theme-toggle" @onclick="ToggleTheme" title="Toggle dark/light mode">
+            @(_isDark ? "☀ Light" : "☾ Dark")
+        </button>
+    </div>
+
+    <div class="app-content">
+        @Body
+    </div>
+
+    <div class="app-status-bar">
+        @if (NotificationService.Current is { } note)
+        {
+            <span class="status-text @note.Level.ToString().ToLower()">@note.Message</span>
+        }
+        else
+        {
+            <span class="status-text">Ready</span>
+        }
+    </div>
+</div>
+
+@code {
+    private bool _isDark;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var stored = await JS.InvokeAsync<string>("AppInterop.getTheme");
+            _isDark = stored == "dark";
+            if (_isDark)
+            {
+                await JS.InvokeVoidAsync("AppInterop.setTheme", "dark");
+            }
+            StateHasChanged();
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        NotificationService.OnChange += StateHasChanged;
+    }
+
+    private async Task ToggleTheme()
+    {
+        _isDark = !_isDark;
+        var theme = _isDark ? "dark" : "light";
+        await JS.InvokeVoidAsync("AppInterop.setTheme", theme);
+    }
+
+    public void Dispose()
+    {
+        NotificationService.OnChange -= StateHasChanged;
+    }
+}

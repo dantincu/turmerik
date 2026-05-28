@@ -1,0 +1,48 @@
+@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>Turmerik Utility</PageTitle>
+
+<div class="tab-nav">
+    @foreach (var (label, idx) in _tabs.Select((t, i) => (t, i)))
+    {
+        <button class="tab-btn @(_activeTab == idx ? "active" : "")"
+                @onclick="() => _activeTab = idx">
+            @label
+        </button>
+    }
+</div>
+
+<div class="tab-content">
+    @switch (_activeTab)
+    {
+        case 0:
+            <TextUtils.TextUtilsTab />
+            break;
+        case 1:
+            <TextTransform.TextTransformTab />
+            break;
+        case 2:
+            <OpenMultipleLinks.OpenMultipleLinksTab />
+            break;
+        case 3:
+            <FetchMultipleLinks.FetchMultipleLinksTab />
+            break;
+        case 4:
+            <GenerateClnblTypes.GenerateClnblTypesTab />
+            break;
+    }
+</div>
+
+@code {
+    private int _activeTab;
+
+    private readonly string[] _tabs =
+    [
+        "Text Utils",
+        "Text Transform",
+        "Open Multiple Links",
+        "Fetch Multiple Links",
+        "Generate Clnbl Types"
+    ];
+}

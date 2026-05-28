@@ -1,0 +1,59 @@
+@inject AppNotificationService Notify
+@inject IJSRuntime JS
+
+<div class="panel">
+    <div class="panel-title">Open Multiple Links</div>
+
+    <div class="form-group">
+        <label>Links (one per line)</label>
+        <textarea @bind="_links" style="height:300px;" class="monospace"
+                  placeholder="Paste links here, one per line...&#10;https://example.com&#10;https://another.com"></textarea>
+    </div>
+
+    <div class="form-row">
+        <button class="btn btn-primary" @onclick="OpenLinks">▶ Open All Links in Browser</button>
+        <button class="btn btn-secondary" @onclick="FixNewLines">Fix New Lines</button>
+    </div>
+    <div style="font-size:12px; color:var(--text-muted); margin-top:6px;">
+        Note: Links will open in new browser tabs. Allow popups for this page if prompted.
+    </div>
+</div>
+
+@code {
+    private string _links = "";
+
+    private async Task OpenLinks()
+    {
+        var lines = _links.Split('\n')
+            .Select(l => l.Trim())
+            .Where(l => !string.IsNullOrEmpty(l) && IsUrl(l))
+            .ToArray();
+
+        if (lines.Length == 0)
+        {
+            Notify.NotifyWarning("No valid URLs found");
+            return;
+        }
+
+        foreach (var link in lines)
+        {
+            await JS.InvokeVoidAsync("AppInterop.openUrl", link);
+        }
+
+        Notify.NotifySuccess($"Opened {lines.Length} link(s)");
+    }
+
+    private void FixNewLines()
+    {
+        var lines = _links.Split(["\r\n", "\r", "\n"], StringSplitOptions.None);
+        _links = string.Join("\n", lines);
+        Notify.NotifySuccess("New lines fixed");
+    }
+
+    private static bool IsUrl(string s)
+    {
+        return s.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
+            || s.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+            || System.Text.RegularExpressions.Regex.IsMatch(s, @"^[a-zA-Z]+://");
+    }
+}

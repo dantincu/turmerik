@@ -1,0 +1,113 @@
+@inject IAppSettings AppSettings
+@inject AppNotificationService Notify
+@inject ClipboardService Clipboard
+@inject IHtmlDocTitleRetriever HtmlTitleRetriever
+
+<div class="panel">
+    <div class="panel-title">Fetch Web Resource</div>
+
+    <div class="form-group">
+        <label>Resource URL</label>
+        <div class="form-row">
+            <input type="url" @bind="_url" @onkeyup="OnUrlKeyUp" placeholder="Paste URL here..." />
+            <button class="btn btn-primary" @onclick="FetchAsync" disabled="@_loading" title="Fetch title (Enter)">
+                @(_loading ? "Fetching..." : "⬇ Fetch")
+            </button>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Title</label>
+        <div class="form-row">
+            <input type="text" @bind="_title" @onkeyup="OnTitleKeyUp" placeholder="Title will appear here..." />
+            <button class="btn btn-icon" @onclick="CopyTitle" title="Copy title to clipboard">⧉</button>
+        </div>
+        <label class="checkbox-label">
+            <input type="checkbox" @bind="_autoTitleToCB" />
+            Auto-copy title after fetch
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label>Markdown Link</label>
+        <div class="form-row">
+            <input type="text" @bind="_mdLink" @onkeyup="OnMdLinkKeyUp" placeholder="[Title](URL)" />
+            <button class="btn btn-icon" @onclick="CopyMdLink" title="Copy markdown link to clipboard">⧉</button>
+        </div>
+        <label class="checkbox-label">
+            <input type="checkbox" @bind="_autoMdLinkToCB" />
+            Auto-copy markdown link after fetch
+        </label>
+    </div>
+</div>
+
+@code {
+    private string _url = "";
+    private string _title = "";
+    private string _mdLink = "";
+    private bool _autoTitleToCB;
+    private bool _autoMdLinkToCB;
+    private bool _loading;
+
+    protected override void OnInitialized()
+    {
+        var settings = AppSettings.Data;
+        _autoTitleToCB = settings.FetchWebResource?.ResxTitleFetchToCB ?? false;
+        _autoMdLinkToCB = settings.FetchWebResource?.ResxMdLinkFetchToCB ?? false;
+    }
+
+    private async Task FetchAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_url)) return;
+        _loading = true;
+        Notify.Notify("Fetching resource title...");
+
+        try
+        {
+            _title = await HtmlTitleRetriever.GetResouceTitleAsync(_url) ?? "";
+            RefreshMdLink();
+
+            if (_autoTitleToCB)
+                await Clipboard.CopyAsync(_title);
+            else if (_autoMdLinkToCB)
+                await Clipboard.CopyAsync(_mdLink);
+
+            Notify.NotifySuccess("Fetched successfully");
+        }
+        catch (Exception ex)
+        {
+            Notify.NotifyError($"Error: {ex.Message}");
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private void RefreshMdLink()
+    {
+        var template = AppSettings.Data.FetchWebResource?.MdLinkTemplate ?? "[{0}]({1})";
+        _mdLink = string.Format(template, _title, _url);
+    }
+
+    private async Task CopyTitle() => await Clipboard.CopyAsync(_title);
+    private async Task CopyMdLink() => await Clipboard.CopyAsync(_mdLink);
+
+    private async Task OnUrlKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            await FetchAsync();
+    }
+
+    private void OnTitleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            RefreshMdLink();
+    }
+
+    private void OnMdLinkKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            RefreshMdLink();
+    }
+}

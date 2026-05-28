@@ -1,0 +1,157 @@
+@inject AppNotificationService Notify
+@inject ClipboardService Clipboard
+
+<div class="panel">
+    <div class="panel-title">Generate Cleanable Types</div>
+
+    <div class="split-container split-30-70" style="gap:10px; min-height:400px;">
+        <div style="display:flex; flex-direction:column; gap:8px;">
+            <div class="panel-title" style="font-size:12px;">Options</div>
+
+            <div class="form-group">
+                <label>Class Name</label>
+                <input type="text" @bind="_className" placeholder="MyClass" />
+            </div>
+
+            <div class="form-group">
+                <label>Namespace</label>
+                <input type="text" @bind="_namespace" placeholder="My.Namespace" />
+            </div>
+
+            <div class="form-group">
+                <label>Properties (one per line)</label>
+                <textarea @bind="_properties" style="height:150px;" class="monospace"
+                          placeholder="string Name&#10;int Age&#10;bool? IsActive"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" @bind="_generateImmtbl" />
+                    Generate Immutable (Immtbl)
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" @bind="_generateMtbl" />
+                    Generate Mutable (Mtbl)
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" @bind="_generateInterface" />
+                    Generate Interface
+                </label>
+            </div>
+
+            <button class="btn btn-primary" @onclick="Generate">⚙ Generate</button>
+        </div>
+
+        <div class="form-group">
+            <div class="form-row">
+                <label>Generated Code</label>
+                <button class="btn btn-icon" @onclick="CopyCode" title="Copy to clipboard" style="margin-left:auto;">⧉ Copy</button>
+            </div>
+            <textarea @bind="_generatedCode" style="flex:1; height:400px;" class="monospace" readonly
+                      placeholder="Generated code will appear here..."></textarea>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string _className = "";
+    private string _namespace = "";
+    private string _properties = "";
+    private bool _generateImmtbl = true;
+    private bool _generateMtbl = true;
+    private bool _generateInterface = true;
+    private string _generatedCode = "";
+
+    private async Task Generate()
+    {
+        if (string.IsNullOrWhiteSpace(_className))
+        {
+            Notify.NotifyWarning("Class name is required");
+            return;
+        }
+
+        try
+        {
+            var sb = new System.Text.StringBuilder();
+            var ns = string.IsNullOrWhiteSpace(_namespace) ? null : _namespace;
+            var props = ParseProperties();
+
+            if (ns != null) sb.AppendLine($"namespace {ns}").AppendLine("{");
+
+            // Interface
+            if (_generateInterface)
+            {
+                var indent = ns != null ? "    " : "";
+                sb.AppendLine($"{indent}public interface I{_className}");
+                sb.AppendLine($"{indent}{{");
+                foreach (var (type, name) in props)
+                    sb.AppendLine($"{indent}    {type} {name} {{ get; }}");
+                sb.AppendLine($"{indent}}}");
+                sb.AppendLine();
+            }
+
+            // Immutable
+            if (_generateImmtbl)
+            {
+                var indent = ns != null ? "    " : "";
+                var iface = _generateInterface ? $" : I{_className}" : "";
+                sb.AppendLine($"{indent}public class {_className}Immtbl{iface}");
+                sb.AppendLine($"{indent}{{");
+                sb.AppendLine($"{indent}    public {_className}Immtbl(I{_className} src)");
+                sb.AppendLine($"{indent}    {{");
+                foreach (var (_, name) in props)
+                    sb.AppendLine($"{indent}        {name} = src.{name};");
+                sb.AppendLine($"{indent}    }}");
+                sb.AppendLine();
+                foreach (var (type, name) in props)
+                    sb.AppendLine($"{indent}    public {type} {name} {{ get; }}");
+                sb.AppendLine($"{indent}}}");
+                sb.AppendLine();
+            }
+
+            // Mutable
+            if (_generateMtbl)
+            {
+                var indent = ns != null ? "    " : "";
+                var iface = _generateInterface ? $" : I{_className}" : "";
+                sb.AppendLine($"{indent}public class {_className}Mtbl{iface}");
+                sb.AppendLine($"{indent}{{");
+                sb.AppendLine($"{indent}    public {_className}Mtbl() {{ }}");
+                sb.AppendLine();
+                sb.AppendLine($"{indent}    public {_className}Mtbl(I{_className} src)");
+                sb.AppendLine($"{indent}    {{");
+                foreach (var (_, name) in props)
+                    sb.AppendLine($"{indent}        {name} = src.{name};");
+                sb.AppendLine($"{indent}    }}");
+                sb.AppendLine();
+                foreach (var (type, name) in props)
+                    sb.AppendLine($"{indent}    public {type} {name} {{ get; set; }}");
+                sb.AppendLine($"{indent}}}");
+            }
+
+            if (ns != null) sb.AppendLine("}");
+
+            _generatedCode = sb.ToString();
+            Notify.NotifySuccess("Code generated");
+        }
+        catch (Exception ex)
+        {
+            Notify.NotifyError($"Error: {ex.Message}");
+        }
+    }
+
+    private List<(string Type, string Name)> ParseProperties()
+    {
+        return _properties.Split('\n')
+            .Select(l => l.Trim().TrimEnd('\r'))
+            .Where(l => !string.IsNullOrEmpty(l))
+            .Select(l =>
+            {
+                var parts = l.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+                return parts.Length >= 2 ? (parts[0], parts[1]) : (parts[0], "Value");
+            })
+            .ToList();
+    }
+
+    private async Task CopyCode() => await Clipboard.CopyAsync(_generatedCode);
+}

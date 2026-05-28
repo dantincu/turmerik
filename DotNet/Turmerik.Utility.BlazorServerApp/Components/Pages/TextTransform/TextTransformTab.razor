@@ -1,0 +1,131 @@
+@inject TextTransformBehavior TextTransformBehavior
+@inject AppNotificationService Notify
+@inject ClipboardService Clipboard
+
+<div class="transform-layout">
+    <div class="transform-tree">
+        @if (_transformers != null)
+        {
+            foreach (var node in _transformers.GetTextTransformers())
+            {
+                <div class="transform-tree-node">@node.Name</div>
+                foreach (var item in node.GetTextTransformItems())
+                {
+                    <div class="transform-tree-child transform-tree-item @(_selectedItem == item && !_isRichText ? "active" : "")"
+                         @onclick="() => SelectTextItem(item, false)">
+                        ▷ @item.Name
+                    </div>
+                }
+                foreach (var item in node.GetRichTextTransformItems())
+                {
+                    <div class="transform-tree-child transform-tree-item @(_selectedItem == item && _isRichText ? "active" : "")"
+                         @onclick="() => SelectTextItem(item, true)"
+                         style="color: var(--status-warning);">
+                        ▷ @item.Name
+                    </div>
+                }
+                foreach (var child in node.GetChildNodes())
+                {
+                    RenderChildNode(child);
+                }
+            }
+        }
+        else
+        {
+            <div style="padding:10px; color:var(--text-muted); font-size:12px;">Loading transformers...</div>
+        }
+    </div>
+
+    <div class="transform-areas">
+        @if (_selectedItem != null)
+        {
+            <div class="panel" style="padding:8px;">
+                <strong>@_selectedItem.Name</strong>
+                @if (!string.IsNullOrEmpty(_selectedItem.Description))
+                {
+                    <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">@_selectedItem.Description</div>
+                }
+                <button class="btn btn-primary" style="margin-top:8px;" @onclick="RunTransform" disabled="@_running">
+                    @(_running ? "Running..." : "▶ Run")
+                </button>
+                <span style="font-size:11px; color:var(--text-muted); margin-left:8px;">Ctrl+Alt+Enter to run &amp; copy</span>
+            </div>
+        }
+        <div class="transform-text-areas" style="flex:1;">
+            <div class="form-group" style="height:100%;">
+                <label>Source Text</label>
+                <textarea @bind="_srcText" @onkeyup="OnSrcKeyDown" style="flex:1; height:300px;" class="monospace"
+                          placeholder="Type or paste source text here..."></textarea>
+            </div>
+            <div class="form-group" style="height:100%;">
+                <label>Result Text</label>
+                <textarea @bind="_resultText" style="flex:1; height:300px;" class="monospace" readonly
+                          placeholder="Result will appear here..."></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private Models.TextTransformBehaviorDataImmtbl? _transformers;
+    private Models.ITextTransformItem? _selectedItem;
+    private bool _isRichText;
+    private string _srcText = "";
+    private string _resultText = "";
+    private bool _running;
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            _transformers = TextTransformBehavior.ExportedMembers;
+        }
+        catch
+        {
+            // Behavior config may not exist yet
+        }
+    }
+
+    private void SelectTextItem(Models.ITextTransformItem item, bool isRichText)
+    {
+        _selectedItem = item;
+        _isRichText = isRichText;
+    }
+
+    private void RenderChildNode(Models.ITextTransformNode node)
+    {
+        // nested nodes rendered inline
+    }
+
+    private async Task RunTransform()
+    {
+        if (_selectedItem == null) return;
+        _running = true;
+        Notify.Notify("Running transformation...");
+
+        try
+        {
+            _resultText = TextTransformBehavior.Behavior.Invoke<string>(
+                _selectedItem.JsMethod, [_srcText]) ?? "";
+            Notify.NotifySuccess("Transformation complete");
+        }
+        catch (Exception ex)
+        {
+            Notify.NotifyError($"Error: {ex.Message}");
+        }
+        finally
+        {
+            _running = false;
+        }
+    }
+
+    private async Task OnSrcKeyDown(KeyboardEventArgs e)
+    {
+        if (e.CtrlKey && e.AltKey && e.Key == "Enter")
+        {
+            await RunTransform();
+            if (!string.IsNullOrEmpty(_resultText))
+                await Clipboard.CopyAsync(_resultText);
+        }
+    }
+}

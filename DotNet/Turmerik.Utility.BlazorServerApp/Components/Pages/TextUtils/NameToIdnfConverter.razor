@@ -1,0 +1,63 @@
+@inject IAppSettings AppSettings
+@inject AppNotificationService Notify
+@inject ClipboardService Clipboard
+@inject INameToIdnfConverter IdnfConverter
+
+<div class="panel">
+    <div class="panel-title">Name to Identifier Converter</div>
+
+    <div class="form-row">
+        <div class="form-col">
+            <label style="font-size:12px; color:var(--text-muted);">Input Name</label>
+            <input type="text" @bind="_name" @onkeyup="OnNameKeyUp" placeholder="Type name here..." />
+        </div>
+        <button class="btn btn-primary" @onclick="Convert" title="Convert (Enter)">▶ Convert</button>
+        <div class="form-col">
+            <label style="font-size:12px; color:var(--text-muted);">Code Identifier</label>
+            <div class="form-row">
+                <input type="text" @bind="_identifier" readonly />
+                <button class="btn btn-icon" @onclick="CopyIdentifier" title="Copy to clipboard">⧉</button>
+            </div>
+        </div>
+    </div>
+    <label class="checkbox-label" style="margin-top:6px;">
+        <input type="checkbox" @bind="_autoToCB" />
+        Auto-copy after conversion
+    </label>
+</div>
+
+@code {
+    private string _name = "";
+    private string _identifier = "";
+    private bool _autoToCB;
+
+    protected override void OnInitialized()
+    {
+        _autoToCB = AppSettings.Data.NameToIdnfConverter?.NameConvertToCB ?? false;
+    }
+
+    private async Task Convert()
+    {
+        try
+        {
+            _identifier = IdnfConverter.Convert(new NameToIdnfConverterOpts
+            {
+                InputIdentifier = _name
+            });
+
+            if (_autoToCB) await Clipboard.CopyAsync(_identifier);
+            Notify.NotifySuccess("Converted");
+        }
+        catch (Exception ex)
+        {
+            Notify.NotifyError(ex.Message);
+        }
+    }
+
+    private async Task CopyIdentifier() => await Clipboard.CopyAsync(_identifier);
+
+    private async Task OnNameKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await Convert();
+    }
+}

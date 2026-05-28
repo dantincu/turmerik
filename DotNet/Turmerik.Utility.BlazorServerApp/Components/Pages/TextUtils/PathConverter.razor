@@ -1,0 +1,99 @@
+@inject IAppSettings AppSettings
+@inject AppNotificationService Notify
+@inject ClipboardService Clipboard
+
+<div class="panel">
+    <div class="panel-title">Path Converter</div>
+
+    <div class="path-row">
+        <span class="path-label">Windows Path</span>
+        <input type="text" @bind="_winPath" @onkeyup="e => OnKeyUp(e, ConvertFromWin)" placeholder="C:\Users\..." />
+        <button class="btn btn-primary" @onclick="ConvertFromWin" title="Convert (Enter)">▶</button>
+        <button class="btn btn-icon" @onclick="() => CopyIfSet(_winPath)" title="Copy">⧉</button>
+        <label class="checkbox-label">
+            <input type="checkbox" @bind="_winToCB" />
+            Auto
+        </label>
+    </div>
+
+    <div class="path-row">
+        <span class="path-label">Escaped Win Path</span>
+        <input type="text" @bind="_escWinPath" @onkeyup="e => OnKeyUp(e, ConvertFromEscWin)" placeholder="C:\\Users\\..." />
+        <button class="btn btn-primary" @onclick="ConvertFromEscWin" title="Convert (Enter)">▶</button>
+        <button class="btn btn-icon" @onclick="() => CopyIfSet(_escWinPath)" title="Copy">⧉</button>
+        <label class="checkbox-label">
+            <input type="checkbox" @bind="_escWinToCB" />
+            Auto
+        </label>
+    </div>
+
+    <div class="path-row">
+        <span class="path-label">Unix Path</span>
+        <input type="text" @bind="_unixPath" @onkeyup="e => OnKeyUp(e, ConvertFromUnix)" placeholder="/home/user/..." />
+        <button class="btn btn-primary" @onclick="ConvertFromUnix" title="Convert (Enter)">▶</button>
+        <button class="btn btn-icon" @onclick="() => CopyIfSet(_unixPath)" title="Copy">⧉</button>
+        <label class="checkbox-label">
+            <input type="checkbox" @bind="_unixToCB" />
+            Auto
+        </label>
+    </div>
+</div>
+
+@code {
+    private string _winPath = "";
+    private string _escWinPath = "";
+    private string _unixPath = "";
+    private bool _winToCB;
+    private bool _escWinToCB;
+    private bool _unixToCB;
+
+    protected override void OnInitialized()
+    {
+        var s = AppSettings.Data.PathConverter;
+        if (s == null) return;
+        _winToCB = s.WinPathToCB ?? false;
+        _escWinToCB = s.EscWinPathToCB ?? false;
+        _unixToCB = s.UnixPathToCB ?? false;
+    }
+
+    private async Task ConvertFromWin()
+    {
+        _escWinPath = _winPath.Replace("\\", "\\\\");
+        _unixPath = NormPathH.NormPathUnixStyle(_winPath);
+        await AutoCopy(_escWinToCB, _escWinPath, _unixToCB, _unixPath);
+        Notify.NotifySuccess("Converted from Windows path");
+    }
+
+    private async Task ConvertFromEscWin()
+    {
+        _winPath = _escWinPath.Replace("\\\\", "\\");
+        _unixPath = NormPathH.NormPathUnixStyle(_winPath);
+        await AutoCopy(_winToCB, _winPath, _unixToCB, _unixPath);
+        Notify.NotifySuccess("Converted from escaped Windows path");
+    }
+
+    private async Task ConvertFromUnix()
+    {
+        if (Path.IsPathRooted(_unixPath))
+            _winPath = NormPathH.NormRootedPathWinStyle(_unixPath);
+        else
+            _winPath = _unixPath.Replace("/", "\\");
+
+        _escWinPath = _winPath.Replace("\\", "\\\\");
+        await AutoCopy(_winToCB, _winPath, _escWinToCB, _escWinPath);
+        Notify.NotifySuccess("Converted from Unix path");
+    }
+
+    private async Task AutoCopy(bool c1, string v1, bool c2, string v2)
+    {
+        if (c1) await Clipboard.CopyAsync(v1);
+        else if (c2) await Clipboard.CopyAsync(v2);
+    }
+
+    private async Task CopyIfSet(string value) => await Clipboard.CopyAsync(value);
+
+    private async Task OnKeyUp(KeyboardEventArgs e, Func<Task> convert)
+    {
+        if (e.Key == "Enter") await convert();
+    }
+}

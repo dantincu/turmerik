@@ -1,0 +1,134 @@
+@inject IAppSettings AppSettings
+@inject AppNotificationService Notify
+@inject ClipboardService Clipboard
+@inject INameToIdnfConverter IdnfConverter
+
+<div class="panel">
+    <div class="panel-title">Text Line Converter</div>
+
+    <div class="form-row" style="margin-bottom:8px;">
+        <label style="font-size:12px; color:var(--text-muted); white-space:nowrap;">Converter:</label>
+        <select @bind="_selectedConverter" style="width:180px;">
+            <option value="nameidnf">Name to Identifier</option>
+            <option value="pathconv">Path Converter</option>
+        </select>
+    </div>
+
+    @if (_selectedConverter == "nameidnf")
+    {
+        <div style="display:flex; flex-direction:column; gap:6px;">
+            <label style="font-size:12px; color:var(--text-muted);">Input (one name per line)</label>
+            <textarea @bind="_inputLines" style="height:120px;" class="monospace" placeholder="Enter names, one per line..."></textarea>
+            <div class="form-row">
+                <button class="btn btn-primary" @onclick="ConvertAllNames">▶ Convert All</button>
+                <label class="checkbox-label">
+                    <input type="checkbox" @bind="_autoToCB" />
+                    Auto-copy result
+                </label>
+                <button class="btn btn-icon" @onclick="CopyResult" title="Copy result">⧉</button>
+            </div>
+            <label style="font-size:12px; color:var(--text-muted);">Result</label>
+            <textarea @bind="_outputLines" style="height:120px;" class="monospace" readonly></textarea>
+        </div>
+    }
+    else if (_selectedConverter == "pathconv")
+    {
+        <div style="display:flex; flex-direction:column; gap:6px;">
+            <div class="form-row">
+                <label style="font-size:12px; color:var(--text-muted); white-space:nowrap;">Convert from:</label>
+                <select @bind="_pathDir" style="width:160px;">
+                    <option value="win">Windows → Unix/Escaped</option>
+                    <option value="escwin">Escaped Win → Win/Unix</option>
+                    <option value="unix">Unix → Win/Escaped</option>
+                </select>
+            </div>
+            <label style="font-size:12px; color:var(--text-muted);">Input (one path per line)</label>
+            <textarea @bind="_inputLines" style="height:120px;" class="monospace" placeholder="Enter paths, one per line..."></textarea>
+            <div class="form-row">
+                <button class="btn btn-primary" @onclick="ConvertAllPaths">▶ Convert All</button>
+                <label class="checkbox-label">
+                    <input type="checkbox" @bind="_autoToCB" />
+                    Auto-copy result
+                </label>
+                <button class="btn btn-icon" @onclick="CopyResult" title="Copy result">⧉</button>
+            </div>
+            <label style="font-size:12px; color:var(--text-muted);">Result</label>
+            <textarea @bind="_outputLines" style="height:120px;" class="monospace" readonly></textarea>
+        </div>
+    }
+</div>
+
+@code {
+    private string _selectedConverter = "nameidnf";
+    private string _pathDir = "win";
+    private string _inputLines = "";
+    private string _outputLines = "";
+    private bool _autoToCB;
+
+    private async Task ConvertAllNames()
+    {
+        var lines = _inputLines.Split('\n').Select(l => l.TrimEnd('\r'));
+        var results = new List<string>();
+
+        foreach (var line in lines)
+        {
+            if (string.IsNullOrEmpty(line))
+            {
+                results.Add("");
+                continue;
+            }
+
+            try
+            {
+                results.Add(IdnfConverter.Convert(new NameToIdnfConverterOpts { InputIdentifier = line }));
+            }
+            catch
+            {
+                results.Add($"ERROR: {line}");
+            }
+        }
+
+        _outputLines = string.Join("\n", results);
+        if (_autoToCB) await Clipboard.CopyAsync(_outputLines);
+        Notify.NotifySuccess("Converted all names");
+    }
+
+    private async Task ConvertAllPaths()
+    {
+        var lines = _inputLines.Split('\n').Select(l => l.TrimEnd('\r'));
+        var results = new List<string>();
+
+        foreach (var line in lines)
+        {
+            if (string.IsNullOrEmpty(line))
+            {
+                results.Add("");
+                continue;
+            }
+
+            try
+            {
+                string result = _pathDir switch
+                {
+                    "win" => NormPathH.NormPathUnixStyle(line),
+                    "escwin" => NormPathH.NormPathUnixStyle(line.Replace("\\\\", "\\")),
+                    "unix" => Path.IsPathRooted(line)
+                        ? NormPathH.NormRootedPathWinStyle(line)
+                        : line.Replace("/", "\\"),
+                    _ => line
+                };
+                results.Add(result);
+            }
+            catch
+            {
+                results.Add($"ERROR: {line}");
+            }
+        }
+
+        _outputLines = string.Join("\n", results);
+        if (_autoToCB) await Clipboard.CopyAsync(_outputLines);
+        Notify.NotifySuccess("Converted all paths");
+    }
+
+    private async Task CopyResult() => await Clipboard.CopyAsync(_outputLines);
+}

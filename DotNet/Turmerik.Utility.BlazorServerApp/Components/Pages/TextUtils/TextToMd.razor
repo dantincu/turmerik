@@ -1,0 +1,189 @@
+@inject IAppSettings AppSettings
+@inject AppNotificationService Notify
+@inject ClipboardService Clipboard
+@inject TextToMdService TextToMdSvc
+
+<div class="panel">
+    <div class="panel-title">Text to Markdown</div>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; align-items:center;">
+        <button class="btn btn-primary" @onclick="SrcTextToMdTable" title="Convert to markdown table (Ctrl+T)">
+            Table
+        </button>
+        <label class="checkbox-label">
+            <input type="checkbox" @bind="_firstLineIsHeader" />
+            First line is header
+        </label>
+        <label class="checkbox-label">
+            <input type="checkbox" checked="@_isTabSeparated" @onchange="OnTabSepChanged" />
+            Tab separated
+        </label>
+        @if (!_isTabSeparated)
+        {
+            <input type="text" @bind="_separator" style="width:80px;" placeholder="Separator" />
+        }
+        <label class="checkbox-label">
+            <input type="checkbox" @bind="_surroundWithCellSep" />
+            Surround rows with |
+        </label>
+        <label class="checkbox-label">
+            <input type="checkbox" @bind="_insertSpaces" />
+            Insert spaces
+        </label>
+        <label class="checkbox-label">
+            <input type="checkbox" @bind="_autoResultToCB" />
+            Auto-copy result
+        </label>
+
+        <span style="margin-left:8px; border-left:1px solid var(--border-color); padding-left:8px; display:flex; gap:6px; flex-wrap:wrap;">
+            <button class="btn btn-secondary" @onclick="SrcTextAddMdQtLvl" title="Add markdown quote level">+&gt;</button>
+            <label class="checkbox-label">
+                <input type="checkbox" @bind="_htmlEncodeOnAddQtLvl" />
+                HTML-encode
+            </label>
+            <button class="btn btn-secondary" @onclick="ResultTextRmMdQtLvl" title="Remove markdown quote level">&lt;-</button>
+            <label class="checkbox-label">
+                <input type="checkbox" @bind="_htmlDecodeOnRmQtLvl" />
+                HTML-decode
+            </label>
+            <button class="btn btn-secondary" @onclick="() => SrcTextEncodeHtml(false)" title="HTML-encode src (preserve > quotes)">&lt;&gt;</button>
+            <button class="btn btn-secondary" @onclick="() => SrcTextEncodeHtml(true)" title="HTML-encode all">All&lt;&gt;</button>
+            <button class="btn btn-secondary" @onclick="ResultTextDecodeHtml" title="HTML-decode result">&gt;&lt;</button>
+            <button class="btn btn-icon" @onclick="CopyResultToCB" title="Copy result to clipboard">⧉ Result</button>
+            <button class="btn btn-icon" @onclick="CopySrcToCB" title="Copy source to clipboard">⧉ Src</button>
+        </span>
+    </div>
+
+    <div class="split-h split-container" style="min-height:200px;">
+        <div class="form-group" style="height:100%;">
+            <label>Source Text</label>
+            <textarea @bind="_srcText" @onkeyup="OnSrcKeyUp" style="flex:1; height:200px;" class="monospace"
+                      placeholder="Type or paste source text..."></textarea>
+        </div>
+        <div class="form-group" style="height:100%;">
+            <label>Result Text</label>
+            <textarea @bind="_resultText" @onkeyup="OnResultKeyUp" style="flex:1; height:200px;" class="monospace"
+                      placeholder="Result will appear here..."></textarea>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string _srcText = "";
+    private string _resultText = "";
+    private bool _firstLineIsHeader = true;
+    private bool _isTabSeparated = true;
+    private string _separator = ",";
+    private bool _surroundWithCellSep = true;
+    private bool _autoResultToCB;
+    private bool _insertSpaces = true;
+    private bool _htmlEncodeOnAddQtLvl = true;
+    private bool _htmlDecodeOnRmQtLvl = true;
+
+    protected override void OnInitialized()
+    {
+        var s = AppSettings.Data.TextToMd;
+        if (s == null) return;
+        _firstLineIsHeader = s.MdTblFirstLineIsHeader ?? true;
+        _isTabSeparated = s.MdTableSrcTextIsTabSeparated ?? true;
+        _separator = s.MdTableSrcTextTabSeparator ?? ",";
+        _surroundWithCellSep = s.MdTableSurroundRowWithCellSep ?? true;
+        _autoResultToCB = s.SetResultTextToCB ?? false;
+        _htmlDecodeOnRmQtLvl = s.HtmlDecodeOnRmMdQtLvl ?? true;
+        _htmlEncodeOnAddQtLvl = s.HtmlEncodeOnAddMdQtLvl ?? true;
+        _insertSpaces = s.InsertSpacesBetweenTokens ?? true;
+    }
+
+    private void OnTabSepChanged(ChangeEventArgs e)
+    {
+        _isTabSeparated = (bool)(e.Value ?? false);
+    }
+
+    private async Task SrcTextToMdTable()
+    {
+        var sep = _isTabSeparated ? "\t" : _separator;
+        if (string.IsNullOrEmpty(sep))
+        {
+            Notify.NotifyError("Separator cannot be empty");
+            return;
+        }
+
+        try
+        {
+            _resultText = TextToMdSvc.SrcTextToMdTable(new TextToMdTableOpts
+            {
+                InputText = _srcText,
+                Separator = sep,
+                FirstLineIsHeader = _firstLineIsHeader,
+                SurroundLineWithCellSep = _surroundWithCellSep,
+                InsertSpacesBetweenTokens = _insertSpaces
+            });
+
+            if (_autoResultToCB) await Clipboard.CopyAsync(_resultText);
+            Notify.NotifySuccess("Converted to markdown table");
+        }
+        catch (Exception ex)
+        {
+            Notify.NotifyError(ex.Message);
+        }
+    }
+
+    private async Task SrcTextAddMdQtLvl()
+    {
+        var text = _srcText;
+        if (_htmlEncodeOnAddQtLvl) text = TextToMdSvc.SrcTextEncodeHtml(text);
+        _resultText = TextToMdSvc.SrcTextAddMdQtLvl(text, _insertSpaces);
+        if (_autoResultToCB) await Clipboard.CopyAsync(_resultText);
+        Notify.NotifySuccess("Added markdown quote level");
+    }
+
+    private async Task ResultTextRmMdQtLvl()
+    {
+        var text = TextToMdSvc.ResultTextRmMdQtLvl(_resultText, _insertSpaces);
+        if (_htmlDecodeOnRmQtLvl) text = TextToMdSvc.ResultTextDecodeHtml(text);
+        _srcText = text;
+        if (_autoResultToCB) await Clipboard.CopyAsync(_srcText);
+        Notify.NotifySuccess("Removed markdown quote level");
+    }
+
+    private async Task ResultTextDecodeHtml()
+    {
+        _srcText = System.Web.HttpUtility.HtmlDecode(_resultText);
+        if (_autoResultToCB) await Clipboard.CopyAsync(_srcText);
+        Notify.NotifySuccess("HTML-decoded");
+    }
+
+    private async Task SrcTextEncodeHtml(bool encodeFull)
+    {
+        _resultText = encodeFull
+            ? System.Web.HttpUtility.HtmlEncode(_srcText)
+            : TextToMdSvc.SrcTextEncodeHtml(_srcText);
+        if (_autoResultToCB) await Clipboard.CopyAsync(_resultText);
+        Notify.NotifySuccess("HTML-encoded");
+    }
+
+    private async Task CopyResultToCB() => await Clipboard.CopyAsync(_resultText);
+    private async Task CopySrcToCB() => await Clipboard.CopyAsync(_srcText);
+
+    private async Task OnSrcKeyUp(KeyboardEventArgs e)
+    {
+        if (e.CtrlKey)
+        {
+            if (e.Key == "t" || e.Key == "T") await SrcTextToMdTable();
+            else if (e.Key == "q" || e.Key == "Q")
+            {
+                if (e.ShiftKey) await SrcTextEncodeHtml(false);
+                else await SrcTextAddMdQtLvl();
+            }
+        }
+    }
+
+    private async Task OnResultKeyUp(KeyboardEventArgs e)
+    {
+        if (e.CtrlKey && (e.Key == "q" || e.Key == "Q"))
+        {
+            if (e.ShiftKey) await ResultTextDecodeHtml();
+            else await ResultTextRmMdQtLvl();
+        }
+    }
+}

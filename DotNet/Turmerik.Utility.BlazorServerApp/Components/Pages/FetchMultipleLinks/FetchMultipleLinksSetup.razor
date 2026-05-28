@@ -1,0 +1,43 @@
+@inject FetchMultipleLinksService FetchLinksService
+@inject AppNotificationService Notify
+
+<div class="panel">
+    <div class="panel-title">Fetch Multiple Links — Setup</div>
+    <p style="font-size:13px; color:var(--text-muted);">
+        Paste a list of URLs below (with optional timestamps and text). Click "Load Links" to serialize them for processing.
+    </p>
+
+    <div class="form-group">
+        <label>Input Text (URLs and text)</label>
+        <textarea @bind="_input" style="height:350px;" class="monospace"
+                  placeholder="Paste URLs here, one per line. Optionally add timestamps (YYYY-MM-DD_HH-MM) before a URL.&#10;&#10;Example:&#10;2024-01-15_10-30&#10;https://example.com&#10;&#10;https://another.com"></textarea>
+    </div>
+
+    <button class="btn btn-primary" @onclick="LoadLinks">⬇ Load Links</button>
+</div>
+
+@code {
+    [Parameter] public EventCallback OnSetupFinished { get; set; }
+
+    private string _input = "";
+
+    private async Task LoadLinks()
+    {
+        if (string.IsNullOrWhiteSpace(_input))
+        {
+            Notify.NotifyWarning("Input is empty");
+            return;
+        }
+
+        try
+        {
+            FetchLinksService.SerializeLinks(_input);
+            Notify.NotifySuccess("Links loaded successfully");
+            await OnSetupFinished.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+            Notify.NotifyError($"Error: {ex.Message}");
+        }
+    }
+}

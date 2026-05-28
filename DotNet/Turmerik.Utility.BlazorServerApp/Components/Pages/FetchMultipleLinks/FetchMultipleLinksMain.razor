@@ -1,0 +1,187 @@
+@inject FetchMultipleLinksService FetchLinksService
+@inject IFetchMultipleLinksDataContainer DataContainer
+@inject AppNotificationService Notify
+@inject ClipboardService Clipboard
+@inject IJSRuntime JS
+
+<div class="fetch-links-layout">
+    <div style="display:flex; flex-direction:column; gap:6px;">
+        <div style="display:flex; gap:4px; flex-wrap:wrap;">
+            <button class="btn btn-secondary" style="font-size:12px;" @onclick="Reload">↺ Reload</button>
+            <button class="btn btn-secondary" style="font-size:12px;" @onclick="PrevItem" disabled="@(_currentIdx <= 0)">◀ Prev</button>
+            <button class="btn btn-secondary" style="font-size:12px;" @onclick="NextItem" disabled="@(_currentIdx >= _items.Count - 1)">Next ▶</button>
+            <button class="btn btn-secondary" style="font-size:12px; color:var(--status-error);" @onclick="Reset">✕ Reset</button>
+        </div>
+
+        <div class="items-list" style="flex:1;">
+            @for (int i = 0; i < _items.Count; i++)
+            {
+                var item = _items[i];
+                var idx = i;
+                <div class="list-item @(idx == _currentIdx ? "selected" : "")"
+                     @onclick="() => ShowItem(idx)">
+                    @(i + 1). @item.Url
+                </div>
+            }
+        </div>
+    </div>
+
+    <div>
+        @if (_currentItem != null)
+        {
+            <div class="panel">
+                <div class="panel-title">Item @(_currentIdx + 1) of @_items.Count</div>
+
+                <div class="form-group">
+                    <label>URL</label>
+                    <div class="form-row">
+                        <input type="text" value="@_currentItem.Url" readonly />
+                        <button class="btn btn-icon" @onclick="() => Clipboard.CopyAsync(_currentItem!.Url)" title="Copy URL">⧉</button>
+                        <button class="btn btn-primary" @onclick="OpenUrl" title="Open in browser">↗ Open</button>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(_currentItem.Title))
+                {
+                    <div class="form-group">
+                        <label>Title</label>
+                        <div class="form-row">
+                            <input type="text" value="@_currentItem.Title" readonly />
+                            <button class="btn btn-icon" @onclick="() => Clipboard.CopyAsync(_currentItem!.Title!)" title="Copy title">⧉</button>
+                        </div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(_currentItem.MdLink))
+                {
+                    <div class="form-group">
+                        <label>Markdown Link</label>
+                        <div class="form-row">
+                            <input type="text" value="@_currentItem.MdLink" readonly />
+                            <button class="btn btn-icon" @onclick="() => Clipboard.CopyAsync(_currentItem!.MdLink!)" title="Copy MD link">⧉</button>
+                        </div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(_currentItem.UrlText))
+                {
+                    <div class="form-group">
+                        <label>Context Text</label>
+                        <textarea readonly style="height:80px;" class="monospace">@_currentItem.UrlText</textarea>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(_currentItem.TimeStampStr))
+                {
+                    <div class="form-group">
+                        <label>Timestamp</label>
+                        <input type="text" value="@_currentItem.TimeStampStr" readonly />
+                    </div>
+                }
+
+                @if (_currentItem is FetchLinkDataUrlItemMtbl urlItem)
+                {
+                    @if (urlItem.Scripts?.Count > 0)
+                    {
+                        <div class="form-group">
+                            <label>Scripts (@urlItem.Scripts.Count)</label>
+                            @foreach (var script in urlItem.Scripts)
+                            {
+                                <div style="font-size:11px; font-family:monospace; padding:2px 0; color:var(--text-muted);">@script</div>
+                            }
+                        </div>
+                    }
+                    @if (urlItem.LastLoadedAt.HasValue)
+                    {
+                        <div style="font-size:11px; color:var(--text-muted);">Last loaded: @urlItem.LastLoadedAt.Value.ToString("yyyy-MM-dd HH:mm")</div>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <div class="panel" style="color:var(--text-muted); font-size:13px;">
+                Select an item from the list to view details.
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback OnReset { get; set; }
+
+    private List<FetchLinkDataItemCoreMtbl> _items = new();
+    private FetchLinkDataItemCoreMtbl? _currentItem;
+    private int _currentIdx = -1;
+
+    protected override void OnInitialized()
+    {
+        LoadItems();
+    }
+
+    private void LoadItems()
+    {
+        try
+        {
+            _items = FetchLinksService.LoadSerializedLinks();
+            _items.Sort((a, b) => a.ItemIdx - b.ItemIdx);
+
+            var savedIdx = DataContainer.Data.CurrentItemIdx;
+            var foundIdx = _items.FindIndex(i => i.ItemIdx == savedIdx);
+            _currentIdx = foundIdx >= 0 ? foundIdx : (_items.Count > 0 ? 0 : -1);
+
+            if (_currentIdx >= 0) _currentItem = _items[_currentIdx];
+        }
+        catch (Exception ex)
+        {
+            Notify.NotifyError($"Error loading items: {ex.Message}");
+        }
+    }
+
+    private void Reload()
+    {
+        LoadItems();
+        Notify.NotifySuccess("Reloaded");
+    }
+
+    private void ShowItem(int idx)
+    {
+        if (idx < 0 || idx >= _items.Count) return;
+        _currentIdx = idx;
+        _currentItem = _items[idx];
+        DataContainer.Update(mtbl => mtbl.CurrentItemIdx = _currentItem.ItemIdx);
+    }
+
+    private void PrevItem()
+    {
+        if (_currentIdx > 0) ShowItem(_currentIdx - 1);
+    }
+
+    private void NextItem()
+    {
+        if (_currentIdx < _items.Count - 1) ShowItem(_currentIdx + 1);
+    }
+
+    private async Task OpenUrl()
+    {
+        if (_currentItem?.Url != null)
+            await JS.InvokeVoidAsync("AppInterop.openUrl", _currentItem.Url);
+    }
+
+    private async Task Reset()
+    {
+        try
+        {
+            FetchLinksService.DeleteSerializedLinks();
+            _items.Clear();
+            _currentItem = null;
+            _currentIdx = -1;
+            Notify.NotifySuccess("Reset complete");
+            await OnReset.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+            Notify.NotifyError($"Error: {ex.Message}");
+        }
+    }
+}

@@ -1,0 +1,45 @@
+@inject IFetchMultipleLinksDataContainer DataContainer
+@inject FetchMultipleLinksService FetchLinksService
+@inject AppNotificationService Notify
+
+@if (_isSetUp)
+{
+    <FetchMultipleLinksMain OnReset="HandleReset" />
+}
+else
+{
+    <FetchMultipleLinksSetup OnSetupFinished="HandleSetupFinished" />
+}
+
+@code {
+    private bool _isSetUp;
+
+    protected override void OnInitialized()
+    {
+        CheckIsSetUp();
+    }
+
+    private void CheckIsSetUp()
+    {
+        try
+        {
+            _isSetUp = DataContainer.LoadData().IsSetUp;
+        }
+        catch
+        {
+            _isSetUp = false;
+        }
+    }
+
+    private void HandleSetupFinished()
+    {
+        CheckIsSetUp();
+        StateHasChanged();
+    }
+
+    private void HandleReset()
+    {
+        CheckIsSetUp();
+        StateHasChanged();
+    }
+}
