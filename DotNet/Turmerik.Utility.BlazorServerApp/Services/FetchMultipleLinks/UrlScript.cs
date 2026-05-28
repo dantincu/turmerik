@@ -34,20 +34,32 @@ namespace Turmerik.Utility.BlazorServerApp.Services.FetchMultipleLinks
 
     public class UrlScriptArgs
     {
-        public UrlScriptArgs(string url, string title, string? redirectedUrl, string? text, string? timeStampStr)
+        public UrlScriptArgs(
+            string url,
+            string title,
+            string? redirectedUrl,
+            string? text,
+            string? timeStampStr,
+            string? redirectedTitle = null)
         {
             Url = url;
             Title = title;
             RedirectedUrl = redirectedUrl;
             Text = text;
             TimeStampStr = timeStampStr;
+            // When no redirected title is provided fall back to the original title
+            // so scripts that use redirectedTitle work even before a redirect occurs.
+            RedirectedTitle = redirectedTitle ?? title;
         }
 
         public string Url { get; init; }
+        /// <summary>First title fetched — used in scripts that pair with the original URL.</summary>
         public string Title { get; init; }
         public string? RedirectedUrl { get; init; }
         public string? Text { get; init; }
         public string? TimeStampStr { get; init; }
+        /// <summary>Latest/new title — used in scripts that pair with the redirected URL.</summary>
+        public string RedirectedTitle { get; init; }
     }
 
     public class UrlScriptOutput

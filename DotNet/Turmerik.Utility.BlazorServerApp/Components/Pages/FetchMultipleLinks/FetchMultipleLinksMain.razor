@@ -92,11 +92,15 @@
                 @if (_titleFetched || !string.IsNullOrEmpty(_currentItem.Title))
                 {
                     <div style="display:grid; grid-template-columns:90px 1fr auto; gap:4px 6px; align-items:center; margin-bottom:8px;">
-                        <label style="font-size:11px; color:var(--text-muted);">Title</label>
+                        <label style="font-size:11px; color:var(--text-muted);" title="First fetched title — used in original-URL scripts">Title</label>
                         <input type="text" @bind="_editTitle" style="font-size:12px;" />
                         <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts" title="Regenerate outputs">↺</button>
 
-                        <label style="font-size:11px; color:var(--text-muted);">Redirected URL</label>
+                        <label style="font-size:11px; color:var(--text-muted);" title="Latest/new title — used in redirected-URL scripts">Redir. Title</label>
+                        <input type="text" @bind="_editRedirectedTitle" style="font-size:12px;" />
+                        <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts" title="Regenerate outputs">↺</button>
+
+                        <label style="font-size:11px; color:var(--text-muted);" title="Current browser address bar URL">Redir. URL</label>
                         <input type="text" @bind="_editRedirectedUrl" style="font-size:12px;" />
                         <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts" title="Regenerate outputs">↺</button>
 
@@ -182,8 +186,9 @@
     private int _currentIdx = -1;
 
     private string _currentUrl = "";
-    private string _editTitle = "";
-    private string _editRedirectedUrl = "";
+    private string _editTitle = "";           // first fetched title — shown in original-URL scripts
+    private string _editRedirectedTitle = ""; // latest fetched title — shown in redirected-URL scripts
+    private string _editRedirectedUrl = "";   // current browser address bar URL
     private string _editTimestamp = "";
     private string _editUrlText = "";
 
@@ -223,6 +228,7 @@
         _currentItem = item;
         _currentUrl = item.Url;
         _editTitle = item.Title ?? "";
+        _editRedirectedTitle = item.Title ?? "";
         _editRedirectedUrl = "";
         _editTimestamp = item.TimeStampStr ?? "";
         _editUrlText = item.UrlText ?? "";
@@ -298,10 +304,18 @@
     }
 
     // Called from Puppeteer's thread — must marshal to Blazor's dispatcher
-    private void OnTitleUpdate(string title, string currentUrl)
+    private void OnTitleUpdate(string title, string currentAddressBarUrl)
     {
-        _editTitle = title;
-        _editRedirectedUrl = currentUrl != _currentUrl ? currentUrl : "";
+        // Lock _editTitle to the very first title received; it represents the original URL's content.
+        if (!_titleFetched)
+            _editTitle = title;
+
+        // _editRedirectedTitle always tracks the latest title (post-redirect / post-login).
+        _editRedirectedTitle = title;
+
+        // _editRedirectedUrl is whatever the browser address bar shows right now.
+        _editRedirectedUrl = currentAddressBarUrl;
+
         _titleFetched = true;
         RegenerateScripts();
         InvokeAsync(StateHasChanged);
@@ -314,9 +328,10 @@
         var args = new UrlScriptArgs(
             url: _currentUrl,
             title: string.IsNullOrEmpty(_editTitle) ? _currentUrl : _editTitle,
-            redirectedUrl: string.IsNullOrEmpty(_editRedirectedUrl) ? null : _editRedirectedUrl,
+            redirectedUrl: string.IsNullOrEmpty(_editRedirectedUrl) ? _currentUrl : _editRedirectedUrl,
             text: string.IsNullOrEmpty(_editUrlText) ? _currentItem.UrlText : _editUrlText,
-            timeStampStr: string.IsNullOrEmpty(_editTimestamp) ? _currentItem.TimeStampStr : _editTimestamp);
+            timeStampStr: string.IsNullOrEmpty(_editTimestamp) ? _currentItem.TimeStampStr : _editTimestamp,
+            redirectedTitle: string.IsNullOrEmpty(_editRedirectedTitle) ? _editTitle : _editRedirectedTitle);
 
         var allScripts = FetchLinksService.UrlScripts;
         var scriptsToShow = string.IsNullOrEmpty(_editTitle) ? allScripts.Take(3) : allScripts;

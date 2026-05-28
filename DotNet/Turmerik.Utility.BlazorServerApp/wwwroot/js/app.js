@@ -25,7 +25,7 @@ window.AppInterop = {
     },
 
     focusAndSelect: function (element) {
-        if (!element) return;
+        if (!element?.focus) return;
         element.focus();
         if (element.tagName === 'TEXTAREA' || element.tagName === 'INPUT') {
             element.select();

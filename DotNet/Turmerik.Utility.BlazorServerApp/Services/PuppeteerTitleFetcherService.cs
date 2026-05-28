@@ -4,22 +4,16 @@ namespace Turmerik.Utility.BlazorServerApp.Services
 {
     public class PuppeteerTitleFetcherService : IAsyncDisposable
     {
-        // Separate from the user's normal browser profile to avoid conflicts,
-        // but cookies/logins are preserved across app restarts.
         private static readonly string UserDataDir = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "TurmerikUtility", "browser-profile");
 
-        // Candidate paths for installed Chrome and Edge, in preference order.
         private static readonly string[] BrowserCandidates =
         [
-            // Chrome – per-machine
             @"C:\Program Files\Google\Chrome\Application\chrome.exe",
             @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
-            // Chrome – per-user
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 @"Google\Chrome\Application\chrome.exe"),
-            // Edge
             @"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
             @"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
         ];
@@ -33,7 +27,6 @@ namespace Turmerik.Utility.BlazorServerApp.Services
 
         public async Task<string?> EnsureReadyAsync(IProgress<string>? progress = null)
         {
-            // Re-initialise if the user manually closed the browser window
             if (_initialized && _initError == null && _browser?.IsConnected == false)
             {
                 _initialized = false;
@@ -57,8 +50,6 @@ namespace Turmerik.Utility.BlazorServerApp.Services
                     [
                         "--no-sandbox",
                         "--disable-setuid-sandbox",
-                        // Hide the "Chrome is being controlled by automated software" banner
-                        // and suppress navigator.webdriver so sites like Google don't block login
                         "--disable-blink-features=AutomationControlled",
                         "--disable-infobars",
                         "--exclude-switches=enable-automation"
@@ -70,12 +61,11 @@ namespace Turmerik.Utility.BlazorServerApp.Services
                 if (executablePath != null)
                 {
                     launchOptions.ExecutablePath = executablePath;
-                    var browserName = Path.GetFileNameWithoutExtension(executablePath);
-                    progress?.Report($"Launching {browserName}…");
+                    progress?.Report($"Launching {Path.GetFileNameWithoutExtension(executablePath)}…");
                 }
                 else
                 {
-                    progress?.Report("No Chrome/Edge installation found — downloading Chromium (one-time, ~400 MB)…");
+                    progress?.Report("No Chrome/Edge found — downloading Chromium (one-time, ~400 MB)…");
                     var fetcher = new BrowserFetcher();
                     await fetcher.DownloadAsync();
                     progress?.Report("Launching Chromium…");
@@ -99,7 +89,7 @@ namespace Turmerik.Utility.BlazorServerApp.Services
 
         public async Task<PageSession> OpenPageAsync(
             string url,
-            Action<string, string> onUpdate,   // (title, currentUrl)
+            Action<string, string> onUpdate,   // (title, currentAddressBarUrl)
             IProgress<string>? progress = null)
         {
             var error = await EnsureReadyAsync(progress);
@@ -121,49 +111,50 @@ namespace Turmerik.Utility.BlazorServerApp.Services
 
     public sealed class PageSession : IAsyncDisposable
     {
-        // Injected before every page script in this tab:
-        //  1. Removes navigator.webdriver so Google/social-media login works.
-        //  2. Watches <title> mutations and document.title assignments,
-        //     calling the exposed .NET callback whenever the title changes.
-        private const string SetupScript = @"
-(() => {
-    // ── Anti-detection ───────────────────────────────────────────────────────
-    try {
-        Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-        delete navigator.__proto__.webdriver;
-    } catch(e) {}
+        // Runs before any page script on every navigation in this tab.
+        // Passes BOTH title AND location.href to .NET so the address-bar URL
+        // is always correct regardless of when _page.Url updates on the C# side.
+        private const string SetupScript = """
+            (() => {
+                // ── Anti-detection ──────────────────────────────────────────
+                try {
+                    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+                    delete navigator.__proto__.webdriver;
+                } catch(e) {}
 
-    // ── Title watcher ────────────────────────────────────────────────────────
-    let _last = '';
-    const notify = () => {
-        const t = document.title || '';
-        if (t && t !== _last) {
-            _last = t;
-            try { window.__trmrkTitleChanged(t); } catch(e) {}
-        }
-    };
+                // ── Title watcher ────────────────────────────────────────────
+                let _last = '';
+                const notify = () => {
+                    const t = document.title || '';
+                    if (t && t !== _last) {
+                        _last = t;
+                        // location.href is read here in JS, so it always reflects
+                        // the current address bar — no race with _page.Url in C#.
+                        try { window.__trmrkTitleChanged(t, location.href); } catch(e) {}
+                    }
+                };
 
-    const watchEl = () => {
-        const el = document.querySelector('title');
-        if (el) new MutationObserver(notify)
-            .observe(el, { childList: true, subtree: true, characterData: true });
-    };
+                const watchEl = () => {
+                    const el = document.querySelector('title');
+                    if (el) new MutationObserver(notify)
+                        .observe(el, { childList: true, subtree: true, characterData: true });
+                };
 
-    // Intercept programmatic document.title = '...' assignments
-    try {
-        const desc = Object.getOwnPropertyDescriptor(HTMLDocument.prototype, 'title')
-                  || Object.getOwnPropertyDescriptor(Document.prototype, 'title');
-        if (desc) Object.defineProperty(document, 'title', {
-            get: () => desc.get ? desc.get.call(document) : _last,
-            set: v  => { if (desc.set) desc.set.call(document, v); notify(); },
-            configurable: true
-        });
-    } catch(e) {}
+                try {
+                    const desc = Object.getOwnPropertyDescriptor(HTMLDocument.prototype, 'title')
+                              || Object.getOwnPropertyDescriptor(Document.prototype, 'title');
+                    if (desc) Object.defineProperty(document, 'title', {
+                        get: () => desc.get ? desc.get.call(document) : _last,
+                        set: v  => { if (desc.set) desc.set.call(document, v); notify(); },
+                        configurable: true
+                    });
+                } catch(e) {}
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => { watchEl(); notify(); });
-    } else { watchEl(); notify(); }
-})();";
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', () => { watchEl(); notify(); });
+                } else { watchEl(); notify(); }
+            })();
+            """;
 
         private readonly IPage _page;
         private readonly Action<string, string> _onUpdate;
@@ -176,17 +167,17 @@ namespace Turmerik.Utility.BlazorServerApp.Services
 
         internal async Task InitAsync(string url)
         {
-            // Expose the .NET callback as a global JS function available on every page
-            await _page.ExposeFunctionAsync<string, bool>("__trmrkTitleChanged", title =>
-            {
-                _onUpdate(title, _page.Url);
-                return true;
-            });
+            // Receive both title and address-bar URL from the JS side
+            await _page.ExposeFunctionAsync<string, string, bool>(
+                "__trmrkTitleChanged",
+                (title, addressBarUrl) =>
+                {
+                    _onUpdate(title, addressBarUrl);
+                    return true;
+                });
 
-            // Run setup script before any page scripts on every navigation in this tab
             await _page.EvaluateExpressionOnNewDocumentAsync(SetupScript);
 
-            // Catch SPA-style navigations (history.pushState / hash changes)
             _page.FrameNavigated += OnFrameNavigated;
 
             try
@@ -197,20 +188,28 @@ namespace Turmerik.Utility.BlazorServerApp.Services
                     Timeout = 30_000
                 });
             }
-            catch (TimeoutException) { /* page may still have a usable title */ }
+            catch (TimeoutException) { }
 
             await RefreshTitleAsync();
         }
 
         private async void OnFrameNavigated(object? sender, FrameNavigatedEventArgs e)
         {
-            if (e.Frame.ParentFrame != null) return; // main frame only
+            if (e.Frame.ParentFrame != null) return;
+            // Use e.Frame.Url — already the post-navigation URL, no race condition
+            var frameUrl = e.Frame.Url;
             await Task.Delay(400);
-            await RefreshTitleAsync();
+            try
+            {
+                var title = await _page.GetTitleAsync();
+                if (!string.IsNullOrEmpty(title))
+                    _onUpdate(title, frameUrl);
+            }
+            catch { }
         }
 
         /// <summary>
-        /// Reads document.title from the open tab without reloading the page.
+        /// Reads document.title and the current address-bar URL from the open tab.
         /// Call this after logging in or accepting a consent dialog.
         /// </summary>
         public async Task RefreshTitleAsync()
@@ -218,10 +217,11 @@ namespace Turmerik.Utility.BlazorServerApp.Services
             try
             {
                 var title = await _page.GetTitleAsync();
+                var currentUrl = _page.Url;
                 if (!string.IsNullOrEmpty(title))
-                    _onUpdate(title, _page.Url);
+                    _onUpdate(title, currentUrl);
             }
-            catch { /* tab may have been closed by the user */ }
+            catch { }
         }
 
         public async ValueTask DisposeAsync()

@@ -54,40 +54,108 @@ namespace Turmerik.Utility.BlazorServerApp.Services.FetchMultipleLinks
             },
             new()
             {
-                Factory = args => new([
-                    GetSpecialTokensTextPart(":"),
+                Factory = (args) => new ([
+                        GetSpecialTokensTextPart(":"),
+                        GetTimeStampTextPart(args),
+                        GetSpecialTokensTextPart(":"),
+                        GetUrlTextPart(args),
+                        GetSpecialTokensTextPart(":"),
+                        GetTitleTextPart(args, false)
+                    ])
+            },
+            // Script 7 — :timestamp:redirectedUrl:redirectedTitle
+            new()
+            {
+                Factory = (args) => new ([
+                        GetSpecialTokensTextPart(":"),
+                        GetTimeStampTextPart(args),
+                        GetSpecialTokensTextPart(":"),
+                        GetRedirectedUrlTextPart(args),
+                        GetSpecialTokensTextPart(":"),
+                        GetRedirectedTitleTextPart(args, false)
+                    ])
+            },
+            // Script 8 — "":t:title"" "":url:url  (original URL, original title)
+            new()
+            {
+                Factory = (args) => new ([
+                    GetSpecialTokensTextPart(@""":t:"),
+                    GetTitleTextPart(NormalizeTitle(args, false).Replace(
+                        "&", "&&").Replace(
+                        "\"", "\"\"").Replace(
+                        ":", "::")),
+                    GetSpecialTokensTextPart(@""" "":url:"),
+                    GetUrlTextPart(args),
+                    GetSpecialTokensTextPart(@"""")])
+            },
+            // Script 9 — "":t:redirectedTitle"" "":url:redirectedUrl
+            new()
+            {
+                Factory = (args) => new ([
+                    GetSpecialTokensTextPart(@""":t:"),
+                    GetRedirectedTitleTextPart(NormalizeRedirectedTitle(args, false).Replace(
+                        "&", "&&").Replace(
+                        "\"", "\"\"").Replace(
+                        ":", "::")),
+                    GetSpecialTokensTextPart(@""" "":url:"),
+                    GetRedirectedUrlTextPart(args),
+                    GetSpecialTokensTextPart(@"""")])
+            },
+            // Script 10 — [title](url)
+            new()
+            {
+                Factory = (args) => new (
+                    GetSpecialTokensTextPart("[").Arr(
+                    GetTitleTextPart(args, true),
+                    GetSpecialTokensTextPart("]("),
+                    GetUrlTextPart(args),
+                    GetSpecialTokensTextPart(")")))
+            },
+            // Script 11 — [redirectedTitle](redirectedUrl)
+            new()
+            {
+                Factory = (args) => new (
+                    GetSpecialTokensTextPart("[").Arr(
+                    GetRedirectedTitleTextPart(args, true),
+                    GetSpecialTokensTextPart("]("),
+                    GetRedirectedUrlTextPart(args),
+                    GetSpecialTokensTextPart(")")))
+            },
+            // Script 12 — <u>timestamp</u>: [title](url)
+            new()
+            {
+                Factory = (args) => new (
+                    GetSpecialTokensTextPart("<").Arr(
+                    GetKeyWordTextPart("u"),
+                    GetSpecialTokensTextPart(">"),
                     GetTimeStampTextPart(args),
-                    GetSpecialTokensTextPart(":"),
-                    GetRedirectedUrlTextPart(args),
-                    GetSpecialTokensTextPart(":"),
-                    GetTitleTextPart(args, false)])
-            },
-            new()
-            {
-                Factory = args => new([
-                    GetSpecialTokensTextPart("\"\":t:"),
-                    GetTitleTextPart(NormalizeTitle(args, false).Replace("&", "&&").Replace("\"", "\"\"").Replace(":", "::")),
-                    GetSpecialTokensTextPart("\"\" \":url:"),
-                    GetUrlTextPart(args),
-                    GetSpecialTokensTextPart("\"\"")])
-            },
-            new()
-            {
-                Factory = args => new([
+                    GetSpecialTokensTextPart("</"),
+                    GetKeyWordTextPart("u"),
+                    GetSpecialTokensTextPart(">"),
+                    GetTextTextPart(": "),
                     GetSpecialTokensTextPart("["),
                     GetTitleTextPart(args, true),
                     GetSpecialTokensTextPart("]("),
                     GetUrlTextPart(args),
-                    GetSpecialTokensTextPart(")")])
+                    GetSpecialTokensTextPart(")")))
             },
+            // Script 13 — <u>timestamp</u>: [redirectedTitle](redirectedUrl)
             new()
             {
-                Factory = args => new([
+                Factory = (args) => new (
+                    GetSpecialTokensTextPart("<").Arr(
+                    GetKeyWordTextPart("u"),
+                    GetSpecialTokensTextPart(">"),
+                    GetTimeStampTextPart(args),
+                    GetSpecialTokensTextPart("</"),
+                    GetKeyWordTextPart("u"),
+                    GetSpecialTokensTextPart(">"),
+                    GetTextTextPart(": "),
                     GetSpecialTokensTextPart("["),
-                    GetTitleTextPart(args, true),
+                    GetRedirectedTitleTextPart(args, true),
                     GetSpecialTokensTextPart("]("),
                     GetRedirectedUrlTextPart(args),
-                    GetSpecialTokensTextPart(")")])
+                    GetSpecialTokensTextPart(")")))
             },
         }.Select((item, i) => new UrlScript(item) { Index = i }).RdnlC();
 
@@ -180,8 +248,18 @@ namespace Turmerik.Utility.BlazorServerApp.Services.FetchMultipleLinks
         private static UrlScriptTextPart GetRedirectedUrlTextPart(string url) =>
             url.ToTextPart(TextFontStyle.Underline, "#008080", "#ffffff");
 
+        // Used in scripts that pair with the redirected URL — uses args.RedirectedTitle
+        private static UrlScriptTextPart GetRedirectedTitleTextPart(UrlScriptArgs args, bool encode) =>
+            GetRedirectedTitleTextPart(NormalizeRedirectedTitle(args, encode));
+
+        private static UrlScriptTextPart GetRedirectedTitleTextPart(string title) =>
+            title.ToTextPart(TextFontStyle.Bold, "#cc2200", "#ffffff");
+
         private static string NormalizeTitle(UrlScriptArgs args, bool encode) =>
             NormalizeTitle(args.Title, encode);
+
+        private static string NormalizeRedirectedTitle(UrlScriptArgs args, bool encode) =>
+            NormalizeTitle(args.RedirectedTitle, encode);
 
         private static string NormalizeTitle(string title, bool encode) =>
             string.Join(" ", (encode ? MdH.EncodeForMd(title) : title)
