@@ -54,7 +54,7 @@
                     <input type="text" value="@_currentUrl" @oninput="e => _currentUrl = e.Value?.ToString() ?? _currentItem.Url"
                            style="flex:1; font-size:12px;" />
                     <button class="btn btn-primary" @onclick="OpenAndFetch"
-                            disabled="@_fetching" title="Open URL in browser and fetch its title">
+                            disabled="@_fetching" title="Open URL in browser and fetch its title (Ctrl+Alt+Enter)">
                         @(_fetching ? "Fetching…" : "▶ Open & Fetch")
                     </button>
                     <button class="btn btn-secondary" @onclick="() => Clipboard.CopyAsync(_currentUrl)"
@@ -114,8 +114,8 @@
                 <div class="panel" style="margin-bottom:6px; padding:8px;">
                     <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
                         <span style="font-size:11px; color:var(--text-muted); min-width:22px; font-weight:700;"
-                              title="Ctrl+@(script.Index % 10 == 0 ? "O" : (script.Index % 10).ToString())">
-                            [@(script.Index % 10 == 0 ? "O" : (script.Index % 10).ToString())]
+                              title="Ctrl+Alt+@(script.Index % 10)">
+                            [@(script.Index % 10)]
                         </span>
                         @if (script.IsTimeStampStr) { <span class="script-badge">⏱ timestamp</span> }
                         else if (script.IsText)     { <span class="script-badge">✏ text</span> }
@@ -356,27 +356,35 @@
         }
     }
 
-    // Ctrl+Up       → previous item
-    // Ctrl+Down     → next item
-    // Ctrl+O        → focus script output [0]
-    // Ctrl+1..9     → focus script output at that digit mod 10
+    // Ctrl+Up           → previous item
+    // Ctrl+Down         → next item
+    // Ctrl+Alt+Enter    → open URL in browser and fetch title
+    // Ctrl+Alt+0        → focus & select script output [0]
+    // Ctrl+Alt+1..9     → focus & select script output at that digit mod 10
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
-        if (!e.CtrlKey || e.AltKey || e.ShiftKey || e.MetaKey) return;
+        if (!e.CtrlKey || e.MetaKey || e.ShiftKey) return;
 
-        switch (e.Key)
+        if (!e.AltKey)
         {
-            case "ArrowUp":
-                PrevItem();
-                return;
-            case "ArrowDown":
-                NextItem();
-                return;
+            switch (e.Key)
+            {
+                case "ArrowUp":   PrevItem(); return;
+                case "ArrowDown": NextItem(); return;
+            }
+            return;
+        }
+
+        // Ctrl+Alt+...
+        if (e.Key == "Enter")
+        {
+            await OpenAndFetch();
+            return;
         }
 
         int? targetMod = e.Key switch
         {
-            "o" or "O" => 0,
+            "0" => 0,
             "1" => 1, "2" => 2, "3" => 3, "4" => 4, "5" => 5,
             "6" => 6, "7" => 7, "8" => 8, "9" => 9,
             _ => null
