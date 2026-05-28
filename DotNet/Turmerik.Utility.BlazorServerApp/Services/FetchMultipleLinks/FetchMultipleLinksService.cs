@@ -41,6 +41,7 @@ namespace Turmerik.Utility.BlazorServerApp.Services.FetchMultipleLinks
             new() { IsText = true, Factory = args => new([GetTextTextPart(args)]) },
             new() { IsTitle = true, Factory = args => new([GetTitleTextPart(args, false)]) },
             new() { IsUrl = true, Factory = args => new([GetUrlTextPart(args)]) },
+            new() { Factory = args => new([GetRedirectedTitleTextPart(args, false)]) },
             new() { Factory = args => new([GetRedirectedUrlTextPart(args)]) },
             new()
             {
@@ -58,24 +59,11 @@ namespace Turmerik.Utility.BlazorServerApp.Services.FetchMultipleLinks
                         GetSpecialTokensTextPart(":"),
                         GetTimeStampTextPart(args),
                         GetSpecialTokensTextPart(":"),
-                        GetUrlTextPart(args),
-                        GetSpecialTokensTextPart(":"),
-                        GetTitleTextPart(args, false)
-                    ])
-            },
-            // Script 7 — :timestamp:redirectedUrl:redirectedTitle
-            new()
-            {
-                Factory = (args) => new ([
-                        GetSpecialTokensTextPart(":"),
-                        GetTimeStampTextPart(args),
-                        GetSpecialTokensTextPart(":"),
                         GetRedirectedUrlTextPart(args),
                         GetSpecialTokensTextPart(":"),
                         GetRedirectedTitleTextPart(args, false)
                     ])
             },
-            // Script 8 — "":t:title"" "":url:url  (original URL, original title)
             new()
             {
                 Factory = (args) => new ([
@@ -88,7 +76,6 @@ namespace Turmerik.Utility.BlazorServerApp.Services.FetchMultipleLinks
                     GetUrlTextPart(args),
                     GetSpecialTokensTextPart(@"""")])
             },
-            // Script 9 — "":t:redirectedTitle"" "":url:redirectedUrl
             new()
             {
                 Factory = (args) => new ([
@@ -101,7 +88,6 @@ namespace Turmerik.Utility.BlazorServerApp.Services.FetchMultipleLinks
                     GetRedirectedUrlTextPart(args),
                     GetSpecialTokensTextPart(@"""")])
             },
-            // Script 10 — [title](url)
             new()
             {
                 Factory = (args) => new (
@@ -111,7 +97,6 @@ namespace Turmerik.Utility.BlazorServerApp.Services.FetchMultipleLinks
                     GetUrlTextPart(args),
                     GetSpecialTokensTextPart(")")))
             },
-            // Script 11 — [redirectedTitle](redirectedUrl)
             new()
             {
                 Factory = (args) => new (
@@ -121,7 +106,6 @@ namespace Turmerik.Utility.BlazorServerApp.Services.FetchMultipleLinks
                     GetRedirectedUrlTextPart(args),
                     GetSpecialTokensTextPart(")")))
             },
-            // Script 12 — <u>timestamp</u>: [title](url)
             new()
             {
                 Factory = (args) => new (
@@ -139,7 +123,6 @@ namespace Turmerik.Utility.BlazorServerApp.Services.FetchMultipleLinks
                     GetUrlTextPart(args),
                     GetSpecialTokensTextPart(")")))
             },
-            // Script 13 — <u>timestamp</u>: [redirectedTitle](redirectedUrl)
             new()
             {
                 Factory = (args) => new (

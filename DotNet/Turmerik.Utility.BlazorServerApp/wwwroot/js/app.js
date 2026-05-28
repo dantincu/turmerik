@@ -40,11 +40,20 @@ window.AppInterop = {
         }
     },
 
-    // Finds a script-output block by its data-script-mod attribute and focuses it.
-    // This avoids any Blazor ElementReference timing issues.
+    // Focuses the next script-output block with the given data-script-mod value.
+    // Pressing the same digit repeatedly cycles through all matching blocks
+    // (e.g. digit 0 → index 0, then index 10, then back to 0, …).
     focusScriptByMod: function (mod) {
-        const el = document.querySelector('[data-script-mod="' + mod + '"]');
-        if (!el) return;
+        const els = Array.from(document.querySelectorAll('[data-script-mod="' + mod + '"]'));
+        if (els.length === 0) return;
+
+        // Find which one (if any) currently holds focus
+        const currentIdx = els.indexOf(document.activeElement);
+
+        // Advance by one, wrapping around — if none focused, currentIdx is -1 so we start at 0
+        const nextIdx = (currentIdx + 1) % els.length;
+        const el = els[nextIdx];
+
         el.focus();
         try {
             const range = document.createRange();
