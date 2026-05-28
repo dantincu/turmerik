@@ -4,10 +4,25 @@ namespace Turmerik.Utility.BlazorServerApp.Services
 {
     public class PuppeteerTitleFetcherService : IAsyncDisposable
     {
-        // Persistent profile keeps cookies/logins between sessions
+        // Separate from the user's normal browser profile to avoid conflicts,
+        // but cookies/logins are preserved across app restarts.
         private static readonly string UserDataDir = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "TurmerikUtility", "chrome-profile");
+            "TurmerikUtility", "browser-profile");
+
+        // Candidate paths for installed Chrome and Edge, in preference order.
+        private static readonly string[] BrowserCandidates =
+        [
+            // Chrome – per-machine
+            @"C:\Program Files\Google\Chrome\Application\chrome.exe",
+            @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+            // Chrome – per-user
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                @"Google\Chrome\Application\chrome.exe"),
+            // Edge
+            @"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+            @"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+        ];
 
         private IBrowser? _browser;
         private readonly SemaphoreSlim _initLock = new(1, 1);
@@ -18,7 +33,7 @@ namespace Turmerik.Utility.BlazorServerApp.Services
 
         public async Task<string?> EnsureReadyAsync(IProgress<string>? progress = null)
         {
-            // Re-initialize if browser was closed externally
+            // Re-initialise if the user manually closed the browser window
             if (_initialized && _initError == null && _browser?.IsConnected == false)
             {
                 _initialized = false;
@@ -32,20 +47,41 @@ namespace Turmerik.Utility.BlazorServerApp.Services
             {
                 if (_initialized) return _initError;
 
-                progress?.Report("Downloading Chromium (one-time, ~400 MB)…");
-                var fetcher = new BrowserFetcher();
-                await fetcher.DownloadAsync();
+                var executablePath = BrowserCandidates.FirstOrDefault(File.Exists);
 
-                progress?.Report("Launching browser…");
-                Directory.CreateDirectory(UserDataDir);
-
-                _browser = await Puppeteer.LaunchAsync(new LaunchOptions
+                var launchOptions = new LaunchOptions
                 {
                     Headless = false,
                     UserDataDir = UserDataDir,
-                    Args = ["--no-sandbox", "--disable-setuid-sandbox"]
-                });
+                    Args =
+                    [
+                        "--no-sandbox",
+                        "--disable-setuid-sandbox",
+                        // Hide the "Chrome is being controlled by automated software" banner
+                        // and suppress navigator.webdriver so sites like Google don't block login
+                        "--disable-blink-features=AutomationControlled",
+                        "--disable-infobars",
+                        "--exclude-switches=enable-automation"
+                    ]
+                };
 
+                Directory.CreateDirectory(UserDataDir);
+
+                if (executablePath != null)
+                {
+                    launchOptions.ExecutablePath = executablePath;
+                    var browserName = Path.GetFileNameWithoutExtension(executablePath);
+                    progress?.Report($"Launching {browserName}…");
+                }
+                else
+                {
+                    progress?.Report("No Chrome/Edge installation found — downloading Chromium (one-time, ~400 MB)…");
+                    var fetcher = new BrowserFetcher();
+                    await fetcher.DownloadAsync();
+                    progress?.Report("Launching Chromium…");
+                }
+
+                _browser = await Puppeteer.LaunchAsync(launchOptions);
                 _initialized = true;
             }
             catch (Exception ex)
@@ -85,18 +121,35 @@ namespace Turmerik.Utility.BlazorServerApp.Services
 
     public sealed class PageSession : IAsyncDisposable
     {
-        // Injected before every page script; notifies .NET whenever document.title changes
-        private const string TitleWatcherScript = @"
+        // Injected before every page script in this tab:
+        //  1. Removes navigator.webdriver so Google/social-media login works.
+        //  2. Watches <title> mutations and document.title assignments,
+        //     calling the exposed .NET callback whenever the title changes.
+        private const string SetupScript = @"
 (() => {
+    // ── Anti-detection ───────────────────────────────────────────────────────
+    try {
+        Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+        delete navigator.__proto__.webdriver;
+    } catch(e) {}
+
+    // ── Title watcher ────────────────────────────────────────────────────────
     let _last = '';
     const notify = () => {
         const t = document.title || '';
-        if (t && t !== _last) { _last = t; try { window.__trmrkTitleChanged(t); } catch(e){} }
+        if (t && t !== _last) {
+            _last = t;
+            try { window.__trmrkTitleChanged(t); } catch(e) {}
+        }
     };
+
     const watchEl = () => {
         const el = document.querySelector('title');
-        if (el) new MutationObserver(notify).observe(el, { childList: true, subtree: true, characterData: true });
+        if (el) new MutationObserver(notify)
+            .observe(el, { childList: true, subtree: true, characterData: true });
     };
+
+    // Intercept programmatic document.title = '...' assignments
     try {
         const desc = Object.getOwnPropertyDescriptor(HTMLDocument.prototype, 'title')
                   || Object.getOwnPropertyDescriptor(Document.prototype, 'title');
@@ -106,6 +159,7 @@ namespace Turmerik.Utility.BlazorServerApp.Services
             configurable: true
         });
     } catch(e) {}
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => { watchEl(); notify(); });
     } else { watchEl(); notify(); }
@@ -122,17 +176,17 @@ namespace Turmerik.Utility.BlazorServerApp.Services
 
         internal async Task InitAsync(string url)
         {
-            // Expose .NET callback so the injected JS can call it
+            // Expose the .NET callback as a global JS function available on every page
             await _page.ExposeFunctionAsync<string, bool>("__trmrkTitleChanged", title =>
             {
                 _onUpdate(title, _page.Url);
                 return true;
             });
 
-            // Run watcher script on every navigation in this tab
-            await _page.EvaluateExpressionOnNewDocumentAsync(TitleWatcherScript);
+            // Run setup script before any page scripts on every navigation in this tab
+            await _page.EvaluateExpressionOnNewDocumentAsync(SetupScript);
 
-            // Also catch SPA-style navigations (history.pushState etc.)
+            // Catch SPA-style navigations (history.pushState / hash changes)
             _page.FrameNavigated += OnFrameNavigated;
 
             try
@@ -143,22 +197,21 @@ namespace Turmerik.Utility.BlazorServerApp.Services
                     Timeout = 30_000
                 });
             }
-            catch (TimeoutException) { /* page may still have a title */ }
+            catch (TimeoutException) { /* page may still have a usable title */ }
 
-            // Seed the UI with whatever title is already there
             await RefreshTitleAsync();
         }
 
         private async void OnFrameNavigated(object? sender, FrameNavigatedEventArgs e)
         {
             if (e.Frame.ParentFrame != null) return; // main frame only
-            await Task.Delay(400);                   // let the new page settle
+            await Task.Delay(400);
             await RefreshTitleAsync();
         }
 
         /// <summary>
-        /// Reads the current title from the open tab without reopening the page.
-        /// Useful as a manual fallback after authentication or consent dialogs.
+        /// Reads document.title from the open tab without reloading the page.
+        /// Call this after logging in or accepting a consent dialog.
         /// </summary>
         public async Task RefreshTitleAsync()
         {
@@ -168,13 +221,13 @@ namespace Turmerik.Utility.BlazorServerApp.Services
                 if (!string.IsNullOrEmpty(title))
                     _onUpdate(title, _page.Url);
             }
-            catch { /* page may have been closed by the user */ }
+            catch { /* tab may have been closed by the user */ }
         }
 
         public async ValueTask DisposeAsync()
         {
             _page.FrameNavigated -= OnFrameNavigated;
-            try { await _page.CloseAsync(); } catch { /* already closed */ }
+            try { await _page.CloseAsync(); } catch { }
             await _page.DisposeAsync();
         }
     }
