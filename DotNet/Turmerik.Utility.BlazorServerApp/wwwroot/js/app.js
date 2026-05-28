@@ -40,6 +40,21 @@ window.AppInterop = {
         }
     },
 
+    // Finds a script-output block by its data-script-mod attribute and focuses it.
+    // This avoids any Blazor ElementReference timing issues.
+    focusScriptByMod: function (mod) {
+        const el = document.querySelector('[data-script-mod="' + mod + '"]');
+        if (!el) return;
+        el.focus();
+        try {
+            const range = document.createRange();
+            range.selectNodeContents(el);
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        } catch (e) { /* non-critical */ }
+    },
+
     copyToClipboard: async function (text) {
         try {
             await navigator.clipboard.writeText(text);
