@@ -1,36 +1,44 @@
 @page "/"
 @rendermode InteractiveServer
+@using Turmerik.Utility.BlazorServerApp.Components.Pages.TextUtils
+@using Turmerik.Utility.BlazorServerApp.Components.Pages.TextTransform
+@using Turmerik.Utility.BlazorServerApp.Components.Pages.OpenMultipleLinks
+@using Turmerik.Utility.BlazorServerApp.Components.Pages.FetchMultipleLinks
+@using Turmerik.Utility.BlazorServerApp.Components.Pages.GenerateClnblTypes
 
 <PageTitle>Turmerik Utility</PageTitle>
 
 <div class="tab-nav">
-    @foreach (var (label, idx) in _tabs.Select((t, i) => (t, i)))
+    @for (int i = 0; i < _tabs.Length; i++)
     {
+        var idx = i;
         <button class="tab-btn @(_activeTab == idx ? "active" : "")"
                 @onclick="() => _activeTab = idx">
-            @label
+            @_tabs[idx]
         </button>
     }
 </div>
 
 <div class="tab-content">
-    @switch (_activeTab)
+    @if (_activeTab == 0)
     {
-        case 0:
-            <TextUtils.TextUtilsTab />
-            break;
-        case 1:
-            <TextTransform.TextTransformTab />
-            break;
-        case 2:
-            <OpenMultipleLinks.OpenMultipleLinksTab />
-            break;
-        case 3:
-            <FetchMultipleLinks.FetchMultipleLinksTab />
-            break;
-        case 4:
-            <GenerateClnblTypes.GenerateClnblTypesTab />
-            break;
+        <TextUtilsTab />
+    }
+    else if (_activeTab == 1)
+    {
+        <TextTransformTab />
+    }
+    else if (_activeTab == 2)
+    {
+        <OpenMultipleLinksTab />
+    }
+    else if (_activeTab == 3)
+    {
+        <FetchMultipleLinksTab />
+    }
+    else if (_activeTab == 4)
+    {
+        <GenerateClnblTypesTab />
     }
 </div>
 
