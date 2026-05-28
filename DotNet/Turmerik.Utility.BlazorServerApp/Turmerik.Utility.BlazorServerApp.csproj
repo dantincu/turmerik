@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Turmerik.NetCore\Turmerik.NetCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="PuppeteerSharp" />
+  </ItemGroup>
+
 </Project>

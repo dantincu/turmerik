@@ -34,6 +34,7 @@ services.AddSingleton<IFetchMultipleLinksDataContainer, FetchMultipleLinksDataCo
 services.AddSingleton<FetchMultipleLinksService>();
 services.AddScoped<ClipboardService>();
 services.AddSingleton<AppNotificationService>();
+services.AddSingleton<PuppeteerTitleFetcherService>();
 
 var app = builder.Build();
 

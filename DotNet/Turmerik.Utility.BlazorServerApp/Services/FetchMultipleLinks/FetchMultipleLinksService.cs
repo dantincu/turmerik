@@ -133,6 +133,15 @@ namespace Turmerik.Utility.BlazorServerApp.Services.FetchMultipleLinks
                 fetchMultipleLinksItemsDirPath,
                 string.Format(FetchMultipleLinksH.ITEM_FILE_NAME_TPL, item.ItemIdx)));
 
+        public void SaveSerializedLink(FetchLinkDataItemCoreMtbl item)
+        {
+            var path = Path.Combine(
+                fetchMultipleLinksItemsDirPath,
+                string.Format(FetchMultipleLinksH.ITEM_FILE_NAME_TPL, item.ItemIdx));
+
+            File.WriteAllText(path, jsonConversion.Adapter.Serialize(item));
+        }
+
         #region Private Static Methods
 
         private static UrlScriptTextPart GetSpecialTokensTextPart(string tokens) =>

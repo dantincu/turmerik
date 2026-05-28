@@ -3,100 +3,155 @@
 @inject AppNotificationService Notify
 @inject ClipboardService Clipboard
 @inject IJSRuntime JS
+@inject PuppeteerTitleFetcherService TitleFetcher
 
 <div class="fetch-links-layout">
-    <div style="display:flex; flex-direction:column; gap:6px;">
-        <div style="display:flex; gap:4px; flex-wrap:wrap;">
+
+    <!-- Left: item list -->
+    <div style="display:flex; flex-direction:column; gap:6px; overflow:hidden;">
+        <div style="display:flex; gap:4px; flex-wrap:wrap; flex-shrink:0;">
             <button class="btn btn-secondary" style="font-size:12px;" @onclick="Reload">↺ Reload</button>
-            <button class="btn btn-secondary" style="font-size:12px;" @onclick="PrevItem" disabled="@(_currentIdx <= 0)">◀ Prev</button>
-            <button class="btn btn-secondary" style="font-size:12px;" @onclick="NextItem" disabled="@(_currentIdx >= _items.Count - 1)">Next ▶</button>
-            <button class="btn btn-secondary" style="font-size:12px; color:var(--status-error);" @onclick="Reset">✕ Reset</button>
+            <button class="btn btn-secondary" style="font-size:12px;" @onclick="PrevItem"
+                    disabled="@(_currentIdx <= 0)">◀</button>
+            <button class="btn btn-secondary" style="font-size:12px;" @onclick="NextItem"
+                    disabled="@(_currentIdx >= _items.Count - 1)">▶</button>
+            <span style="font-size:12px; color:var(--text-muted); align-self:center;">
+                @(_items.Count > 0 ? $"{_currentIdx + 1} / {_items.Count}" : "0 / 0")
+            </span>
+            <button class="btn btn-secondary" style="font-size:12px; color:var(--status-error); margin-left:auto;"
+                    @onclick="Reset">✕ Reset</button>
         </div>
 
-        <div class="items-list" style="flex:1;">
+        <div class="items-list" style="flex:1; overflow-y:auto;">
             @for (int i = 0; i < _items.Count; i++)
             {
                 var item = _items[i];
                 var idx = i;
                 <div class="list-item @(idx == _currentIdx ? "selected" : "")"
-                     @onclick="() => ShowItem(idx)">
-                    @(i + 1). @item.Url
+                     @onclick="() => SelectItem(idx)">
+                    <span style="color:var(--text-muted); font-size:11px;">@(i + 1).</span>
+                    @if (!string.IsNullOrEmpty(item.Title))
+                    {
+                        <span style="font-weight:600;">@item.Title</span><br />
+                        <span style="font-size:11px; opacity:0.7;">@item.Url</span>
+                    }
+                    else
+                    {
+                        @item.Url
+                    }
                 </div>
             }
         </div>
     </div>
 
-    <div>
+    <!-- Right: item detail -->
+    <div style="overflow-y:auto;">
         @if (_currentItem != null)
         {
-            <div class="panel">
-                <div class="panel-title">Item @(_currentIdx + 1) of @_items.Count</div>
-
-                <div class="form-group">
-                    <label>URL</label>
-                    <div class="form-row">
-                        <input type="text" value="@_currentItem.Url" readonly />
-                        <button class="btn btn-icon" @onclick="() => Clipboard.CopyAsync(_currentItem!.Url)" title="Copy URL">⧉</button>
-                        <button class="btn btn-primary" @onclick="OpenUrl" title="Open in browser">↗ Open</button>
-                    </div>
+            <div class="panel" style="margin-bottom:8px;">
+                <!-- URL bar row -->
+                <div class="form-row" style="margin-bottom:8px;">
+                    <input type="text" value="@_currentUrl" @oninput="e => _currentUrl = e.Value?.ToString() ?? _currentItem.Url"
+                           style="flex:1; font-size:12px;" />
+                    <button class="btn btn-primary" @onclick="OpenAndFetch"
+                            disabled="@_fetching" title="Open URL in browser and fetch its title">
+                        @(_fetching ? "Fetching…" : "▶ Open & Fetch")
+                    </button>
+                    <button class="btn btn-secondary" @onclick="() => Clipboard.CopyAsync(_currentUrl)"
+                            title="Copy URL">⧉</button>
                 </div>
 
-                @if (!string.IsNullOrEmpty(_currentItem.Title))
+                @if (_fetchError != null)
                 {
-                    <div class="form-group">
-                        <label>Title</label>
-                        <div class="form-row">
-                            <input type="text" value="@_currentItem.Title" readonly />
-                            <button class="btn btn-icon" @onclick="() => Clipboard.CopyAsync(_currentItem!.Title!)" title="Copy title">⧉</button>
-                        </div>
+                    <div style="color:var(--status-error); font-size:12px; margin-bottom:6px;">
+                        ⚠ @_fetchError
+                    </div>
+                }
+                @if (_fetching)
+                {
+                    <div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;">
+                        @_fetchStatus
                     </div>
                 }
 
-                @if (!string.IsNullOrEmpty(_currentItem.MdLink))
+                <!-- Editable components -->
+                @if (_titleFetched || !string.IsNullOrEmpty(_currentItem.Title))
                 {
-                    <div class="form-group">
-                        <label>Markdown Link</label>
-                        <div class="form-row">
-                            <input type="text" value="@_currentItem.MdLink" readonly />
-                            <button class="btn btn-icon" @onclick="() => Clipboard.CopyAsync(_currentItem!.MdLink!)" title="Copy MD link">⧉</button>
-                        </div>
-                    </div>
-                }
+                    <div style="display:grid; grid-template-columns:80px 1fr auto; gap:4px; align-items:center; margin-bottom:8px;">
+                        <label style="font-size:11px; color:var(--text-muted);">Title</label>
+                        <input type="text" @bind="_editTitle" style="font-size:12px;" />
+                        <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts">↺</button>
 
-                @if (!string.IsNullOrEmpty(_currentItem.UrlText))
-                {
-                    <div class="form-group">
-                        <label>Context Text</label>
-                        <textarea readonly style="height:80px;" class="monospace">@_currentItem.UrlText</textarea>
-                    </div>
-                }
+                        <label style="font-size:11px; color:var(--text-muted);">Redirected URL</label>
+                        <input type="text" @bind="_editRedirectedUrl" style="font-size:12px;" />
+                        <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts">↺</button>
 
-                @if (!string.IsNullOrEmpty(_currentItem.TimeStampStr))
-                {
-                    <div class="form-group">
-                        <label>Timestamp</label>
-                        <input type="text" value="@_currentItem.TimeStampStr" readonly />
-                    </div>
-                }
+                        @if (!string.IsNullOrEmpty(_currentItem.TimeStampStr) || !string.IsNullOrEmpty(_editTimestamp))
+                        {
+                            <label style="font-size:11px; color:var(--text-muted);">Timestamp</label>
+                            <input type="text" @bind="_editTimestamp" style="font-size:12px;" />
+                            <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts">↺</button>
+                        }
 
-                @if (_currentItem is FetchLinkDataUrlItemMtbl urlItem)
-                {
-                    @if (urlItem.Scripts?.Count > 0)
-                    {
-                        <div class="form-group">
-                            <label>Scripts (@urlItem.Scripts.Count)</label>
-                            @foreach (var script in urlItem.Scripts)
-                            {
-                                <div style="font-size:11px; font-family:monospace; padding:2px 0; color:var(--text-muted);">@script</div>
-                            }
-                        </div>
-                    }
-                    @if (urlItem.LastLoadedAt.HasValue)
-                    {
-                        <div style="font-size:11px; color:var(--text-muted);">Last loaded: @urlItem.LastLoadedAt.Value.ToString("yyyy-MM-dd HH:mm")</div>
-                    }
+                        @if (!string.IsNullOrEmpty(_currentItem.UrlText) || !string.IsNullOrEmpty(_editUrlText))
+                        {
+                            <label style="font-size:11px; color:var(--text-muted);">Context text</label>
+                            <input type="text" @bind="_editUrlText" style="font-size:12px;" />
+                            <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts">↺</button>
+                        }
+                    </div>
+                    <div style="display:flex; gap:6px; margin-bottom:8px;">
+                        <button class="btn btn-success" style="font-size:12px;" @onclick="SaveCurrentItem">💾 Save</button>
+                    </div>
                 }
             </div>
+
+            <!-- URL Script outputs -->
+            @foreach (var (script, output) in _scriptOutputs)
+            {
+                <div class="panel" style="margin-bottom:6px; padding:8px;">
+                    <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
+                        <span style="font-size:11px; color:var(--text-muted); min-width:16px; font-weight:600;">
+                            @script.Index
+                        </span>
+                        @if (script.IsTimeStampStr)
+                        {
+                            <span class="script-badge" style="color:#888;">⏱ timestamp</span>
+                        }
+                        else if (script.IsText)
+                        {
+                            <span class="script-badge" style="color:#888;">✏ text</span>
+                        }
+                        else if (script.IsTitle)
+                        {
+                            <span class="script-badge" style="color:#888;">🏷 title</span>
+                        }
+                        else if (script.IsUrl)
+                        {
+                            <span class="script-badge" style="color:#888;">🔗 url</span>
+                        }
+                        <button class="btn btn-icon" style="margin-left:auto; font-size:13px;"
+                                @onclick="() => Clipboard.CopyAsync(output.PlainText)"
+                                title="Copy to clipboard">⧉</button>
+                    </div>
+                    <div style="font-family:monospace; font-size:12px; padding:4px 6px;
+                                background:var(--code-bg); border-radius:3px;
+                                border:1px solid var(--border-color); word-break:break-all;
+                                line-height:1.6;">
+                        @foreach (var part in output.Parts)
+                        {
+                            <span style="@GetPartStyle(part)">@part.Text</span>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (_scriptOutputs.Count == 0 && !_fetching)
+            {
+                <div class="panel" style="color:var(--text-muted); font-size:13px;">
+                    Click <strong>▶ Open &amp; Fetch</strong> to open this URL in the browser and automatically retrieve its title.
+                </div>
+            }
         }
         else
         {
@@ -110,9 +165,24 @@
 @code {
     [Parameter] public EventCallback OnReset { get; set; }
 
+    private record ScriptOutput(string PlainText, List<UrlScriptTextPart> Parts);
+
     private List<FetchLinkDataItemCoreMtbl> _items = new();
     private FetchLinkDataItemCoreMtbl? _currentItem;
     private int _currentIdx = -1;
+
+    private string _currentUrl = "";
+    private string _editTitle = "";
+    private string _editRedirectedUrl = "";
+    private string _editTimestamp = "";
+    private string _editUrlText = "";
+
+    private bool _fetching;
+    private bool _titleFetched;
+    private string? _fetchError;
+    private string _fetchStatus = "";
+
+    private List<(UrlScript Script, ScriptOutput Output)> _scriptOutputs = new();
 
     protected override void OnInitialized()
     {
@@ -130,7 +200,7 @@
             var foundIdx = _items.FindIndex(i => i.ItemIdx == savedIdx);
             _currentIdx = foundIdx >= 0 ? foundIdx : (_items.Count > 0 ? 0 : -1);
 
-            if (_currentIdx >= 0) _currentItem = _items[_currentIdx];
+            if (_currentIdx >= 0) ApplyCurrentItem(_items[_currentIdx]);
         }
         catch (Exception ex)
         {
@@ -138,34 +208,137 @@
         }
     }
 
-    private void Reload()
+    private void ApplyCurrentItem(FetchLinkDataItemCoreMtbl item)
     {
-        LoadItems();
-        Notify.NotifySuccess("Reloaded");
+        _currentItem = item;
+        _currentUrl = item.Url;
+        _editTitle = item.Title ?? "";
+        _editRedirectedUrl = "";
+        _editTimestamp = item.TimeStampStr ?? "";
+        _editUrlText = item.UrlText ?? "";
+        _titleFetched = !string.IsNullOrEmpty(item.Title);
+        _fetchError = null;
+        _scriptOutputs = new();
+
+        if (_titleFetched)
+        {
+            RegenerateScripts();
+        }
     }
 
-    private void ShowItem(int idx)
+    private void SelectItem(int idx)
     {
         if (idx < 0 || idx >= _items.Count) return;
         _currentIdx = idx;
-        _currentItem = _items[idx];
-        DataContainer.Update(mtbl => mtbl.CurrentItemIdx = _currentItem.ItemIdx);
+        ApplyCurrentItem(_items[idx]);
+        DataContainer.Update(mtbl => mtbl.CurrentItemIdx = _items[idx].ItemIdx);
     }
 
-    private void PrevItem()
+    private void Reload() { LoadItems(); Notify.NotifySuccess("Reloaded"); }
+    private void PrevItem() { if (_currentIdx > 0) SelectItem(_currentIdx - 1); }
+    private void NextItem() { if (_currentIdx < _items.Count - 1) SelectItem(_currentIdx + 1); }
+
+    private async Task OpenAndFetch()
     {
-        if (_currentIdx > 0) ShowItem(_currentIdx - 1);
+        if (_currentItem == null) return;
+
+        var url = _currentUrl.Trim();
+        if (string.IsNullOrEmpty(url)) return;
+
+        // Open in browser tab immediately
+        await JS.InvokeVoidAsync("AppInterop.openUrl", url);
+
+        // Then fetch the title server-side with Puppeteer
+        _fetching = true;
+        _fetchError = null;
+        _titleFetched = false;
+        _scriptOutputs = new();
+        _fetchStatus = "Initialising headless browser…";
+        StateHasChanged();
+
+        try
+        {
+            var progress = new Progress<string>(msg =>
+            {
+                _fetchStatus = msg;
+                InvokeAsync(StateHasChanged);
+            });
+
+            var initError = await TitleFetcher.EnsureReadyAsync(progress);
+            if (initError != null)
+            {
+                _fetchError = initError;
+                return;
+            }
+
+            _fetchStatus = "Navigating to page…";
+            StateHasChanged();
+
+            var result = await TitleFetcher.FetchTitleAsync(url);
+
+            _editTitle = result.Title;
+            _editRedirectedUrl = result.FinalUrl != url ? result.FinalUrl : "";
+            _titleFetched = true;
+
+            RegenerateScripts();
+            Notify.NotifySuccess("Title fetched");
+        }
+        catch (Exception ex)
+        {
+            _fetchError = ex.Message;
+            Notify.NotifyError($"Fetch error: {ex.Message}");
+        }
+        finally
+        {
+            _fetching = false;
+            _fetchStatus = "";
+        }
     }
 
-    private void NextItem()
+    private void RegenerateScripts()
     {
-        if (_currentIdx < _items.Count - 1) ShowItem(_currentIdx + 1);
+        if (_currentItem == null) return;
+
+        var args = new UrlScriptArgs(
+            url: _currentUrl,
+            title: string.IsNullOrEmpty(_editTitle) ? _currentUrl : _editTitle,
+            redirectedUrl: string.IsNullOrEmpty(_editRedirectedUrl) ? null : _editRedirectedUrl,
+            text: string.IsNullOrEmpty(_editUrlText) ? _currentItem.UrlText : _editUrlText,
+            timeStampStr: string.IsNullOrEmpty(_editTimestamp) ? _currentItem.TimeStampStr : _editTimestamp);
+
+        var allScripts = FetchLinksService.UrlScripts;
+        var scriptsToShow = string.IsNullOrEmpty(_editTitle) ? allScripts.Take(3) : allScripts;
+
+        _scriptOutputs = scriptsToShow
+            .Where(s => s.Factory != null)
+            .Select(s =>
+            {
+                var output = s.Factory!(args);
+                var plain = string.Concat(output.TextParts.Select(p => p.Text));
+                return (s, new ScriptOutput(plain, output.TextParts.ToList()));
+            })
+            .ToList();
     }
 
-    private async Task OpenUrl()
+    private async Task SaveCurrentItem()
     {
-        if (_currentItem?.Url != null)
-            await JS.InvokeVoidAsync("AppInterop.openUrl", _currentItem.Url);
+        if (_currentItem is not FetchLinkDataUrlItemMtbl urlItem) return;
+
+        urlItem.Title = string.IsNullOrEmpty(_editTitle) ? null : _editTitle;
+        urlItem.Url = _currentUrl;
+        urlItem.TimeStampStr = string.IsNullOrEmpty(_editTimestamp) ? null : _editTimestamp;
+        urlItem.UrlText = string.IsNullOrEmpty(_editUrlText) ? null : _editUrlText;
+        urlItem.LastLoadedAt = DateTime.Now;
+
+        var mdLinkTemplate = "[{0}]({1})";
+        var targetUrl = string.IsNullOrEmpty(_editRedirectedUrl) ? _currentUrl : _editRedirectedUrl;
+        urlItem.MdLink = string.IsNullOrEmpty(urlItem.Title)
+            ? null
+            : string.Format(mdLinkTemplate, urlItem.Title, targetUrl);
+
+        FetchLinksService.SaveSerializedLink(urlItem);
+        _items[_currentIdx] = urlItem;
+        Notify.NotifySuccess("Item saved");
     }
 
     private async Task Reset()
@@ -176,6 +349,7 @@
             _items.Clear();
             _currentItem = null;
             _currentIdx = -1;
+            _scriptOutputs = new();
             Notify.NotifySuccess("Reset complete");
             await OnReset.InvokeAsync();
         }
@@ -183,5 +357,25 @@
         {
             Notify.NotifyError($"Error: {ex.Message}");
         }
+    }
+
+    private static string GetPartStyle(UrlScriptTextPart part)
+    {
+        var sb = new System.Text.StringBuilder();
+
+        if (!string.IsNullOrEmpty(part.ForeColor))
+            sb.Append($"color:{part.ForeColor};");
+        if (!string.IsNullOrEmpty(part.BackColor))
+            sb.Append($"background:{part.BackColor};");
+
+        sb.Append(part.FontStyle switch
+        {
+            TextFontStyle.Bold => "font-weight:bold;",
+            TextFontStyle.Italic => "font-style:italic;",
+            TextFontStyle.Underline => "text-decoration:underline;",
+            _ => ""
+        });
+
+        return sb.ToString();
     }
 }
