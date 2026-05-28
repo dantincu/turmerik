@@ -5,16 +5,16 @@
 @inject IJSRuntime JS
 @inject PuppeteerTitleFetcherService TitleFetcher
 
-<div class="fetch-links-layout">
+<div class="fetch-links-layout" @onkeydown="HandleKeyDown">
 
     <!-- Left: item list -->
     <div style="display:flex; flex-direction:column; gap:6px; overflow:hidden;">
         <div style="display:flex; gap:4px; flex-wrap:wrap; flex-shrink:0;">
             <button class="btn btn-secondary" style="font-size:12px;" @onclick="Reload">↺ Reload</button>
             <button class="btn btn-secondary" style="font-size:12px;" @onclick="PrevItem"
-                    disabled="@(_currentIdx <= 0)">◀</button>
+                    disabled="@(_currentIdx <= 0)" title="Previous link (Ctrl+Up)">◀</button>
             <button class="btn btn-secondary" style="font-size:12px;" @onclick="NextItem"
-                    disabled="@(_currentIdx >= _items.Count - 1)">▶</button>
+                    disabled="@(_currentIdx >= _items.Count - 1)" title="Next link (Ctrl+Down)">▶</button>
             <span style="font-size:12px; color:var(--text-muted); align-self:center;">
                 @(_items.Count > 0 ? $"{_currentIdx + 1} / {_items.Count}" : "0 / 0")
             </span>
@@ -106,38 +106,32 @@
                 }
             </div>
 
-            <!-- URL Script outputs -->
-            @foreach (var (script, output) in _scriptOutputs)
+            <!-- URL Script outputs  (Ctrl+O → #0, Ctrl+1-9 → digit mod 10) -->
+            @for (int si = 0; si < _scriptOutputs.Count; si++)
             {
+                var (script, output) = _scriptOutputs[si];
+                var capturedIdx = si;
                 <div class="panel" style="margin-bottom:6px; padding:8px;">
                     <div style="display:flex; align-items:center; gap:6px; margin-bottom:4px;">
-                        <span style="font-size:11px; color:var(--text-muted); min-width:16px; font-weight:600;">
-                            @script.Index
+                        <span style="font-size:11px; color:var(--text-muted); min-width:22px; font-weight:700;"
+                              title="Ctrl+@(script.Index % 10 == 0 ? "O" : (script.Index % 10).ToString())">
+                            [@(script.Index % 10 == 0 ? "O" : (script.Index % 10).ToString())]
                         </span>
-                        @if (script.IsTimeStampStr)
-                        {
-                            <span class="script-badge" style="color:#888;">⏱ timestamp</span>
-                        }
-                        else if (script.IsText)
-                        {
-                            <span class="script-badge" style="color:#888;">✏ text</span>
-                        }
-                        else if (script.IsTitle)
-                        {
-                            <span class="script-badge" style="color:#888;">🏷 title</span>
-                        }
-                        else if (script.IsUrl)
-                        {
-                            <span class="script-badge" style="color:#888;">🔗 url</span>
-                        }
-                        <button class="btn btn-icon" style="margin-left:auto; font-size:13px;"
+                        @if (script.IsTimeStampStr) { <span class="script-badge">⏱ timestamp</span> }
+                        else if (script.IsText)     { <span class="script-badge">✏ text</span> }
+                        else if (script.IsTitle)    { <span class="script-badge">🏷 title</span> }
+                        else if (script.IsUrl)      { <span class="script-badge">🔗 url</span> }
+                        <button class="btn btn-icon" style="margin-left:auto;"
                                 @onclick="() => Clipboard.CopyAsync(output.PlainText)"
                                 title="Copy to clipboard">⧉</button>
                     </div>
-                    <div style="font-family:monospace; font-size:12px; padding:4px 6px;
-                                background:var(--code-bg); border-radius:3px;
+                    <div @ref="_scriptRefs[capturedIdx]"
+                         tabindex="0"
+                         style="font-family:monospace; font-size:12px; padding:6px 8px;
+                                background:var(--code-bg); border-radius:4px;
                                 border:1px solid var(--border-color); word-break:break-all;
-                                line-height:1.6;">
+                                line-height:1.7; cursor:text; outline-offset:2px;"
+                         title="Click to focus, then Ctrl+A / Ctrl+C to copy">
                         @foreach (var part in output.Parts)
                         {
                             <span style="@GetPartStyle(part)">@part.Text</span>
@@ -168,6 +162,7 @@
     private record ScriptOutput(string PlainText, List<UrlScriptTextPart> Parts);
 
     private List<FetchLinkDataItemCoreMtbl> _items = new();
+    private ElementReference[] _scriptRefs = Array.Empty<ElementReference>();
     private FetchLinkDataItemCoreMtbl? _currentItem;
     private int _currentIdx = -1;
 
@@ -318,6 +313,8 @@
                 return (s, new ScriptOutput(plain, output.TextParts.ToList()));
             })
             .ToList();
+
+        _scriptRefs = new ElementReference[_scriptOutputs.Count];
     }
 
     private async Task SaveCurrentItem()
@@ -356,6 +353,48 @@
         catch (Exception ex)
         {
             Notify.NotifyError($"Error: {ex.Message}");
+        }
+    }
+
+    // Ctrl+Up       → previous item
+    // Ctrl+Down     → next item
+    // Ctrl+O        → focus script output [0]
+    // Ctrl+1..9     → focus script output at that digit mod 10
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (!e.CtrlKey || e.AltKey || e.ShiftKey || e.MetaKey) return;
+
+        switch (e.Key)
+        {
+            case "ArrowUp":
+                PrevItem();
+                return;
+            case "ArrowDown":
+                NextItem();
+                return;
+        }
+
+        int? targetMod = e.Key switch
+        {
+            "o" or "O" => 0,
+            "1" => 1, "2" => 2, "3" => 3, "4" => 4, "5" => 5,
+            "6" => 6, "7" => 7, "8" => 8, "9" => 9,
+            _ => null
+        };
+
+        if (targetMod is not null)
+            await FocusScriptByMod(targetMod.Value);
+    }
+
+    private async Task FocusScriptByMod(int mod)
+    {
+        for (int i = 0; i < _scriptOutputs.Count; i++)
+        {
+            if (_scriptOutputs[i].Script.Index % 10 == mod)
+            {
+                await JS.InvokeVoidAsync("AppInterop.focusAndSelect", _scriptRefs[i]);
+                return;
+            }
         }
     }
 

@@ -1,4 +1,45 @@
 window.AppInterop = {
+    registerGlobalShortcuts: function (dotnetRef) {
+        if (window._trmrkKbHandler) {
+            document.removeEventListener('keydown', window._trmrkKbHandler);
+        }
+        window._trmrkKbDotnet = dotnetRef;
+        window._trmrkKbHandler = function (e) {
+            if (e.ctrlKey && e.shiftKey && e.altKey && !e.metaKey) {
+                const num = parseInt(e.key);
+                if (!isNaN(num) && num >= 1 && num <= 5) {
+                    e.preventDefault();
+                    dotnetRef.invokeMethodAsync('SwitchTab', num - 1);
+                }
+            }
+        };
+        document.addEventListener('keydown', window._trmrkKbHandler);
+    },
+
+    unregisterGlobalShortcuts: function () {
+        if (window._trmrkKbHandler) {
+            document.removeEventListener('keydown', window._trmrkKbHandler);
+            window._trmrkKbHandler = null;
+            window._trmrkKbDotnet = null;
+        }
+    },
+
+    focusAndSelect: function (element) {
+        if (!element) return;
+        element.focus();
+        if (element.tagName === 'TEXTAREA' || element.tagName === 'INPUT') {
+            element.select();
+        } else {
+            try {
+                const range = document.createRange();
+                range.selectNodeContents(element);
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            } catch (ex) { /* non-critical */ }
+        }
+    },
+
     copyToClipboard: async function (text) {
         try {
             await navigator.clipboard.writeText(text);

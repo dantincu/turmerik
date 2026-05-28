@@ -8,14 +8,21 @@
 
     <div class="form-row">
         <div class="form-col">
-            <label style="font-size:12px; color:var(--text-muted);">Input Name</label>
-            <input type="text" @bind="_name" @onkeyup="OnNameKeyUp" placeholder="Type name here..." />
+            <label style="font-size:11px; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:.5px;">
+                Input Name
+            </label>
+            <input type="text" @bind="_name" @bind:event="oninput" @onkeyup="OnNameKeyUp"
+                   placeholder="Type name here…"
+                   title="Enter=convert | Ctrl+Enter=enable auto-copy+convert | Ctrl+Shift+Enter=disable auto-copy+convert" />
         </div>
         <button class="btn btn-primary" @onclick="Convert" title="Convert (Enter)">▶ Convert</button>
         <div class="form-col">
-            <label style="font-size:12px; color:var(--text-muted);">Code Identifier</label>
+            <label style="font-size:11px; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:.5px;">
+                Code Identifier
+            </label>
             <div class="form-row">
-                <input type="text" @bind="_identifier" readonly />
+                <input type="text" @bind="_identifier" @bind:event="oninput" @onkeyup="OnIdentifierKeyUp" readonly
+                       title="Enter=activate auto-copy | Ctrl+Enter=deactivate auto-copy" />
                 <button class="btn btn-icon" @onclick="CopyIdentifier" title="Copy to clipboard">⧉</button>
             </div>
         </div>
@@ -44,7 +51,6 @@
             {
                 InputIdentifier = _name
             });
-
             if (_autoToCB) await Clipboard.CopyAsync(_identifier);
             Notify.NotifySuccess("Converted");
         }
@@ -56,8 +62,23 @@
 
     private async Task CopyIdentifier() => await Clipboard.CopyAsync(_identifier);
 
+    // Name box:
+    //   Enter             → convert (+ auto-copy if enabled)
+    //   Ctrl+Enter        → enable auto-copy, then convert
+    //   Ctrl+Shift+Enter  → disable auto-copy, then convert
     private async Task OnNameKeyUp(KeyboardEventArgs e)
     {
-        if (e.Key == "Enter") await Convert();
+        if (e.Key != "Enter") return;
+        if (e.CtrlKey) _autoToCB = !e.ShiftKey;
+        await Convert();
+    }
+
+    // Identifier box:
+    //   Enter             → activate auto-copy
+    //   Ctrl+Enter        → deactivate auto-copy
+    private void OnIdentifierKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            _autoToCB = !e.CtrlKey;
     }
 }

@@ -7,35 +7,32 @@
 
     <div class="path-row">
         <span class="path-label">Windows Path</span>
-        <input type="text" @bind="_winPath" @onkeyup="e => OnKeyUp(e, ConvertFromWin)" placeholder="C:\Users\..." />
-        <button class="btn btn-primary" @onclick="ConvertFromWin" title="Convert (Enter)">▶</button>
-        <button class="btn btn-icon" @onclick="() => CopyIfSet(_winPath)" title="Copy">⧉</button>
-        <label class="checkbox-label">
-            <input type="checkbox" @bind="_winToCB" />
-            Auto
-        </label>
+        <input type="text" @bind="_winPath" @bind:event="oninput" @onkeyup="OnWinKeyUp"
+               placeholder="C:\Users\…"
+               title="Enter=convert | Ctrl+Enter=enable escaped-Win auto-copy | Ctrl+Shift+Enter=enable Unix auto-copy" />
+        <button class="btn btn-primary" @onclick="ConvertFromWin">▶</button>
+        <button class="btn btn-icon" @onclick="() => Clipboard.CopyAsync(_winPath)" title="Copy">⧉</button>
+        <label class="checkbox-label"><input type="checkbox" @bind="_winToCB" /> Auto</label>
     </div>
 
     <div class="path-row">
         <span class="path-label">Escaped Win Path</span>
-        <input type="text" @bind="_escWinPath" @onkeyup="e => OnKeyUp(e, ConvertFromEscWin)" placeholder="C:\\Users\\..." />
-        <button class="btn btn-primary" @onclick="ConvertFromEscWin" title="Convert (Enter)">▶</button>
-        <button class="btn btn-icon" @onclick="() => CopyIfSet(_escWinPath)" title="Copy">⧉</button>
-        <label class="checkbox-label">
-            <input type="checkbox" @bind="_escWinToCB" />
-            Auto
-        </label>
+        <input type="text" @bind="_escWinPath" @bind:event="oninput" @onkeyup="OnEscWinKeyUp"
+               placeholder="C:\\Users\\…"
+               title="Enter=convert | Ctrl+Enter=enable Win auto-copy | Ctrl+Shift+Enter=enable Unix auto-copy" />
+        <button class="btn btn-primary" @onclick="ConvertFromEscWin">▶</button>
+        <button class="btn btn-icon" @onclick="() => Clipboard.CopyAsync(_escWinPath)" title="Copy">⧉</button>
+        <label class="checkbox-label"><input type="checkbox" @bind="_escWinToCB" /> Auto</label>
     </div>
 
     <div class="path-row">
         <span class="path-label">Unix Path</span>
-        <input type="text" @bind="_unixPath" @onkeyup="e => OnKeyUp(e, ConvertFromUnix)" placeholder="/home/user/..." />
-        <button class="btn btn-primary" @onclick="ConvertFromUnix" title="Convert (Enter)">▶</button>
-        <button class="btn btn-icon" @onclick="() => CopyIfSet(_unixPath)" title="Copy">⧉</button>
-        <label class="checkbox-label">
-            <input type="checkbox" @bind="_unixToCB" />
-            Auto
-        </label>
+        <input type="text" @bind="_unixPath" @bind:event="oninput" @onkeyup="OnUnixKeyUp"
+               placeholder="/home/user/…"
+               title="Enter=convert | Ctrl+Enter=enable Win auto-copy | Ctrl+Shift+Enter=enable escaped-Win auto-copy" />
+        <button class="btn btn-primary" @onclick="ConvertFromUnix">▶</button>
+        <button class="btn btn-icon" @onclick="() => Clipboard.CopyAsync(_unixPath)" title="Copy">⧉</button>
+        <label class="checkbox-label"><input type="checkbox" @bind="_unixToCB" /> Auto</label>
     </div>
 </div>
 
@@ -51,49 +48,85 @@
     {
         var s = AppSettings.Data.PathConverter;
         if (s == null) return;
-        _winToCB = s.WinPathToCB ?? false;
+        _winToCB    = s.WinPathToCB    ?? false;
         _escWinToCB = s.EscWinPathToCB ?? false;
-        _unixToCB = s.UnixPathToCB ?? false;
+        _unixToCB   = s.UnixPathToCB   ?? false;
     }
 
     private async Task ConvertFromWin()
     {
         _escWinPath = _winPath.Replace("\\", "\\\\");
-        _unixPath = NormPathH.NormPathUnixStyle(_winPath);
-        await AutoCopy(_escWinToCB, _escWinPath, _unixToCB, _unixPath);
+        _unixPath   = NormPathH.NormPathUnixStyle(_winPath);
+        if      (_escWinToCB) await Clipboard.CopyAsync(_escWinPath);
+        else if (_unixToCB)   await Clipboard.CopyAsync(_unixPath);
         Notify.NotifySuccess("Converted from Windows path");
     }
 
     private async Task ConvertFromEscWin()
     {
-        _winPath = _escWinPath.Replace("\\\\", "\\");
+        _winPath  = _escWinPath.Replace("\\\\", "\\");
         _unixPath = NormPathH.NormPathUnixStyle(_winPath);
-        await AutoCopy(_winToCB, _winPath, _unixToCB, _unixPath);
+        if      (_winToCB)  await Clipboard.CopyAsync(_winPath);
+        else if (_unixToCB) await Clipboard.CopyAsync(_unixPath);
         Notify.NotifySuccess("Converted from escaped Windows path");
     }
 
     private async Task ConvertFromUnix()
     {
-        if (Path.IsPathRooted(_unixPath))
-            _winPath = NormPathH.NormRootedPathWinStyle(_unixPath);
-        else
-            _winPath = _unixPath.Replace("/", "\\");
-
+        _winPath = Path.IsPathRooted(_unixPath)
+            ? NormPathH.NormRootedPathWinStyle(_unixPath)
+            : _unixPath.Replace("/", "\\");
         _escWinPath = _winPath.Replace("\\", "\\\\");
-        await AutoCopy(_winToCB, _winPath, _escWinToCB, _escWinPath);
+        if      (_winToCB)    await Clipboard.CopyAsync(_winPath);
+        else if (_escWinToCB) await Clipboard.CopyAsync(_escWinPath);
         Notify.NotifySuccess("Converted from Unix path");
     }
 
-    private async Task AutoCopy(bool c1, string v1, bool c2, string v2)
+    // Win path box:
+    //   Enter             → convert
+    //   Ctrl+Enter        → enable esc-Win auto-copy (disable Unix), then convert
+    //   Ctrl+Shift+Enter  → enable Unix auto-copy (disable esc-Win), then convert
+    private async Task OnWinKeyUp(KeyboardEventArgs e)
     {
-        if (c1) await Clipboard.CopyAsync(v1);
-        else if (c2) await Clipboard.CopyAsync(v2);
+        if (e.Key != "Enter") return;
+        if (e.CtrlKey)
+        {
+            _escWinToCB = !e.ShiftKey;
+            _unixToCB   = e.ShiftKey;
+            _winToCB    = false;
+        }
+        await ConvertFromWin();
     }
 
-    private async Task CopyIfSet(string value) => await Clipboard.CopyAsync(value);
-
-    private async Task OnKeyUp(KeyboardEventArgs e, Func<Task> convert)
+    // Escaped Win path box:
+    //   Enter             → convert
+    //   Ctrl+Enter        → enable Win auto-copy (disable Unix), then convert
+    //   Ctrl+Shift+Enter  → enable Unix auto-copy (disable Win), then convert
+    private async Task OnEscWinKeyUp(KeyboardEventArgs e)
     {
-        if (e.Key == "Enter") await convert();
+        if (e.Key != "Enter") return;
+        if (e.CtrlKey)
+        {
+            _winToCB    = !e.ShiftKey;
+            _unixToCB   = e.ShiftKey;
+            _escWinToCB = false;
+        }
+        await ConvertFromEscWin();
+    }
+
+    // Unix path box:
+    //   Enter             → convert
+    //   Ctrl+Enter        → enable Win auto-copy (disable esc-Win), then convert
+    //   Ctrl+Shift+Enter  → enable esc-Win auto-copy (disable Win), then convert
+    private async Task OnUnixKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key != "Enter") return;
+        if (e.CtrlKey)
+        {
+            _winToCB    = !e.ShiftKey;
+            _escWinToCB = e.ShiftKey;
+            _unixToCB   = false;
+        }
+        await ConvertFromUnix();
     }
 }

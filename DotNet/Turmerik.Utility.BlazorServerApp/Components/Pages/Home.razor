@@ -5,6 +5,8 @@
 @using Turmerik.Utility.BlazorServerApp.Components.Pages.OpenMultipleLinks
 @using Turmerik.Utility.BlazorServerApp.Components.Pages.FetchMultipleLinks
 @using Turmerik.Utility.BlazorServerApp.Components.Pages.GenerateClnblTypes
+@inject IJSRuntime JS
+@implements IAsyncDisposable
 
 <PageTitle>Turmerik Utility</PageTitle>
 
@@ -13,7 +15,8 @@
     {
         var idx = i;
         <button class="tab-btn @(_activeTab == idx ? "active" : "")"
-                @onclick="() => _activeTab = idx">
+                @onclick="() => _activeTab = idx"
+                title="Ctrl+Shift+Alt+@(idx+1)">
             @_tabs[idx]
         </button>
     }
@@ -44,6 +47,7 @@
 
 @code {
     private int _activeTab;
+    private DotNetObjectReference<Home>? _dotNetRef;
 
     private readonly string[] _tabs =
     [
@@ -53,4 +57,29 @@
         "Fetch Multiple Links",
         "Generate Clnbl Types"
     ];
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("AppInterop.registerGlobalShortcuts", _dotNetRef);
+        }
+    }
+
+    [JSInvokable]
+    public void SwitchTab(int idx)
+    {
+        if (idx >= 0 && idx < _tabs.Length)
+        {
+            _activeTab = idx;
+            StateHasChanged();
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await JS.InvokeVoidAsync("AppInterop.unregisterGlobalShortcuts");
+        _dotNetRef?.Dispose();
+    }
 }

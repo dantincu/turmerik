@@ -9,9 +9,10 @@
     <div class="form-group">
         <label>Resource URL</label>
         <div class="form-row">
-            <input type="url" @bind="_url" @onkeyup="OnUrlKeyUp" placeholder="Paste URL here..." />
-            <button class="btn btn-primary" @onclick="FetchAsync" disabled="@_loading" title="Fetch title (Enter)">
-                @(_loading ? "Fetching..." : "⬇ Fetch")
+            <input type="url" @bind="_url" @bind:event="oninput" @onkeyup="OnUrlKeyUp"
+                   placeholder="Paste URL here… then press Enter to fetch" title="Enter=fetch | Shift+Enter=refresh MD link | Ctrl+Enter=enable MD-link auto-copy+fetch | Ctrl+Shift+Enter=disable+fetch" />
+            <button class="btn btn-primary" @onclick="FetchAsync" disabled="@_loading">
+                @(_loading ? "Fetching…" : "⬇ Fetch")
             </button>
         </div>
     </div>
@@ -19,8 +20,9 @@
     <div class="form-group">
         <label>Title</label>
         <div class="form-row">
-            <input type="text" @bind="_title" @onkeyup="OnTitleKeyUp" placeholder="Title will appear here..." />
-            <button class="btn btn-icon" @onclick="CopyTitle" title="Copy title to clipboard">⧉</button>
+            <input type="text" @bind="_title" @bind:event="oninput" @onkeyup="OnTitleKeyUp"
+                   placeholder="Title will appear here…" title="Enter=refresh MD link+copy | Ctrl+Enter=enable title auto-copy | Ctrl+Shift+Enter=disable" />
+            <button class="btn btn-icon" @onclick="CopyTitle" title="Copy title">⧉</button>
         </div>
         <label class="checkbox-label">
             <input type="checkbox" @bind="_autoTitleToCB" />
@@ -31,8 +33,9 @@
     <div class="form-group">
         <label>Markdown Link</label>
         <div class="form-row">
-            <input type="text" @bind="_mdLink" @onkeyup="OnMdLinkKeyUp" placeholder="[Title](URL)" />
-            <button class="btn btn-icon" @onclick="CopyMdLink" title="Copy markdown link to clipboard">⧉</button>
+            <input type="text" @bind="_mdLink" @bind:event="oninput" @onkeyup="OnMdLinkKeyUp"
+                   placeholder="[Title](URL)" title="Enter=refresh MD link+copy | Ctrl+Enter=enable MD-link auto-copy | Ctrl+Shift+Enter=disable" />
+            <button class="btn btn-icon" @onclick="CopyMdLink" title="Copy markdown link">⧉</button>
         </div>
         <label class="checkbox-label">
             <input type="checkbox" @bind="_autoMdLinkToCB" />
@@ -60,18 +63,13 @@
     {
         if (string.IsNullOrWhiteSpace(_url)) return;
         _loading = true;
-        Notify.Notify("Fetching resource title...");
+        Notify.Notify("Fetching resource title…");
 
         try
         {
             _title = await HtmlTitleRetriever.GetResouceTitleAsync(_url) ?? "";
             RefreshMdLink();
-
-            if (_autoTitleToCB)
-                await Clipboard.CopyAsync(_title);
-            else if (_autoMdLinkToCB)
-                await Clipboard.CopyAsync(_mdLink);
-
+            await AutoCopyAfterFetch();
             Notify.NotifySuccess("Fetched successfully");
         }
         catch (Exception ex)
@@ -90,24 +88,77 @@
         _mdLink = string.Format(template, _title, _url);
     }
 
+    private async Task AutoCopyAfterFetch()
+    {
+        if (_autoTitleToCB) await Clipboard.CopyAsync(_title);
+        else if (_autoMdLinkToCB) await Clipboard.CopyAsync(_mdLink);
+    }
+
     private async Task CopyTitle() => await Clipboard.CopyAsync(_title);
     private async Task CopyMdLink() => await Clipboard.CopyAsync(_mdLink);
 
+    // URL box:
+    //   Enter             → fetch
+    //   Shift+Enter       → refresh MD link only (no fetch)
+    //   Ctrl+Enter        → enable MD-link auto-copy, then fetch
+    //   Ctrl+Shift+Enter  → disable MD-link auto-copy, then fetch
     private async Task OnUrlKeyUp(KeyboardEventArgs e)
     {
-        if (e.Key == "Enter")
+        if (e.Key != "Enter") return;
+
+        if (e.CtrlKey)
+        {
+            _autoMdLinkToCB = !e.ShiftKey;
+            _autoTitleToCB = false;
             await FetchAsync();
+        }
+        else if (e.ShiftKey)
+        {
+            RefreshMdLink();
+        }
+        else
+        {
+            await FetchAsync();
+        }
     }
 
-    private void OnTitleKeyUp(KeyboardEventArgs e)
+    // Title box:
+    //   Enter             → refresh MD link + auto-copy (if enabled)
+    //   Ctrl+Enter        → enable title auto-copy
+    //   Ctrl+Shift+Enter  → disable title auto-copy
+    private async Task OnTitleKeyUp(KeyboardEventArgs e)
     {
-        if (e.Key == "Enter")
+        if (e.Key != "Enter") return;
+
+        if (e.CtrlKey)
+        {
+            _autoTitleToCB = !e.ShiftKey;
+            _autoMdLinkToCB = false;
+        }
+        else
+        {
             RefreshMdLink();
+            await AutoCopyAfterFetch();
+        }
     }
 
-    private void OnMdLinkKeyUp(KeyboardEventArgs e)
+    // Markdown-link box:
+    //   Enter             → refresh MD link + auto-copy (if enabled)
+    //   Ctrl+Enter        → enable MD-link auto-copy
+    //   Ctrl+Shift+Enter  → disable MD-link auto-copy
+    private async Task OnMdLinkKeyUp(KeyboardEventArgs e)
     {
-        if (e.Key == "Enter")
+        if (e.Key != "Enter") return;
+
+        if (e.CtrlKey)
+        {
+            _autoMdLinkToCB = !e.ShiftKey;
+            _autoTitleToCB = false;
+        }
+        else
+        {
             RefreshMdLink();
+            await AutoCopyAfterFetch();
+        }
     }
 }
