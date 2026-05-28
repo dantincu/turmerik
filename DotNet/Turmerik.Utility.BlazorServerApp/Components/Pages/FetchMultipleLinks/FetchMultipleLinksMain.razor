@@ -4,6 +4,7 @@
 @inject ClipboardService Clipboard
 @inject IJSRuntime JS
 @inject PuppeteerTitleFetcherService TitleFetcher
+@implements IAsyncDisposable
 
 <div class="fetch-links-layout" @onkeydown="HandleKeyDown">
 
@@ -49,15 +50,21 @@
         @if (_currentItem != null)
         {
             <div class="panel" style="margin-bottom:8px;">
-                <!-- URL bar row -->
+
+                <!-- URL bar + action buttons -->
                 <div class="form-row" style="margin-bottom:8px;">
-                    <input type="text" value="@_currentUrl" @oninput="e => _currentUrl = e.Value?.ToString() ?? _currentItem.Url"
+                    <input type="text" value="@_currentUrl"
+                           @oninput="e => _currentUrl = e.Value?.ToString() ?? _currentItem.Url"
                            style="flex:1; font-size:12px;" />
-                    <button class="btn btn-primary" @onclick="OpenAndFetch"
-                            disabled="@_fetching" title="Open URL in browser and fetch its title (Ctrl+Alt+Enter)">
-                        @(_fetching ? "Fetching…" : "▶ Open & Fetch")
+                    <button class="btn btn-primary" @onclick="OpenPage" disabled="@_opening"
+                            title="Open URL in a visible Chrome window (Ctrl+Alt+Enter)">
+                        @(_opening ? "Opening…" : "▶ Open")
                     </button>
-                    <button class="btn btn-secondary" @onclick="() => Clipboard.CopyAsync(_currentUrl)"
+                    <button class="btn btn-secondary" @onclick="GetTitle" disabled="@(_session == null)"
+                            title="Read the current title from the open tab (Ctrl+Alt+T)">
+                        ↻ Get Title
+                    </button>
+                    <button class="btn btn-icon" @onclick="() => Clipboard.CopyAsync(_currentUrl)"
                             title="Copy URL">⧉</button>
                 </div>
 
@@ -67,37 +74,44 @@
                         ⚠ @_fetchError
                     </div>
                 }
-                @if (_fetching)
+                @if (_opening)
                 {
                     <div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;">
-                        @_fetchStatus
+                        @_openStatus
+                    </div>
+                }
+                @if (_session != null && !_opening)
+                {
+                    <div style="font-size:11px; color:var(--status-success); margin-bottom:6px;">
+                        ● Browser tab open — title updates automatically,
+                        or press <kbd>Ctrl+Alt+T</kbd> / "↻ Get Title" after logging in.
                     </div>
                 }
 
-                <!-- Editable components -->
+                <!-- Editable title / url components -->
                 @if (_titleFetched || !string.IsNullOrEmpty(_currentItem.Title))
                 {
-                    <div style="display:grid; grid-template-columns:80px 1fr auto; gap:4px; align-items:center; margin-bottom:8px;">
+                    <div style="display:grid; grid-template-columns:90px 1fr auto; gap:4px 6px; align-items:center; margin-bottom:8px;">
                         <label style="font-size:11px; color:var(--text-muted);">Title</label>
                         <input type="text" @bind="_editTitle" style="font-size:12px;" />
-                        <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts">↺</button>
+                        <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts" title="Regenerate outputs">↺</button>
 
                         <label style="font-size:11px; color:var(--text-muted);">Redirected URL</label>
                         <input type="text" @bind="_editRedirectedUrl" style="font-size:12px;" />
-                        <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts">↺</button>
+                        <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts" title="Regenerate outputs">↺</button>
 
                         @if (!string.IsNullOrEmpty(_currentItem.TimeStampStr) || !string.IsNullOrEmpty(_editTimestamp))
                         {
                             <label style="font-size:11px; color:var(--text-muted);">Timestamp</label>
                             <input type="text" @bind="_editTimestamp" style="font-size:12px;" />
-                            <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts">↺</button>
+                            <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts" title="Regenerate outputs">↺</button>
                         }
 
                         @if (!string.IsNullOrEmpty(_currentItem.UrlText) || !string.IsNullOrEmpty(_editUrlText))
                         {
                             <label style="font-size:11px; color:var(--text-muted);">Context text</label>
                             <input type="text" @bind="_editUrlText" style="font-size:12px;" />
-                            <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts">↺</button>
+                            <button class="btn btn-secondary" style="font-size:11px;" @onclick="RegenerateScripts" title="Regenerate outputs">↺</button>
                         }
                     </div>
                     <div style="display:flex; gap:6px; margin-bottom:8px;">
@@ -106,7 +120,7 @@
                 }
             </div>
 
-            <!-- URL Script outputs  (Ctrl+O → #0, Ctrl+1-9 → digit mod 10) -->
+            <!-- URL Script outputs -->
             @for (int si = 0; si < _scriptOutputs.Count; si++)
             {
                 var (script, output) = _scriptOutputs[si];
@@ -140,10 +154,12 @@
                 </div>
             }
 
-            @if (_scriptOutputs.Count == 0 && !_fetching)
+            @if (_scriptOutputs.Count == 0 && !_opening)
             {
                 <div class="panel" style="color:var(--text-muted); font-size:13px;">
-                    Click <strong>▶ Open &amp; Fetch</strong> to open this URL in the browser and automatically retrieve its title.
+                    Click <strong>▶ Open</strong> to open this URL in Chrome.
+                    The title will be updated automatically. Use <strong>↻ Get Title</strong>
+                    after logging in or accepting consent dialogs.
                 </div>
             }
         }
@@ -162,7 +178,6 @@
     private record ScriptOutput(string PlainText, List<UrlScriptTextPart> Parts);
 
     private List<FetchLinkDataItemCoreMtbl> _items = new();
-    private ElementReference[] _scriptRefs = Array.Empty<ElementReference>();
     private FetchLinkDataItemCoreMtbl? _currentItem;
     private int _currentIdx = -1;
 
@@ -172,17 +187,17 @@
     private string _editTimestamp = "";
     private string _editUrlText = "";
 
-    private bool _fetching;
+    private bool _opening;
     private bool _titleFetched;
     private string? _fetchError;
-    private string _fetchStatus = "";
+    private string _openStatus = "";
 
     private List<(UrlScript Script, ScriptOutput Output)> _scriptOutputs = new();
+    private ElementReference[] _scriptRefs = Array.Empty<ElementReference>();
 
-    protected override void OnInitialized()
-    {
-        LoadItems();
-    }
+    private PageSession? _session;
+
+    protected override void OnInitialized() => LoadItems();
 
     private void LoadItems()
     {
@@ -192,8 +207,8 @@
             _items.Sort((a, b) => a.ItemIdx - b.ItemIdx);
 
             var savedIdx = DataContainer.Data.CurrentItemIdx;
-            var foundIdx = _items.FindIndex(i => i.ItemIdx == savedIdx);
-            _currentIdx = foundIdx >= 0 ? foundIdx : (_items.Count > 0 ? 0 : -1);
+            var found = _items.FindIndex(i => i.ItemIdx == savedIdx);
+            _currentIdx = found >= 0 ? found : (_items.Count > 0 ? 0 : -1);
 
             if (_currentIdx >= 0) ApplyCurrentItem(_items[_currentIdx]);
         }
@@ -214,11 +229,9 @@
         _titleFetched = !string.IsNullOrEmpty(item.Title);
         _fetchError = null;
         _scriptOutputs = new();
+        _scriptRefs = Array.Empty<ElementReference>();
 
-        if (_titleFetched)
-        {
-            RegenerateScripts();
-        }
+        if (_titleFetched) RegenerateScripts();
     }
 
     private void SelectItem(int idx)
@@ -233,61 +246,65 @@
     private void PrevItem() { if (_currentIdx > 0) SelectItem(_currentIdx - 1); }
     private void NextItem() { if (_currentIdx < _items.Count - 1) SelectItem(_currentIdx + 1); }
 
-    private async Task OpenAndFetch()
+    private async Task OpenPage()
     {
         if (_currentItem == null) return;
-
         var url = _currentUrl.Trim();
         if (string.IsNullOrEmpty(url)) return;
 
-        // Open in browser tab immediately
-        await JS.InvokeVoidAsync("AppInterop.openUrl", url);
+        // Close any previously opened tab for this component
+        if (_session != null)
+        {
+            await _session.DisposeAsync();
+            _session = null;
+        }
 
-        // Then fetch the title server-side with Puppeteer
-        _fetching = true;
+        _opening = true;
         _fetchError = null;
         _titleFetched = false;
         _scriptOutputs = new();
-        _fetchStatus = "Initialising headless browser…";
+        _scriptRefs = Array.Empty<ElementReference>();
+        _openStatus = "Initialising browser…";
         StateHasChanged();
 
         try
         {
             var progress = new Progress<string>(msg =>
             {
-                _fetchStatus = msg;
+                _openStatus = msg;
                 InvokeAsync(StateHasChanged);
             });
 
-            var initError = await TitleFetcher.EnsureReadyAsync(progress);
-            if (initError != null)
-            {
-                _fetchError = initError;
-                return;
-            }
-
-            _fetchStatus = "Navigating to page…";
-            StateHasChanged();
-
-            var result = await TitleFetcher.FetchTitleAsync(url);
-
-            _editTitle = result.Title;
-            _editRedirectedUrl = result.FinalUrl != url ? result.FinalUrl : "";
-            _titleFetched = true;
-
-            RegenerateScripts();
-            Notify.NotifySuccess("Title fetched");
+            _session = await TitleFetcher.OpenPageAsync(url, OnTitleUpdate, progress);
+            Notify.NotifySuccess("Browser tab opened");
         }
         catch (Exception ex)
         {
             _fetchError = ex.Message;
-            Notify.NotifyError($"Fetch error: {ex.Message}");
+            Notify.NotifyError($"Error: {ex.Message}");
         }
         finally
         {
-            _fetching = false;
-            _fetchStatus = "";
+            _opening = false;
+            _openStatus = "";
         }
+    }
+
+    private async Task GetTitle()
+    {
+        if (_session == null) return;
+        await _session.RefreshTitleAsync();
+        Notify.NotifySuccess("Title refreshed");
+    }
+
+    // Called from Puppeteer's thread — must marshal to Blazor's dispatcher
+    private void OnTitleUpdate(string title, string currentUrl)
+    {
+        _editTitle = title;
+        _editRedirectedUrl = currentUrl != _currentUrl ? currentUrl : "";
+        _titleFetched = true;
+        RegenerateScripts();
+        InvokeAsync(StateHasChanged);
     }
 
     private void RegenerateScripts()
@@ -327,11 +344,10 @@
         urlItem.UrlText = string.IsNullOrEmpty(_editUrlText) ? null : _editUrlText;
         urlItem.LastLoadedAt = DateTime.Now;
 
-        var mdLinkTemplate = "[{0}]({1})";
         var targetUrl = string.IsNullOrEmpty(_editRedirectedUrl) ? _currentUrl : _editRedirectedUrl;
         urlItem.MdLink = string.IsNullOrEmpty(urlItem.Title)
             ? null
-            : string.Format(mdLinkTemplate, urlItem.Title, targetUrl);
+            : $"[{urlItem.Title}]({targetUrl})";
 
         FetchLinksService.SaveSerializedLink(urlItem);
         _items[_currentIdx] = urlItem;
@@ -342,6 +358,7 @@
     {
         try
         {
+            if (_session != null) { await _session.DisposeAsync(); _session = null; }
             FetchLinksService.DeleteSerializedLinks();
             _items.Clear();
             _currentItem = null;
@@ -350,17 +367,14 @@
             Notify.NotifySuccess("Reset complete");
             await OnReset.InvokeAsync();
         }
-        catch (Exception ex)
-        {
-            Notify.NotifyError($"Error: {ex.Message}");
-        }
+        catch (Exception ex) { Notify.NotifyError($"Error: {ex.Message}"); }
     }
 
     // Ctrl+Up           → previous item
     // Ctrl+Down         → next item
-    // Ctrl+Alt+Enter    → open URL in browser and fetch title
-    // Ctrl+Alt+0        → focus & select script output [0]
-    // Ctrl+Alt+1..9     → focus & select script output at that digit mod 10
+    // Ctrl+Alt+Enter    → open page in Chrome
+    // Ctrl+Alt+T        → get title from open tab
+    // Ctrl+Alt+0..9     → focus script output at that digit mod 10
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
         if (!e.CtrlKey || e.MetaKey || e.ShiftKey) return;
@@ -376,10 +390,14 @@
         }
 
         // Ctrl+Alt+...
-        if (e.Key == "Enter")
+        switch (e.Key)
         {
-            await OpenAndFetch();
-            return;
+            case "Enter":
+                await OpenPage();
+                return;
+            case "t" or "T":
+                await GetTitle();
+                return;
         }
 
         int? targetMod = e.Key switch
@@ -409,20 +427,24 @@
     private static string GetPartStyle(UrlScriptTextPart part)
     {
         var sb = new System.Text.StringBuilder();
-
-        if (!string.IsNullOrEmpty(part.ForeColor))
-            sb.Append($"color:{part.ForeColor};");
-        if (!string.IsNullOrEmpty(part.BackColor))
-            sb.Append($"background:{part.BackColor};");
-
+        if (!string.IsNullOrEmpty(part.ForeColor)) sb.Append($"color:{part.ForeColor};");
+        if (!string.IsNullOrEmpty(part.BackColor)) sb.Append($"background:{part.BackColor};");
         sb.Append(part.FontStyle switch
         {
-            TextFontStyle.Bold => "font-weight:bold;",
-            TextFontStyle.Italic => "font-style:italic;",
+            TextFontStyle.Bold      => "font-weight:bold;",
+            TextFontStyle.Italic    => "font-style:italic;",
             TextFontStyle.Underline => "text-decoration:underline;",
             _ => ""
         });
-
         return sb.ToString();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_session != null)
+        {
+            await _session.DisposeAsync();
+            _session = null;
+        }
     }
 }
