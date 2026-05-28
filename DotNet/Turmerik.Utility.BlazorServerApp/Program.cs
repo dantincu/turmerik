@@ -1,4 +1,4 @@
-using Turmerik.Utility.BlazorServerApp;
+using Turmerik.Core.Dependencies;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Dependencies;
@@ -6,6 +6,7 @@ using Turmerik.Jint.Dependencies;
 using Turmerik.Logging;
 using Turmerik.Logging.Dependencies;
 using Turmerik.NetCore.Dependencies;
+using Turmerik.Utility.BlazorServerApp;
 using Turmerik.Utility.BlazorServerApp.Services;
 using Turmerik.Utility.BlazorServerApp.Services.FetchMultipleLinks;
 using Turmerik.Utility.BlazorServerApp.Settings;
@@ -17,6 +18,7 @@ builder.Services.AddRazorComponents()
 
 var services = builder.Services;
 
+TrmrkCoreServices.RegisterAll(services);
 TrmrkServices.RegisterAll(services);
 TrmrkNetCoreServices.RegisterAll(services);
 DriveExplorerH.AddFsRetrieverAndExplorer(services, null, true);
