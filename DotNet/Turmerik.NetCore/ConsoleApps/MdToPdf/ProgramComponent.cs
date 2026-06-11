@@ -33,6 +33,7 @@ namespace Turmerik.NetCore.ConsoleApps.MdToPdf
         private const string REC = "rec";
         private const string RE = "re";
         private const string H = "h";
+        private const string D = "d";
 
         private readonly IJsonConversion jsonConversion;
         private readonly IConsoleArgsParser parser;
@@ -159,6 +160,11 @@ namespace Turmerik.NetCore.ConsoleApps.MdToPdf
                                         data =>
                                         {
                                             data.Args.RemoveExisting = true;
+                                        }, true),
+                                    parser.ArgsFlagOpts(data, [D],
+                                        data =>
+                                        {
+                                            data.Args.Delete = true;
                                         }, true)
                             ]
                         })
@@ -173,7 +179,7 @@ namespace Turmerik.NetCore.ConsoleApps.MdToPdf
 
             var filesMap = PathH.MapFileNameExtensions(filesArr);
 
-            if (pgArgs.RemoveExisting)
+            if (pgArgs.RemoveExisting || pgArgs.Delete)
             {
                 foreach (var extn in ".pdf".Arr(".html"))
                 {
@@ -187,7 +193,7 @@ namespace Turmerik.NetCore.ConsoleApps.MdToPdf
                 }
             }
 
-            if (filesMap.TryGetValue(".md", out var mdFilesGroup))
+            if (!pgArgs.Delete && filesMap.TryGetValue(".md", out var mdFilesGroup))
             {
                 foreach (var file in mdFilesGroup)
                 {

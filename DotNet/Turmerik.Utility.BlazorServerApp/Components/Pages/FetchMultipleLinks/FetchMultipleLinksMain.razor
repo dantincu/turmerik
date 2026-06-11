@@ -422,6 +422,9 @@
             case "t" or "T":
                 await GetTitle();
                 return;
+            case "r" or "R":
+                RegenerateScripts();
+                return;
         }
 
         int? targetMod = e.Key switch

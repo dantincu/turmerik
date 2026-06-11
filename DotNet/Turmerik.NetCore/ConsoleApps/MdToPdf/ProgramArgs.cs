@@ -20,6 +20,7 @@ namespace Turmerik.NetCore.ConsoleApps.MdToPdf
             RecursiveMatchingDirNamesArr = src.RecursiveMatchingDirNamesArr;
             RecursiveMatchingDirNameRegexsArr = src.RecursiveMatchingDirNameRegexsArr;
             RemoveExisting = src.RemoveExisting;
+            Delete = src.Delete;
         }
 
         public LocalDevicePathMacrosMapMtbl LocalDevicePathsMap { get; set; }
@@ -28,5 +29,6 @@ namespace Turmerik.NetCore.ConsoleApps.MdToPdf
         public string[]? RecursiveMatchingDirNamesArr { get; set; }
         public Regex[]? RecursiveMatchingDirNameRegexsArr { get; set; }
         public bool RemoveExisting { get; set; }
+        public bool Delete { get; set; }
     }
 }
