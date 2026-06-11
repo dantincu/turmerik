@@ -55,6 +55,7 @@
                 <div class="form-row" style="margin-bottom:8px;">
                     <input type="text" value="@_currentUrl"
                            @oninput="e => _currentUrl = e.Value?.ToString() ?? _currentItem.Url"
+                           @ref="_currentUrlInputRef"
                            style="flex:1; font-size:12px;" />
                     <button class="btn btn-primary" @onclick="OpenPage" disabled="@_opening"
                             title="Open URL in a visible Chrome window (Ctrl+Alt+Enter)">
@@ -200,7 +201,19 @@
 
     private PageSession? _session;
 
+    private ElementReference _currentUrlInputRef;
+    private bool _focusCurrentUrlInput;
+
     protected override void OnInitialized() => LoadItems();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_focusCurrentUrlInput)
+        {
+            _focusCurrentUrlInput = false;
+            await _currentUrlInputRef.FocusAsync();
+        }
+    }
 
     private void LoadItems()
     {
@@ -233,6 +246,7 @@
         _titleFetched = !string.IsNullOrEmpty(item.Title);
         _fetchError = null;
         _scriptOutputs = new();
+        _focusCurrentUrlInput = true;
 
         if (_titleFetched) RegenerateScripts();
     }

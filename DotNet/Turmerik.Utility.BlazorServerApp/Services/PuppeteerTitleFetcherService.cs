@@ -27,7 +27,7 @@ namespace Turmerik.Utility.BlazorServerApp.Services
 
         public async Task<string?> EnsureReadyAsync(IProgress<string>? progress = null)
         {
-            if (_initialized && _initError == null && _browser?.IsConnected == false)
+            if (_initialized && (_initError != null || _browser?.IsConnected == false))
             {
                 _initialized = false;
                 _initError = null;
