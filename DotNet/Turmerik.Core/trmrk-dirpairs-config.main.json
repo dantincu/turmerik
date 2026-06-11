@@ -1,5 +1,5 @@
 {
-  "CreatePdfFile": true,
+  "CreatePdfFile": false,
   "DirNames": {
     "DirNamesTplMap": {
       "f": {
