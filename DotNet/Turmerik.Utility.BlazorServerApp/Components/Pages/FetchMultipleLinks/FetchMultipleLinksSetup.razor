@@ -1,5 +1,6 @@
 @inject FetchMultipleLinksService FetchLinksService
 @inject AppNotificationService Notify
+@inject IJSRuntime JS
 
 <div class="panel">
     <div class="panel-title">Fetch Multiple Links — Setup</div>
@@ -9,7 +10,7 @@
 
     <div class="form-group">
         <label>Input Text (URLs and text)</label>
-        <textarea @bind="_input" style="height:350px;" class="monospace"
+        <textarea @bind="_input" style="height:350px;" class="monospace" id="fetchMultipleLinksInput"
                   placeholder="Paste URLs here, one per line. Optionally add timestamps (YYYY-MM-DD_HH-MM) before a URL.&#10;&#10;Example:&#10;2024-01-15_10-30&#10;https://example.com&#10;&#10;https://another.com"></textarea>
     </div>
 
@@ -23,7 +24,14 @@
 
     private async Task LoadLinks()
     {
-        if (string.IsNullOrWhiteSpace(_input))
+        string inputStr = _input;
+
+        if (string.IsNullOrWhiteSpace(inputStr))
+        {
+            inputStr = await JS.InvokeAsync<string>("eval", $"document.getElementById('fetchMultipleLinksInput').value");
+        }
+
+        if (string.IsNullOrWhiteSpace(inputStr))
         {
             Notify.NotifyWarning("Input is empty");
             return;
@@ -31,7 +39,7 @@
 
         try
         {
-            FetchLinksService.SerializeLinks(_input);
+            FetchLinksService.SerializeLinks(inputStr);
             Notify.NotifySuccess("Links loaded successfully");
             await OnSetupFinished.InvokeAsync();
         }
