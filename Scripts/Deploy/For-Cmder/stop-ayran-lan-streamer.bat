@@ -1,0 +1,1 @@
+powershell -NoProfile -Command "Get-NetTCPConnection -LocalPort 9443 -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique | ForEach-Object { Stop-Process -Id $_ -Force; Write-Output ('Stopped process ' + $_) }"
