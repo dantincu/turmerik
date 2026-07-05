@@ -1,55 +1,81 @@
 # Desert Sand for Visual Studio
 
-Visual Studio splits theming into two independent systems, unlike VS Code's single JSON file:
+This is the verified, working process for applying the Desert Sand theme to Visual Studio. It was
+worked out empirically against Visual Studio 2026 (v18), which ships a new Fluent-based theming
+engine that replaced most of the old `.vstheme`/pkgdef category system used through VS 2022.
 
-1. **Code editor colors** (comments, keywords, strings, ...) — set via Tools > Options > Fonts and
-   Colors, and only exportable as a binary-blob `.vssettings` from a running VS instance.
-2. **IDE chrome** (title bar, toolbars, tool windows, tabs, status bar) — set via a `.vstheme` XML
-   file shipped in a VSIX extension, whose Category/Color elements require internal GUIDs that VS
-   itself stamps in when you use its "Custom Theme" project item template.
+Two independent pieces make up the final result:
 
-Neither format can be safely hand-authored from scratch without a running Visual Studio + SDK to
-generate the authoritative base file, so this folder gives you the design (fully specified) and the
-tooling to apply it, rather than a fragile guessed-GUID file.
+1. **Bulk conversion** — Microsoft's [theme-converter-for-vs](https://github.com/microsoft/theme-converter-for-vs)
+   tool converts `../themes/desert-sand-light-color-theme.json` (the VS Code theme) directly into a
+   Visual Studio `.pkgdef` and installs it. This covers editor syntax colors (comment/string/keyword/
+   number/etc. — all except "Plain Text", see below), most tool windows, menus, dialogs, and other
+   legacy-era surfaces.
+2. **Fluent token override** — VS 2026's shell chrome (title bar, status bar, panel headers, editor
+   tabs, empty editor background) reads a newer, separate set of ~229 "Shell"/"Shell internal" tokens
+   that the converter (built for the older system) doesn't touch. [desert-sand-light-color-theme.json](desert-sand-light-color-theme.json)
+   in this folder is a hand-built override file targeting exactly those tokens, sourced from the
+   official [theme color token reference](https://learn.microsoft.com/en-us/visualstudio/extensibility/ux-guidelines/theme-color-token-reference).
 
-## 1. Editor syntax colors (10 minutes, manual)
+## 1. Build and run the converter
 
-Follow [fonts-and-colors.md](fonts-and-colors.md) — a direct hex table for every Fonts and Colors
-Display Item, matching the VS Code Desert Sand token colors. Do this in Tools > Options once; export
-your own `.vssettings` afterward if you want to reuse it elsewhere.
+```
+git clone https://github.com/microsoft/theme-converter-for-vs.git
+cd theme-converter-for-vs/ThemeConverter/ThemeConverter
+dotnet build ThemeConverter.csproj
+```
 
-## 2. IDE chrome re-skin (VSIX extension)
+The built exe targets `net6.0`; if only newer .NET runtimes are installed, set a roll-forward policy.
+Find your VS install path first (`vswhere -latest -property installationPath`), then from an **admin**
+PowerShell:
 
-1. Install the **Visual Studio extension development** workload (Visual Studio Installer).
-2. File > New > Project > search "VSIX Project" > name it `DesertSandTheme`.
-3. In the new project: Add > New Item > Extensibility > **Custom Theme** > name it `DesertSand`.
-   This generates `DesertSand.vstheme` (usually cloned from the Light theme) with all the real,
-   version-correct Category/Color GUIDs plus the matching `.pkgdef` registration — do not touch
-   these GUIDs by hand.
-4. Run the merge script against that generated file:
-   ```
-   python merge_vstheme_colors.py DesertSand.vstheme chrome-colors.json DesertSand.merged.vstheme
-   ```
-   It rewrites only the `Background`/`Foreground` hex values for `<Color Name="...">` entries it
-   recognizes from [chrome-colors.json](chrome-colors.json), and prints which mapping entries it
-   found vs. didn't — the "didn't find" list tells you which names need correcting for your VS
-   version.
-5. Replace the generated `DesertSand.vstheme`'s contents with `DesertSand.merged.vstheme`'s.
-6. Build the VSIX project (F6). Double-click the resulting `.vsix` in `bin\Debug` to install.
-7. Restart Visual Studio > Tools > Options > Environment > General > Color theme > **Desert Sand**.
+```powershell
+cd <repo>\ThemeConverter\ThemeConverter\bin\Debug\net6.0
+$env:DOTNET_ROLL_FORWARD="LatestMajor"
+& ".\ThemeConverter.exe" -i "<path to>\themes\desert-sand-light-color-theme.json" -t "<VS install path>"
+```
 
-### If the mapping is off
+You must `cd` into that exact folder first — the tool loads `TokenMappings.json`/`OverlayMapping.json`
+relative to the current directory, not the exe's location. `-t` patches the pkgdef into the target VS
+install and launches it.
 
-`chrome-colors.json` is a best-effort starting point built from patterns seen in other published VS
-themes, not verified against a live SDK. After step 4, if entries show up as "not found," paste me
-the base `.vstheme`'s list of `<Color Name="...">` values (or the file itself) and the mapping in
-`chrome-colors.json` can be corrected exactly rather than guessed.
+Once launched, Tools > Options > Environment > General (or Tools > Themes) > select
+"desert-sand-light-color-theme".
+
+## 2. Fix the one thing the converter misses
+
+See [fonts-and-colors.md](fonts-and-colors.md) — the converter never sets the base "Plain Text"
+Fonts and Colors item, so the editor canvas keeps its old background/foreground until you set it by
+hand (one dialog, two values).
+
+## 3. Apply the Fluent shell override
+
+Find your VS instance folder and drop the override file in:
+
+```powershell
+Get-ChildItem "$env:LOCALAPPDATA\Microsoft\VisualStudio" -Directory   # find the 18.0_xxxxxxxx one
+$dest = "$env:LOCALAPPDATA\Microsoft\VisualStudio\18.0_xxxxxxxx\ColorThemes"
+New-Item -ItemType Directory -Force -Path $dest | Out-Null
+Copy-Item "desert-sand-light-color-theme.json" "$dest\desert-sand-light-color-theme.json" -Force
+```
+
+The override file name must match the theme's internal name (`desert-sand-light-color-theme`, i.e.
+lowercase-hyphenated, no spaces). Fully restart Visual Studio (not just switch the theme dropdown —
+some chrome only repaints on relaunch).
+
+Tools > Options > Environment > Visual Experience > Theme colors > "Customize color values for the
+current theme" opens this exact file from inside VS, which is the fastest way to confirm the path and
+tweak further tokens using the live token reference.
 
 ## Files
 
-- [palette.json](palette.json) — the canonical Desert Sand hex values by semantic role, shared with
-  the VS Code theme.
-- [fonts-and-colors.md](fonts-and-colors.md) — manual Tools > Options table for code editor colors.
-- [chrome-colors.json](chrome-colors.json) — candidate `.vstheme` Color Name → hex mapping.
-- [merge_vstheme_colors.py](merge_vstheme_colors.py) — applies the mapping onto a VS-generated base
-  `.vstheme` without touching GUIDs.
+- [desert-sand-light-color-theme.json](desert-sand-light-color-theme.json) — the Fluent Shell/Shell
+  internal token override (step 3). This is the actively-maintained file; edit and redeploy it here
+  when adjusting IDE chrome colors.
+- [fonts-and-colors.md](fonts-and-colors.md) — the one manual Fonts and Colors fix (step 2).
+- [palette.json](palette.json) — canonical Desert Sand hex values by semantic role, shared with the
+  VS Code theme.
+
+`theme-converter-for-vs/` (Microsoft's cloned tool) and the generated `.pkgdef` are build tooling/output
+— not checked in here as golden artifacts. Re-clone and re-run per step 1 whenever
+`themes/desert-sand-light-color-theme.json` changes.
