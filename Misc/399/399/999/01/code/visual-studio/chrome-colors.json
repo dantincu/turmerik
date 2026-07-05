@@ -1,0 +1,60 @@
+{
+  "_note": "Candidate mapping from VS .vstheme Color 'Name' attributes to Desert Sand hex values. These names are recalled from common published VS theme extensions, NOT verified against a live Visual Studio SDK install, so treat them as a starting point. Run merge_vstheme_colors.py against your VS-generated base .vstheme; it will report which of these names it actually found. Send me the generated file (or its list of Color Name attributes) and I will correct/extend this mapping precisely instead of guessing further.",
+  "colors": {
+    "MainWindowActiveCaption":               { "background": "#F0D394" },
+    "MainWindowInactiveCaption":             { "background": "#F3DDAE" },
+    "MainWindowActiveCaptionText":           { "foreground": "#5C3A1E" },
+    "MainWindowInactiveCaptionText":         { "foreground": "#B4926A" },
+    "MainWindowButtonActiveBorder":          { "foreground": "#E0BA76" },
+    "MainWindowButtonInactiveBorder":        { "foreground": "#E0BA76" },
+    "MainWindowButtonActiveGlyph":           { "foreground": "#5C3A1E" },
+    "MainWindowButtonInactiveGlyph":         { "foreground": "#B4926A" },
+
+    "CommandBarGradientBegin":               { "background": "#F0D394" },
+    "CommandBarGradientMiddle":              { "background": "#F0D394" },
+    "CommandBarGradientEnd":                 { "background": "#EFCF92" },
+    "CommandBarMenuBackgroundGradientBegin": { "background": "#F5DFA8" },
+    "CommandBarMenuBackgroundGradientEnd":   { "background": "#F5DFA8" },
+    "CommandBarMenuSeparator":               { "background": "#E0BA76" },
+    "CommandBarText":                        { "foreground": "#5C3A1E" },
+    "CommandBarMenuItemMouseOver":           { "background": "#ECAF6D" },
+    "CommandBarToolBarBorder":               { "foreground": "#E0BA76" },
+    "CommandBarSelectedIcon":                { "background": "#F0BE7E" },
+
+    "ToolWindowBackground":                  { "background": "#F3DDAE" },
+    "ToolWindowText":                        { "foreground": "#5C3A1E" },
+    "ToolWindowBorder":                      { "foreground": "#E0BA76" },
+    "ToolWindowTabSelectedTab":               { "background": "#FAE7BE" },
+    "ToolWindowTabSelectedText":              { "foreground": "#5C3A1E" },
+    "ToolWindowTabMouseOverTab":              { "background": "#EFCF92" },
+    "ToolWindowTabMouseOverText":             { "foreground": "#5C3A1E" },
+    "ToolWindowTabBorder":                    { "foreground": "#E0BA76" },
+
+    "StatusBarDefault":                       { "background": "#A8551E" },
+    "StatusBarDefaultText":                   { "foreground": "#FFF6E5" },
+    "StatusBarDebugging":                     { "background": "#B5451F" },
+    "StatusBarDebuggingText":                 { "foreground": "#FFF6E5" },
+    "StatusBarNoSolution":                    { "background": "#A8551E" },
+    "StatusBarNoSolutionText":                { "foreground": "#FFF6E5" },
+
+    "FileTabBackground":                      { "background": "#F0D394" },
+    "FileTabSelectedTab":                     { "background": "#FAE7BE" },
+    "FileTabSelectedText":                    { "foreground": "#5C3A1E" },
+    "FileTabInactiveTab":                     { "background": "#F0D394" },
+    "FileTabInactiveDocumentText":            { "foreground": "#B4926A" },
+    "FileTabHotTab":                          { "background": "#EFCF92" },
+    "FileTabButtonDownSelectedActive":        { "background": "#ECAF6D" },
+
+    "ScrollBarBackground":                    { "background": "#FAE7BE" },
+    "ScrollBarThumbBackground":               { "background": "#D9B87F" },
+    "ScrollBarArrowBackground":               { "background": "#D9B87F" },
+
+    "TreeViewBackground":                     { "background": "#F3DDAE" },
+    "TreeViewText":                           { "foreground": "#5C3A1E" },
+    "TreeViewSelectedItemActive":             { "background": "#ECAF6D" },
+    "TreeViewSelectedItemInactive":           { "background": "#F0D394" },
+
+    "StartPageBackground":                    { "background": "#FAE7BE" },
+    "StartPageTextColor":                     { "foreground": "#5C3A1E" }
+  }
+}

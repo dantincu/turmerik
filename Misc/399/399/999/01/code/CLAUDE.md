@@ -1,0 +1,1 @@
+I want you to create a VS Code light theme that gives the feeling of desert sand

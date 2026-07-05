@@ -1,0 +1,52 @@
+{
+  "description": "Desert Sand palette, keyed by semantic UI role. Shared source of truth for both the VS Code theme and the Visual Studio port.",
+  "background": {
+    "editorMain": "#FAE7BE",
+    "editorElevated": "#F5DFA8",
+    "sidebar": "#F3DDAE",
+    "activityBar": "#F0D394",
+    "tabInactive": "#F0D394",
+    "statusBar": "#A8551E",
+    "selection": "#F0BE7E",
+    "lineHighlight": "#F2D9A1"
+  },
+  "border": {
+    "default": "#E0BA76",
+    "strong": "#C97D30"
+  },
+  "foreground": {
+    "main": "#5C3A1E",
+    "muted": "#8A6238",
+    "faint": "#B4926A",
+    "onStatusBar": "#FFF6E5",
+    "onAccent": "#FFF6E5"
+  },
+  "syntax": {
+    "comment": { "color": "#A9793F", "italic": true },
+    "string": "#74902A",
+    "number": "#C08552",
+    "keyword": "#B5651D",
+    "operator": "#8F5A26",
+    "function": "#8F5A26",
+    "type": { "color": "#A56B1C", "bold": true },
+    "variable": "#5C3A1E",
+    "parameter": "#8F4518",
+    "attribute": "#A0522D",
+    "tag": "#B5651D",
+    "punctuation": "#8A6238",
+    "link": "#A0522D"
+  },
+  "semantic": {
+    "error": "#C0392B",
+    "warning": "#D68910",
+    "info": "#B8752E",
+    "hint": "#74902A",
+    "added": "#74902A",
+    "modified": "#C08552",
+    "deleted": "#C0392B"
+  },
+  "accent": {
+    "rust": "#B5651D",
+    "rustDark": "#9C5518"
+  }
+}
