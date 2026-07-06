@@ -1,0 +1,1 @@
+﻿I want to create a .NET MAUI app that will generate Visual Studio and Visual Studio Code themes starting from a few key colors that the app will ask my input for.

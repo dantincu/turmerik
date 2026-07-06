@@ -1,0 +1,181 @@
+{
+  "$schema": "vscode://schemas/color-theme",
+  "name": "My Custom Theme",
+  "type": "light",
+  "colors": {
+    "editor.background": "#FFFDF0",
+    "editor.foreground": "#442200",
+    "editorLineNumber.foreground": "#AB9A84",
+    "editorLineNumber.activeForeground": "#694E30",
+    "editor.lineHighlightBackground": "#FFF9D1",
+    "editor.selectionBackground": "#FFF19480",
+    "editorCursor.foreground": "#FF8800",
+    "editorIndentGuide.background1": "#FFF3A9",
+    "editorWhitespace.foreground": "#FFF3A9",
+    "editorWidget.background": "#FFFADC",
+    "editorWidget.border": "#FFF3A9",
+    "editorGroup.border": "#FFF3A9",
+    "editorGroupHeader.tabsBackground": "#FFFFFF",
+    "editorError.foreground": "#FF3300",
+    "editorWarning.foreground": "#9A8500",
+    "editorInfo.foreground": "#CC6C00",
+    "errorForeground": "#FF3300",
+    "activityBar.background": "#FFFFFF",
+    "activityBar.foreground": "#442200",
+    "activityBarBadge.background": "#FF8800",
+    "activityBarBadge.foreground": "#FFFDF0",
+    "sideBar.background": "#FFFFFF",
+    "sideBar.foreground": "#442200",
+    "sideBarTitle.foreground": "#442200",
+    "sideBar.border": "#FFF3A9",
+    "statusBar.background": "#FFFFFF",
+    "statusBar.foreground": "#442200",
+    "statusBarItem.hoverBackground": "#FFFADC",
+    "titleBar.activeBackground": "#FFFFFF",
+    "titleBar.activeForeground": "#442200",
+    "titleBar.inactiveBackground": "#FFFFFF",
+    "titleBar.inactiveForeground": "#AB9A84",
+    "tab.activeBackground": "#FFFDF0",
+    "tab.activeForeground": "#442200",
+    "tab.inactiveBackground": "#FFFFFF",
+    "tab.inactiveForeground": "#AB9A84",
+    "tab.border": "#FFF3A9",
+    "button.background": "#FF8800",
+    "button.foreground": "#FFFDF0",
+    "button.hoverBackground": "#D67200",
+    "input.background": "#FFFFFF",
+    "input.foreground": "#442200",
+    "input.border": "#FFF3A9",
+    "focusBorder": "#FF8800",
+    "list.activeSelectionBackground": "#FFF194",
+    "list.activeSelectionForeground": "#442200",
+    "list.hoverBackground": "#FFFADC",
+    "badge.background": "#FF8800",
+    "badge.foreground": "#FFFDF0",
+    "progressBar.background": "#FF8800",
+    "textLink.foreground": "#FF8800",
+    "textLink.activeForeground": "#8800FF"
+  },
+  "tokenColors": [
+    {
+      "name": "Comment",
+      "scope": [
+        "comment"
+      ],
+      "settings": {
+        "foreground": "#828282",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "name": "String",
+      "scope": [
+        "string"
+      ],
+      "settings": {
+        "foreground": "#DD00FF"
+      }
+    },
+    {
+      "name": "Number, Boolean",
+      "scope": [
+        "constant.numeric",
+        "constant.language.boolean"
+      ],
+      "settings": {
+        "foreground": "#159A00"
+      }
+    },
+    {
+      "name": "Other Constants",
+      "scope": [
+        "constant.language",
+        "constant.character",
+        "constant.other"
+      ],
+      "settings": {
+        "foreground": "#009A85"
+      }
+    },
+    {
+      "name": "Keyword",
+      "scope": [
+        "keyword",
+        "storage.type",
+        "storage.modifier"
+      ],
+      "settings": {
+        "foreground": "#8800FF"
+      }
+    },
+    {
+      "name": "Control Keyword",
+      "scope": [
+        "keyword.control"
+      ],
+      "settings": {
+        "foreground": "#3300FF"
+      }
+    },
+    {
+      "name": "Operator",
+      "scope": [
+        "keyword.operator"
+      ],
+      "settings": {
+        "foreground": "#73593C"
+      }
+    },
+    {
+      "name": "Function, Method",
+      "scope": [
+        "entity.name.function",
+        "support.function"
+      ],
+      "settings": {
+        "foreground": "#CC6C00"
+      }
+    },
+    {
+      "name": "Type, Class",
+      "scope": [
+        "entity.name.type",
+        "entity.name.class",
+        "support.type",
+        "support.class"
+      ],
+      "settings": {
+        "foreground": "#FF00CC"
+      }
+    },
+    {
+      "name": "Variable, Parameter",
+      "scope": [
+        "variable",
+        "variable.parameter"
+      ],
+      "settings": {
+        "foreground": "#442200"
+      }
+    },
+    {
+      "name": "Tag / Property",
+      "scope": [
+        "entity.name.tag",
+        "entity.other.attribute-name"
+      ],
+      "settings": {
+        "foreground": "#8800FF"
+      }
+    },
+    {
+      "name": "Punctuation",
+      "scope": [
+        "punctuation"
+      ],
+      "settings": {
+        "foreground": "#73593C"
+      }
+    }
+  ]
+}

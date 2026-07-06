@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Turmerik.VSCodeThemeCreator.MauiApp.MainPage"
+             Title="VS Code / Visual Studio Theme Creator">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="18">
+
+            <Label Text="Theme Creator" FontSize="28" FontAttributes="Bold" />
+            <Label Text="Pick five key colors and generate a matching VS Code theme and a Visual Studio .vssettings file." FontSize="13" Opacity="0.7" />
+
+            <Entry x:Name="ThemeNameEntry" Placeholder="Theme name" Text="My Custom Theme" TextChanged="OnAnyInputChanged" />
+
+            <Grid ColumnDefinitions="140,*,48" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="10" ColumnSpacing="10">
+                <Label Grid.Row="0" Grid.Column="0" Text="Background" VerticalOptions="Center" />
+                <Entry x:Name="BackgroundEntry" Grid.Row="0" Grid.Column="1" Text="#1E1E1E" TextChanged="OnAnyInputChanged" />
+                <BoxView x:Name="BackgroundSwatch" Grid.Row="0" Grid.Column="2" CornerRadius="6" />
+
+                <Label Grid.Row="1" Grid.Column="0" Text="Foreground" VerticalOptions="Center" />
+                <Entry x:Name="ForegroundEntry" Grid.Row="1" Grid.Column="1" Text="#D4D4D4" TextChanged="OnAnyInputChanged" />
+                <BoxView x:Name="ForegroundSwatch" Grid.Row="1" Grid.Column="2" CornerRadius="6" />
+
+                <Label Grid.Row="2" Grid.Column="0" Text="Accent" VerticalOptions="Center" />
+                <Entry x:Name="AccentEntry" Grid.Row="2" Grid.Column="1" Text="#569CD6" TextChanged="OnAnyInputChanged" />
+                <BoxView x:Name="AccentSwatch" Grid.Row="2" Grid.Column="2" CornerRadius="6" />
+
+                <Label Grid.Row="3" Grid.Column="0" Text="Secondary" VerticalOptions="Center" />
+                <Entry x:Name="SecondaryEntry" Grid.Row="3" Grid.Column="1" Text="#C586C0" TextChanged="OnAnyInputChanged" />
+                <BoxView x:Name="SecondarySwatch" Grid.Row="3" Grid.Column="2" CornerRadius="6" />
+
+                <Label Grid.Row="4" Grid.Column="0" Text="Error" VerticalOptions="Center" />
+                <Entry x:Name="ErrorEntry" Grid.Row="4" Grid.Column="1" Text="#F44747" TextChanged="OnAnyInputChanged" />
+                <BoxView x:Name="ErrorSwatch" Grid.Row="4" Grid.Column="2" CornerRadius="6" />
+            </Grid>
+
+            <Label x:Name="StatusLabel" TextColor="Red" FontSize="12" IsVisible="False" />
+
+            <Border x:Name="PreviewFrame" Padding="16" StrokeShape="RoundRectangle 8">
+                <VerticalStackLayout Spacing="2">
+                    <Label x:Name="PreviewComment" Text="// a generated preview of your theme" FontFamily="Courier" />
+
+                    <HorizontalStackLayout>
+                        <Label x:Name="PreviewKeyword1" Text="public " FontFamily="Courier" />
+                        <Label x:Name="PreviewType1" Text="class " FontFamily="Courier" />
+                        <Label x:Name="PreviewVariable1" Text="ThemeSample " FontFamily="Courier" />
+                        <Label x:Name="PreviewOperator1" Text="::open-brace::" FontFamily="Courier" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout>
+                        <Label Text="    " FontFamily="Courier" />
+                        <Label x:Name="PreviewKeyword2" Text="private " FontFamily="Courier" />
+                        <Label x:Name="PreviewType2" Text="int " FontFamily="Courier" />
+                        <Label x:Name="PreviewVariable2" Text="count " FontFamily="Courier" />
+                        <Label x:Name="PreviewOperator2" Text="= " FontFamily="Courier" />
+                        <Label x:Name="PreviewNumber1" Text="42" FontFamily="Courier" />
+                        <Label x:Name="PreviewOperator3" Text=";" FontFamily="Courier" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout>
+                        <Label Text="    " FontFamily="Courier" />
+                        <Label x:Name="PreviewControl1" Text="return " FontFamily="Courier" />
+                        <Label x:Name="PreviewFunction1" Text="Compute" FontFamily="Courier" />
+                        <Label x:Name="PreviewOperator4" Text="(" FontFamily="Courier" />
+                        <Label x:Name="PreviewString1" Text="&quot;ok&quot;" FontFamily="Courier" />
+                        <Label x:Name="PreviewOperator5" Text=");" FontFamily="Courier" />
+                    </HorizontalStackLayout>
+
+                    <Label x:Name="PreviewCloseBrace" Text="::close-brace::" FontFamily="Courier" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Button x:Name="ExportVsCodeButton" Text="Export VS Code Theme (.json)" Clicked="OnExportVsCodeClicked" />
+            <Button x:Name="ExportVsSettingsButton" Text="Export Visual Studio Theme (.vssettings)" Clicked="OnExportVsSettingsClicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
