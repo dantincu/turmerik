@@ -1,8 +1,8 @@
 {
   "name": "desert-sand-theme",
   "displayName": "Desert Sand",
-  "description": "Warm light VS Code themes (Desert Sand, Gold, Turmeric, Vanilla, White Chocolate, Wheat, Corn, Brandy, Whiskey, Bourbon, Rooibos, Warm Sunlight, Fire, Butter, Honey) plus a milk-lightened \"Latte\" variant of each.",
-  "version": "1.9.0",
+  "description": "Warm light VS Code themes (Desert Sand, Gold, Turmeric, Vanilla, White Chocolate, Wheat, Corn, Brandy, Whiskey, Bourbon, Rooibos, Warm Sunlight, Fire, Butter, Honey), each with a \"Latte\" (milk-lightened) and \"Extra Latte\" (milk-dominant) variant.",
+  "version": "1.10.0",
   "publisher": "local",
   "engines": {
     "vscode": "^1.60.0"
@@ -182,6 +182,81 @@
         "label": "Honey Latte",
         "uiTheme": "vs",
         "path": "./themes/honey-latte-light-color-theme.json"
+      },
+      {
+        "label": "Desert Sand Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/desert-sand-extra-latte-light-color-theme.json"
+      },
+      {
+        "label": "Gold Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/gold-extra-latte-light-color-theme.json"
+      },
+      {
+        "label": "Turmeric Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/turmeric-extra-latte-light-color-theme.json"
+      },
+      {
+        "label": "Vanilla Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/vanilla-extra-latte-light-color-theme.json"
+      },
+      {
+        "label": "White Chocolate Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/white-chocolate-extra-latte-light-color-theme.json"
+      },
+      {
+        "label": "Wheat Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/wheat-extra-latte-light-color-theme.json"
+      },
+      {
+        "label": "Corn Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/corn-extra-latte-light-color-theme.json"
+      },
+      {
+        "label": "Brandy Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/brandy-extra-latte-light-color-theme.json"
+      },
+      {
+        "label": "Whiskey Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/whiskey-extra-latte-light-color-theme.json"
+      },
+      {
+        "label": "Bourbon Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/bourbon-extra-latte-light-color-theme.json"
+      },
+      {
+        "label": "Rooibos Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/rooibos-extra-latte-light-color-theme.json"
+      },
+      {
+        "label": "Warm Sunlight Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/warm-sunlight-extra-latte-light-color-theme.json"
+      },
+      {
+        "label": "Fire Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/fire-extra-latte-light-color-theme.json"
+      },
+      {
+        "label": "Butter Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/butter-extra-latte-light-color-theme.json"
+      },
+      {
+        "label": "Honey Extra Latte",
+        "uiTheme": "vs",
+        "path": "./themes/honey-extra-latte-light-color-theme.json"
       }
     ]
   }
