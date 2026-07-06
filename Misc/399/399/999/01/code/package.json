@@ -1,8 +1,8 @@
 {
   "name": "desert-sand-theme",
   "displayName": "Desert Sand",
-  "description": "Warm light VS Code themes: Desert Sand (sand dunes and terracotta), Gold (sunlit brass and wheat), and Turmeric (spice-market orange-gold).",
-  "version": "1.2.0",
+  "description": "Warm light VS Code themes: Desert Sand (sand dunes and terracotta), Gold (sunlit brass and wheat), Turmeric (spice-market orange-gold), and Vanilla (soft creamy ivory).",
+  "version": "1.3.0",
   "publisher": "local",
   "engines": {
     "vscode": "^1.60.0"
@@ -17,6 +17,7 @@
     "desert",
     "gold",
     "turmeric",
+    "vanilla",
     "warm"
   ],
   "contributes": {
@@ -35,6 +36,11 @@
         "label": "Turmeric",
         "uiTheme": "vs",
         "path": "./themes/turmeric-light-color-theme.json"
+      },
+      {
+        "label": "Vanilla",
+        "uiTheme": "vs",
+        "path": "./themes/vanilla-light-color-theme.json"
       }
     ]
   }
