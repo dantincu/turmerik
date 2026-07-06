@@ -1,0 +1,16 @@
+{
+  "name": "turmerik-theme",
+  "displayName": "Turmerik Theme",
+  "version": "1.0.0",
+  "engines": { "vscode": "^1.80.0" },
+  "categories": ["Themes"],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Turmerik Theme",
+        "uiTheme": "vs",
+        "path": "./theme.json"
+      }
+    ]
+  }
+}
