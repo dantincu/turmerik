@@ -1,0 +1,142 @@
+[
+  {
+    "Name": "AccentFillDefault",
+    "Category": "73708ded-2d56-4aad-b8eb-73b20d3f4bff",
+    "Background": "FFFAEFD3"
+  },
+  {
+    "Name": "AccentFillSecondary",
+    "Category": "73708ded-2d56-4aad-b8eb-73b20d3f4bff",
+    "Background": "E5FAEFD3"
+  },
+  {
+    "Name": "AccentFillTertiary",
+    "Category": "73708ded-2d56-4aad-b8eb-73b20d3f4bff",
+    "Background": "CCFAEFD3"
+  },
+  {
+    "Name": "SolidBackgroundFillTertiary",
+    "Category": "73708ded-2d56-4aad-b8eb-73b20d3f4bff",
+    "Background": "FFFEFAF0"
+  },
+  {
+    "Name": "SolidBackgroundFillQuaternary",
+    "Category": "73708ded-2d56-4aad-b8eb-73b20d3f4bff",
+    "Background": "FFFFFCF5"
+  },
+  {
+    "Name": "SurfaceBackgroundFillDefault",
+    "Category": "73708ded-2d56-4aad-b8eb-73b20d3f4bff",
+    "Background": "FFFDF8E9"
+  },
+  {
+    "Name": "TextFillPrimary",
+    "Category": "73708ded-2d56-4aad-b8eb-73b20d3f4bff",
+    "Background": "FF3A2F1A"
+  },
+  {
+    "Name": "TextFillSecondary",
+    "Category": "73708ded-2d56-4aad-b8eb-73b20d3f4bff",
+    "Background": "9E3A2F1A"
+  },
+  {
+    "Name": "TextFillTertiary",
+    "Category": "73708ded-2d56-4aad-b8eb-73b20d3f4bff",
+    "Background": "C84E4227"
+  },
+  {
+    "Name": "EnvironmentBackground",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FFFCF5E2"
+  },
+  {
+    "Name": "EnvironmentBorder",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FF9D8C5E"
+  },
+  {
+    "Name": "EnvironmentIndicator",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "66757575"
+  },
+  {
+    "Name": "EnvironmentLogo",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FFFAEFD3"
+  },
+  {
+    "Name": "EnvironmentLayeredBackground",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "80FFFEFB"
+  },
+  {
+    "Name": "EnvironmentBody",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FFFFFCF5"
+  },
+  {
+    "Name": "EnvironmentBodyText",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FF3A2F1A"
+  },
+  {
+    "Name": "EnvironmentHeader",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FFFEFAF0"
+  },
+  {
+    "Name": "EnvironmentHeaderInactive",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FFFCF5E2"
+  },
+  {
+    "Name": "EnvironmentTab",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FFFFFCF5"
+  },
+  {
+    "Name": "EnvironmentTabInactive",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FFFCF5E2"
+  },
+  {
+    "Name": "StatusBarBackgroundFillRest",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FFF7EAD0"
+  },
+  {
+    "Name": "StatusBarBackgroundFillBuilding",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FFFAEFD3"
+  },
+  {
+    "Name": "StatusBarBackgroundFillDebugging",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FFB5451F"
+  },
+  {
+    "Name": "StatusBarBackgroundFillSolutionLoading",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FFF1EAD3"
+  },
+  {
+    "Name": "StatusBarTextFillRest",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FF2C2516"
+  },
+  {
+    "Name": "StatusBarTextFillBuilding",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FF2C2516"
+  },
+  {
+    "Name": "StatusBarTextFillDebugging",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FFFFFDF2"
+  },
+  {
+    "Name": "StatusBarTextFillSolutionLoading",
+    "Category": "5af241b7-5627-4d12-bfb1-2b67d11127d7",
+    "Background": "FF2C2516"
+  }
+]
