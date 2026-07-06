@@ -1,8 +1,8 @@
 {
   "name": "desert-sand-theme",
   "displayName": "Desert Sand",
-  "description": "A warm, light VS Code theme inspired by desert dunes, sun-bleached sand, and terracotta.",
-  "version": "1.0.0",
+  "description": "Warm light VS Code themes: Desert Sand (sand dunes and terracotta), Gold (sunlit brass and wheat), and Turmeric (spice-market orange-gold).",
+  "version": "1.2.0",
   "publisher": "local",
   "engines": {
     "vscode": "^1.60.0"
@@ -15,6 +15,8 @@
     "light",
     "sand",
     "desert",
+    "gold",
+    "turmeric",
     "warm"
   ],
   "contributes": {
@@ -23,6 +25,16 @@
         "label": "Desert Sand",
         "uiTheme": "vs",
         "path": "./themes/desert-sand-light-color-theme.json"
+      },
+      {
+        "label": "Gold",
+        "uiTheme": "vs",
+        "path": "./themes/gold-light-color-theme.json"
+      },
+      {
+        "label": "Turmeric",
+        "uiTheme": "vs",
+        "path": "./themes/turmeric-light-color-theme.json"
       }
     ]
   }
