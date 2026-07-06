@@ -1,8 +1,8 @@
 {
   "name": "desert-sand-theme",
   "displayName": "Desert Sand",
-  "description": "Warm light VS Code themes: Desert Sand, Gold, Turmeric, Vanilla, White Chocolate, Wheat, Corn, Brandy, Whiskey, Bourbon, Rooibos, Warm Sunlight, and Fire.",
-  "version": "1.7.0",
+  "description": "Warm light VS Code themes: Desert Sand, Gold, Turmeric, Vanilla, White Chocolate, Wheat, Corn, Brandy, Whiskey, Bourbon, Rooibos, Warm Sunlight, Fire, Butter, and Honey.",
+  "version": "1.8.0",
   "publisher": "local",
   "engines": {
     "vscode": "^1.60.0"
@@ -27,6 +27,8 @@
     "rooibos",
     "sunlight",
     "fire",
+    "butter",
+    "honey",
     "warm"
   ],
   "contributes": {
@@ -95,6 +97,16 @@
         "label": "Fire",
         "uiTheme": "vs",
         "path": "./themes/fire-light-color-theme.json"
+      },
+      {
+        "label": "Butter",
+        "uiTheme": "vs",
+        "path": "./themes/butter-light-color-theme.json"
+      },
+      {
+        "label": "Honey",
+        "uiTheme": "vs",
+        "path": "./themes/honey-light-color-theme.json"
       }
     ]
   }
