@@ -1,8 +1,8 @@
 {
   "name": "desert-sand-theme",
   "displayName": "Desert Sand",
-  "description": "Warm light VS Code themes: Desert Sand, Gold, Turmeric, Vanilla, White Chocolate, Wheat, Corn, Brandy, Whiskey, Bourbon, Rooibos, Warm Sunlight, Fire, Butter, and Honey.",
-  "version": "1.8.0",
+  "description": "Warm light VS Code themes (Desert Sand, Gold, Turmeric, Vanilla, White Chocolate, Wheat, Corn, Brandy, Whiskey, Bourbon, Rooibos, Warm Sunlight, Fire, Butter, Honey) plus a milk-lightened \"Latte\" variant of each.",
+  "version": "1.9.0",
   "publisher": "local",
   "engines": {
     "vscode": "^1.60.0"
@@ -107,6 +107,81 @@
         "label": "Honey",
         "uiTheme": "vs",
         "path": "./themes/honey-light-color-theme.json"
+      },
+      {
+        "label": "Desert Sand Latte",
+        "uiTheme": "vs",
+        "path": "./themes/desert-sand-latte-light-color-theme.json"
+      },
+      {
+        "label": "Gold Latte",
+        "uiTheme": "vs",
+        "path": "./themes/gold-latte-light-color-theme.json"
+      },
+      {
+        "label": "Turmeric Latte",
+        "uiTheme": "vs",
+        "path": "./themes/turmeric-latte-light-color-theme.json"
+      },
+      {
+        "label": "Vanilla Latte",
+        "uiTheme": "vs",
+        "path": "./themes/vanilla-latte-light-color-theme.json"
+      },
+      {
+        "label": "White Chocolate Latte",
+        "uiTheme": "vs",
+        "path": "./themes/white-chocolate-latte-light-color-theme.json"
+      },
+      {
+        "label": "Wheat Latte",
+        "uiTheme": "vs",
+        "path": "./themes/wheat-latte-light-color-theme.json"
+      },
+      {
+        "label": "Corn Latte",
+        "uiTheme": "vs",
+        "path": "./themes/corn-latte-light-color-theme.json"
+      },
+      {
+        "label": "Brandy Latte",
+        "uiTheme": "vs",
+        "path": "./themes/brandy-latte-light-color-theme.json"
+      },
+      {
+        "label": "Whiskey Latte",
+        "uiTheme": "vs",
+        "path": "./themes/whiskey-latte-light-color-theme.json"
+      },
+      {
+        "label": "Bourbon Latte",
+        "uiTheme": "vs",
+        "path": "./themes/bourbon-latte-light-color-theme.json"
+      },
+      {
+        "label": "Rooibos Latte",
+        "uiTheme": "vs",
+        "path": "./themes/rooibos-latte-light-color-theme.json"
+      },
+      {
+        "label": "Warm Sunlight Latte",
+        "uiTheme": "vs",
+        "path": "./themes/warm-sunlight-latte-light-color-theme.json"
+      },
+      {
+        "label": "Fire Latte",
+        "uiTheme": "vs",
+        "path": "./themes/fire-latte-light-color-theme.json"
+      },
+      {
+        "label": "Butter Latte",
+        "uiTheme": "vs",
+        "path": "./themes/butter-latte-light-color-theme.json"
+      },
+      {
+        "label": "Honey Latte",
+        "uiTheme": "vs",
+        "path": "./themes/honey-latte-light-color-theme.json"
       }
     ]
   }
