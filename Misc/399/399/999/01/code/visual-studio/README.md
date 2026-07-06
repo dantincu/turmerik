@@ -74,8 +74,9 @@ tweak further tokens using the live token reference.
   when adjusting IDE chrome colors.
 - [fonts-and-colors.md](fonts-and-colors.md) — the one manual Fonts and Colors fix (step 2).
 - [plain-text-colors.md](plain-text-colors.md) — Plain Text foreground/background RGB values for all
-  90 theme variants (15 base themes × Base/Latte/Extra Latte/High Contrast/Latte High Contrast/Extra
-  Latte High Contrast), since Fonts and Colors is a single global setting that must be reset per theme.
+  135 theme variants (15 base themes × Base/Latte/Extra Latte/Higher Contrast/Latte Higher Contrast/
+  Extra Latte Higher Contrast/High Contrast/Latte High Contrast/Extra Latte High Contrast), since
+  Fonts and Colors is a single global setting that must be reset per theme.
 - [palette.json](palette.json) — canonical Desert Sand hex values by semantic role, shared with the
   VS Code theme.
 

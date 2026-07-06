@@ -1,8 +1,8 @@
 {
   "name": "desert-sand-theme",
   "displayName": "Desert Sand",
-  "description": "Warm light VS Code themes (Desert Sand, Gold, Turmeric, Vanilla, White Chocolate, Wheat, Corn, Brandy, Whiskey, Bourbon, Rooibos, Warm Sunlight, Fire, Butter, Honey), each with Latte (milk-lightened), Extra Latte (milk-dominant), and High Contrast variants.",
-  "version": "1.11.0",
+  "description": "Warm light VS Code themes (Desert Sand, Gold, Turmeric, Vanilla, White Chocolate, Wheat, Corn, Brandy, Whiskey, Bourbon, Rooibos, Warm Sunlight, Fire, Butter, Honey), each with Latte, Extra Latte, Higher Contrast, and High Contrast variants.",
+  "version": "1.12.0",
   "publisher": "local",
   "engines": {
     "vscode": "^1.60.0"
@@ -482,6 +482,231 @@
         "label": "Honey Extra Latte High Contrast",
         "uiTheme": "hc-light",
         "path": "./themes/honey-extra-latte-high-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Desert Sand Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/desert-sand-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Gold Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/gold-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Turmeric Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/turmeric-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Vanilla Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/vanilla-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "White Chocolate Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/white-chocolate-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Wheat Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/wheat-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Corn Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/corn-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Brandy Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/brandy-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Whiskey Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/whiskey-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Bourbon Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/bourbon-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Rooibos Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/rooibos-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Warm Sunlight Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/warm-sunlight-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Fire Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/fire-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Butter Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/butter-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Honey Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/honey-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Desert Sand Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/desert-sand-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Gold Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/gold-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Turmeric Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/turmeric-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Vanilla Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/vanilla-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "White Chocolate Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/white-chocolate-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Wheat Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/wheat-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Corn Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/corn-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Brandy Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/brandy-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Whiskey Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/whiskey-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Bourbon Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/bourbon-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Rooibos Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/rooibos-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Warm Sunlight Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/warm-sunlight-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Fire Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/fire-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Butter Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/butter-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Honey Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/honey-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Desert Sand Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/desert-sand-extra-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Gold Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/gold-extra-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Turmeric Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/turmeric-extra-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Vanilla Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/vanilla-extra-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "White Chocolate Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/white-chocolate-extra-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Wheat Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/wheat-extra-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Corn Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/corn-extra-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Brandy Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/brandy-extra-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Whiskey Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/whiskey-extra-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Bourbon Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/bourbon-extra-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Rooibos Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/rooibos-extra-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Warm Sunlight Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/warm-sunlight-extra-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Fire Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/fire-extra-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Butter Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/butter-extra-latte-higher-contrast-light-color-theme.json"
+      },
+      {
+        "label": "Honey Extra Latte Higher Contrast",
+        "uiTheme": "vs",
+        "path": "./themes/honey-extra-latte-higher-contrast-light-color-theme.json"
       }
     ]
   }
