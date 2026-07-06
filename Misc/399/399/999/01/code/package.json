@@ -1,8 +1,8 @@
 {
   "name": "desert-sand-theme",
   "displayName": "Desert Sand",
-  "description": "Warm light VS Code themes: Desert Sand (sand dunes and terracotta), Gold (sunlit brass), Turmeric (spice-market orange-gold), Vanilla (soft creamy ivory), White Chocolate (pale buttery cream), Wheat (golden straw fields), and Corn (sunny kernel-yellow with husk green).",
-  "version": "1.5.0",
+  "description": "Warm light VS Code themes: Desert Sand, Gold, Turmeric, Vanilla, White Chocolate, Wheat, Corn, Brandy, Whiskey, and Bourbon.",
+  "version": "1.6.0",
   "publisher": "local",
   "engines": {
     "vscode": "^1.60.0"
@@ -21,6 +21,9 @@
     "white chocolate",
     "wheat",
     "corn",
+    "brandy",
+    "whiskey",
+    "bourbon",
     "warm"
   ],
   "contributes": {
@@ -59,6 +62,21 @@
         "label": "Corn",
         "uiTheme": "vs",
         "path": "./themes/corn-light-color-theme.json"
+      },
+      {
+        "label": "Brandy",
+        "uiTheme": "vs",
+        "path": "./themes/brandy-light-color-theme.json"
+      },
+      {
+        "label": "Whiskey",
+        "uiTheme": "vs",
+        "path": "./themes/whiskey-light-color-theme.json"
+      },
+      {
+        "label": "Bourbon",
+        "uiTheme": "vs",
+        "path": "./themes/bourbon-light-color-theme.json"
       }
     ]
   }
