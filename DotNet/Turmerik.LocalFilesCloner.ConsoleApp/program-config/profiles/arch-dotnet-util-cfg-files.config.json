@@ -2,33 +2,33 @@
   "ProfileName": "arch-dotnet-util-cfg-files",
   "FileGroups": [
     {
-      "CloneArchiveDirPath": "|$LARGEFILESCSDRIVE_DIR|\\|$LARGEFILESCSDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|",
+      "CloneArchiveDirPath": "|$LARGEFILESCSDRIVE_DIR|/|$LARGEFILESCSDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|",
       "CloneArchiveFileNameTpl": "AppCfgFiles[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
       "BeforeArchiveCleanupFilter": {
         "IncludedRelPathRegexes": [
           "^\\/AppCfgFiles\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
         ]
       },
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Core",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|/DotNet/Turmerik.Core",
       "CloneDirPath": "|$TURMERIK_TEMP_DIR|",
       "Folders": [
         {
           "InputDirFilter": {
             "IncludedRelPathRegexes": [
-              "^\\/trmrk-dirpairs-config\\.json$",
-              "^\\/trmrk-dirpairs-config\\..+\\.json$",
-              "^\\/trmrk-notes-config\\.json$",
-              "^\\/trmrk-notes-config\\..+\\.json$",
-              "^\\/trmrk-custom-commands-config\\.json$"
+              "^//trmrk-dirpairs-config/.json$",
+              "^//trmrk-dirpairs-config/..+/.json$",
+              "^//trmrk-notes-config/.json$",
+              "^//trmrk-notes-config/..+/.json$",
+              "^//trmrk-custom-commands-config/.json$"
             ]
           }
         },
         {
-          "InputDirPath": "_ENV\\PROD",
+          "InputDirPath": "_ENV/PROD",
           "InputDirFilter": {
             "IncludedRelPathRegexes": [
-              "^\\/app-env-locator\\.json$",
-              "^\\/trmrk-localdevice-paths\\.json$"
+              "^//app-env-locator/.json$",
+              "^//trmrk-localdevice-paths/.json$"
             ]
           }
         }

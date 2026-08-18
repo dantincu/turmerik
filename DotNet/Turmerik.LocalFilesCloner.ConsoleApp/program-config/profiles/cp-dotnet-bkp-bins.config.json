@@ -2,8 +2,8 @@
   "ProfileName": "cp-dotnet-bkp-bins",
   "FileGroups": [
     {
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet",
-      "CloneDirPath": "|$USER_PROFILE_DIR|\\AppData\\Roaming\\Turmerik\\Apps",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|/DotNet",
+      "CloneDirPath": "|$LOCAL_APP_DATA|/Turmerik/Apps",
       "DfInputDirFilter": {
         "ExcludedRelPathRegexes": [
           "^\\/app-env-locator\\.json$",
@@ -19,8 +19,8 @@
       },
       "Folders": [
         {
-          "InputDirPath": "Turmerik.LocalFilesCloner.ConsoleApp\\bin\\Release\\net10.0",
-          "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.CmdApp\\Release\\net10.0"
+          "InputDirPath": "Turmerik.LocalFilesCloner.ConsoleApp/bin/Release/net10.0",
+          "CloneDirPath": "Bin/Turmerik.LocalFilesCloner.CmdApp/Release/net10.0"
         }
       ]
     }

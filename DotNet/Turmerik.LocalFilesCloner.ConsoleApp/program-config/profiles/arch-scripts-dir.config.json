@@ -11,7 +11,7 @@
       },
       "Folders": [
         {
-          "InputDirPath": "|$TURMERIK_REPO_DIR|\\Scripts",
+          "InputDirPath": "|$TURMERIK_REPO_DIR|/Scripts",
           "CloneDirPath": "|$TURMERIK_TEMP_DIR|"
         }
       ]

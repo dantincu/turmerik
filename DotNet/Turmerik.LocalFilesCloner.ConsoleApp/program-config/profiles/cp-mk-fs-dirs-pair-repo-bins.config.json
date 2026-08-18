@@ -2,7 +2,7 @@
   "ProfileName": "cp-mk-fs-dirs-pair-repo-bins",
   "FileGroups": [
     {
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\..\\trmrk-mk-dirs-pair\\DotNet",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|/../trmrk-mk-dirs-pair\\DotNet",
       "CloneDirPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_PROD_DIR|",
       "DfBeforeCloneDestnCleanupFilter": {
         "ExcludedRelPathRegexes": [
@@ -11,8 +11,8 @@
       },
       "Folders": [
         {
-          "InputDirPath": "TrmrkMkFsDirsPair\\bin\\Release\\net10.0",
-          "CloneDirPath": "Bin\\TrmrkMkFsDirsPair\\Release\\net10.0"
+          "InputDirPath": "TrmrkMkFsDirsPair/bin/Release/net10.0",
+          "CloneDirPath": "Bin/TrmrkMkFsDirsPair/Release/net10.0"
         }
       ]
     }

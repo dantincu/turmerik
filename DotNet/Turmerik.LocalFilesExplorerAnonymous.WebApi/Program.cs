@@ -21,7 +21,7 @@ DriveExplorerH.AddFsRetrieverAndExplorer(
     builder.Services, null, false, false, Path.Combine(
         Path.Combine(
             Environment.GetFolderPath(
-                Environment.SpecialFolder.ApplicationData),
+                Environment.SpecialFolder.LocalApplicationData),
                 "Turmerik", "FsExplorerRoot")));
 
 builder.Services.AddSingleton<IObjectModelValidator, NullValidator>();

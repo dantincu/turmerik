@@ -2,7 +2,7 @@
   "ProfileName": "cp-text-transform-behavior",
   "ScriptGroups": [
     {
-      "WorkDir": "|$TURMERIK_REPO_DIR|\\JsWs\\libs\\trmrk-text-transform-mybehavior",
+      "WorkDir": "|$TURMERIK_REPO_DIR|/JsWs/libs/trmrk-text-transform-mybehavior",
       "OnBeforeScripts": [
         {
           "PowerShellCmd": {
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "WorkDir": "|$TURMERIK_REPO_DIR|\\JsWs\\libs\\trmrk-text-transform-defaultbehavior",
+      "WorkDir": "|$TURMERIK_REPO_DIR|/JsWs/libs/trmrk-text-transform-defaultbehavior",
       "OnBeforeScripts": [
         {
           "PowerShellCmd": {
@@ -54,7 +54,7 @@
     {
       "OnBeforeScripts": [
         {
-          "WorkDir": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|\\Config\\Turmerik.Utility.WinFormsApp.UserControls.TextTransformBehavior",
+          "WorkDir": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|/Config/Turmerik.Utility.WinFormsApp.UserControls.TextTransformBehavior",
           "PowerShellCmd": {
             "Commands": [
               {
@@ -65,7 +65,7 @@
           }
         },
         {
-          "WorkDir": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|\\Data\\Turmerik.Utility.WinFormsApp.UserControls.TextTransformBehavior",
+          "WorkDir": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|/Data/Turmerik.Utility.WinFormsApp.UserControls.TextTransformBehavior",
           "PowerShellCmd": {
             "Commands": [
               {
@@ -80,12 +80,12 @@
   ],
   "FileGroups": [
     {
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\JsWs\\libs\\trmrk-text-transform-mybehavior",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|/JsWs/libs/trmrk-text-transform-mybehavior",
       "CloneDirPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|",
       "Files": [
         {
-          "InputFilePath": "dist\\prod\\index.js",
-          "CloneDirPath": "Data\\Turmerik.Utility.WinFormsApp.UserControls.TextTransformBehavior",
+          "InputFilePath": "dist/prod/index.js",
+          "CloneDirPath": "Data/Turmerik.Utility.WinFormsApp.UserControls.TextTransformBehavior",
           "CloneFileNameTpl": "behavior.js",
           "CloneTplLines": [
             "globalThis.turmerikObj = {{}};",
@@ -96,12 +96,12 @@
       ]
     },
     {
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\JsWs\\libs\\trmrk-text-transform-defaultbehavior",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|/JsWs/libs/trmrk-text-transform-defaultbehavior",
       "CloneDirPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|",
       "Files": [
         {
-          "InputFilePath": "dist\\prod\\index.js",
-          "CloneDirPath": "Config\\Turmerik.Utility.WinFormsApp.UserControls.TextTransformBehavior",
+          "InputFilePath": "dist/prod/index.js",
+          "CloneDirPath": "Config/Turmerik.Utility.WinFormsApp.UserControls.TextTransformBehavior",
           "CloneFileNameTpl": "behavior.js",
           "CloneTplLines": [
             "globalThis.turmerikObj = {{}};",

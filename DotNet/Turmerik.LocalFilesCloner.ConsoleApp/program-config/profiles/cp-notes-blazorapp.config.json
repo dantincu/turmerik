@@ -2,7 +2,7 @@
   "ProfileName": "cp-notes-blazorapp",
   "ScriptGroups": [
     {
-      "WorkDir": "|$TURMERIK_REPO_DIR|\\JsWs\\apps\\trmrk-notes-blazorapp",
+      "WorkDir": "|$TURMERIK_REPO_DIR|/JsWs/apps/trmrk-notes-blazorapp",
       "OnBeforeScripts": [
         {
           "PowerShellCmd": {
@@ -33,7 +33,7 @@
       ]
     },
     {
-      "WorkDir": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
+      "WorkDir": "|$TURMERIK_REPO_DIR|/DotNet/Turmerik.Notes.BlazorApp",
       "OnBeforeScripts": [
         {
           "WorkDir": "wwwroot",
@@ -55,12 +55,12 @@
   ],
   "FileGroups": [
     {
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
-      "CloneDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|/DotNet/Turmerik.Notes.BlazorApp",
+      "CloneDirPath": "|$TURMERIK_REPO_DIR|/DotNet/Turmerik.Notes.BlazorApp",
       "Files": [
         {
           "InputFilePath": "trmrk-notes-config.json",
-          "CloneDirPath": "wwwroot\\trmrk-notes-config",
+          "CloneDirPath": "wwwroot/trmrk-notes-config",
           "UseChecksum": true
         },
         {
@@ -81,12 +81,12 @@
       ]
     },
     {
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\JsWs\\apps\\trmrk-notes-blazorapp",
-      "CloneDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|/JsWs/apps/trmrk-notes-blazorapp",
+      "CloneDirPath": "|$TURMERIK_REPO_DIR|/DotNet/Turmerik.Notes.BlazorApp",
       "Files": [
         {
-          "InputFilePath": "dist\\dev\\index.js",
-          "CloneDirPath": "wwwroot\\js\\dev",
+          "InputFilePath": "dist/dev/index.js",
+          "CloneDirPath": "wwwroot/js/dev",
           "UseChecksum": true,
           "CloneTplLines": [
             "const turmerikObj = {{}};",
@@ -96,8 +96,8 @@
           ]
         },
         {
-          "InputFilePath": "dist\\prod\\index.js",
-          "CloneDirPath": "wwwroot\\js\\prod",
+          "InputFilePath": "dist/prod/index.js",
+          "CloneDirPath": "wwwroot/js/prod",
           "UseChecksum": true,
           "CloneTplLines": [
             "const turmerikObj = {{}};",
@@ -107,7 +107,7 @@
           ]
         },
         {
-          "InputFilePath": "dist\\dev\\index.js",
+          "InputFilePath": "dist/dev/index.js",
           "CloneDirPath": "",
           "CloneFileNameTpl": "FileCheckSums.JsFile.cs",
           "ForceOverwrite": true,

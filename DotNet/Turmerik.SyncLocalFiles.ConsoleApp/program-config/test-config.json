@@ -1,7 +1,7 @@
 {
   "Profiles": [
     {
-      "ProfileRelFilePath": "test-profiles\\unit-test.json"
+      "ProfileRelFilePath": "test-profiles/unit-test.json"
     }
   ]
 }

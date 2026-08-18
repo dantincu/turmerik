@@ -59,7 +59,11 @@ namespace Turmerik.Core.LocalDeviceEnv
         public ReadOnlyDictionary<string, string> DefaultPathsMap { get; } = new Dictionary<string, string>
         {
             { "|$USER_PROFILE_DIR|", Environment.GetFolderPath(
-                Environment.SpecialFolder.UserProfile) }
+                Environment.SpecialFolder.UserProfile) },
+            { "|$APP_DATA|", Environment.GetFolderPath(
+                Environment.SpecialFolder.ApplicationData) },
+            { "|$LOCAL_APP_DATA|", Environment.GetFolderPath(
+                Environment.SpecialFolder.LocalApplicationData) },
         }.RdnlD();
 
         public static string ConvertPropNameToMacro(

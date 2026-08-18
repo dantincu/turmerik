@@ -129,7 +129,7 @@ namespace Turmerik.Core.LocalDeviceEnv
             {
                 appEnvDirBasePath = Path.Combine(
                     GetFolderPath(
-                        SpecialFolder.ApplicationData),
+                        SpecialFolder.LocalApplicationData),
                     appEnvDirBasePath);
             }
 

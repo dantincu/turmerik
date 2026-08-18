@@ -2,11 +2,11 @@
   "ProfileName": "arch-dotnet-util-dirs",
   "FileGroups": [
     {
-      "CloneArchiveDirPath": "|$LARGEFILESCSDRIVE_DIR|\\|$LARGEFILESCSDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|",
+      "CloneArchiveDirPath": "|$LARGEFILESCSDRIVE_DIR|/|$LARGEFILESCSDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|",
       "CloneArchiveFileNameTpl": "AppsEnv[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
       "BeforeArchiveCleanupFilter": {
         "IncludedRelPathRegexes": [
-          "^\\/AppsEnv\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
+          "^/AppsEnv\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
         ]
       },
       "Folders": [

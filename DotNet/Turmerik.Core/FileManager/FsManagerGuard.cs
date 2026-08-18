@@ -54,7 +54,7 @@ namespace Turmerik.Core.FileManager
                 UserProfilePath);
 
             AppDataDirName = Environment.GetFolderPath(
-                Environment.SpecialFolder.ApplicationData).Substring(
+                Environment.SpecialFolder.LocalApplicationData).Substring(
                     UserProfilePath.Length).Split(
                         Path.DirectorySeparatorChar.Arr(),
                         StringSplitOptions.RemoveEmptyEntries)[0];
