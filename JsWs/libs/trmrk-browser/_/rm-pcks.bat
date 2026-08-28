@@ -1,2 +1,2 @@
-CALL rimraf .\node_modules
-CALL del .\package-lock.json
+CALL rimraf ./node_modules
+CALL del ./package-lock.json

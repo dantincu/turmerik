@@ -1,2 +1,2 @@
-CALL rimraf .\.parcel-cache
-CALL rimraf .\dist
+CALL rimraf ./.parcel-cache
+CALL rimraf ./dist

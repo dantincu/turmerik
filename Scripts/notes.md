@@ -8,3 +8,8 @@ How to edit my PATH variable from powershell:
 $updated = (Get-Content "$env:USERPROFILE\path_user.txt") -join ";"
 [Environment]::SetEnvironmentVariable("PATH", $updated, "User")
 ```
+
+How do permanently edit my PATH variable from cmd:
+```cmd
+setx PATH "%PATH%;c:\A\T\turmerik\Scripts\global"
+```

@@ -1,13 +1,13 @@
 {
   "ProfileName": "turmerik-jsws",
   "RelDirPaths": {
-    "DirPath": "|$TURMERIK_REPO_DIR|\\JsWs"
+    "DirPath": "|$TURMERIK_REPO_DIR|/JsWs"
   },
   "Sections": [
     {
       "SectionName": "workspace-lvl",
       "RelDirPaths": {
-        "DirPath": "scripts\\all"
+        "DirPath": "scripts/all"
       },
       "FileGroups": [
         {

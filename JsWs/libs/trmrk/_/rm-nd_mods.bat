@@ -1,1 +1,1 @@
-CALL rimraf .\node_modules
+CALL rimraf ./node_modules

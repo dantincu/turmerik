@@ -1,2 +1,2 @@
 @echo off
-"%USERPROFILE%\AppData\Roaming\Turmerik\Apps\Bin\TrmrkMkFsDirsPair\Release\net10.0\TrmrkMkFsDirsPair.exe" %*
+"%USERPROFILE%\AppData\Local\Turmerik\Apps\Bin\TrmrkMkFsDirsPair\Release\net10.0\TrmrkMkFsDirsPair.exe" %*
