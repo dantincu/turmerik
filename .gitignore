@@ -403,3 +403,5 @@ FodyWeavers.xsd
 /DotNet/Turmerik.Core/trmrk-dirpairs-config.MacrosMap.*
 /DotNet/Turmerik.MkFsDirsPairCfg.ConsoleApp/program-config/data.json
 /DotNet/Turmerik.ScrapeWebPages.ConsoleApp/program-behavior
+
+/Scripts/Deploy/For-Cmder/ayran-lan-streamer/api-rs/duckdns-token.sh

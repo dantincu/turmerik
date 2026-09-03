@@ -8,10 +8,10 @@
 set -euo pipefail
 
 DOMAIN="ayran-lan-streamer.duckdns.org"
-DEPLOY_CERTS_DIR="/c/Users/victo/AppData/Roaming/Ayran/Apps/Bin/lan-streamer/certs"
-DEPLOY_DIR="/c/Users/victo/AppData/Roaming/Ayran/Apps/Bin/lan-streamer"
+DEPLOY_CERTS_DIR="/c/Users/danti/AppData/Local/Ayran/Apps/Bin/lan-streamer/certs"
+DEPLOY_DIR="/c/Users/danti/AppData/Local/Ayran/Apps/Bin/lan-streamer"
 
-export DuckDNS_Token="592aa43a-a12c-464c-bc40-dde8e310d17b"
+source "$(dirname "${BASH_SOURCE[0]}")/../duckdns-token.sh"
 
 "$HOME/.acme.sh/acme.sh" --cron --home "$HOME/.acme.sh" 2>&1
 
