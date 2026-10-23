@@ -2,7 +2,7 @@
   "profiles": {
     "Turmerik.UpdateNoteChildren.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": ":wd:||$LARGEFILESCSDRIVE_DIR||\\0002 :rec"
+      "commandLineArgs": ":wd:||$MAINCSDRIVE_DIR||\\0002 :rec"
     }
   }
 }

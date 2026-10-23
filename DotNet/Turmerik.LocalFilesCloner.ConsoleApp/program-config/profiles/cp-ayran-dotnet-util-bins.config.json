@@ -11,6 +11,10 @@
         {
           "InputDirPath": "docs-converter/ayran-docs-converter-cmd/AyranDocsConverter/bin/Release/net10.0",
           "CloneDirPath": "Bin/docs-converter/ayran-docs-converter-cmd/AyranDocsConverter/Release/net10.0"
+        },
+        {
+          "InputDirPath": "find-and-replace-file/bin/Release/net10.0",
+          "CloneDirPath": "Bin/find-and-replace-file/Release/net10.0"
         }
       ]
     }
