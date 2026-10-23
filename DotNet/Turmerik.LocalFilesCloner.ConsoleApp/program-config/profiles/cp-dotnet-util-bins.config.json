@@ -29,6 +29,10 @@
           "CloneDirPath": "Bin/Turmerik.ExecuteCustomCommand.ConsoleApp/Release/net10.0"
         },
         {
+          "InputDirPath": "Turmerik.FlatLocalDevicePathsToFiles.ConsoleApp/bin/Release/net10.0",
+          "CloneDirPath": "Bin/Turmerik.FlatLocalDevicePathsToFiles.ConsoleApp/Release/net10.0"
+        },
+        {
           "InputDirPath": "Turmerik.LocalFilesCloner.ConsoleApp/bin/Release/net10.0",
           "CloneDirPath": "Bin/Turmerik.LocalFilesCloner.ConsoleApp/Release/net10.0"
         },

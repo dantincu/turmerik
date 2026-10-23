@@ -16,8 +16,8 @@ namespace Turmerik.Core.LocalDeviceEnv
         IFolder GetTurmerikRepoDir();
         IFolder GetTurmerikDotnetUtilityAppsEnvDir();
         IFolder GetTurmerikDotnetUtilityAppsEnvDirTypeName();
-        IFolder GetOnedriveDir();
-        IFolder GetOnedriveTurmerikDotNetUtilityAppsArchiveReldir();
+        IFolder GetMainCsDriveDir();
+        IFolder GetMainCsDriveTurmerikDotNetUtilityAppsArchiveReldir();
 
         IEnumerable<KeyValuePair<string, string>> GetPathsMap();
     }
@@ -80,8 +80,8 @@ namespace Turmerik.Core.LocalDeviceEnv
             TurmerikRepoDir = src.GetTurmerikRepoDir()?.ToImmtbl()!;
             TurmerikDotnetUtilityAppsEnvDir = src.GetTurmerikDotnetUtilityAppsEnvDir()?.ToImmtbl()!;
             TurmerikDotnetUtilityAppsEnvDirTypeName = src.GetTurmerikDotnetUtilityAppsEnvDirTypeName()?.ToImmtbl()!;
-            OnedriveDir = src.GetOnedriveDir()?.ToImmtbl()!;
-            OnedriveTurmerikDotNetUtilityAppsArchiveReldir = src.GetOnedriveTurmerikDotNetUtilityAppsArchiveReldir()?.ToImmtbl()!;
+            MainCsDriveDir = src.GetMainCsDriveDir()?.ToImmtbl()!;
+            MainCsDriveTurmerikDotNetUtilityAppsArchiveReldir = src.GetMainCsDriveTurmerikDotNetUtilityAppsArchiveReldir()?.ToImmtbl()!;
             PathsMap = src.GetPathsMap()?.Dictnr().RdnlD()!;
         }
 
@@ -90,8 +90,8 @@ namespace Turmerik.Core.LocalDeviceEnv
         public FolderImmtbl TurmerikRepoDir { get; }
         public FolderImmtbl TurmerikDotnetUtilityAppsEnvDir { get; }
         public FolderImmtbl TurmerikDotnetUtilityAppsEnvDirTypeName { get; }
-        public FolderImmtbl OnedriveDir { get; }
-        public FolderImmtbl OnedriveTurmerikDotNetUtilityAppsArchiveReldir { get; }
+        public FolderImmtbl MainCsDriveDir { get; }
+        public FolderImmtbl MainCsDriveTurmerikDotNetUtilityAppsArchiveReldir { get; }
 
         public ReadOnlyDictionary<string, string> PathsMap { get; }
 
@@ -100,8 +100,8 @@ namespace Turmerik.Core.LocalDeviceEnv
         public IFolder GetTurmerikRepoDir() => TurmerikRepoDir;
         public IFolder GetTurmerikDotnetUtilityAppsEnvDir() => TurmerikDotnetUtilityAppsEnvDir;
         public IFolder GetTurmerikDotnetUtilityAppsEnvDirTypeName() => TurmerikDotnetUtilityAppsEnvDirTypeName;
-        public IFolder GetOnedriveDir() => OnedriveDir;
-        public IFolder GetOnedriveTurmerikDotNetUtilityAppsArchiveReldir() => OnedriveTurmerikDotNetUtilityAppsArchiveReldir;
+        public IFolder GetMainCsDriveDir() => MainCsDriveDir;
+        public IFolder GetMainCsDriveTurmerikDotNetUtilityAppsArchiveReldir() => MainCsDriveTurmerikDotNetUtilityAppsArchiveReldir;
 
         public IEnumerable<KeyValuePair<string, string>> GetPathsMap() => PathsMap;
     }
@@ -119,8 +119,8 @@ namespace Turmerik.Core.LocalDeviceEnv
             TurmerikRepoDir = src.GetTurmerikRepoDir()?.ToMtbl()!;
             TurmerikDotnetUtilityAppsEnvDir = src.GetTurmerikDotnetUtilityAppsEnvDir()?.ToMtbl()!;
             TurmerikDotnetUtilityAppsEnvDirTypeName = src.GetTurmerikDotnetUtilityAppsEnvDirTypeName()?.ToMtbl()!;
-            OnedriveDir = src.GetOnedriveDir()?.ToMtbl()!;
-            OnedriveTurmerikDotNetUtilityAppsArchiveReldir = src.GetOnedriveTurmerikDotNetUtilityAppsArchiveReldir()?.ToMtbl()!;
+            OnedriveDir = src.GetMainCsDriveDir()?.ToMtbl()!;
+            OnedriveTurmerikDotNetUtilityAppsArchiveReldir = src.GetMainCsDriveTurmerikDotNetUtilityAppsArchiveReldir()?.ToMtbl()!;
             PathsMap = src.GetPathsMap()?.Dictnr()!;
         }
 
@@ -139,8 +139,8 @@ namespace Turmerik.Core.LocalDeviceEnv
         public IFolder GetTurmerikRepoDir() => TurmerikRepoDir;
         public IFolder GetTurmerikDotnetUtilityAppsEnvDir() => TurmerikDotnetUtilityAppsEnvDir;
         public IFolder GetTurmerikDotnetUtilityAppsEnvDirTypeName() => TurmerikDotnetUtilityAppsEnvDirTypeName;
-        public IFolder GetOnedriveDir() => OnedriveDir;
-        public IFolder GetOnedriveTurmerikDotNetUtilityAppsArchiveReldir() => OnedriveTurmerikDotNetUtilityAppsArchiveReldir;
+        public IFolder GetMainCsDriveDir() => OnedriveDir;
+        public IFolder GetMainCsDriveTurmerikDotNetUtilityAppsArchiveReldir() => OnedriveTurmerikDotNetUtilityAppsArchiveReldir;
 
         public IEnumerable<KeyValuePair<string, string>> GetPathsMap() => PathsMap;
     }

@@ -18,6 +18,7 @@
               "^\\/Bin\\/TrmrkMkFsDirsPair\\/.*",
               "^\\/Bin\\/TrmrkMkMdFile\\/.*",
               "^\\/Bin\\/Turmerik\\.ExecuteCustomCommand\\.ConsoleApp\\/.*",
+              "^\\/Bin\\/Turmerik\\.FlatLocalDevicePathsToFiles\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.LocalFilesCloner\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.ListDirsDeep\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.LsFsDirPairs\\.ConsoleApp\\/.*",

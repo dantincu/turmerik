@@ -132,6 +132,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Utility.BlazorServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.VSCodeThemeCreator.MauiApp", "Turmerik.VSCodeThemeCreator.MauiApp\Turmerik.VSCodeThemeCreator.MauiApp.csproj", "{57562CCA-F70F-45F9-8DE4-7601F0E42055}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.FlatLocalDevicePathsToFiles.ConsoleApp", "Turmerik.FlatLocalDevicePathsToFiles.ConsoleApp\Turmerik.FlatLocalDevicePathsToFiles.ConsoleApp.csproj", "{E70E996E-F15F-4931-A220-A3F113DF101B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -354,6 +356,10 @@ Global
 		{57562CCA-F70F-45F9-8DE4-7601F0E42055}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57562CCA-F70F-45F9-8DE4-7601F0E42055}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57562CCA-F70F-45F9-8DE4-7601F0E42055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E70E996E-F15F-4931-A220-A3F113DF101B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E70E996E-F15F-4931-A220-A3F113DF101B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E70E996E-F15F-4931-A220-A3F113DF101B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E70E996E-F15F-4931-A220-A3F113DF101B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -417,6 +423,7 @@ Global
 		{F98BA596-B36B-4B6A-B2A8-353A48CDE1CB} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
 		{5D8F3A12-7C4B-4E9D-A6B1-2C3D4E5F6A01} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
 		{57562CCA-F70F-45F9-8DE4-7601F0E42055} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
+		{E70E996E-F15F-4931-A220-A3F113DF101B} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}
